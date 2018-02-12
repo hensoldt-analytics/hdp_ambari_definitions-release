@@ -51,15 +51,6 @@ def yarn(name=None, config_dir=None):
   if config_dir is None:
     config_dir = params.hadoop_conf_dir
 
-  if params.yarn_nodemanager_recovery_dir:
-    Directory(InlineTemplate(params.yarn_nodemanager_recovery_dir).get_content(),
-              owner=params.yarn_user,
-              group=params.user_group,
-              create_parents=True,
-              mode=0755,
-              cd_access='a',
-    )
-
   Directory([params.yarn_pid_dir_prefix, params.yarn_pid_dir, params.yarn_log_dir],
             owner=params.yarn_user,
             group=params.user_group,
@@ -209,6 +200,15 @@ def yarn(name=None, config_dir=None):
        mode=0755,
        content=InlineTemplate(params.mapred_env_sh_template)
   )
+
+  if params.yarn_nodemanager_recovery_dir:
+    Directory(InlineTemplate(params.yarn_nodemanager_recovery_dir).get_content(),
+              owner=params.yarn_user,
+              group=params.user_group,
+              create_parents=True,
+              mode=0755,
+              cd_access='a',
+    )
 
   if params.security_enabled:
     File(os.path.join(params.hadoop_bin, "task-controller"),
