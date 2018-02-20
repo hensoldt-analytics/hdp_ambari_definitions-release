@@ -567,7 +567,7 @@ class RangerRecommender(service_advisor.ServiceAdvisor):
 
     ranger_audit_zk_port = ''
 
-    if 'AMBARI_INFRA' in servicesList and zookeeper_host_port and is_solr_cloud_enabled and not is_external_solr_cloud_enabled:
+    if 'AMBARI_INFRA_SOLR' in servicesList and zookeeper_host_port and is_solr_cloud_enabled and not is_external_solr_cloud_enabled:
       zookeeper_host_port = zookeeper_host_port.split(',')
       zookeeper_host_port.sort()
       zookeeper_host_port = ",".join(zookeeper_host_port)

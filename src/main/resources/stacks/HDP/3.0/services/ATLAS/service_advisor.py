@@ -204,7 +204,7 @@ class AtlasRecommender(service_advisor.ServiceAdvisor):
     if atlas_rest_address is not None:
       putAtlasApplicationProperty("atlas.rest.address", atlas_rest_address)
 
-    if "AMBARI_INFRA" in servicesList and 'infra-solr-env' in services['configurations']:
+    if "AMBARI_INFRA_SOLR" in servicesList and 'infra-solr-env' in services['configurations']:
       if 'infra_solr_znode' in services['configurations']['infra-solr-env']['properties']:
         infra_solr_znode = services['configurations']['infra-solr-env']['properties']['infra_solr_znode']
       else:
@@ -398,7 +398,7 @@ class AtlasValidator(service_advisor.ServiceAdvisor):
     if not application_properties['atlas.graph.index.search.solr.zookeeper-url']:
       validationItems.append({"config-name": "atlas.graph.index.search.solr.zookeeper-url",
                               "item": self.getErrorItem(
-                                "If AMBARI_INFRA is not installed then the SOLR zookeeper url configuration must be specified.")})
+                                "If AMBARI_INFRA_SOLR is not installed then the SOLR zookeeper url configuration must be specified.")})
 
     if not application_properties['atlas.kafka.bootstrap.servers']:
       validationItems.append({"config-name": "atlas.kafka.bootstrap.servers",
@@ -439,4 +439,3 @@ class AtlasValidator(service_advisor.ServiceAdvisor):
 
     validationProblems = self.toConfigurationValidationProblems(validationItems, "application-properties")
     return validationProblems
-
