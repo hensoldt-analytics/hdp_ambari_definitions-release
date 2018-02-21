@@ -47,7 +47,7 @@ include_file_path = default("/configurations/hdfs-site/dfs.hosts", None)
 hdfs_include_file = None
 manage_include_files = default("/configurations/hdfs-site/manage.include.files", False)
 if include_file_path and manage_include_files:
-  slave_hosts = default("/clusterHostInfo/slave_hosts", [])
+  slave_hosts = default("/clusterHostInfo/datanode_hosts", [])
   hdfs_include_file = slave_hosts
 update_files_only = default("/commandParams/update_files_only",False)
 # HDFS High Availability properties
@@ -57,7 +57,7 @@ dfs_ha_namenode_ids = default(format("/configurations/hdfs-site/dfs.ha.namenodes
 
 namenode_id = None
 namenode_rpc = None
-hostname = config["hostname"]
+hostname = config['agentLevelParams']['hostname']
 if dfs_ha_namenode_ids:
   dfs_ha_namemodes_ids_list = dfs_ha_namenode_ids.split(",")
   dfs_ha_namenode_ids_array_len = len(dfs_ha_namemodes_ids_list)

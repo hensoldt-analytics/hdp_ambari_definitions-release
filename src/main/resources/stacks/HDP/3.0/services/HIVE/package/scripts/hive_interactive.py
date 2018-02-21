@@ -141,7 +141,7 @@ def hive_interactive(name = None):
   XmlConfig("tez-site.xml",
             conf_dir = params.tez_interactive_config_dir,
             configurations = merged_tez_interactive_site,
-            configuration_attributes=params.config['configuration_attributes']['tez-interactive-site'],
+            configuration_attributes=params.config['configurationAttributes']['tez-interactive-site'],
             owner = params.tez_interactive_user,
             group = params.user_group,
             mode = 0664)
@@ -179,7 +179,7 @@ def hive_interactive(name = None):
   XmlConfig("hive-site.xml",
             conf_dir = hive_server_interactive_conf_dir,
             configurations = merged_hive_interactive_site,
-            configuration_attributes = params.config['configuration_attributes']['hive-interactive-site'],
+            configuration_attributes = params.config['configurationAttributes']['hive-interactive-site'],
             owner = params.hive_user,
             group = params.user_group,
             mode=0600
@@ -187,7 +187,7 @@ def hive_interactive(name = None):
   XmlConfig("hiveserver2-site.xml",
             conf_dir = hive_server_interactive_conf_dir,
             configurations = merged_hiveserver2_interactive_site,
-            configuration_attributes = params.config['configuration_attributes']['hiveserver2-interactive-site'],
+            configuration_attributes = params.config['configurationAttributes']['hiveserver2-interactive-site'],
             owner = params.hive_user,
             group = params.user_group,
             mode = mode_identified

@@ -68,7 +68,7 @@ def hive(name=None):
   XmlConfig("hive-site.xml",
             conf_dir=params.hive_config_dir,
             configurations=params.hive_site_config,
-            configuration_attributes=params.config['configuration_attributes']['hive-site'],
+            configuration_attributes=params.config['configurationAttributes']['hive-site'],
             owner=params.hive_user,
             group=params.user_group,
             mode=mode_identified)
@@ -134,7 +134,7 @@ def setup_hiveserver2():
   XmlConfig("hiveserver2-site.xml",
             conf_dir=params.hive_server_conf_dir,
             configurations=params.config['configurations']['hiveserver2-site'],
-            configuration_attributes=params.config['configuration_attributes']['hiveserver2-site'],
+            configuration_attributes=params.config['configurationAttributes']['hiveserver2-site'],
             owner=params.hive_user,
             group=params.user_group,
             mode=0600)
@@ -265,7 +265,7 @@ def setup_metastore():
       XmlConfig("hivemetastore-site.xml",
                 conf_dir=params.hive_server_conf_dir,
                 configurations=params.config['configurations']['hivemetastore-site'],
-                configuration_attributes=params.config['configuration_attributes']['hivemetastore-site'],
+                configuration_attributes=params.config['configurationAttributes']['hivemetastore-site'],
                 owner=params.hive_user,
                 group=params.user_group,
                 mode=0600)
@@ -346,7 +346,7 @@ def fill_conf_dir(component_conf_dir):
   XmlConfig("mapred-site.xml",
             conf_dir=component_conf_dir,
             configurations=params.config['configurations']['mapred-site'],
-            configuration_attributes=params.config['configuration_attributes']['mapred-site'],
+            configuration_attributes=params.config['configurationAttributes']['mapred-site'],
             owner=params.hive_user,
             group=params.user_group,
             mode=mode_identified_for_file)

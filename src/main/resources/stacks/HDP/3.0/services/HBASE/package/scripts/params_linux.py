@@ -49,8 +49,8 @@ exec_tmp_dir = Script.get_tmp_dir()
 sudo = AMBARI_SUDO_BINARY
 
 stack_name = status_params.stack_name
-agent_stack_retry_on_unavailability = config['hostLevelParams']['agent_stack_retry_on_unavailability']
-agent_stack_retry_count = expect("/hostLevelParams/agent_stack_retry_count", int)
+agent_stack_retry_on_unavailability = config['ambariLevelParams']['agent_stack_retry_on_unavailability']
+agent_stack_retry_count = expect("/ambariLevelParams/agent_stack_retry_count", int)
 version = default("/commandParams/version", None)
 component_directory = status_params.component_directory
 etc_prefix_dir = "/etc/hbase"
@@ -112,8 +112,8 @@ security_enabled = config['configurations']['cluster-env']['security_enabled']
 metric_prop_file_name = "hadoop-metrics2-hbase.properties"
 
 # not supporting 32 bit jdk.
-java64_home = config['hostLevelParams']['java_home']
-java_version = expect("/hostLevelParams/java_version", int)
+java64_home = config['ambariLevelParams']['java_home']
+java_version = expect("/ambariLevelParams/java_version", int)
 
 log_dir = config['configurations']['hbase-env']['hbase_log_dir']
 java_io_tmpdir = default("/configurations/hbase-env/hbase_java_io_tmpdir", "/tmp")
@@ -171,11 +171,11 @@ if has_metric_collector:
 metrics_report_interval = default("/configurations/ams-site/timeline.metrics.sink.report.interval", 60)
 metrics_collection_period = default("/configurations/ams-site/timeline.metrics.sink.collection.period", 10)
 
-# if hbase is selected the hbase_rs_hosts, should not be empty, but still default just in case
-if 'slave_hosts' in config['clusterHostInfo']:
-  rs_hosts = default('/clusterHostInfo/hbase_rs_hosts', '/clusterHostInfo/slave_hosts') #if hbase_rs_hosts not given it is assumed that region servers on same nodes as slaves
+# if hbase is selected the hbase_regionserver_hosts, should not be empty, but still default just in case
+if 'datanode_hosts' in config['clusterHostInfo']:
+  rs_hosts = default('/clusterHostInfo/hbase_regionserver_hosts', '/clusterHostInfo/datanode_hosts') #if hbase_regionserver_hosts not given it is assumed that region servers on same nodes as slaves
 else:
-  rs_hosts = default('/clusterHostInfo/hbase_rs_hosts', '/clusterHostInfo/all_hosts') 
+  rs_hosts = default('/clusterHostInfo/hbase_regionserver_hosts', '/clusterHostInfo/all_hosts') 
 
 smoke_test_user = config['configurations']['cluster-env']['smokeuser']
 smokeuser_principal =  config['configurations']['cluster-env']['smokeuser_principal_name']
@@ -184,7 +184,7 @@ service_check_data = get_unique_id_and_date()
 user_group = config['configurations']['cluster-env']["user_group"]
 
 if security_enabled:
-  _hostname_lowercase = config['hostname'].lower()
+  _hostname_lowercase = config['agentLevelParams']['hostname'].lower()
   master_jaas_princ = config['configurations']['hbase-site']['hbase.master.kerberos.principal'].replace('_HOST',_hostname_lowercase)
   master_keytab_path = config['configurations']['hbase-site']['hbase.master.keytab.file']
   regionserver_jaas_princ = config['configurations']['hbase-site']['hbase.regionserver.kerberos.principal'].replace('_HOST',_hostname_lowercase)
@@ -223,7 +223,7 @@ hbase_env_sh_template = config['configurations']['hbase-env']['content']
 hbase_hdfs_root_dir = config['configurations']['hbase-site']['hbase.rootdir']
 hbase_staging_dir = "/apps/hbase/staging"
 #for create_hdfs_directory
-hostname = config["hostname"]
+hostname = config['agentLevelParams']['hostname']
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 hdfs_principal_name = config['configurations']['hadoop-env']['hdfs_principal_name']
@@ -261,7 +261,7 @@ hadoop_security_authentication = config['configurations']['core-site']['hadoop.s
 # ranger hbase plugin section start
 
 # to get db connector jar
-jdk_location = config['hostLevelParams']['jdk_location']
+jdk_location = config['ambariLevelParams']['jdk_location']
 
 # ranger host
 ranger_admin_hosts = default("/clusterHostInfo/ranger_admin_hosts", [])
@@ -269,9 +269,6 @@ has_ranger_admin = not len(ranger_admin_hosts) == 0
 
 # ranger support xml_configuration flag, instead of depending on ranger xml_configurations_supported/ranger-env introduced, using stack feature
 xml_configurations_supported = check_stack_feature(StackFeature.RANGER_XML_CONFIGURATION, version_for_stack_feature_checks)
-
-# ambari-server hostname
-ambari_server_hostname = config['clusterHostInfo']['ambari_server_host'][0]
 
 # ranger hbase plugin enabled property
 enable_ranger_hbase = default("/configurations/ranger-hbase-plugin-properties/ranger-hbase-plugin-enabled", "No")

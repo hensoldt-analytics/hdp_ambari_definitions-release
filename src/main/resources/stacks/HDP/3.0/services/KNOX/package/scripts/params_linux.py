@@ -53,7 +53,7 @@ version = default("/commandParams/version", None)
 version_formatted = format_stack_version(version)
 
 # E.g., 2.3
-stack_version_unformatted = config['hostLevelParams']['stack_version']
+stack_version_unformatted = config['clusterLevelParams']['stack_version']
 stack_version_formatted = format_stack_version(stack_version_unformatted)
 
 # get the correct version to use for checking stack features
@@ -108,7 +108,7 @@ if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE,
 knox_group = default("/configurations/knox-env/knox_group", "knox")
 mode = 0644
 
-stack_version_unformatted = config['hostLevelParams']['stack_version']
+stack_version_unformatted = config['clusterLevelParams']['stack_version']
 stack_version_formatted = format_stack_version(stack_version_unformatted)
 
 dfs_ha_enabled = False
@@ -141,7 +141,7 @@ if dfs_ha_enabled:
         namenode_port_map[nn_host_parts[0]] = nn_host_parts[1]
 
 
-namenode_hosts = default("/clusterHostInfo/namenode_host", None)
+namenode_hosts = default("/clusterHostInfo/namenode_hosts", None)
 if type(namenode_hosts) is list:
   namenode_host = namenode_hosts[0]
 else:
@@ -199,7 +199,7 @@ if yarn_http_policy !=  None :
    yarn_https_on = ( yarn_http_policy.upper() == 'HTTPS_ONLY')
    yarn_scheme = 'http' if not yarn_https_on else 'https'
 
-rm_hosts = default("/clusterHostInfo/rm_host", None)
+rm_hosts = default("/clusterHostInfo/resourcemanager_hosts", None)
 if type(rm_hosts) is list:
   rm_host = rm_hosts[0]
 else:
@@ -218,14 +218,14 @@ if has_rm:
 
 hive_http_port = default('/configurations/hive-site/hive.server2.thrift.http.port', "10001")
 hive_http_path = default('/configurations/hive-site/hive.server2.thrift.http.path', "cliservice")
-hive_server_hosts = default("/clusterHostInfo/hive_server_host", None)
+hive_server_hosts = default("/clusterHostInfo/hive_server_hosts", None)
 if type(hive_server_hosts) is list:
   hive_server_host = hive_server_hosts[0]
 else:
   hive_server_host = hive_server_hosts
 
 templeton_port = default('/configurations/webhcat-site/templeton.port', "50111")
-webhcat_server_hosts = default("/clusterHostInfo/webhcat_server_host", None)
+webhcat_server_hosts = default("/clusterHostInfo/webhcat_server_hosts", None)
 if type(webhcat_server_hosts) is list:
   webhcat_server_host = webhcat_server_hosts[0]
 else:
@@ -249,7 +249,7 @@ else:
 oozie_https_port = None
 oozie_scheme = 'http'
 oozie_server_port = "11000"
-oozie_server_hosts = default("/clusterHostInfo/oozie_server", None)
+oozie_server_hosts = default("/clusterHostInfo/oozie_server_hosts", None)
 
 if type(oozie_server_hosts) is list:
   oozie_server_host = oozie_server_hosts[0]
@@ -316,7 +316,7 @@ mr_historyserver_address = default("/configurations/mapred-site/mapreduce.jobhis
 #
 nodeui_scheme= 'http'
 nodeui_port = "8042"
-nm_hosts = default("/clusterHostInfo/nm_hosts", None)
+nm_hosts = default("/clusterHostInfo/nodemanager_hosts", None)
 if type(nm_hosts) is list:
   nm_host = nm_hosts[0]
 else:
@@ -351,7 +351,7 @@ knox_ldap_log_maxbackupindex = default('/configurations/ldap-log4j/knox_ldap_log
 # server configurations
 knox_master_secret = config['configurations']['knox-env']['knox_master_secret']
 knox_host_name = config['clusterHostInfo']['knox_gateway_hosts'][0]
-knox_host_name_in_cluster = config['hostname']
+knox_host_name_in_cluster = config['agentLevelParams']['hostname']
 knox_host_port = config['configurations']['gateway-site']['gateway.port']
 topology_template = config['configurations']['topology']['content']
 admin_topology_template = default('/configurations/admin-topology/content', None)
@@ -359,7 +359,7 @@ knoxsso_topology_template = config['configurations']['knoxsso-topology']['conten
 gateway_log4j = config['configurations']['gateway-log4j']['content']
 ldap_log4j = config['configurations']['ldap-log4j']['content']
 users_ldif = config['configurations']['users-ldif']['content']
-java_home = config['hostLevelParams']['java_home']
+java_home = config['ambariLevelParams']['java_home']
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 smokeuser = config['configurations']['cluster-env']['smokeuser']
 smokeuser_principal = config['configurations']['cluster-env']['smokeuser_principal_name']
@@ -367,11 +367,11 @@ smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
 if security_enabled:
   knox_keytab_path = config['configurations']['knox-env']['knox_keytab_path']
-  _hostname_lowercase = config['hostname'].lower()
+  _hostname_lowercase = config['agentLevelParams']['hostname'].lower()
   knox_principal_name = config['configurations']['knox-env']['knox_principal_name'].replace('_HOST',_hostname_lowercase)
 
 # for curl command in ranger plugin to get db connector
-jdk_location = config['hostLevelParams']['jdk_location']
+jdk_location = config['ambariLevelParams']['jdk_location']
 
 # ranger knox plugin start section
 
@@ -381,9 +381,6 @@ has_ranger_admin = not len(ranger_admin_hosts) == 0
 
 # ranger support xml_configuration flag, instead of depending on ranger xml_configurations_supported/ranger-env, using stack feature
 xml_configurations_supported = check_stack_feature(StackFeature.RANGER_XML_CONFIGURATION, version_for_stack_feature_checks)
-
-# ambari-server hostname
-ambari_server_hostname = config['clusterHostInfo']['ambari_server_host'][0]
 
 # ranger knox plugin enabled property
 enable_ranger_knox = default("/configurations/ranger-knox-plugin-properties/ranger-knox-plugin-enabled", "No")

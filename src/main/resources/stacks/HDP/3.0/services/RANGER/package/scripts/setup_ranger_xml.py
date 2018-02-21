@@ -181,7 +181,7 @@ def setup_ranger_admin(upgrade_type=None):
   XmlConfig("ranger-admin-site.xml",
     conf_dir=ranger_conf,
     configurations=ranger_admin_site_copy,
-    configuration_attributes=params.config['configuration_attributes']['ranger-admin-site'],
+    configuration_attributes=params.config['configurationAttributes']['ranger-admin-site'],
     owner=params.unix_user,
     group=params.unix_group,
     mode=0644)
@@ -209,7 +209,7 @@ def setup_ranger_admin(upgrade_type=None):
       XmlConfig("hbase-site.xml",
         conf_dir=ranger_conf,
         configurations=params.config['configurations']['hbase-site'],
-        configuration_attributes=params.config['configuration_attributes']['hbase-site'],
+        configuration_attributes=params.config['configurationAttributes']['hbase-site'],
         owner=params.unix_user,
         group=params.unix_group,
         mode=0644
@@ -219,7 +219,7 @@ def setup_ranger_admin(upgrade_type=None):
       XmlConfig("hdfs-site.xml",
         conf_dir=ranger_conf,
         configurations=params.config['configurations']['hdfs-site'],
-        configuration_attributes=params.config['configuration_attributes']['hdfs-site'],
+        configuration_attributes=params.config['configurationAttributes']['hdfs-site'],
         owner=params.unix_user,
         group=params.unix_group,
         mode=0644
@@ -465,7 +465,7 @@ def setup_usersync(upgrade_type=None):
   XmlConfig("ranger-ugsync-site.xml",
     conf_dir=ranger_ugsync_conf,
     configurations=ranger_ugsync_site_copy,
-    configuration_attributes=params.config['configuration_attributes']['ranger-ugsync-site'],
+    configuration_attributes=params.config['configurationAttributes']['ranger-ugsync-site'],
     owner=params.unix_user,
     group=params.unix_group,
     mode=0644)
@@ -548,7 +548,7 @@ def setup_tagsync(upgrade_type=None):
   XmlConfig("ranger-tagsync-site.xml",
     conf_dir=ranger_tagsync_conf,
     configurations=params.config['configurations']['ranger-tagsync-site'],
-    configuration_attributes=params.config['configuration_attributes']['ranger-tagsync-site'],
+    configuration_attributes=params.config['configurationAttributes']['ranger-tagsync-site'],
     owner=params.unix_user,
     group=params.unix_group,
     mode=0644)
@@ -601,7 +601,7 @@ def create_core_site_xml(conf_dir):
       XmlConfig("core-site.xml",
                 conf_dir=conf_dir,
                 configurations=params.config['configurations']['core-site'],
-                configuration_attributes=params.config['configuration_attributes']['core-site'],
+                configuration_attributes=params.config['configurationAttributes']['core-site'],
                 owner=params.unix_user,
                 group=params.unix_group,
                 mode=0644
@@ -754,7 +754,7 @@ def setup_tagsync_ssl_configs():
   XmlConfig("ranger-policymgr-ssl.xml",
             conf_dir=params.ranger_tagsync_conf,
             configurations=ranger_tagsync_policymgr_ssl_copy,
-            configuration_attributes=params.config['configuration_attributes']['ranger-tagsync-policymgr-ssl'],
+            configuration_attributes=params.config['configurationAttributes']['ranger-tagsync-policymgr-ssl'],
             owner=params.unix_user,
             group=params.unix_group,
             mode=0644)
@@ -778,7 +778,7 @@ def setup_tagsync_ssl_configs():
   XmlConfig("atlas-tagsync-ssl.xml",
             conf_dir=params.ranger_tagsync_conf,
             configurations=atlas_tagsync_ssl_copy,
-            configuration_attributes=params.config['configuration_attributes']['atlas-tagsync-ssl'],
+            configuration_attributes=params.config['configurationAttributes']['atlas-tagsync-ssl'],
             owner=params.unix_user,
             group=params.unix_group,
             mode=0644)
