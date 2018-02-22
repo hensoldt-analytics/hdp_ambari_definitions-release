@@ -421,3 +421,8 @@ if has_atlas:
   atlas_with_managed_hbase = len(zk_hosts_matches) > 0
 else:
   atlas_with_managed_hbase = False
+
+# Hbase Atlas hook configurations
+atlas_hook_filename = default('/configurations/atlas-env/metadata_conf_file', 'atlas-application.properties')
+enable_hbase_atlas_hook = default('/configurations/hbase-env/hbase.atlas.hook', False)
+hbase_atlas_hook_properties = default('/configurations/hbase-atlas-application-properties', {})

@@ -130,6 +130,7 @@ class HBASEServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendHBASEConfigurationsFromHDP23(configurations, clusterData, services, hosts)
     recommender.recommendHBASEConfigurationsFromHDP25(configurations, clusterData, services, hosts)
     recommender.recommendHBASEConfigurationsFromHDP26(configurations, clusterData, services, hosts)
+    recommender.recommendHBASEConfigurationsFromHDP30(configurations, clusterData, services, hosts)
 
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
@@ -491,6 +492,55 @@ class HBASERecommender(service_advisor.ServiceAdvisor):
       putRangerHbasePluginProperty("REPOSITORY_CONFIG_USERNAME",hbase_user)
     else:
       self.logger.info("Not setting Hbase Repo user for Ranger.")
+
+  def recommendHBASEConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
+    # Hbase-hook configurations for Atlas
+    servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
+    hbase_atlas_hook_property = 'hbase.coprocessor.master.classes'
+    hbase_atlas_hook_impl_class = 'org.apache.atlas.hbase.hook.HBaseAtlasCoprocessor'
+    if hbase_atlas_hook_property in configurations['hbase-site']['properties']:
+      hbase_master_coprocessor_value = configurations['hbase-site']['properties']['hbase.coprocessor.master.classes']
+    else:
+      hbase_master_coprocessor_value = ''
+
+    hbase_master_coprocessor_list = [coprocessor_class.strip(' ') for coprocessor_class in hbase_master_coprocessor_value.split(',')]
+    hbase_master_coprocessor_list = [coprocessor_class for coprocessor_class in hbase_master_coprocessor_list if coprocessor_class != '' ]
+
+    is_atlas_present_in_cluster = 'ATLAS' in servicesList
+    putHbaseEnvProperty = self.putProperty(configurations, "hbase-env", services)
+    putHbaseSiteProperty = self.putProperty(configurations, "hbase-site", services)
+    putHBaseAtlasHookProperty = self.putProperty(configurations, "hbase-atlas-application-properties", services)
+    putHBaseAtlasHookPropertyAttribute = self.putPropertyAttribute(configurations,"hbase-atlas-application-properties")
+    if 'hbase-atlas-application-properties' in services['configurations'] and 'enable.external.atlas.for.hbase' in services['configurations']['hbase-atlas-application-properties']['properties']:
+      enable_external_hook_for_hbase = services['configurations']['hbase-atlas-application-properties']['properties']['enable.external.atlas.for.hbase'].lower() == 'true'
+    else:
+      enable_external_hook_for_hbase = False
+
+    if is_atlas_present_in_cluster:
+      putHbaseEnvProperty('hbase.atlas.hook','true')
+    elif enable_external_hook_for_hbase:
+      putHbaseEnvProperty('hbase.atlas.hook','true')
+    else:
+      putHbaseEnvProperty('hbase.atlas.hook','false')
+
+    if 'hbase-env' in configurations and 'hbase.atlas.hook' in configurations['hbase-env']['properties']:
+      enable_hbase_atlas_hook = configurations['hbase-env']['properties']['hbase.atlas.hook'] == 'true'
+    elif 'hbase-env' in services['configurations'] and 'hbase.atlas.hook' in services['configurations']['hbase-env']['properties']:
+      enable_hbase_atlas_hook = services['configurations']['hbase-env']['properties']['hbase.atlas.hook'] == 'true'
+    else:
+      enable_hbase_atlas_hook = False
+
+    if enable_hbase_atlas_hook:
+      is_hbase_atlas_hook_in_config = hbase_atlas_hook_impl_class in hbase_master_coprocessor_list
+      if not is_hbase_atlas_hook_in_config:
+        hbase_master_coprocessor_list.append(hbase_atlas_hook_impl_class)
+      else:
+        self.logger.info('hbase-atlas hook is already present in configuration.')
+    else:
+      hbase_master_coprocessor_list = [hbase_master_coprocessor for hbase_master_coprocessor in hbase_master_coprocessor_list if hbase_master_coprocessor != hbase_atlas_hook_impl_class]
+
+    hbase_master_coprocessor_value = '' if len(hbase_master_coprocessor_list) == 0 else ",".join(hbase_master_coprocessor_list)
+    putHbaseSiteProperty(hbase_atlas_hook_property,hbase_master_coprocessor_value)
 
 
 class HBASEValidator(service_advisor.ServiceAdvisor):

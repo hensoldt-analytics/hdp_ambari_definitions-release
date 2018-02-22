@@ -32,6 +32,10 @@ import upgrade
 from setup_ranger_hbase import setup_ranger_hbase
 from ambari_commons import OSCheck, OSConst
 from ambari_commons.os_family_impl import OsFamilyImpl
+import os
+from resource_management.libraries.functions.setup_atlas_hook import has_atlas_in_cluster, setup_atlas_hook
+from ambari_commons.constants import SERVICE
+from resource_management.core.logger import Logger
 
 
 class HbaseMaster(Script):
@@ -82,6 +86,12 @@ class HbaseMasterDefault(HbaseMaster):
     env.set_params(params)
     self.configure(env) # for security
     setup_ranger_hbase(upgrade_type=upgrade_type, service_name="hbase-master")
+    if params.enable_hbase_atlas_hook:
+      Logger.info("Hbase Atlas hook is enabled, configuring Atlas HBase Hook.")
+      hbase_atlas_hook_file_path = os.path.join(params.hbase_conf_dir,params.atlas_hook_filename)
+      setup_atlas_hook(SERVICE.HBASE,params.hbase_atlas_hook_properties,hbase_atlas_hook_file_path,params.hbase_user,params.user_group)
+    else:
+      Logger.info("Hbase Atlas hook is disabled, skippking Atlas configurations.")
     hbase_service('master', action = 'start')
     
   def stop(self, env, upgrade_type=None):
