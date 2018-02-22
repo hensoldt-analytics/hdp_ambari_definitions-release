@@ -279,6 +279,16 @@
 
       <osSpecifics>
         <osSpecific>
+          <osFamily>any</osFamily>
+          <packages>
+            <package>
+              <name>mysql-connector-java</name>
+              <skipUpgrade>true</skipUpgrade>
+              <condition>should_install_mysql_connector</condition>
+            </package>
+          </packages>
+        </osSpecific>
+        <osSpecific>
           <osFamily>redhat7,amazon2015,redhat6,suse11,suse12</osFamily>
           <packages>
             <package>
@@ -303,12 +313,7 @@
           <osFamily>redhat7</osFamily>
           <packages>
             <package>
-              <name>mysql-community-release</name>
-              <skipUpgrade>true</skipUpgrade>
-              <condition>should_install_mysql</condition>
-            </package>
-            <package>
-              <name>mysql-community-server</name>
+              <name>mariadb-server</name>
               <skipUpgrade>true</skipUpgrade>
               <condition>should_install_mysql</condition>
             </package>
