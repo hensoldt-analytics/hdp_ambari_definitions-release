@@ -35,7 +35,7 @@ from resource_management.core.resources.system import Directory, Execute, File
 from resource_management.core.source import InlineTemplate, Template, DownloadSource
 from utils import get_property_value
 from ambari_commons.os_utils import remove_file
-from ambari_agent import Constants
+from ambari_commons.constants import AGENT_TMP_DIR
 from collections import namedtuple
 from resource_management.core import sudo
 from resource_management.core.resources.klist import Klist
@@ -294,7 +294,7 @@ class KerberosScript(Script):
 
   @staticmethod
   def clear_tmp_cache():
-    tmp_dir = Constants.AGENT_TMP_DIR
+    tmp_dir = AGENT_TMP_DIR
     if tmp_dir is None:
       tmp_dir = gettempdir()
     curl_krb_cache_path = os.path.join(tmp_dir, "curl_krb_cache")
