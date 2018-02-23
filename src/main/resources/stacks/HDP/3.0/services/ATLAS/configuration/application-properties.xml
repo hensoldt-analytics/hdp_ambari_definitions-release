@@ -96,7 +96,7 @@
   <!-- Storage properties -->
   <property>
     <name>atlas.graph.storage.hbase.table</name>
-    <value>atlas_titan</value>
+    <value>atlas_janus</value>
     <description/>
     <on-ambari-upgrade add="false"/>
   </property>
