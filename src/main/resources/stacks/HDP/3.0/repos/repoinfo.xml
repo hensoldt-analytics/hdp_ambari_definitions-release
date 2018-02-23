@@ -25,6 +25,15 @@
       <unique>true</unique>
     </repo>
     <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/centos6/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
+    </repo>
+    <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/centos6</baseurl>
       <repoid>HDP-UTILS-1.1.0.21</repoid>
       <reponame>HDP-UTILS</reponame>
@@ -37,6 +46,15 @@
       <repoid>HDP-3.0</repoid>
       <reponame>HDP</reponame>
       <unique>true</unique>
+    </repo>    
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/centos7/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
     </repo>
     <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/centos7</baseurl>
@@ -53,6 +71,15 @@
       <unique>true</unique>
     </repo>
     <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/suse11sp3/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
+    </repo>
+    <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/suse11sp3</baseurl>
       <repoid>HDP-UTILS-1.1.0.21</repoid>
       <reponame>HDP-UTILS</reponame>
@@ -65,6 +92,15 @@
       <repoid>HDP-3.0</repoid>
       <reponame>HDP</reponame>
       <unique>true</unique>
+    </repo>
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/sles12/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
     </repo>
     <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/suse11sp3</baseurl>
@@ -81,6 +117,15 @@
       <unique>true</unique>
     </repo>
     <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/ubuntu12/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
+    </repo>
+    <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/ubuntu12</baseurl>
       <repoid>HDP-UTILS-1.1.0.21</repoid>
       <reponame>HDP-UTILS</reponame>
@@ -93,6 +138,15 @@
       <repoid>HDP-3.0</repoid>
       <reponame>HDP</reponame>
       <unique>true</unique>
+    </repo>
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/debian7/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
     </repo>
     <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/debian6</baseurl>
@@ -109,6 +163,15 @@
       <unique>true</unique>
     </repo>
     <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/ubuntu14/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
+    </repo>
+    <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/ubuntu12</baseurl>
       <repoid>HDP-UTILS-1.1.0.21</repoid>
       <reponame>HDP-UTILS</reponame>
@@ -121,6 +184,15 @@
       <repoid>HDP-3.0</repoid>
       <reponame>HDP</reponame>
       <unique>true</unique>
+    </repo>
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/ubuntu14/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
     </repo>
     <repo>
       <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/ubuntu12</baseurl>
