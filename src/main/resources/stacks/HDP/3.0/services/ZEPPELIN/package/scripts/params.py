@@ -121,7 +121,7 @@ log4j_properties_content = config['configurations']['zeppelin-log4j-properties']
 # detect configs
 master_configs = config['clusterHostInfo']
 java64_home = config['ambariLevelParams']['java_home']
-ambari_host = str(master_configs['ambari_server_host'][0])
+ambari_host = str(config['ambariLevelParams']['ambari_server_host'])
 zeppelin_host = str(master_configs['zeppelin_master_hosts'][0])
 ui_ssl_enabled = config['configurations']['zeppelin-config']['zeppelin.ssl']
 
