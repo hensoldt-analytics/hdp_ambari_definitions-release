@@ -134,6 +134,11 @@
     <appender-ref ref="FILE"/>
   </logger>
 
+  <logger name="org.janusgraph" additivity="false">
+    <level value="warn"/>
+    <appender-ref ref="FILE"/>
+  </logger>
+
   <logger name="org.elasticsearch" additivity="false">
     <level value="info"/>
     <appender-ref ref="FILE"/>
