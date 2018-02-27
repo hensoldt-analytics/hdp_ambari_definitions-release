@@ -78,10 +78,6 @@ def hive_interactive(name = None):
   exclude_list_for_hive2_client = ['javax.jdo.option.ConnectionPassword',
                                    'hadoop.security.credential.provider.path']
 
-  Directory(params.hive_interactive_etc_dir_prefix,
-            mode = 0755
-  )
-
   Logger.info("Directories to fill with configs: %s" % str(params.hive_conf_dirs_list))
   for conf_dir in params.hive_conf_dirs_list:
     fill_conf_dir(conf_dir)
@@ -96,6 +92,8 @@ def hive_interactive(name = None):
   for item in exclude_list:
     if item in merged_hive_interactive_site.keys():
       del merged_hive_interactive_site[item]
+
+  merged_hive_interactive_site['hive.llap.daemon.vcpus.per.instance'] = format(merged_hive_interactive_site['hive.llap.daemon.vcpus.per.instance'] )
 
   '''
   Config 'hive.llap.io.memory.size' calculated value in stack_advisor is in MB as of now. We need to
@@ -141,7 +139,7 @@ def hive_interactive(name = None):
   XmlConfig("tez-site.xml",
             conf_dir = params.tez_interactive_config_dir,
             configurations = merged_tez_interactive_site,
-            configuration_attributes=params.config['configurationAttributes']['tez-interactive-site'],
+            configuration_attributes=params.config['configuration_attributes']['tez-interactive-site'],
             owner = params.tez_interactive_user,
             group = params.user_group,
             mode = 0664)
@@ -179,15 +177,15 @@ def hive_interactive(name = None):
   XmlConfig("hive-site.xml",
             conf_dir = hive_server_interactive_conf_dir,
             configurations = merged_hive_interactive_site,
-            configuration_attributes = params.config['configurationAttributes']['hive-interactive-site'],
+            configuration_attributes = params.config['configuration_attributes']['hive-interactive-site'],
             owner = params.hive_user,
             group = params.user_group,
-            mode=0600
+            mode = 0644
   )
   XmlConfig("hiveserver2-site.xml",
             conf_dir = hive_server_interactive_conf_dir,
             configurations = merged_hiveserver2_interactive_site,
-            configuration_attributes = params.config['configurationAttributes']['hiveserver2-interactive-site'],
+            configuration_attributes = params.config['configuration_attributes']['hiveserver2-interactive-site'],
             owner = params.hive_user,
             group = params.user_group,
             mode = mode_identified
