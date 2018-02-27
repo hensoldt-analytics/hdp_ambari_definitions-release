@@ -500,51 +500,6 @@
           ]
         },
         {
-          "config": "hive-interactive-site/hive.llap.io.allocator.mmap",
-          "subsection-name": "interactive-query-row1-col1",
-          "depends-on": [
-            {
-              "configs":[
-                "hive-interactive-env/enable_hive_interactive"
-              ],
-              "if": "${hive-interactive-env/enable_hive_interactive}",
-              "then": {
-                "property_value_attributes": {
-                  "visible": true
-                }
-              },
-              "else": {
-                "property_value_attributes": {
-                  "visible": false
-                }
-              }
-            }
-          ]
-        },
-        {
-          "config": "hive-interactive-site/hive.llap.io.allocator.mmap.path",
-          "subsection-name": "interactive-query-row1-col1",
-          "depends-on": [
-            {
-              "configs":[
-                "hive-interactive-env/enable_hive_interactive",
-                "hive-interactive-site/hive.llap.io.allocator.mmap"
-              ],
-              "if": "${hive-interactive-env/enable_hive_interactive} && ${hive-interactive-site/hive.llap.io.allocator.mmap}",
-              "then": {
-                "property_value_attributes": {
-                  "visible": true
-                }
-              },
-              "else": {
-                "property_value_attributes": {
-                  "visible": false
-                }
-              }
-            }
-          ]
-        },
-        {
           "config": "hive-env/hive.log.level",
           "subsection-name": "misc-row1-col1"
         }
@@ -830,18 +785,6 @@
               "unit-name": "int"
             }
           ]
-        }
-      },
-      {
-        "config": "hive-interactive-site/hive.llap.io.allocator.mmap",
-        "widget": {
-          "type": "toggle"
-        }
-      },
-      {
-        "config": "hive-interactive-site/hive.llap.io.allocator.mmap.path",
-        "widget": {
-          "type": "text-field"
         }
       },
       {

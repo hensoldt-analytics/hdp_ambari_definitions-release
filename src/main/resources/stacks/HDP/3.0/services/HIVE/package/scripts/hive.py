@@ -49,6 +49,10 @@ def hive(name=None):
   # Permissions 644 for conf dir (client) files, and 600 for conf.server
   mode_identified = 0644 if params.hive_config_dir == hive_client_conf_path else 0600
 
+  Directory(params.hive_etc_dir_prefix,
+            mode=0755
+  )
+
   # We should change configurations for client as well as for server.
   # The reason is that stale-configs are service-level, not component.
   Logger.info("Directories to fill with configs: %s" % str(params.hive_conf_dirs_list))
@@ -62,12 +66,12 @@ def hive(name=None):
                                                      params.user_group
                                                      )
   XmlConfig("hive-site.xml",
-            conf_dir = params.hive_config_dir,
-            configurations = params.hive_site_config,
-            configuration_attributes = params.config['configuration_attributes']['hive-site'],
-            owner = params.hive_user,
-            group = params.user_group,
-            mode = 0644)
+            conf_dir=params.hive_config_dir,
+            configurations=params.hive_site_config,
+            configuration_attributes=params.config['configurationAttributes']['hive-site'],
+            owner=params.hive_user,
+            group=params.user_group,
+            mode=mode_identified)
 
   # Generate atlas-application.properties.xml file
   if params.enable_atlas_hook:
@@ -130,7 +134,7 @@ def setup_hiveserver2():
   XmlConfig("hiveserver2-site.xml",
             conf_dir=params.hive_server_conf_dir,
             configurations=params.config['configurations']['hiveserver2-site'],
-            configuration_attributes=params.config['configuration_attributes']['hiveserver2-site'],
+            configuration_attributes=params.config['configurationAttributes']['hiveserver2-site'],
             owner=params.hive_user,
             group=params.user_group,
             mode=0600)
@@ -261,7 +265,7 @@ def setup_metastore():
       XmlConfig("hivemetastore-site.xml",
                 conf_dir=params.hive_server_conf_dir,
                 configurations=params.config['configurations']['hivemetastore-site'],
-                configuration_attributes=params.config['configuration_attributes']['hivemetastore-site'],
+                configuration_attributes=params.config['configurationAttributes']['hivemetastore-site'],
                 owner=params.hive_user,
                 group=params.user_group,
                 mode=0600)
@@ -342,7 +346,7 @@ def fill_conf_dir(component_conf_dir):
   XmlConfig("mapred-site.xml",
             conf_dir=component_conf_dir,
             configurations=params.config['configurations']['mapred-site'],
-            configuration_attributes=params.config['configuration_attributes']['mapred-site'],
+            configuration_attributes=params.config['configurationAttributes']['mapred-site'],
             owner=params.hive_user,
             group=params.user_group,
             mode=mode_identified_for_file)

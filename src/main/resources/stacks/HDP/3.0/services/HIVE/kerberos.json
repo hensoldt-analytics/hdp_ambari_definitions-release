@@ -124,16 +124,6 @@
                         {
                             "name": "hive_hive_server_interactive_llap_zk_hive",
                             "reference": "/YARN/NODEMANAGER/llap_zk_hive"
-                        },
-                        {
-                            "name": "hive_hive_server_interactive_task_scheduler_am_registry.",
-                            "reference": "/HIVE/HIVE_SERVER/hive_server_hive",
-                            "principal": {
-                                "configuration": "hive-interactive-site/hive.llap.task.scheduler.am.registry.principal"
-                            },
-                            "keytab": {
-                                "configuration": "hive-interactive-site/hive.llap.task.scheduler.am.registry.keytab.file"
-                            }
                         }
                     ]
                 }
