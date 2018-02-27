@@ -100,6 +100,17 @@ class KmsServer(Script):
     kms.kms(upgrade_type=upgrade_type)
     kms.setup_java_patch()
 
+  def post_upgrade_restart(self, env, upgrade_type = None):
+    import params
+    env.set_params(params)
+
+    if upgrade_type and params.upgrade_direction == Direction.UPGRADE and not params.stack_supports_multiple_env_sh_files:
+      files_name_list = ['ranger-kms-env-piddir.sh', 'ranger-kms-env-logdir.sh']
+      for file_name in files_name_list:
+        File(format("{kms_conf_dir}/{file_name}"),
+          action = "delete"
+        )
+
   def setup_ranger_kms_database(self, env):
     import params
     env.set_params(params)

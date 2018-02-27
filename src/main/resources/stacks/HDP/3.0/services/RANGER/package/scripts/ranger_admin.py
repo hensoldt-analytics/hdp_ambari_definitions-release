@@ -79,6 +79,13 @@ class RangerAdmin(Script):
     if os.path.isfile(params.upgrade_marker_file):
       os.remove(params.upgrade_marker_file)
 
+    if upgrade_type and params.upgrade_direction == Direction.UPGRADE and not params.stack_supports_multiple_env_sh_files:
+      files_name_list = ['ranger-admin-env-piddir.sh', 'ranger-admin-env-logdir.sh']
+      for file_name in files_name_list:
+        File(format("{ranger_conf}/{file_name}"),
+          action = "delete"
+        )
+
   def start(self, env, upgrade_type=None):
     import params
     env.set_params(params)

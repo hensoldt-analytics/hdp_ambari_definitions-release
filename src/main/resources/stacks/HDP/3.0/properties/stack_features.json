@@ -392,6 +392,11 @@
         "name": "atlas_core_site_support",
         "description": "Need to create core-site under Atlas conf directory.",
         "min_version": "2.6.0.0"
+      },
+      {
+        "name": "multiple_env_sh_files_support",
+        "description": "This feature is supported by RANGER and RANGER_KMS service to remove multiple env sh files during upgrade to stack 3.0",
+        "max_version": "2.6.99.99"
       }
     ]
   }

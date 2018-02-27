@@ -94,6 +94,17 @@ class RangerUsersync(Script):
     env.set_params(params)
     upgrade.prestart(env)
 
+  def post_upgrade_restart(self, env, upgrade_type = None):
+    import params
+    env.set_params(params)
+
+    if upgrade_type and params.upgrade_direction == Direction.UPGRADE and not params.stack_supports_multiple_env_sh_files:
+      files_name_list = ['ranger-usersync-env-piddir.sh', 'ranger-usersync-env-logdir.sh']
+      for file_name in files_name_list:
+        File(format("{ranger_ugsync_conf}/{file_name}"),
+          action = "delete"
+        )
+
   def get_log_folder(self):
     import params
     return params.usersync_log_dir
