@@ -84,11 +84,6 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>hbase.coprocessor.region.classes</name>
-    <value>org.apache.hadoop.yarn.server.timelineservice.storage.flow.FlowRunCoprocessor</value>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
     <name>hbase.zookeeper.quorum</name>
     <value>{{zookeeper_quorum_hosts}}</value>
     <on-ambari-upgrade add="false"/>

@@ -77,10 +77,12 @@ def install_hbase(env):
     hbase_download_url = params.hbase_download_url
     hbase_package_name = params.hbase_package_name
     hbase_download_cmd = format("umask 0022;wget --no-cookies --no-check-certificate {hbase_download_url} && tar -xzf {hbase_package_name} && rm -rf {hbase_package_name} && rm -rf {hbase_home} && mv hbase-* {hbase_home}")
-    hbase_copy_jar = format("umask 0022;cp {params.hadoop_yarn_home}/timelineservice/hadoop-yarn-server-timelineservice-hbase.jar {hbase_home}/lib")
+    #TODO keep co processor jar in hdfs
+
+    create_symb_link = format("umask 0022;cd {params.hadoop_yarn_home}/timelineservice;if [ ! -f {params.coprocessor_jar_name} ]; then ln -s hadoop-yarn-server-timelineservice-hbase.jar {params.coprocessor_jar_name};fi;cd -")
     try:
       Execute(hbase_download_cmd, user="root", logoutput=True)
-      Execute(hbase_copy_jar, user="root", logoutput=True)
+      Execute(create_symb_link, user="root", logoutput=True)
     except:
       raise
 
@@ -105,7 +107,7 @@ def stop_hbase():
 def createTables():
     import params
     class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create -s")
-    cmd = format("{params.yarn_timelineservice_kinit_cmd} {params.yarn_hbase_bin}/hbase --config {params.yarn_hbase_conf_dir} {class_name}")
+    cmd = format("export HBASE_CLASSPATH_PREFIX={params.hadoop_yarn_home}/timelineservice/*;{params.yarn_timelineservice_kinit_cmd} {params.yarn_hbase_bin}/hbase --config {params.yarn_hbase_conf_dir} {class_name}")
     try:
         Execute(cmd, user=params.yarn_user, timeout = 60, logoutput=True)
     except:

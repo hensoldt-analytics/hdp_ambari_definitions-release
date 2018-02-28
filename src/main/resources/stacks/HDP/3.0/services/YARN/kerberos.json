@@ -320,7 +320,7 @@
                 "hbase.security.authentication": "kerberos",
                 "hbase.security.authorization": "true",
                 "hbase.coprocessor.master.classes": "org.apache.hadoop.hbase.security.access.AccessController",
-                "hbase.coprocessor.region.classes": "org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.yarn.server.timelineservice.storage.flow.FlowRunCoprocessor",
+                "hbase.coprocessor.region.classes": "org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController",
                 "zookeeper.znode.parent": "/atsv2-hbase-secure"
               }
             }
