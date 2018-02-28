@@ -78,7 +78,7 @@ class HistoryServerDefault(HistoryServer):
       # MC Hammer said, "Can't touch this"
       copy_to_hdfs("mapreduce", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
       copy_to_hdfs("tez", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
-      copy_to_hdfs("yarn", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
+      #copy_to_hdfs("yarn", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
       params.HdfsResource(None, action="execute")
 
   def start(self, env, upgrade_type=None):
@@ -98,11 +98,13 @@ class HistoryServerDefault(HistoryServer):
         params.user_group,
         params.hdfs_user,
         skip=params.sysprep_skip_copy_tarballs_hdfs) or resource_created
+      """
       resource_created = copy_to_hdfs(
         "yarn",
         params.user_group,
         params.hdfs_user,
         skip=params.sysprep_skip_copy_tarballs_hdfs) or resource_created
+      """
       if resource_created:
         params.HdfsResource(None, action="execute")
     else:
