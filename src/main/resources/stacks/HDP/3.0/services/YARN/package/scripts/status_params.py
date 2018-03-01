@@ -23,9 +23,10 @@ import pwd
 from ambari_commons import OSCheck
 
 from resource_management.libraries.script.script import Script
-from resource_management.libraries import functions
-from resource_management.libraries.functions import stack_select
+from resource_management.libraries.functions import conf_select
 from resource_management.libraries.functions import format
+from resource_management.libraries.functions import get_kinit_path
+from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.default import default
 
 config = Script.get_config()
@@ -58,10 +59,10 @@ mapred_historyserver_pid_file = format("{mapred_pid_dir}/hadoop-{mapred_user}-hi
 yarn_timelinereader_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-timelinereader.pid")
 
 hadoop_home = stack_select.get_hadoop_dir("home")
-hadoop_conf_dir = functions.conf_select.get_hadoop_conf_dir()
+hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 
 hostname = config['agentLevelParams']['hostname']
-kinit_path_local = functions.get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
+kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
 stack_name = default("/clusterLevelParams/stack_name", None)
