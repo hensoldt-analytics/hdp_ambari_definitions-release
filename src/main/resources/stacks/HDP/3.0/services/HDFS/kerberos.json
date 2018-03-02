@@ -16,6 +16,16 @@
         {
           "name": "hdfs_smokeuser",
           "reference": "/smokeuser"
+        },
+        {
+          "name": "hadoop_http_spnego",
+          "reference": "/spnego",
+          "principal": {
+            "configuration": "core-site/hadoop.http.authentication.kerberos.principal"
+          },
+          "keytab": {
+            "configuration": "core-site/hadoop.http.authentication.kerberos.keytab"
+          }
         }
       ],
       "auth_to_local_properties" : [
@@ -27,7 +37,11 @@
             "hadoop.security.authentication": "kerberos",
             "hadoop.security.authorization": "true",
             "hadoop.proxyuser.HTTP.groups": "${hadoop-env/proxyuser_group}",
-            "ha.zookeeper.acl":"sasl:nn:rwcda"
+            "ha.zookeeper.acl":"sasl:nn:rwcda",
+            "hadoop.http.authentication.simple.anonymous.allowed" : "false",
+            "hadoop.http.authentication.signature.secret.file" : "/etc/security/http_secret",
+            "hadoop.http.authentication.type" : "kerberos",
+            "hadoop.http.filter.initializers" : "org.apache.hadoop.security.AuthenticationFilterInitializer,org.apache.hadoop.security.HttpCrossOriginFilterInitializer"
           }
         },
         {

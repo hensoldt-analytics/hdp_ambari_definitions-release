@@ -172,24 +172,27 @@ class ZeppelinRecommender(service_advisor.ServiceAdvisor):
         zeppelin_user = zeppelin_principal.split('@')[0] if zeppelin_principal else None
 
         if zeppelin_user:
-          livy_conf = self.getServicesSiteProperties(services, 'livy-conf')
+          self.__conditionallyUpdateSuperUsers('livy2-conf', 'livy.superusers', zeppelin_user, configurations, services)
 
-          if livy_conf:
-            superusers = livy_conf['livy.superusers'] if livy_conf and 'livy.superusers' in livy_conf else None
+  def __conditionallyUpdateSuperUsers(self, config_name, property_name, user_to_add, configurations, services):
+    config = self.getServicesSiteProperties(services, config_name)
 
-            # add the Zeppelin user to the set of users
-            if superusers:
-              _superusers = superusers.split(',')
-              _superusers = [x.strip() for x in _superusers]
-              _superusers = filter(None, _superusers)  # Removes empty string elements from array
-            else:
-              _superusers = []
+    if config:
+      superusers = config[property_name] if property_name in config else None
 
-            if zeppelin_user not in _superusers:
-              _superusers.append(zeppelin_user)
+      # add the user to the set of users
+      if superusers:
+        _superusers = superusers.split(',')
+        _superusers = [x.strip() for x in _superusers]
+        _superusers = filter(None, _superusers)  # Removes empty string elements from array
+      else:
+        _superusers = []
 
-              putLivyProperty = self.putProperty(configurations, 'livy-conf', services)
-              putLivyProperty('livy.superusers', ','.join(_superusers))
+      if user_to_add not in _superusers:
+        _superusers.append(user_to_add)
+
+        putProperty = self.putProperty(configurations, config_name, services)
+        putProperty(property_name, ','.join(_superusers))
 
 class ZeppelinValidator(service_advisor.ServiceAdvisor):
   """

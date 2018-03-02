@@ -325,6 +325,32 @@
               }
             }
           ]
+        },
+        {
+          "name": "YARN_REGISTRY_DNS",
+          "identities": [
+            {
+              "name": "registry_dns_yarn",
+              "principal": {
+                "value": "yarn/_HOST@${realm}",
+                "type" : "service",
+                "configuration": "yarn-env/yarn.registry-dns.principal",
+                "local_username": "${yarn-env/yarn_user}"
+              },
+              "keytab": {
+                "file": "${keytab_dir}/yarn.service.keytab",
+                "owner": {
+                  "name": "${yarn-env/yarn_user}",
+                  "access": "r"
+                },
+                "group": {
+                  "name": "${cluster-env/user_group}",
+                  "access": ""
+                },
+                "configuration": "yarn-env/yarn.registry-dns.keytab"
+              }
+            }
+          ]
         }
       ]
     },

@@ -644,6 +644,68 @@
           ]
         }
       },
+      "SPARK2": {
+        "LIVY2_CLIENT": {
+          "STACK-SELECT-PACKAGE": "livy2-client",
+          "INSTALL": [
+            "livy2-client"
+          ],
+          "PATCH": [
+            "livy2-client"
+          ],
+          "STANDARD": [
+            "livy2-client"
+          ]
+        },
+        "LIVY2_SERVER": {
+          "STACK-SELECT-PACKAGE": "livy2-server",
+          "INSTALL": [
+            "livy2-server"
+          ],
+          "PATCH": [
+            "livy2-server"
+          ],
+          "STANDARD": [
+            "livy2-server"
+          ]
+        },
+        "SPARK2_CLIENT": {
+          "STACK-SELECT-PACKAGE": "spark2-client",
+          "INSTALL": [
+            "spark2-client"
+          ],
+          "PATCH": [
+            "spark2-client"
+          ],
+          "STANDARD": [
+            "spark2-client"
+          ]
+        },
+        "SPARK2_JOBHISTORYSERVER": {
+          "STACK-SELECT-PACKAGE": "spark2-historyserver",
+          "INSTALL": [
+            "spark2-historyserver"
+          ],
+          "PATCH": [
+            "spark2-historyserver"
+          ],
+          "STANDARD": [
+            "spark2-historyserver"
+          ]
+        },
+        "SPARK2_THRIFTSERVER": {
+          "STACK-SELECT-PACKAGE": "spark2-thriftserver",
+          "INSTALL": [
+            "spark2-thriftserver"
+          ],
+          "PATCH": [
+            "spark2-thriftserver"
+          ],
+          "STANDARD": [
+            "spark2-thriftserver"
+          ]
+        }
+      },
       "SQOOP": {
         "SQOOP": {
           "STACK-SELECT-PACKAGE": "sqoop-client",

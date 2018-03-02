@@ -95,11 +95,32 @@ def service(componentName, action='start', serviceName='yarn'):
 
   elif action == 'stop':
     daemon_cmd = format("{cmd} stop {componentName}")
-    try:
-      Execute(daemon_cmd, user=usr)
-    except:
-      show_logs(log_dir, usr)
-      raise
+
+    # When registry dns is switched from non-privileged to privileged mode or the other way,
+    # then the previous instance of registry dns has a different pid/user.
+    if componentName == 'registrydns':
+      rdns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{componentName}.pid")
+      check_process = as_sudo(["test", "-f", rdns_pid_file]) + " && " + as_sudo(["pgrep", "-F", rdns_pid_file])
+      try:
+        Execute(daemon_cmd, only_if = check_process, user=params.yarn_user)
+      except:
+        show_logs(log_dir, params.yarn_user)
+        raise
+
+      privileged_rdns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{status_params.root_user}-{componentName}.pid")
+      check_process = as_sudo(["test", "-f", privileged_rdns_pid_file]) + " && " + as_sudo(["pgrep", "-F", privileged_rdns_pid_file])
+      try:
+        Execute(daemon_cmd, only_if = check_process, user=status_params.root_user)
+      except:
+        show_logs(log_dir, status_params.root_user)
+        raise
+
+    else:
+      try:
+        Execute(daemon_cmd, user=usr)
+      except:
+        show_logs(log_dir, usr)
+        raise
 
     # !!! yarn-daemon doesn't need us to delete PIDs
     if delete_pid_file is True:

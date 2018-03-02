@@ -283,6 +283,8 @@ has_ats = not len(ats_host) == 0
 atsv2_host = set(default("/clusterHostInfo/timeline_reader_hosts", []))
 has_atsv2 = not len(atsv2_host) == 0
 
+registry_dns_host = set(default("/clusterHostInfo/yarn_registry_dns_hosts", []))
+has_registry_dns = not len(registry_dns_host) == 0
 
 # don't using len(nm_hosts) here, because check can take too much time on large clusters
 number_of_nm = 1
@@ -316,6 +318,12 @@ if security_enabled:
     yarn_timelineservice_keytab = config['configurations']['yarn-site']['yarn.timeline-service.keytab']
     yarn_timelineservice_kinit_cmd = format("{kinit_path_local} -kt {yarn_timelineservice_keytab} {yarn_timelineservice_principal_name};")
     yarn_ats_jaas_file = os.path.join(config_dir, 'yarn_ats_jaas.conf')
+
+  if has_registry_dns:
+    yarn_registry_dns_principal_name = config['configurations']['yarn-env']['yarn.registry-dns.principal']
+    yarn_registry_dns_principal_name = yarn_registry_dns_principal_name.replace('_HOST', hostname.lower())
+    yarn_registry_dns_keytab = config['configurations']['yarn-env']['yarn.registry-dns.keytab']
+    yarn_registry_dns_jaas_file = os.path.join(config_dir, 'yarn_registry_dns_jaas.conf')
 
   if 'yarn.nodemanager.principal' in config['configurations']['yarn-site']:
     nodemanager_principal_name = default('/configurations/yarn-site/yarn.nodemanager.principal', None)

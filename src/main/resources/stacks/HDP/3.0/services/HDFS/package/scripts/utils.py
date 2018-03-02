@@ -179,7 +179,7 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
   # NFS GATEWAY is always started by root using jsvc due to rpcbind bugs
   # on Linux such as CentOS6.2. https://bugzilla.redhat.com/show_bug.cgi?id=731542
   if name == "nfs3" :
-    pid_file = format("{hadoop_pid_dir_prefix}/privileged-root-nfs3.pid")
+    pid_file = format("{hadoop_pid_dir_prefix}/{params.root_user}/privileged-root-nfs3.pid")
     custom_export = {
       'HADOOP_PRIVILEGED_NFS_USER': params.hdfs_user,
       'HADOOP_PRIVILEGED_NFS_PID_DIR': pid_dir,

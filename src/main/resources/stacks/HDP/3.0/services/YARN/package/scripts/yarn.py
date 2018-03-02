@@ -233,6 +233,12 @@ def yarn(name=None, config_dir=None):
            group=params.user_group,
            content=Template("yarn_ats_jaas.conf.j2")
       )
+    if params.has_registry_dns:
+      File(os.path.join(config_dir, 'yarn_registry_dns_jaas.conf'),
+           owner=params.yarn_user,
+           group=params.user_group,
+           content=Template("yarn_registry_dns_jaas.conf.j2")
+      )
     File(os.path.join(config_dir, 'yarn_nm_jaas.conf'),
          owner=params.yarn_user,
          group=params.user_group,

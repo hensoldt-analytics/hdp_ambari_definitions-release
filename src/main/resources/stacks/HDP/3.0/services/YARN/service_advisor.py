@@ -393,21 +393,6 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       else:  # When Hive Interactive Server is in 'off/removed' state.
         self.checkAndStopLlapQueue(services, configurations, LLAP_QUEUE_NAME)
 
-    putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
-    stack_root = "/usr/hdp"
-    if cluster_env and "stack_root" in cluster_env:
-      stack_root = cluster_env["stack_root"]
-
-    timeline_plugin_classes_values = []
-    timeline_plugin_classpath_values = []
-
-    if self.isServiceDeployed(services, "TEZ"):
-      timeline_plugin_classes_values.append('org.apache.tez.dag.history.logging.ats.TimelineCachePluginImpl')
-
-    putYarnSiteProperty('yarn.timeline-service.entity-group-fs-store.group-id-plugin-classes', ",".join(timeline_plugin_classes_values))
-    putYarnSiteProperty('yarn.timeline-service.entity-group-fs-store.group-id-plugin-classpath', ":".join(timeline_plugin_classpath_values))
-
-
   def recommendYARNConfigurationsFromHDP26(self, configurations, clusterData, services, hosts):
     putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
     putYarnEnvProperty = self.putProperty(configurations, "yarn-env", services)
