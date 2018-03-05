@@ -55,16 +55,22 @@
         </component>
 
         <component>
-          <name>STORM_REST_API</name>
-          <displayName>Storm REST API Server</displayName>
+          <name>STORM_UI_SERVER</name>
+          <displayName>Storm UI Server</displayName>
           <category>MASTER</category>
           <cardinality>1</cardinality>
           <versionAdvertised>true</versionAdvertised>
           <commandScript>
-            <script>scripts/rest_api.py</script>
+            <script>scripts/ui_server.py</script>
             <scriptType>PYTHON</scriptType>
             <timeout>1200</timeout>
           </commandScript>
+          <logs>
+            <log>
+              <logId>storm_ui</logId>
+              <primary>true</primary>
+            </log>
+          </logs>
         </component>
 
         <component>
