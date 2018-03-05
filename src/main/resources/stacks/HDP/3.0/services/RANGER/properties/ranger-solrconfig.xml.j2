@@ -234,7 +234,10 @@
       -->
 
     <!-- Ranger customization. Set to 5 to trigger purging of deleted documents more often -->
-    <mergeFactor>{{ranger_audit_logs_merge_factor}}</mergeFactor>
+    <mergePolicyFactory class="org.apache.solr.index.TieredMergePolicyFactory">
+      <int name="maxMergeAtOnce">{{ranger_audit_logs_merge_factor}}</int>
+      <int name="segmentsPerTier">{{ranger_audit_logs_merge_factor}}</int>
+    </mergePolicyFactory>
 
     <!-- Expert: Merge Scheduler
          The Merge Scheduler in Lucene controls how merges are
