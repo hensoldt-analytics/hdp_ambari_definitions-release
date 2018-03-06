@@ -58,12 +58,10 @@ hive_interactive_pid = format("{hive_pid_dir}/hive-interactive.pid")
 hive_metastore_pid = format("{hive_pid_dir}/hive.pid")
 
 process_name = 'mysqld'
-if OSCheck.is_suse_family() or OSCheck.is_ubuntu_family():
-  daemon_name = 'mysql'
-elif OSCheck.is_redhat_family() and int(OSCheck.get_os_major_version()) >= 7:
-  daemon_name = 'mariadb'
-else:
-  daemon_name = 'mysqld'
+
+SERVICES_DIR = '/etc/init.d'
+POSSIBLE_DAEMON_NAMES = ['mysql', 'mysqld', 'mariadb']
+
 
 # Security related/required params
 hostname = config['agentLevelParams']['hostname']
