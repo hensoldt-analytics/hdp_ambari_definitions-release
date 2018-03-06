@@ -37,7 +37,7 @@ SERVER_ROLE_DIRECTORY_MAP = {
   'HIVE_METASTORE' : 'hive-metastore',
   'HIVE_SERVER' : 'hive-server2',
   'HIVE_CLIENT' : 'hive-client',
-  'HIVE_SERVER_INTERACTIVE' : 'hive-server2-hive2'
+  'HIVE_SERVER_INTERACTIVE' : 'hive-server2'
 }
 
 
@@ -76,11 +76,9 @@ hive_user = config['configurations']['hive-env']['hive_user']
 # default configuration directories
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
-hive_etc_dir_prefix = "/etc/hive"
-hive_interactive_etc_dir_prefix = "/etc/hive2"
 
-hive_server_conf_dir = "/etc/hive/conf.server"
-hive_server_interactive_conf_dir = "/etc/hive2/conf.server"
+hive_server_conf_dir = "/etc/hive/conf"
+hive_server_interactive_conf_dir = "/etc/hive_llap/conf"
 
 hive_home_dir = format("{stack_root}/current/{component_directory}")
 hive_conf_dir = format("{stack_root}/current/{component_directory}/conf")
@@ -92,7 +90,7 @@ if check_stack_feature(StackFeature.CONFIG_VERSIONING, stack_version_formatted_m
 
 # if stack version supports hive serve interactive
 if check_stack_feature(StackFeature.HIVE_SERVER_INTERACTIVE, stack_version_formatted_major):
-  hive_server_interactive_conf_dir = format("{stack_root}/current/{component_directory_interactive}/conf/")
+  hive_server_interactive_conf_dir = format("{stack_root}/current/{component_directory_interactive}/conf_llap/")
 
 hive_config_dir = hive_client_conf_dir
 

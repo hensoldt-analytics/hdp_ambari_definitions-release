@@ -222,6 +222,12 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>tez.history.logging.log.level</name>
+    <value>TASK_ATTEMPT</value>
+    <description>Set the log level to TASK_ATTEMPT.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>tez.history.logging.taskattempt-filters</name>
     <value>SERVICE_BUSY,EXTERNAL_PREEMPTION</value>
     <description>TASK_ATTEMPT events to be ignored.</description>
@@ -252,6 +258,53 @@
   <property>
     <name>tez.runtime.shuffle.parallel.copies</name>
     <value>8</value>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>tez.runtime.shuffle.ssl.enable</name>
+    <value>false</value>
+     <value-attributes>
+      <type>boolean</type>
+      <overridable>false</overridable>
+      <editable-only-at-install>true</editable-only-at-install>
+    </value-attributes>
+    <final>true</final>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>tez.runtime.shuffle.keep-alive.enabled</name>
+    <value>true</value>
+    <description>Connection keep-alive for shuffle</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>tez.am.am-rm.heartbeat.interval-ms.max</name>
+    <value>10000</value>
+    <description>The heartbeat interval between the tez AM and YARN RM</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>tez.runtime.enable.final-merge.in.output</name>
+    <value>false</value>
+    <description>Whether to enable a map side merge of outputs</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>tez.am.task.reschedule.higher.priority</name>
+    <value>false</value>
+    <description>Whether rescheduled tasks should be treated at higher priority</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>tez.runtime.shuffle.connect.timeout</name>
+    <value>30000</value>
+    <description>Shuffle connect timeouts (ms)</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>tez.runtime.shuffle.read.timeout</name>
+    <value>30000</value>
+    <description>Shuffle read timeout (ms)</description>
     <on-ambari-upgrade add="false"/>
   </property>
 </configuration>

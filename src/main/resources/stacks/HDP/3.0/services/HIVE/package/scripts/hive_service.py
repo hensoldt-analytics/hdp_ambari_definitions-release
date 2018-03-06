@@ -25,11 +25,14 @@ import time
 # Ambari Commons & Resource Management Imports
 from ambari_commons.constants import UPGRADE_TYPE_ROLLING
 from resource_management.core import shell
+from resource_management.core import utils
+from resource_management.core.exceptions import Fail
 from resource_management.core.logger import Logger
 from resource_management.core.resources.system import File, Execute
-from resource_management.core.shell import as_user
+from resource_management.core.shell import as_user, quote_bash_args
 from resource_management.libraries.functions import get_user_call_output
 from resource_management.libraries.functions import StackFeature
+from resource_management.libraries.functions.decorator import retry
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.libraries.functions.stack_features import check_stack_feature
@@ -92,6 +95,10 @@ def hive_service(name, action='start', upgrade_type=None):
       if not validation_called:
         emessage = "ERROR! DB connection check should be executed at least one time!"
         Logger.error(emessage)
+    
+    #if name == 'hiveserver2':
+      #wait_for_znode()
+      #create_hive_metastore_schema()
 
   elif action == 'stop':
 
@@ -162,7 +169,53 @@ def check_fs_root(conf_dir, execution_path):
     out = out.strip()
     cmd = format("{metatool_cmd} -updateLocation {fs_root} {out}")
     Execute(cmd,
-            user=params.hive_user,
-            environment={'PATH': execution_path}
+            user = params.hive_user,
+            environment = {'PATH': execution_path}
     )
 
+@retry(times=30, sleep_time=5, err_class=Fail)
+def wait_for_znode():
+  import params
+  
+  cmd = format("{zk_bin}/zkCli.sh ls /{hive_server2_zookeeper_namespace} | grep '\[serverUri='")
+  code, out = shell.call(cmd)
+  if code == 1:
+    raise Fail(format("ZooKeeper node /{hive_server2_zookeeper_namespace} is not ready yet"))
+
+def create_hive_metastore_schema():
+  import params
+
+  create_hive_schema_cmd = format("export HIVE_CONF_DIR={hive_server_conf_dir} ; "
+                                  "{hive_schematool_bin}/schematool -initSchema "
+                                  "-dbType hive "
+                                  "-metaDbType {hive_metastore_db_type} "
+                                  "-url '{hive_jdbc_url}' "
+                                  "-userName {hive_metastore_user_name} "
+                                  "-passWord {hive_metastore_user_passwd!p} -verbose")
+
+  check_hive_schema_created_cmd = as_user(format("export HIVE_CONF_DIR={hive_server_conf_dir} ; "
+                                          "{hive_schematool_bin}/schematool -info "
+                                          "-dbType hive "
+                                          "-metaDbType {hive_metastore_db_type} "
+                                          "-url '{hive_jdbc_url}' "
+                                          "-userName {hive_metastore_user_name} "
+                                          "-passWord {hive_metastore_user_passwd!p} -verbose"), params.hive_user)
+
+
+  # HACK: in cases with quoted passwords and as_user (which does the quoting as well) !p won't work for hiding passwords.
+  # Fixing it with the hack below:
+  quoted_hive_metastore_user_passwd = quote_bash_args(quote_bash_args(params.hive_metastore_user_passwd))
+  if quoted_hive_metastore_user_passwd.startswith("'") and quoted_hive_metastore_user_passwd.endswith("'") \
+      or quoted_hive_metastore_user_passwd.startswith('"') and quoted_hive_metastore_user_passwd.endswith('"'):
+    quoted_hive_metastore_user_passwd = quoted_hive_metastore_user_passwd[1:-1]
+  Logger.sensitive_strings[repr(check_hive_schema_created_cmd)] = repr(check_hive_schema_created_cmd.replace(
+      format("-passWord {quoted_hive_metastore_user_passwd}"), "-passWord " + utils.PASSWORDS_HIDE_STRING))
+  Logger.sensitive_strings[repr(create_hive_schema_cmd)] = repr(create_hive_schema_cmd.replace(
+      format("-passWord {quoted_hive_metastore_user_passwd}"), "-passWord " + utils.PASSWORDS_HIDE_STRING))
+
+  Execute(create_hive_schema_cmd,
+          not_if = check_hive_schema_created_cmd,
+          user = params.hive_user
+  )
+  
+  Logger.info("Sys DB is set up")

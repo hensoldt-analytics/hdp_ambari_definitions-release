@@ -449,8 +449,53 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.llap.io.allocator.mmap</name>
+    <display-name>Turn SSD Cache On?</display-name>
+    <description>Turn SSD Cache On?</description>
+    <value>true</value>
+    <depends-on>
+      <property>
+        <type>hive-interactive-env</type>
+        <name>enable_hive_interactive</name>
+      </property>
+    </depends-on>
+    <value-attributes>
+      <type>value-list</type>
+      <overridable>false</overridable>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>Yes</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>No</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.llap.io.allocator.mmap.path</name>
+    <display-name>SSD mount path</display-name>
+    <description>SSD mount path</description>
+    <value></value>
+    <depends-on>
+      <property>
+        <type>hive-interactive-env</type>
+        <name>enable_hive_interactive</name>
+      </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.llap.io.allocator.mmap</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.llap.daemon.vcpus.per.instance</name>
-    <value>${hive.llap.daemon.num.executors}</value>
+    <value>{hive_llap_daemon_num_executors}</value>
     <description>The total number of vcpus to use for the executors inside LLAP.</description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -783,6 +828,20 @@ limitations under the License.
     <name>hive.merge.nway.joins</name>
     <value>false</value>
     <description>Merge adjacent joins into a single n-way join</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>dfs.client.mmap.enabled</name>
+    <value>false</value>
+    <description>Disable HDFS caching fo LLAP</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>dfs.short.circuit.shared.memory.watcher.interrupt.check.ms</name>
+    <value>0</value>
+    <description>Disable HDFS caching fo LLAP</description>
     <on-ambari-upgrade add="false"/>
   </property>
 

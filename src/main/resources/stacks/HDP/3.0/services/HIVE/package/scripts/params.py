@@ -118,6 +118,7 @@ hive_lib = format('{stack_root}/current/{component_directory}/lib')
 hive_version_lib = format('{stack_root}/{version}/hive/lib')
 hive_var_lib = '/var/lib/hive'
 hive_user_home_dir = "/home/hive"
+zk_bin = format('{stack_root}/current/zookeeper-client/bin')
 
 # starting on stacks where HSI is supported, we need to begin using the 'hive2' schematool
 hive_server2_hive2_dir = None
@@ -163,8 +164,6 @@ hive_interactive_var_lib = '/var/lib/hive2'
 hadoop_streaming_jars = '/usr/lib/hadoop-mapreduce/hadoop-streaming-*.jar'
 
 hive_metastore_site_supported = False
-hive_etc_dir_prefix = "/etc/hive"
-hive_interactive_etc_dir_prefix = "/etc/hive2"
 limits_conf_dir = "/etc/security/limits.d"
 
 hive_user_nofile_limit = default("/configurations/hive-env/hive_user_nofile_limit", "32000")
@@ -382,7 +381,7 @@ elif status_params.role == "HIVE_SERVER" and hive_server_hosts is not None and h
 elif status_params.role == "HIVE_SERVER_INTERACTIVE" and hive_server_interactive_hosts is not None and hostname in hive_server_interactive_hosts:
   hive_conf_dirs_list.append(status_params.hive_server_interactive_conf_dir)
   ranger_hive_component = status_params.SERVER_ROLE_DIRECTORY_MAP['HIVE_SERVER_INTERACTIVE']
-# log4j version is 2 for hive2; put config files under /etc/hive2/conf
+# log4j version is 2 for hive2; put config files under /etc/hive_llap/conf
 if status_params.role == "HIVE_SERVER_INTERACTIVE":
   log4j_version = '2'
 
@@ -628,6 +627,7 @@ if has_hive_interactive:
   hive_llap_io_mem_size = config['configurations']['hive-interactive-site']['hive.llap.io.memory.size']
   llap_heap_size = config['configurations']['hive-interactive-env']['llap_heap_size']
   llap_app_name = config['configurations']['hive-interactive-env']['llap_app_name']
+  hive_llap_daemon_num_executors = config['configurations']['hive-interactive-site']['hive.llap.daemon.num.executors']
   hive_llap_principal = None
   if security_enabled:
     hive_llap_keytab_file = config['configurations']['hive-interactive-site']['hive.llap.daemon.keytab.file']
@@ -636,6 +636,9 @@ if has_hive_interactive:
 
 hive_server2_zookeeper_namespace = config['configurations']['hive-site']['hive.server2.zookeeper.namespace']
 hive_zookeeper_quorum = config['configurations']['hive-site']['hive.zookeeper.quorum']
+
+hive_jdbc_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace={hive_server2_zookeeper_namespace}")
+
 
 if security_enabled:
   hive_principal = hive_server_principal.replace('_HOST',hostname.lower())
@@ -718,7 +721,7 @@ if enable_ranger_hive:
 
   ranger_hive_url = format("{hive_url}/default;principal={hive_principal}") if security_enabled else hive_url
   if stack_supports_ranger_hive_jdbc_url_change:
-    ranger_hive_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace={hive_server2_zookeeper_namespace}")
+    ranger_hive_url = hive_jdbc_url
 
   hive_ranger_plugin_config = {
     'username': repo_config_username,
