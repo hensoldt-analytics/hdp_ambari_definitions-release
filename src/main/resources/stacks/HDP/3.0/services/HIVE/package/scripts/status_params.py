@@ -59,7 +59,8 @@ hive_metastore_pid = format("{hive_pid_dir}/hive.pid")
 
 process_name = 'mysqld'
 
-SERVICES_DIR = '/etc/init.d'
+
+SERVICE_FILE_TEMPLATES = ['/etc/init.d/{0}', '/usr/lib/systemd/system/{0}.service']
 POSSIBLE_DAEMON_NAMES = ['mysql', 'mysqld', 'mariadb']
 
 
