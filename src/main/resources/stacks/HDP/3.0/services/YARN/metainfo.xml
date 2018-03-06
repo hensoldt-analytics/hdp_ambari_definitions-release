@@ -220,7 +220,7 @@
               <type>xml</type>
               <fileName>capacity-scheduler.xml</fileName>
               <dictionaryName>capacity-scheduler</dictionaryName>
-            </configFile>
+            </configFile>                        
             <configFile>
               <type>xml</type>
               <fileName>resource-types.xml</fileName>
@@ -278,6 +278,10 @@
       <themes>
         <theme>
           <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
+          <fileName>directories.json</fileName>
           <default>true</default>
         </theme>
       </themes>
@@ -421,6 +425,10 @@
       <themes>
         <theme>
           <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
+          <fileName>directories.json</fileName>
           <default>true</default>
         </theme>
       </themes>

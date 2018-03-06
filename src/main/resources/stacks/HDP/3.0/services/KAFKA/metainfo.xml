@@ -106,6 +106,14 @@
             </osSpecifics>
             <restartRequiredAfterChange>true</restartRequiredAfterChange>
             <restartRequiredAfterRackChange>true</restartRequiredAfterRackChange>
+
+            <themes>
+                <theme>
+                    <fileName>directories.json</fileName>
+                    <default>true</default>
+                </theme>
+            </themes>
+
         </service>
     </services>
 </metainfo>

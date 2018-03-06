@@ -168,7 +168,7 @@
             <script>scripts/hive_server_interactive.py</script>
             <scriptType>PYTHON</scriptType>
           </commandScript>
-           <customCommands>
+          <customCommands>
             <customCommand>
               <name>RESTART_LLAP</name>
               <commandScript>
@@ -354,6 +354,18 @@
       <themes>
         <theme>
           <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
+          <fileName>credentials.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
+          <fileName>database.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
+          <fileName>directories.json</fileName>
           <default>true</default>
         </theme>
       </themes>

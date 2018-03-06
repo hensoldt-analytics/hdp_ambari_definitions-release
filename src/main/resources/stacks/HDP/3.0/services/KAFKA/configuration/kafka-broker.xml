@@ -22,6 +22,7 @@
 <configuration xmlns:xi="http://www.w3.org/2001/XInclude" supports_final="true">
   <property>
     <name>log.dirs</name>
+    <display-name>Log directories</display-name>
     <value>/kafka-logs</value>
     <description>
       A comma-separated list of one or more directories in which Kafka data is stored.

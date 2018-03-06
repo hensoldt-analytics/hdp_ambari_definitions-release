@@ -23,6 +23,7 @@
   <!-- Inherited from HBase in HDP 2.0.6 -->
   <property>
     <name>hbase.rootdir</name>
+    <display-name>HBase root directory</display-name>
     <value>hdfs://localhost:8020/apps/hbase/data</value>
     <description>The directory shared by region servers and into
     which HBase persists.  The URL should be 'fully-qualified'
@@ -72,6 +73,7 @@
   </property>
   <property>
     <name>hbase.local.dir</name>
+    <display-name>HBase Local directory</display-name>
     <value>${hbase.tmp.dir}/local</value>
     <description>Directory on the local filesystem to be used as a local storage
     </description>
@@ -497,6 +499,7 @@
   </property>
   <property>
     <name>zookeeper.znode.parent</name>
+    <display-name>ZooKeeper Znode Parent</display-name>
     <value>/hbase-unsecure</value>
     <description>Root ZNode for HBase in ZooKeeper. All of HBase's ZooKeeper
       files that are configured with a relative path will go under this node.
@@ -576,6 +579,7 @@
   <!-- Inherited from HBase in HDP 2.2 -->
   <property>
     <name>hbase.bulkload.staging.dir</name>
+    <display-name>HBase Bulkload Staging directory</display-name>
     <value>/apps/hbase/staging</value>
     <description>A staging directory in default file system (HDFS)
       for bulk loading.

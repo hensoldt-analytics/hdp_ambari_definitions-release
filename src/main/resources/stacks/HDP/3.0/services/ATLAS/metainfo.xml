@@ -23,7 +23,7 @@
       <displayName>Atlas</displayName>
       <comment>Atlas Metadata and Governance platform</comment>
       <version>0.7.0.3.0</version>
-
+      
       <components>
         <component>
           <name>ATLAS_SERVER</name>
@@ -129,6 +129,10 @@
         </theme>
         <theme>
           <fileName>theme_version_2.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
+          <fileName>directories.json</fileName>
           <default>true</default>
         </theme>
       </themes>

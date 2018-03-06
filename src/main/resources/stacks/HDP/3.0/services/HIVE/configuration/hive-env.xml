@@ -279,6 +279,7 @@
     <value-attributes>
       <overridable>false</overridable>
       <type>value-list</type>
+      <entries_editable>false</entries_editable>
       <entries>
         <entry>
           <value>New MySQL Database</value>
@@ -295,10 +296,6 @@
         <entry>
           <value>Existing Oracle Database</value>
           <label>Existing Oracle</label>
-        </entry>
-        <entry>
-          <value>Existing SQL Anywhere Database</value>
-          <label>Existing SQL Anywhere</label>
         </entry>
       </entries>
     </value-attributes>
