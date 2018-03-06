@@ -38,7 +38,7 @@ class RangerTagsync(Script):
     import params
     env.set_params(params)
 
-    ranger_credential_helper(params.tagsync_cred_lib, 'tagadmin.user.password', 'rangertagsync', params.tagsync_jceks_path)
+    ranger_credential_helper(params.tagsync_cred_lib, 'tagadmin.user.password', params.rangertagsync_user_password, params.tagsync_jceks_path)
     File(params.tagsync_jceks_path,
        owner = params.unix_user,
        group = params.unix_group,
@@ -113,7 +113,7 @@ class RangerTagsync(Script):
   def create_atlas_user_keystore(self,env):
     import params
     env.set_params(params)
-    ranger_credential_helper(params.tagsync_cred_lib, 'atlas.user.password', 'admin', params.atlas_tagsync_jceks_path)
+    ranger_credential_helper(params.tagsync_cred_lib, 'atlas.user.password', params.atlas_admin_password, params.atlas_tagsync_jceks_path)
     File(params.atlas_tagsync_jceks_path,
          owner = params.unix_user,
          group = params.unix_group,

@@ -446,3 +446,21 @@ is_ranger_tagsync_host = 'role' in config and config['role'] == "RANGER_TAGSYNC"
 # zookeeper principal
 zookeeper_principal = default("/configurations/zookeeper-env/zookeeper_principal_name", "zookeeper@EXAMPLE.COM")
 zookeeper_principal_primary = get_bare_principal(zookeeper_principal)
+
+# rangerusersync user credential
+rangerusersync_username = 'rangerusersync'
+rangerusersync_user_password = config['configurations']['ranger-env']['rangerusersync_user_password']
+default_rangerusersync_user_password = 'rangerusersync'
+
+# rangertagsync user credential
+rangertagsync_username = 'rangertagsync'
+rangertagsync_user_password = config['configurations']['ranger-env']['rangertagsync_user_password']
+default_rangertagsync_user_password = 'rangertagsync'
+
+# keyadmin user credential
+keyadmin_username = 'keyadmin'
+keyadmin_user_password = config['configurations']['ranger-env']['keyadmin_user_password']
+default_keyadmin_user_password = 'keyadmin'
+
+# atlas admin user password
+atlas_admin_password = default("/configurations/atlas-env/atlas.admin.password", "admin")

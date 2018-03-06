@@ -40,7 +40,7 @@ class RangerUsersync(Script):
 
     if params.stack_supports_usersync_passwd:
       from setup_ranger_xml import ranger_credential_helper
-      ranger_credential_helper(params.ugsync_cred_lib, params.ugsync_policymgr_alias, 'rangerusersync', params.ugsync_policymgr_keystore)
+      ranger_credential_helper(params.ugsync_cred_lib, params.ugsync_policymgr_alias, params.rangerusersync_user_password, params.ugsync_policymgr_keystore)
 
       File(params.ugsync_policymgr_keystore,
         owner = params.unix_user,
