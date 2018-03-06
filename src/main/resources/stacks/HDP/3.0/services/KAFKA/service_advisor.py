@@ -163,6 +163,10 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
 
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
     kafka_broker = self.getServicesSiteProperties(services, "kafka-broker")
+    kafka_env = self.getServicesSiteProperties(services, "kafka-env")
+
+    if not kafka_env: #Kafka check not required
+      return
 
     security_enabled = self.isSecurityEnabled(services)
 
@@ -171,8 +175,7 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
     putKafkaBrokerAttributes = self.putPropertyAttribute(configurations, "kafka-broker")
 
     if security_enabled:
-      kafka_env = self.getServicesSiteProperties(services, "kafka-env")
-      kafka_user = kafka_env.get('kafka_user') if kafka_env is not None else None
+      kafka_user = kafka_env.get('kafka_user')
 
       if kafka_user is not None:
         kafka_super_users = kafka_broker.get('super.users') if kafka_broker is not None else None
