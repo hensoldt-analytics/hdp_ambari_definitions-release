@@ -75,6 +75,7 @@ stack_supports_ranger_setup_db_on_start = check_stack_feature(StackFeature.RANGE
 stack_supports_ranger_tagsync_ssl_xml_support = check_stack_feature(StackFeature.RANGER_TAGSYNC_SSL_XML_SUPPORT, version_for_stack_feature_checks)
 stack_supports_ranger_solr_configs = check_stack_feature(StackFeature.RANGER_SOLR_CONFIG_SUPPORT, version_for_stack_feature_checks)
 stack_supports_secure_ssl_password = check_stack_feature(StackFeature.SECURE_RANGER_SSL_PASSWORD, version_for_stack_feature_checks)
+stack_supports_multiple_env_sh_files = check_stack_feature(StackFeature.MULTIPLE_ENV_SH_FILES_SUPPORT, version_for_stack_feature_checks)
 
 upgrade_direction = default("/commandParams/upgrade_direction", None)
 
