@@ -487,9 +487,13 @@ class HDFSValidator(service_advisor.ServiceAdvisor):
     HTTP_ONLY = 'HTTP_ONLY'
     HTTPS_ONLY = 'HTTPS_ONLY'
     HTTP_AND_HTTPS = 'HTTP_AND_HTTPS'
-
     VALID_HTTP_POLICY_VALUES = [HTTP_ONLY, HTTPS_ONLY, HTTP_AND_HTTPS]
-    VALID_TRANSFER_PROTECTION_VALUES = ['authentication', 'integrity', 'privacy']
+
+    TRANSFER_PROTECTION_AUTHENTICATION = 'authentication'
+    TRANSFER_PROTECTION_INTEGRITY = 'integrity'
+    TRANSFER_PROTECTION_PRIVACY = 'privacy'
+    TRANSFER_PROTECTION_AUTHENTICATION_AND_PRIVACY = 'authentication,privacy'
+    VALID_TRANSFER_PROTECTION_VALUES = [TRANSFER_PROTECTION_AUTHENTICATION, TRANSFER_PROTECTION_INTEGRITY, TRANSFER_PROTECTION_PRIVACY, TRANSFER_PROTECTION_AUTHENTICATION_AND_PRIVACY]
 
     validationItems = []
     address_properties = [
@@ -598,17 +602,15 @@ class HDFSValidator(service_advisor.ServiceAdvisor):
 
       # Check if it is appropriate to use dfs.data.transfer.protection
       if data_transfer_protection_value is not None:
-        if dfs_http_policy_value in [HTTP_ONLY, HTTP_AND_HTTPS]:
-          validationItems.append({"config-name": data_transfer_protection,
-                                  "item": self.getWarnItem(
-                                    "{0} property can not be used when {1} is set to any "
-                                    "value other then {2}. Tip: When {1} property is not defined, it defaults to {3}".format(
-                                      data_transfer_protection, dfs_http_policy, HTTPS_ONLY, HTTP_ONLY))})
-        elif not data_transfer_protection_value in VALID_TRANSFER_PROTECTION_VALUES:
-          validationItems.append({"config-name": data_transfer_protection,
-                                  "item": self.getWarnItem(
-                                    "Invalid property value: {0}. Valid values are {1}.".format(
-                                      data_transfer_protection_value, VALID_TRANSFER_PROTECTION_VALUES))})
+        if data_transfer_protection_value not in VALID_TRANSFER_PROTECTION_VALUES:
+          validationItems.append({"config-name": data_transfer_protection, "item": self.getWarnItem(
+                                      "Invalid property value: {0}. Valid values are {1}.".format(data_transfer_protection_value, VALID_TRANSFER_PROTECTION_VALUES)
+                                  )})
+        elif (data_transfer_protection_value == TRANSFER_PROTECTION_PRIVACY or data_transfer_protection_value == TRANSFER_PROTECTION_AUTHENTICATION_AND_PRIVACY) and dfs_http_policy_value in [HTTP_ONLY, HTTP_AND_HTTPS]:
+          validationItems.append({"config-name": data_transfer_protection, "item": self.getWarnItem(
+                                      "{0} property can not be used when {1} is set to any value other then {2}. Tip: When {1} property is not defined, it defaults to {3}".format(
+                                      data_transfer_protection, dfs_http_policy, HTTPS_ONLY, HTTP_ONLY)
+                                  )})
     return self.toConfigurationValidationProblems(validationItems, "hdfs-site")
 
   def validateHadoopEnvConfigurationsFromHDP22(self, properties, recommendedDefaults, configurations, services, hosts):
