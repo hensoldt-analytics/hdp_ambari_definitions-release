@@ -264,7 +264,7 @@ export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS {% if hbase_max_direct_memory_size 
   </property>
   <property>
     <name>phoenix_sql_enabled</name>
-    <value>false</value>
+    <value>true</value>
     <description>Enable Phoenix SQL</description>
     <display-name>Enable Phoenix</display-name>
     <value-attributes>
