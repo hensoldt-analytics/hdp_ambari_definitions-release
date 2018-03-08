@@ -41,7 +41,8 @@
             "hadoop.http.authentication.simple.anonymous.allowed" : "false",
             "hadoop.http.authentication.signature.secret.file" : "/etc/security/http_secret",
             "hadoop.http.authentication.type" : "kerberos",
-            "hadoop.http.filter.initializers" : "org.apache.hadoop.security.AuthenticationFilterInitializer,org.apache.hadoop.security.HttpCrossOriginFilterInitializer"
+            "hadoop.http.filter.initializers" : "org.apache.hadoop.security.AuthenticationFilterInitializer,org.apache.hadoop.security.HttpCrossOriginFilterInitializer",
+            "hadoop.rpc.protection": "authentication,privacy"
           }
         },
         {
@@ -165,7 +166,8 @@
             {
               "hdfs-site" : {
                 "dfs.datanode.address" : "0.0.0.0:1019",
-                "dfs.datanode.http.address": "0.0.0.0:1022"
+                "dfs.datanode.http.address": "0.0.0.0:1022",
+                "dfs.data.transfer.protection": "authentication,privacy"
               }
             }
           ]
