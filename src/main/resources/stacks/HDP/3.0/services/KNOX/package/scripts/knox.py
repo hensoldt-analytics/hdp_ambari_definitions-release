@@ -93,7 +93,7 @@ def knox():
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def knox():
     import params
-    Directory([params.knox_data_dir, params.knox_logs_dir, params.knox_pid_dir, params.knox_conf_dir, os.path.join(params.knox_conf_dir, "topologies")],
+    Directory([params.knox_data_dir, params.knox_logs_dir, params.knox_pid_dir, params.knox_conf_dir, os.path.join(params.knox_conf_dir, "topologies"), params.knox_descriptors_dir, params.knox_shared_providers_dir],
               owner = params.knox_user,
               group = params.knox_group,
               create_parents = True,

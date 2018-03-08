@@ -561,3 +561,7 @@ if "zeppelin-config" in config['configurations']:
   zeppelin_ui_urls += buildUrlElement(protocol, host, port, "")
   zeppelin_ws_urls += buildUrlElement("ws", host, port, "/ws")
   websocket_support = "true"
+
+# for stack 3.0 +
+knox_descriptors_dir = format('{knox_conf_dir}/descriptors')
+knox_shared_providers_dir = format('{knox_conf_dir}/shared-providers')
