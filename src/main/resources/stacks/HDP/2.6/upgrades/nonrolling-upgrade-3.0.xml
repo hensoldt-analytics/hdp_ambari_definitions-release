@@ -363,9 +363,13 @@
 
             <!--RANGER-KMS-->
 
-            <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Applying Atlas proxy-user configurations.">
-                <task xsi:type="server_action"
-                      class="org.apache.ambari.server.serveraction.upgrades.AtlasProxyUserConfigCalculation"/>
+            <!--ATLAS-->
+            <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Updating Atlas configurations.">
+                <task xsi:type="configure" id="atlas_upgrade_configuration"/>
+            </execute-stage>
+
+            <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Adding Janus-graph logger configurations for Atlas.">
+                <task xsi:type="configure" id="atlas_log4j_adding_janus_graph"/>
             </execute-stage>
 
             <!--KAFKA-->
@@ -915,16 +919,6 @@
             </component>
 
             <component name="RANGER_TAGSYNC">
-
-                <pre-upgrade>
-                    <task xsi:type="execute" hosts="all">
-                        <script>scripts/ranger_tagsync.py</script>
-                        <function>configure_atlas_user_for_tagsync</function>
-                    </task>
-                </pre-upgrade>
-
-                <pre-downgrade copy-upgrade="true"/>
-
                 <upgrade>
                     <task xsi:type="restart-task"/>
                 </upgrade>
