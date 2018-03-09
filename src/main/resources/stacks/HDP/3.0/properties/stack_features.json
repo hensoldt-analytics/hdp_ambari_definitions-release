@@ -394,9 +394,79 @@
         "min_version": "2.6.0.0"
       },
       {
+        "name": "toolkit_config_update",
+        "description": "Support separate input and output for toolkit configuration",
+        "min_version": "2.6.0.0"
+      },
+      {
+        "name": "nifi_encrypt_config",
+        "description": "Encrypt sensitive properties written to nifi property file",
+        "min_version": "2.6.0.0"
+      },
+      {
+        "name": "tls_toolkit_san",
+        "description": "Support subject alternative name flag",
+        "min_version": "2.6.0.0"
+      },
+      {
+        "name": "admin_toolkit_support",
+        "description": "Supports the nifi admin toolkit",
+        "min_version": "2.6.0.0"
+      },
+      {
+        "name": "nifi_jaas_conf_create",
+        "description": "Create NIFI jaas configuration when kerberos is enabled",
+        "min_version": "2.6.0.0"
+      },
+      {
+        "name": "registry_remove_rootpath",
+        "description": "Registry remove root path setting",
+        "min_version": "2.6.3.0"
+      },
+      {
+        "name": "nifi_encrypted_authorizers_config",
+        "description": "Support encrypted authorizers.xml configuration for version 3.1 onwards",
+        "min_version": "2.6.5.0"
+      },
+      {
         "name": "multiple_env_sh_files_support",
         "description": "This feature is supported by RANGER and RANGER_KMS service to remove multiple env sh files during upgrade to stack 3.0",
         "max_version": "2.6.99.99"
+      },
+      {
+        "name": "registry_allowed_resources_support",
+        "description": "Registry allowed resources",
+        "min_version": "3.0.0.0"
+      },
+      {
+        "name": "registry_rewriteuri_filter_support",
+        "description": "Registry RewriteUri servlet filter",
+        "min_version": "3.0.0.0"
+      },
+      {
+        "name": "registry_support_schema_migrate",
+        "description": "Support schema migrate in registry for version 3.1 onwards",
+        "min_version": "3.0.0.0"
+      },
+      {
+        "name": "sam_support_schema_migrate",
+        "description": "Support schema migrate in SAM for version 3.1 onwards",
+        "min_version": "3.0.0.0"
+      },
+      {
+        "name": "sam_storage_core_in_registry",
+        "description": "Storage core module moved to registry",
+        "min_version": "3.0.0.0"
+      },
+      {
+        "name": "sam_db_file_storage",
+        "description": "DB based file storage in SAM",
+        "min_version": "3.0.0.0"
+      },
+      {
+        "name": "kafka_extended_sasl_support",
+        "description": "Support SASL PLAIN and GSSAPI",
+        "min_version": "3.0.0.0"
       }
     ]
   }
