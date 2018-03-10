@@ -96,13 +96,15 @@
   <property>
     <name>admin_username</name>
     <value>admin</value>
+    <display-name>Ranger Admin username</display-name>
     <description>This is the username for default admin user that is used for creating ambari user in Ranger Admin</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>admin_password</name>
-    <value>admin</value>
+    <value></value>
     <property-type>PASSWORD</property-type>
+    <display-name>Ranger Admin user's password</display-name>
     <description>This is the password for default admin user that is used for creating ambari user in Ranger Admin</description>
     <value-attributes>
       <type>password</type>
@@ -542,6 +544,45 @@
     <value-attributes>
       <property-file-name>ranger-env.sh.j2</property-file-name>
       <property-file-type>text</property-file-type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>rangerusersync_user_password</name>
+    <value></value>
+    <property-type>PASSWORD</property-type>
+    <display-name>Ranger Usersync user's password</display-name>
+    <description>This is the rangerusersync user password</description>
+    <value-attributes>
+      <type>password</type>
+      <overridable>false</overridable>
+      <editable-only-at-install>true</editable-only-at-install>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>rangertagsync_user_password</name>
+    <value></value>
+    <property-type>PASSWORD</property-type>
+    <display-name>Ranger Tagsync user's password</display-name>
+    <description>This is the rangertagsync user password</description>
+    <value-attributes>
+      <type>password</type>
+      <overridable>false</overridable>
+      <editable-only-at-install>true</editable-only-at-install>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>keyadmin_user_password</name>
+    <value></value>
+    <property-type>PASSWORD</property-type>
+    <display-name>Ranger KMS keyadmin user's password</display-name>
+    <description>This is the keyadmin user password</description>
+    <value-attributes>
+      <type>password</type>
+      <overridable>false</overridable>
+      <editable-only-at-install>true</editable-only-at-install>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>

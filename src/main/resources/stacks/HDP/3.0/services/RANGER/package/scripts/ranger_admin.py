@@ -134,8 +134,14 @@ class RangerAdmin(Script):
     if setup_db and upgrade_type is None:
       setup_ranger_xml.setup_java_patch()
 
-      if params.stack_supports_ranger_admin_password_change:
-        setup_ranger_xml.setup_ranger_admin_passwd_change()
+      # Updating password for Ranger Admin user
+      setup_ranger_xml.setup_ranger_admin_passwd_change(params.admin_username, params.admin_password, params.default_admin_password)
+      # Updating password for Ranger Usersync user
+      setup_ranger_xml.setup_ranger_admin_passwd_change(params.rangerusersync_username, params.rangerusersync_user_password, params.default_rangerusersync_user_password)
+      # Updating password for Ranger Tagsync user
+      setup_ranger_xml.setup_ranger_admin_passwd_change(params.rangertagsync_username, params.rangertagsync_user_password, params.default_rangertagsync_user_password)
+      # Updating password for Ranger Keyadmin user
+      setup_ranger_xml.setup_ranger_admin_passwd_change(params.keyadmin_username, params.keyadmin_user_password, params.default_keyadmin_user_password)
 
   def set_ru_rangeradmin_in_progress(self, upgrade_marker_file):
     config_dir = os.path.dirname(upgrade_marker_file)
