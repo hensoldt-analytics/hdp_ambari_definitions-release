@@ -100,6 +100,10 @@ class DruidBase(Script):
       show_logs(params.druid_log_dir, params.druid_user)
       raise
 
+  def get_pid_files(self):
+    import status_params
+    return [getPid(status_params, self.nodeType)]
+
   def status(self, env):
     import status_params
     env.set_params(status_params)
