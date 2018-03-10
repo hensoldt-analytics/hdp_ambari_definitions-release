@@ -204,7 +204,7 @@ def setup_ranger_admin(upgrade_type=None):
 
   create_core_site_xml(ranger_conf)
 
-  if params.stack_supports_ranger_kerberos and params.security_enabled:
+  if params.stack_supports_ranger_kerberos:
     if params.is_hbase_ha_enabled and params.ranger_hbase_plugin_enabled:
       XmlConfig("hbase-site.xml",
         conf_dir=ranger_conf,

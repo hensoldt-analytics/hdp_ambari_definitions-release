@@ -43,6 +43,7 @@ from resource_management.libraries.functions.format_jvm_option import format_jvm
 from resource_management.libraries.functions.hdfs_utils import is_https_enabled_in_hdfs
 from resource_management.libraries.functions import is_empty
 from resource_management.libraries.functions.setup_ranger_plugin_xml import get_audit_configs, generate_ranger_service_config
+from resource_management.libraries.functions import namenode_ha_utils
 
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
@@ -541,6 +542,17 @@ if enable_ranger_hdfs:
   # for SQLA explicitly disable audit to DB for Ranger
   if has_ranger_admin and stack_supports_ranger_audit_db and xa_audit_db_flavor.lower() == 'sqla':
     xa_audit_db_is_enabled = False
+
+  # Configuration when HDFS federation is enabled
+  # TODO: This will need to be updated when Ambari supports Namenode-Federation without enabling Namenode-HA.
+  is_hdfs_federation_enabled = False if dfs_ha_nameservices is None else "," in dfs_ha_nameservices
+  is_namenode_host = 'role' in config and config['role'] == "NAMENODE"
+  if is_hdfs_federation_enabled and is_namenode_host:
+    namenode_nameservice,namenode_logical_name = namenode_ha_utils.get_namespace_mapping_for_hostname(hostname, hdfs_site, security_enabled, hdfs_user)
+    if namenode_nameservice is not None:
+      repo_name = repo_name + '_' + namenode_nameservice
+      hdfs_ranger_plugin_repo['name'] = repo_name
+      hdfs_ranger_plugin_repo['configs']['fs.default.name'] = "hdfs://"+ namenode_nameservice
 
 # need this to capture cluster name from where ranger hdfs plugin is enabled
 cluster_name = config['clusterName']
