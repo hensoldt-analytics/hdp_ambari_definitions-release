@@ -239,6 +239,16 @@
             <type>atlas-env</type>
             <set key="atlas.hbase.conf.dir" value="/etc/hbase/conf"/>
           </definition>
+          <definition xsi:type="configure" id="atlas_upgrade_configuration" summary="Updating Atlas configurations.">
+            <type>application-properties</type>
+            <transfer operation="delete" delete-key="atlas.graph.storage.backend" />
+            <transfer operation="delete" delete-key="atlas.graph.index.search.backend" />
+            <set key="atlas.graph.storage.hbase.table" value="atlas_janus" />
+          </definition>
+          <definition xsi:type="configure" id="atlas_log4j_adding_janus_graph" summary="Adding Janus-graph logger configurations for Atlas.">
+            <type>atlas-log4j</type>
+            <replace key="content" find="&lt;logger name=&quot;com.thinkaurelius.titan&quot; additivity=&quot;false&quot;&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;level value=&quot;warn&quot;/&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;appender-ref ref=&quot;FILE&quot;/&gt;&#xA;&#x20;&#x20;&lt;/logger&gt;" replace-with="&lt;logger name=&quot;com.thinkaurelius.titan&quot; additivity=&quot;false&quot;&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;level value=&quot;warn&quot;/&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;appender-ref ref=&quot;FILE&quot;/&gt;&#xA;&#x20;&#x20;&lt;/logger&gt;&#xA;&#xA;&#xA;&#x20;&#x20;&lt;logger name=&quot;org.janusgraph&quot; additivity=&quot;false&quot;&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;level value=&quot;warn&quot;/&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;appender-ref ref=&quot;FILE&quot;/&gt;&#xA;&#x20;&#x20;&lt;/logger&gt;&#xA;"/>
+          </definition>
         </changes>
       </component>
     </service>
