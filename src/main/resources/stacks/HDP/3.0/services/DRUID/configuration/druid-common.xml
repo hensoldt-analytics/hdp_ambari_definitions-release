@@ -262,7 +262,7 @@
   </property>
   <property>
     <name>druid.monitoring.monitors</name>
-    <value>["com.metamx.metrics.JvmMonitor"]</value>
+    <value>["io.druid.java.util.metrics.JvmMonitor"]</value>
     <description>Password to open the trust store file.</description>
     <on-ambari-upgrade add="false"/>
   </property>
