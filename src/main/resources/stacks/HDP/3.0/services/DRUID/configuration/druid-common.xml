@@ -257,13 +257,13 @@
   <property>
     <name>druid.emitter.ambari-metrics.eventConverter</name>
     <value>{"type":"whiteList"}</value>
-    <description>Password to open the trust store file.</description>
+    <description>Filter and converter of druid events to ambari-metrics timeline event.</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>druid.monitoring.monitors</name>
     <value>["io.druid.java.util.metrics.JvmMonitor"]</value>
-    <description>Password to open the trust store file.</description>
+    <description>List of Druid monitors used by a node.</description>
     <on-ambari-upgrade add="false"/>
   </property>
 
