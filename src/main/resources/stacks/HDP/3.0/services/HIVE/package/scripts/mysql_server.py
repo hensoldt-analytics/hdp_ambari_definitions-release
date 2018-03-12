@@ -47,12 +47,12 @@ class MysqlServer(Script):
     env.set_params(params)
     mysql_configure()
 
-  def start(self, env, rolling_restart=False):
+  def start(self, env, upgrade_type=None):
     import params
     env.set_params(params)
     mysql_service(action='start')
 
-  def stop(self, env, rolling_restart=False):
+  def stop(self, env, upgrade_type=None):
     import params
     env.set_params(params)
     mysql_service(action='stop')
