@@ -610,7 +610,6 @@ if yarn_timeline_service_enabled:
         break
 
 coprocessor_jar_name = "hadoop-yarn-server-timelineservice-hbase-coprocessor.jar"
-atsv2_host = config['clusterHostInfo']['timeline_reader_hosts'][0]
 hbase_download_url = config['configurations']['yarn-hbase-site']['hbase.download.url']
 hbase_package_name = config['configurations']['yarn-hbase-site']['hbase.package.name']
 yarn_timeline_jar_location = format("file://{hadoop_yarn_home}/timelineservice/{coprocessor_jar_name}")
