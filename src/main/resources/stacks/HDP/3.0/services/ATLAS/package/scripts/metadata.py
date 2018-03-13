@@ -108,7 +108,7 @@ def metadata(type='server'):
             owner = params.metadata_user
         )
 
-      files_to_chown = [format("{conf_dir}/policy-store.txt"), format("{conf_dir}/users-credentials.properties")]
+      files_to_chown = [format("{conf_dir}/atlas-simple-authz-policy.json"), format("{conf_dir}/users-credentials.properties")]
       for file in files_to_chown:
         if os.path.exists(file):
           Execute(('chown', format('{metadata_user}:{user_group}'), file),

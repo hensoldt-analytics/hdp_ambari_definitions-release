@@ -170,8 +170,8 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>atlas.auth.policy.file</name>
-    <value>{{conf_dir}}/policy-store.txt</value>
+    <name>atlas.simple.authz.policy.file</name>
+    <value>{{conf_dir}}/atlas-simple-authz-policy.json</value>
     <description>Path for the Atlas policy file.</description>
     <on-ambari-upgrade add="false"/>
   </property>
