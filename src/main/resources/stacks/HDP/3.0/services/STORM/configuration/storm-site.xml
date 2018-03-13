@@ -884,7 +884,7 @@
   </property>
   <property>
     <name>nimbus.authorizer</name>
-    <description>Log directory for Storm.</description>
+    <description>Authorization plug-in for Nimbus. Should be provided as a fully qualified class name (e.g. org.apache.storm.security.auth.authorizer.SimpleACLAuthorizer) .</description>
     <depends-on>
       <property>
         <type>ranger-storm-plugin-properties</type>
