@@ -45,11 +45,10 @@ def service(componentName, action='start', serviceName='yarn'):
 
   if serviceName == 'mapreduce' and componentName == 'historyserver':
     delete_pid_file = True
-    daemon = format("{mapred_bin}/mapred")
+    daemon = format("{mapred_bin}/mr-jobhistory-daemon.sh")
     pid_file = format("{mapred_pid_dir}/hadoop-{mapred_user}-{componentName}.pid")
     usr = params.mapred_user
     log_dir = params.mapred_log_dir
-    cmd = format("export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {daemon} --daemon")
   else:
     # !!! yarn-daemon.sh deletes the PID for us; if we remove it the script
     # may not work correctly when stopping the service
@@ -63,7 +62,7 @@ def service(componentName, action='start', serviceName='yarn'):
       usr = params.yarn_user
     log_dir = params.yarn_log_dir
 
-    cmd = format("export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {daemon} --config {hadoop_conf_dir}")
+  cmd = format("export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {daemon} --config {hadoop_conf_dir}")
 
   if action == 'start':
     daemon_cmd = format("{ulimit_cmd} {cmd} start {componentName}")
