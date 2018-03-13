@@ -21,6 +21,7 @@ limitations under the License.
 # Python Imports
 import os
 import time
+import traceback
 
 # Ambari Commons & Resource Management Imports
 from ambari_commons.constants import UPGRADE_TYPE_ROLLING
@@ -96,9 +97,9 @@ def hive_service(name, action='start', upgrade_type=None):
         emessage = "ERROR! DB connection check should be executed at least one time!"
         Logger.error(emessage)
     
-    #if name == 'hiveserver2':
-      #wait_for_znode()
-      #create_hive_metastore_schema()
+    if name == 'hiveserver2':
+      wait_for_znode()
+      create_hive_metastore_schema()
 
   elif action == 'stop':
 
@@ -177,7 +178,7 @@ def check_fs_root(conf_dir, execution_path):
 def wait_for_znode():
   import params
   
-  cmd = format("{zk_bin}/zkCli.sh ls /{hive_server2_zookeeper_namespace} | grep '\[serverUri='")
+  cmd = format("{zk_bin}/zkCli.sh -server {zk_quorum} ls /{hive_server2_zookeeper_namespace} | grep '\[serverUri='")
   code, out = shell.call(cmd)
   if code == 1:
     raise Fail(format("ZooKeeper node /{hive_server2_zookeeper_namespace} is not ready yet"))
@@ -213,9 +214,12 @@ def create_hive_metastore_schema():
   Logger.sensitive_strings[repr(create_hive_schema_cmd)] = repr(create_hive_schema_cmd.replace(
       format("-passWord {quoted_hive_metastore_user_passwd}"), "-passWord " + utils.PASSWORDS_HIDE_STRING))
 
-  Execute(create_hive_schema_cmd,
-          not_if = check_hive_schema_created_cmd,
-          user = params.hive_user
-  )
-  
-  Logger.info("Sys DB is set up")
+  try:
+    Execute(create_hive_schema_cmd,
+            not_if = check_hive_schema_created_cmd,
+            user = params.hive_user
+    )
+    Logger.info("Sys DB is set up")
+  except:
+    Logger.error("Could not create sys db. Try to restart HDFS, and then restart HiveServer2")
+    Logger.error(traceback.format_exc())

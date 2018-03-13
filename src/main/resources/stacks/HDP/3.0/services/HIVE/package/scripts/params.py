@@ -491,6 +491,7 @@ hive_authorization_enabled = config['configurations']['hive-site']['hive.securit
 mysql_jdbc_driver_jar = "/usr/share/java/mysql-connector-java.jar"
 
 hive_site_config = dict(config['configurations']['hive-site'])
+hive_site_config["hive.metastore.db.type"] = hive_metastore_db_type.upper()
 
 ########################################################
 ############# AMS related params #####################
@@ -788,3 +789,12 @@ if security_enabled:
 # replication directories
 hive_repl_cmrootdir = default('/configurations/hive-site/hive.repl.cmrootdir', None)
 hive_repl_rootdir = default('/configurations/hive-site/hive.repl.rootdir', None)
+
+#zookeeper
+zk_quorum = ""
+zookeeper_port = default('/configurations/zoo.cfg/clientPort', None)
+if 'zookeeper_server_hosts' in config['clusterHostInfo']:
+  for host in config['clusterHostInfo']['zookeeper_server_hosts']:
+    if zk_quorum:
+      zk_quorum += ','
+    zk_quorum += host + ":" + str(zookeeper_port)
