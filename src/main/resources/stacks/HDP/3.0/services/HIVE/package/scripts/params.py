@@ -491,7 +491,6 @@ hive_authorization_enabled = config['configurations']['hive-site']['hive.securit
 mysql_jdbc_driver_jar = "/usr/share/java/mysql-connector-java.jar"
 
 hive_site_config = dict(config['configurations']['hive-site'])
-hive_site_config["hive.metastore.db.type"] = hive_metastore_db_type.upper()
 
 ########################################################
 ############# AMS related params #####################

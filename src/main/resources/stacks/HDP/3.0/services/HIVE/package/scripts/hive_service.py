@@ -21,7 +21,6 @@ limitations under the License.
 # Python Imports
 import os
 import time
-import traceback
 
 # Ambari Commons & Resource Management Imports
 from ambari_commons.constants import UPGRADE_TYPE_ROLLING
@@ -97,9 +96,9 @@ def hive_service(name, action='start', upgrade_type=None):
         emessage = "ERROR! DB connection check should be executed at least one time!"
         Logger.error(emessage)
     
-    if name == 'hiveserver2':
-      wait_for_znode()
-      create_hive_metastore_schema()
+    #if name == 'hiveserver2':
+      #wait_for_znode()
+      #create_hive_metastore_schema()
 
   elif action == 'stop':
 
@@ -214,12 +213,9 @@ def create_hive_metastore_schema():
   Logger.sensitive_strings[repr(create_hive_schema_cmd)] = repr(create_hive_schema_cmd.replace(
       format("-passWord {quoted_hive_metastore_user_passwd}"), "-passWord " + utils.PASSWORDS_HIDE_STRING))
 
-  try:
-    Execute(create_hive_schema_cmd,
-            not_if = check_hive_schema_created_cmd,
-            user = params.hive_user
-    )
-    Logger.info("Sys DB is set up")
-  except:
-    Logger.error("Could not create sys db. Try to restart HDFS, and then restart HiveServer2")
-    Logger.error(traceback.format_exc())
+  Execute(create_hive_schema_cmd,
+          not_if = check_hive_schema_created_cmd,
+          user = params.hive_user
+  )
+  
+  Logger.info("Sys DB is set up")
