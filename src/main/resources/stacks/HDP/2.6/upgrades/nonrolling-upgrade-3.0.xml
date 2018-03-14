@@ -378,6 +378,31 @@
             <!--KAFKA-->
             <!--KNOX-->
             <!--STORM-->
+            <execute-stage service="STORM" component="NIMBUS" title="Apply config changes for Storm AutoCreds">
+                <task xsi:type="configure" id="storm_nimbus_autocred_config"/>
+            </execute-stage>
+
+            <execute-stage service="STORM" component="NIMBUS" title="Update config changes for Storm">
+                <task xsi:type="configure" id="hdp_3_0_update_storm_env_ext_classpath"/>
+            </execute-stage>
+
+            <execute-stage service="STORM" component="NIMBUS" title="Apply config changes for Nimbus">
+                <task xsi:type="configure" id="increase_storm_zookeeper_timeouts"/>
+            </execute-stage>
+
+            <execute-stage service="STORM" component="NIMBUS" title="Parameterizing Storm worker Log4J Properties">
+                <task xsi:type="configure" id="storm_worker_log4j_parameterize">
+                    <summary>Updating the Storm worker Log4J properties to include parameterizations</summary>
+                </task>
+            </execute-stage>
+            <execute-stage service="STORM" component="NIMBUS" title="Parameterizing Storm cluster Log4J Properties">
+                <task xsi:type="configure" id="storm_cluster_log4j_parameterize">
+                    <summary>Updating the Storm cluster Log4J properties to include parameterizations</summary>
+                </task>
+            </execute-stage>
+            <execute-stage service="STORM" component="NIMBUS" title="Removing jmxetric from childopts">
+                <task xsi:type="configure" id="storm_remove_jmxetric"/>
+            </execute-stage>
 
             <!-- PIG -->
 
