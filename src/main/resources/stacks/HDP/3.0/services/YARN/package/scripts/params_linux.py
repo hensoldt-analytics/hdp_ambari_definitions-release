@@ -277,13 +277,16 @@ if include_file_path and manage_include_files:
   rm_nodes_include_dir = os.path.dirname(include_file_path)
   include_hosts = list(set(nm_hosts) - set(exclude_hosts))
 
-ats_host = set(default("/clusterHostInfo/app_timeline_server_hosts", []))
+ats_host = default("/clusterHostInfo/app_timeline_server_hosts", [])
 has_ats = not len(ats_host) == 0
 
-atsv2_host = set(default("/clusterHostInfo/timeline_reader_hosts", []))
+atsv2_host = default("/clusterHostInfo/timeline_reader_hosts", [])
 has_atsv2 = not len(atsv2_host) == 0
 
-registry_dns_host = set(default("/clusterHostInfo/yarn_registry_dns_hosts", []))
+timeline_address_http = format("{atsv2_host[0]}:8198") if has_atsv2 else "" # after stack_upgrade, timeline_reader can be absent
+timeline_address_https = format("{atsv2_host[0]}:8199") if has_atsv2 else "" # after stack_upgrade, timeline_reader can be absent
+
+registry_dns_host = default("/clusterHostInfo/yarn_registry_dns_hosts", [])
 has_registry_dns = not len(registry_dns_host) == 0
 
 # don't using len(nm_hosts) here, because check can take too much time on large clusters
