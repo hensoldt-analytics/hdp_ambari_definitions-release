@@ -22,11 +22,23 @@
   <property>
     <name>docker_module_enabled</name>
     <value>false</value>
-    <display-name>Enable Launching Docker Containers</display-name>
+    <display-name>Enable GPU isolation for launched Docker Container
+      (Need enable docker on YARN feature first)</display-name>
     <description>Whether to enable launching docker containers.
     </description>
     <value-attributes>
-      <type>boolean</type>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>Enabled</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>Disabled</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -157,7 +169,18 @@
     <description>Whether to enable gpu.
     </description>
     <value-attributes>
-      <type>boolean</type>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>Enabled</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>Disabled</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>

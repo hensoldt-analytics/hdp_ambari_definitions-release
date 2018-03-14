@@ -23,5 +23,25 @@
         <value-attributes>
             <empty-value-valid>true</empty-value-valid>
         </value-attributes>
+        <depends-on>
+            <property>
+                <type>container-executor</type>
+                <name>gpu_module_enabled</name>
+            </property>
+        </depends-on>
+        <on-ambari-upgrade add="false"/>
+    </property>
+    <property>
+        <name>yarn.resource-types.yarn.io_gpu.maximum-allocation</name>
+        <value>8</value>
+        <display-name>Maximum Container Size (GPU)</display-name>
+        <description>Maximum GPU Allocation</description>
+        <value-attributes>
+            <type>int</type>
+            <minimum>0</minimum>
+            <maximum>8</maximum>
+            <increment-step>1</increment-step>
+        </value-attributes>
+        <on-ambari-upgrade add="false"/>
     </property>
 </configuration>

@@ -396,6 +396,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
   def recommendYARNConfigurationsFromHDP26(self, configurations, clusterData, services, hosts):
     putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
     putYarnEnvProperty = self.putProperty(configurations, "yarn-env", services)
+    putResTypsProperty = self.putProperty(configurations, "resource-types", services)
+    putCapScheProperty = self.putProperty(configurations, "capacity-scheduler", services)
 
     if "yarn-site" in services["configurations"] and \
                     "yarn.resourcemanager.scheduler.monitor.enable" in services["configurations"]["yarn-site"]["properties"]:
@@ -474,6 +476,36 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       ats_heapsize = self.calculate_yarn_apptimelineserver_heapsize(host_mem, yarn_timeline_app_cache_size)
       putYarnEnvProperty('apptimelineserver_heapsize', ats_heapsize) # Value in MB
       self.logger.info("Updated YARN config 'apptimelineserver_heapsize' as : {0}, ".format(ats_heapsize))
+
+    if "container-executor" in services["configurations"] and \
+                    "gpu_module_enabled" in services["configurations"]["container-executor"]["properties"]:
+      gpu_module_enabled = services["configurations"]["container-executor"]["properties"]["gpu_module_enabled"]
+
+    yarn_restyps = services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]
+    restyps_list = yarn_restyps.split(',') if len(yarn_restyps) > 1 else yarn_restyps.split()
+    self.logger.info("new what is yarn_restyps: '{0}'.".format(restyps_list))
+    if gpu_module_enabled.lower() == 'true':
+      # put yarn.io/gpu if it is absent in resource-types.xml
+      if "resource-types" in services["configurations"] and \
+                      "yarn.resource-types" in services["configurations"]["resource-types"]["properties"]:
+        if 'yarn.io/gpu' in restyps_list:
+          self.logger.info("GPU types already in resource-types.")
+        else:
+          restyps_list.append("yarn.io/gpu")
+          yarn_restyps = ','.join(str(x) for x in restyps_list)
+          putResTypsProperty('yarn.resource-types', yarn_restyps)
+      # ResourceCalculator must switch to DominantResourceCalculator when GPU enabled and additional resource types are added other than memory and vcore
+      if len(services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]) > 0:
+        self.logger.info("auto switch ResourceCalculator to DominantResourceCalculator when GPU enabled and resource types are added other than memory and vcore")
+        putCapScheProperty('yarn.scheduler.capacity.resource-calculator', "org.apache.hadoop.yarn.util.resource.DominantResourceCalculator")
+    else:
+      # revert gpu types from resource-types.xml
+      if 'yarn.io/gpu' in restyps_list:
+        restyps_list.remove("yarn.io/gpu")
+        yarn_restyps = ','.join(str(x) for x in restyps_list)
+        putResTypsProperty('yarn.resource-types', yarn_restyps)
+      # switch back ResourceCalculator to DefaultResourceCalculator
+      putCapScheProperty('yarn.scheduler.capacity.resource-calculator', "org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator")
 
   """
   Calculate YARN config 'apptimelineserver_heapsize' in MB.

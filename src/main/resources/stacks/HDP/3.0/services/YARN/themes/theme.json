@@ -11,7 +11,7 @@
             "display-name": "Settings",
             "layout": {
               "tab-columns": "3",
-              "tab-rows": "2",
+              "tab-rows": "3",
               "sections": [
                 {
                   "name": "section-nm-sizing",
@@ -87,6 +87,33 @@
                       "column-span": "1"
                     }
                   ]
+                },
+                {
+                  "name": "section-gpu-sizing",
+                  "display-name": "GPU",
+                  "row-index": "2",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "2",
+                  "section-columns": "2",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-gpu-sizing-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    },
+                    {
+                      "name": "subsection-gpu-sizing-col2",
+                      "display-name": "Container",
+                      "row-index": "0",
+                      "column-index": "1",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
                 }
               ]
             }
@@ -140,6 +167,22 @@
         {
           "config": "yarn-site/yarn.scheduler.maximum-allocation-vcores",
           "subsection-name": "subsection-container-sizing-col2"
+        },
+        {
+          "config": "container-executor/gpu_module_enabled",
+          "subsection-name": "subsection-gpu-sizing-col1"
+        },
+        {
+          "config": "container-executor/docker_module_enabled",
+          "subsection-name": "subsection-gpu-sizing-col1"
+        },
+        {
+          "config": "yarn-site/yarn.nodemanager.resource-plugins.gpu.path-to-discovery-executables",
+          "subsection-name": "subsection-gpu-sizing-col1"
+        },
+        {
+          "config": "resource-types/yarn.resource-types.yarn.io_gpu.maximum-allocation",
+          "subsection-name": "subsection-gpu-sizing-col2"
         }
       ]
     },
@@ -243,6 +286,35 @@
         "config": "capacity-scheduler/yarn.scheduler.capacity.resource-calculator",
         "widget": {
           "type": "toggle"
+        }
+      },
+      {
+        "config": "container-executor/gpu_module_enabled",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
+        "config": "container-executor/docker_module_enabled",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
+        "config": "yarn-site/yarn.nodemanager.resource-plugins.gpu.path-to-discovery-executables",
+        "widget": {
+          "type": "directories"
+        }
+      },
+      {
+        "config": "resource-types/yarn.resource-types.yarn.io_gpu.maximum-allocation",
+        "widget": {
+          "type": "slider",
+          "units": [
+            {
+              "unit-name": "int"
+            }
+          ]
         }
       }
     ]

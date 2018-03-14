@@ -810,6 +810,12 @@
       split by comma. By default, this is empty.
       Acceptable values: { "yarn-io/gpu"}
     </description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
@@ -828,10 +834,13 @@
   <property>
     <name>yarn.nodemanager.resource-plugins.gpu.path-to-discovery-executables</name>
     <value></value>
+    <display-name>Absolute path of nvidia-smi on NodeManagers</display-name>
     <description>When value is empty (default), YARN NodeManager will try to
       locate discovery executable itself</description>
     <on-ambari-upgrade add="false"/>
     <value-attributes>
+      <type>directories</type>
+      <overridable>false</overridable>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
   </property>
