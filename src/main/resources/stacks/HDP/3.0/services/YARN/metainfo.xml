@@ -39,6 +39,16 @@
             <scriptType>PYTHON</scriptType>
             <timeout>1200</timeout>
           </commandScript>
+          <!-- ATSv2 backend i.e Hbase requires HDFS as dependency -->
+          <dependencies>
+            <dependency>
+              <name>HDFS/HDFS_CLIENT</name>
+              <scope>host</scope>
+              <auto-deploy>
+                <enabled>true</enabled>
+              </auto-deploy>
+            </dependency>
+          </dependencies>
         </component>
 
         <component>
@@ -258,6 +268,14 @@
             </package>
             <package>
               <name>hadoop-${stack_version}-mapreduce</name>
+            </package>
+          </packages>
+        </osSpecific>
+        <osSpecific>
+          <osFamily>any</osFamily>
+          <packages>
+            <package>
+              <name>hbase</name>
             </package>
           </packages>
         </osSpecific>

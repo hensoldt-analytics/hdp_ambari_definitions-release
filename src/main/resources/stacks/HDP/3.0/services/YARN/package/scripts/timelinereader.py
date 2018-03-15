@@ -36,33 +36,32 @@ from yarn import yarn
 from service import service
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyImpl
-#import hbase_service
+from hbase_service import hbase, configure_hbase
 
 
 class ApplicationTimelineReader(Script):
   def install(self, env):
     self.install_packages(env)
-    #hbase_service.install_hbase(env)
 
   def start(self, env, upgrade_type=None):
     import params
     env.set_params(params)
     self.configure(env) # FOR SECURITY
-    #hbase_service.start_hbase()
-    #hbase_service.createTables()
+    hbase(action='start')
     service('timelinereader', action='start')
 
   def stop(self, env, upgrade_type=None):
     import params
     env.set_params(params)
-    #hbase_service.stop_hbase()
+    self.configure(env) # FOR SECURITY
+    hbase(action='stop')
     service('timelinereader', action='stop')
 
-  def configure(self, env):
+  def configure(self, env, action = None):
     import params
     env.set_params(params)
     yarn(name='apptimelinereader')
-    #hbase_service.configure_hbase(env)
+    configure_hbase(env)
 
 @OsFamilyImpl(os_family=OSConst.WINSRV_FAMILY)
 class ApplicationTimelineReaderWindows(ApplicationTimelineReader):
@@ -83,7 +82,8 @@ class ApplicationTimelineReaderDefault(ApplicationTimelineReader):
   def status(self, env):
     import status_params
     env.set_params(status_params)
-    check_process_status(status_params.yarn_timelinereader_pid_file)
+    for pid_file in self.get_pid_files():
+      check_process_status(pid_file)
 
   def get_log_folder(self):
     import params
@@ -94,8 +94,11 @@ class ApplicationTimelineReaderDefault(ApplicationTimelineReader):
     return params.yarn_user
 
   def get_pid_files(self):
-    import status_params
-    return [status_params.yarn_timelinereader_pid_file]
+    pid_files = []
+    pid_files.append(format("{yarn_timelinereader_pid_file}"))
+    pid_files.append(format("{yarn_hbase_pid_dir}/hbase-{yarn_hbase_user}-master.pid"))
+    pid_files.append(format("{yarn_hbase_pid_dir}/hbase-{yarn_hbase_user}-regionserver.pid"))
+    return pid_files
 
 if __name__ == "__main__":
   ApplicationTimelineReader().execute()

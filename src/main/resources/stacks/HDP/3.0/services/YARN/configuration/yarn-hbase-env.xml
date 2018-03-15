@@ -45,24 +45,6 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>yarn_hbase_user</name>
-    <display-name>Yarn User</display-name>
-    <value>yarn</value>
-    <property-type>USER</property-type>
-    <description>HBASE User</description>
-    <value-attributes>
-      <type>user</type>
-      <overridable>false</overridable>
-      <user-groups>
-        <property>
-          <type>cluster-env</type>
-          <name>user_group</name>
-        </property>
-      </user-groups>
-    </value-attributes>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
     <name>hbase_java_io_tmpdir</name>
     <value>/tmp</value>
     <description>Used in hbase-env.sh as HBASE_OPTS=-Djava.io.tmpdir=java_io_tmpdir</description>

@@ -23,9 +23,6 @@ from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.core.shell import as_sudo
 from resource_management.core.resources.system import Execute, File
 
-
-
-
 def hbase_service(
   name,
   action = 'start'): # 'start' or 'stop'
@@ -33,10 +30,10 @@ def hbase_service(
     import params
 
     sudo = AMBARI_SUDO_BINARY
-    daemon_script = format("{params.yarn_hbase_bin}/hbase-daemon.sh")
+    daemon_script = format("{yarn_hbase_bin}/hbase-daemon.sh")
     role = name
-    cmd = format("{daemon_script} --config {params.yarn_hbase_conf_dir}")
-    pid_file = format("{params.yarn_hbase_pid_dir}/hbase-{params.yarn_hbase_user}-{role}.pid")
+    cmd = format("{daemon_script} --config {yarn_hbase_conf_dir}")
+    pid_file = format("{yarn_hbase_pid_dir}/hbase-{yarn_hbase_user}-{role}.pid")
     pid_expression = as_sudo(["cat", pid_file])
     no_op_test = as_sudo(["test", "-f", pid_file]) + format(" && ps -p `{pid_expression}` >/dev/null 2>&1")
 
@@ -69,22 +66,15 @@ def hbase_service(
            action = "delete",
       )
 
-def install_hbase(env):
-    import params
-    env.set_params(params)
+def hbase(action):
+    if action == 'stop':
+        hbase_service('regionserver', action=action)
+        hbase_service('master', action=action)
+    else:
+        hbase_service('master', action=action)
+        hbase_service('regionserver', action=action)
+        createTables()
 
-    hbase_home = params.yarn_atsv2_hbase_versioned_home
-    hbase_download_url = params.hbase_download_url
-    hbase_package_name = params.hbase_package_name
-    hbase_download_cmd = format("umask 0022;wget --no-cookies --no-check-certificate {hbase_download_url} && tar -xzf {hbase_package_name} && rm -rf {hbase_package_name} && rm -rf {hbase_home} && mv hbase-* {hbase_home}")
-    #TODO keep co processor jar in hdfs
-
-    create_symb_link = format("umask 0022;cd {params.hadoop_yarn_home}/timelineservice;if [ ! -f {params.coprocessor_jar_name} ]; then ln -s hadoop-yarn-server-timelineservice-hbase.jar {params.coprocessor_jar_name};fi;cd -")
-    try:
-      Execute(hbase_download_cmd, user="root", logoutput=True)
-      Execute(create_symb_link, user="root", logoutput=True)
-    except:
-      raise
 
 def configure_hbase(env):
     import params
@@ -96,20 +86,12 @@ def configure_hbase(env):
                             )
     params.HdfsResource(None, action="execute")
 
-def start_hbase():
-    hbase_service('master', action = 'start')
-    hbase_service('regionserver', action='start')
-
-def stop_hbase():
-    hbase_service('master', action = 'stop')
-    hbase_service('regionserver', action='stop')
-
 def createTables():
     import params
     class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create -s")
-    cmd = format("export HBASE_CLASSPATH_PREFIX={params.hadoop_yarn_home}/timelineservice/*;{params.yarn_timelineservice_kinit_cmd} {params.yarn_hbase_bin}/hbase --config {params.yarn_hbase_conf_dir} {class_name}")
+    cmd = format("export HBASE_CLASSPATH_PREFIX={hadoop_yarn_home}/timelineservice/*;{yarn_timelineservice_kinit_cmd} {yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir} {class_name}")
     try:
-        Execute(cmd, user=params.yarn_user, timeout = 60, logoutput=True)
+        Execute(cmd, user=params.yarn_hbase_user, timeout = 60, logoutput=True)
     except:
         show_logs(params.yarn_hbase_log_dir, params.yarn_hbase_user)
         raise

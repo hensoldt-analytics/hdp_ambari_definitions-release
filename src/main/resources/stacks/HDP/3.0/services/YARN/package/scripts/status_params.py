@@ -66,3 +66,9 @@ kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executab
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
 stack_name = default("/clusterLevelParams/stack_name", None)
+
+# ATSv2 backend properties
+yarn_hbase_user = format("{yarn_user}") #Use same user as yarn user.
+yarn_hbase_pid_dir_prefix = config['configurations']['yarn-hbase-env']['yarn_hbase_pid_dir_prefix']
+yarn_hbase_pid_dir = format("{yarn_hbase_pid_dir_prefix}/{yarn_hbase_user}")
+yarn_hbase_conf_dir = "/etc/yarn-hbase/conf"

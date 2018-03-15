@@ -28,7 +28,7 @@ from resource_management.core.resources.service import ServiceConfig
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.is_empty import is_empty
 from resource_management.libraries.functions.lzo_utils import install_lzo_if_needed
-from resource_management.core.resources.system import Directory
+from resource_management.core.resources.system import Directory, Execute
 from resource_management.core.resources.system import File
 from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.core.source import InlineTemplate, Template
@@ -37,6 +37,7 @@ from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
 
 from resource_management.libraries.functions.mounted_dirs_helper import handle_mounted_dirs
+
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def yarn(name=None, config_dir=None):
@@ -72,13 +73,12 @@ def yarn(name=None, config_dir=None):
             cd_access='a',
   )
 
-  Directory([params.yarn_hbase_conf_dir],
-            owner="root",
-            group="root",
-            create_parents=True,
-            ignore_failures=True,
+  Directory(params.yarn_hbase_conf_dir,
+            owner = params.yarn_hbase_user,
+            group = params.user_group,
+            create_parents = True,
             cd_access='a',
-  )
+            )
 
   # Some of these function calls depend on the directories above being created first.
   if name == 'resourcemanager':
@@ -587,13 +587,17 @@ def yarn(name = None):
 
 def setup_atsv2_reader():
     import params
+    setup_atsv2_hbase_directories()
 
-    Directory([params.yarn_hbase_pid_dir_prefix, params.yarn_hbase_pid_dir, params.yarn_hbase_log_dir_prefix, params.yarn_hbase_log_dir],
-              owner=params.yarn_hbase_user,
-              group=params.user_group,
-              create_parents=True,
-              cd_access='a',
-    )
+    if 'yarn-hbase-policy' in params.config['configurations']:
+        XmlConfig( "hbase-policy.xml",
+                   conf_dir = params.yarn_hbase_conf_dir,
+                   configurations = params.config['configurations']['yarn-hbase-policy'],
+                   configuration_attributes=params.config['configurationAttributes']['yarn-hbase-policy'],
+                   owner = params.yarn_hbase_user,
+                   group = params.user_group,
+                   mode=0644
+                   )
 
     File(os.path.join(params.yarn_hbase_conf_dir, "hbase-env.sh"),
          owner=params.yarn_hbase_user,
@@ -617,7 +621,27 @@ def setup_atsv2_reader():
         )
     if params.security_enabled:
         File(os.path.join(params.yarn_hbase_conf_dir, 'yarn_hbase_jaas.conf'),
-             owner=params.yarn_user,
+             owner=params.yarn_hbase_user,
              group=params.user_group,
              content=Template("yarn_hbase_jaas.conf.j2")
         )
+
+def setup_atsv2_hbase_directories():
+    import  params
+    Directory([params.yarn_hbase_pid_dir_prefix, params.yarn_hbase_pid_dir, params.yarn_hbase_log_dir_prefix, params.yarn_hbase_log_dir],
+              owner=params.yarn_hbase_user,
+              group=params.user_group,
+              create_parents=True,
+              cd_access='a',
+              )
+
+    parent_dir = os.path.dirname(params.yarn_hbase_tmp_dir)
+    # In case if we have several placeholders in path
+    while ("${" in parent_dir):
+        parent_dir = os.path.dirname(parent_dir)
+    if parent_dir != os.path.abspath(os.sep) :
+        Directory (parent_dir,
+              create_parents = True,
+              cd_access="a",
+              )
+        Execute(("chmod", "1777", parent_dir), sudo=True)

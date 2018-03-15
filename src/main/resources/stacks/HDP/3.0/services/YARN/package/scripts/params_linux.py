@@ -39,7 +39,6 @@ from resource_management.libraries import functions
 from resource_management.libraries.functions import is_empty
 from resource_management.libraries.functions.get_architecture import get_architecture
 from resource_management.libraries.functions.setup_ranger_plugin_xml import get_audit_configs, generate_ranger_service_config
-
 import status_params
 
 # a map of the Ambari role to the component name
@@ -571,7 +570,8 @@ docker_privileged_containers_enabled = str(config['configurations']['container-e
 docker_allowed_volume_drivers = config['configurations']['container-executor']['docker_allowed_volume-drivers']
 
 # ATSv2 integration properties started.
-yarn_atsv2_hbase_versioned_home = format("{stack_root}/{stack_version_formatted}/hadoop-yarn-hbase")
+yarn_timelinereader_pid_file = status_params.yarn_timelinereader_pid_file
+yarn_atsv2_hbase_versioned_home = format("{stack_root}/{stack_version_formatted}/hbase")
 yarn_hbase_bin = format("{yarn_atsv2_hbase_versioned_home}/bin")
 yarn_hbase_hdfs_root_dir = config['configurations']['yarn-hbase-site']['hbase.rootdir']
 cluster_zookeeper_quorum_hosts = ",".join(config['clusterHostInfo']['zookeeper_server_hosts'])
@@ -582,14 +582,16 @@ else:
 
 zookeeper_quorum_hosts = cluster_zookeeper_quorum_hosts
 zookeeper_clientPort = cluster_zookeeper_clientPort
-yarn_hbase_user = config['configurations']['yarn-hbase-env']['yarn_hbase_user']
+yarn_hbase_user = status_params.yarn_hbase_user
 yarn_hbase_log_dir_prefix = config['configurations']['yarn-hbase-env']['yarn_hbase_log_dir_prefix']
 yarn_hbase_log_dir = format("{yarn_hbase_log_dir_prefix}/{yarn_hbase_user}")
-yarn_hbase_pid_dir_prefix = config['configurations']['yarn-hbase-env']['yarn_hbase_pid_dir_prefix']
-yarn_hbase_pid_dir = format("{yarn_hbase_pid_dir_prefix}/{yarn_hbase_user}")
-yarn_hbase_conf_dir = "/etc/yarn-hbase/conf"
+yarn_hbase_pid_dir_prefix = status_params.yarn_hbase_pid_dir_prefix
+yarn_hbase_pid_dir = status_params.yarn_hbase_pid_dir
+yarn_hbase_conf_dir = status_params.yarn_hbase_conf_dir
 yarn_hbase_env_sh_template = config['configurations']['yarn-hbase-env']['content']
 yarn_hbase_java_io_tmpdir = default("/configurations/yarn-hbase-env/hbase_java_io_tmpdir", "/tmp")
+yarn_hbase_tmp_dir = config['configurations']['yarn-hbase-site']['hbase.tmp.dir']
+yarn_hbase_local_dir = config['configurations']['yarn-hbase-site']['hbase.local.dir']
 
 if (('yarn-hbase-log4j' in config['configurations']) and ('content' in config['configurations']['yarn-hbase-log4j'])):
   yarn_hbase_log4j_props = config['configurations']['yarn-hbase-log4j']['content']
@@ -613,9 +615,7 @@ if yarn_timeline_service_enabled:
         break
 
 coprocessor_jar_name = "hadoop-yarn-server-timelineservice-hbase-coprocessor.jar"
-hbase_download_url = config['configurations']['yarn-hbase-site']['hbase.download.url']
-hbase_package_name = config['configurations']['yarn-hbase-site']['hbase.package.name']
-yarn_timeline_jar_location = format("file://{hadoop_yarn_home}/timelineservice/{coprocessor_jar_name}")
+yarn_timeline_jar_location = format("file://{stack_root}/current/hadoop-yarn-timelinereader/timelineservice/{coprocessor_jar_name}")
 
 if security_enabled and has_atsv2:
   yarn_hbase_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_jaas.conf')

@@ -105,15 +105,5 @@
     <value>17020</value>
     <on-ambari-upgrade add="false"/>
   </property>
-  <property>
-    <name>hbase.download.url</name>
-    <value>http://public-repo-1.hortonworks.com/ARTIFACTS/dist/hbase/1.2.6/hadoop-2.7.5/hbase-1.2.6-bin.tar.gz</value>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>hbase.package.name</name>
-    <value>hbase-1.2.6-bin.tar.gz</value>
-    <on-ambari-upgrade add="false"/>
-  </property>
 
 </configuration>
