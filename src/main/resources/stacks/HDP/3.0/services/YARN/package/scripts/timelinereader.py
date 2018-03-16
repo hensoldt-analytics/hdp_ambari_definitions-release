@@ -36,33 +36,33 @@ from yarn import yarn
 from service import service
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyImpl
-import hbase_service
+#import hbase_service
 
 
 class ApplicationTimelineReader(Script):
   def install(self, env):
     self.install_packages(env)
-    hbase_service.install_hbase(env)
+    #hbase_service.install_hbase(env)
 
   def start(self, env, upgrade_type=None):
     import params
     env.set_params(params)
     self.configure(env) # FOR SECURITY
-    hbase_service.start_hbase()
-    hbase_service.createTables()
+    #hbase_service.start_hbase()
+    #hbase_service.createTables()
     service('timelinereader', action='start')
 
   def stop(self, env, upgrade_type=None):
     import params
     env.set_params(params)
-    hbase_service.stop_hbase()
+    #hbase_service.stop_hbase()
     service('timelinereader', action='stop')
 
   def configure(self, env):
     import params
     env.set_params(params)
     yarn(name='apptimelinereader')
-    hbase_service.configure_hbase(env)
+    #hbase_service.configure_hbase(env)
 
 @OsFamilyImpl(os_family=OSConst.WINSRV_FAMILY)
 class ApplicationTimelineReaderWindows(ApplicationTimelineReader):
