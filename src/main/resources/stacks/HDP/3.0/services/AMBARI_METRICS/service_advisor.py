@@ -43,6 +43,8 @@ sys.path.append(os.path.join(metricsDir, 'scripts'))
 from split_points import FindSplitPointsForAMSRegions
 
 try:
+  if "BASE_SERVICE_ADVISOR" in os.environ:
+    PARENT_FILE = os.environ["BASE_SERVICE_ADVISOR"]
   with open(PARENT_FILE, 'rb') as fp:
     service_advisor = imp.load_module('service_advisor', fp, PARENT_FILE, ('.py', 'rb', imp.PY_SOURCE))
 except Exception as e:
