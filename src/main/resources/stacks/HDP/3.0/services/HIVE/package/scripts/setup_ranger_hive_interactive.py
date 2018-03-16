@@ -37,24 +37,27 @@ def setup_ranger_hive_interactive(upgrade_type = None):
     else:
       Logger.info("Hive2: Setup ranger: command retry not enabled thus skipping if ranger admin is down !")
 
-    if params.xml_configurations_supported and params.xa_audit_hdfs_is_enabled:
-      params.HdfsResource("/ranger/audit",
-                         type="directory",
-                         action="create_on_execute",
-                         owner=params.hdfs_user,
-                         group=params.hdfs_user,
-                         mode=0755,
-                         recursive_chmod=True
-      )
-      params.HdfsResource("/ranger/audit/hive2",
-                         type="directory",
-                         action="create_on_execute",
-                         owner=params.hive_user,
-                         group=params.hive_user,
-                         mode=0700,
-                         recursive_chmod=True
-      )
-      params.HdfsResource(None, action="execute")
+    if params.xa_audit_hdfs_is_enabled:
+      try:
+        params.HdfsResource("/ranger/audit",
+                           type="directory",
+                           action="create_on_execute",
+                           owner=params.hdfs_user,
+                           group=params.hdfs_user,
+                           mode=0755,
+                           recursive_chmod=True
+        )
+        params.HdfsResource("/ranger/audit/hive2",
+                           type="directory",
+                           action="create_on_execute",
+                           owner=params.hive_user,
+                           group=params.hive_user,
+                           mode=0700,
+                           recursive_chmod=True
+        )
+        params.HdfsResource(None, action="execute")
+      except Exception, err:
+        Logger.exception("Audit directory creation in HDFS for HIVE2 Ranger plugin failed with error:\n{0}".format(err))
 
     from resource_management.libraries.functions.setup_ranger_plugin_xml import setup_ranger_plugin
     setup_ranger_plugin('hive-server2', 'hive', params.ranger_previous_jdbc_jar,

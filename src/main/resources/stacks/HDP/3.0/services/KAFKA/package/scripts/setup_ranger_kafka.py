@@ -31,8 +31,8 @@ def setup_ranger_kafka():
     else:
       Logger.info("Kafka: Setup ranger: command retry not enabled thus skipping if ranger admin is down !")
 
-    if params.xml_configurations_supported and params.enable_ranger_kafka and params.xa_audit_hdfs_is_enabled:
-      if params.has_namenode:
+    if params.has_namenode and params.xa_audit_hdfs_is_enabled:
+      try:
         params.HdfsResource("/ranger/audit",
                            type="directory",
                            action="create_on_execute",
@@ -50,6 +50,8 @@ def setup_ranger_kafka():
                            recursive_chmod=True
         )
         params.HdfsResource(None, action="execute")
+      except Exception, err:
+        Logger.exception("Audit directory creation in HDFS for KAFKA Ranger plugin failed with error:\n{0}".format(err))
 
     setup_ranger_plugin('kafka-broker', 'kafka', params.previous_jdbc_jar,
                         params.downloaded_custom_connector, params.driver_curl_source,

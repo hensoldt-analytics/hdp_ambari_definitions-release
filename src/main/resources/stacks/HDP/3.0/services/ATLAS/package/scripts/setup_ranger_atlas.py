@@ -28,8 +28,8 @@ def setup_ranger_atlas(upgrade_type=None):
     else:
       Logger.info("ATLAS: Setup ranger: command retry not enabled thus skipping if ranger admin is down !")
 
-    if params.enable_ranger_atlas and params.xa_audit_hdfs_is_enabled:
-      if params.has_namenode:
+    if params.has_namenode and params.xa_audit_hdfs_is_enabled:
+      try:
         params.HdfsResource("/ranger/audit",
                             type="directory",
                             action="create_on_execute",
@@ -47,6 +47,8 @@ def setup_ranger_atlas(upgrade_type=None):
                             recursive_chmod=True
         )
         params.HdfsResource(None, action="execute")
+      except Exception, err:
+        Logger.exception("Audit directory creation in HDFS for ATLAS Ranger plugin failed with error:\n{0}".format(err))
 
     setup_ranger_plugin('atlas-server', 'atlas',None,
                         params.downloaded_custom_connector, params.driver_curl_source,
