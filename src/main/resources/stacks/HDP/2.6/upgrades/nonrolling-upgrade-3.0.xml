@@ -360,6 +360,9 @@
             <!--FALCON-->
 
             <!--RANGER-->
+            <execute-stage service="RANGER" component="RANGER_TAGSYNC" title="Adding Ranger Tagsync Config">
+                <task xsi:type="configure" id="hdp_3_0_add_ranger_tagsync_cookie_enabled_config"/>
+            </execute-stage>
 
             <!--RANGER-KMS-->
 
