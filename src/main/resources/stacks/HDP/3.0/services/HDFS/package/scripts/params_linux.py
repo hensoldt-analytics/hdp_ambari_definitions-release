@@ -21,6 +21,7 @@ import status_params
 import utils
 import ambari_simplejson as json # simplejson is much faster comparing to Python 2.6 json module and has the same functions set.
 import os
+import pwd
 import re
 
 from ambari_commons.os_check import OSCheck
@@ -79,6 +80,7 @@ stack_supports_zk_security = check_stack_feature(StackFeature.SECURE_ZOOKEEPER, 
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 hdfs_user = status_params.hdfs_user
 root_user = "root"
+current_user = pwd.getpwuid(os.getuid()).pw_name
 hadoop_pid_dir_prefix = status_params.hadoop_pid_dir_prefix
 namenode_pid_file = status_params.namenode_pid_file
 zkfc_pid_file = status_params.zkfc_pid_file

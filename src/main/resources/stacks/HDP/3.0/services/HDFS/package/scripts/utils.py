@@ -231,7 +231,7 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
     if not (params.stack_version_formatted and check_stack_feature(StackFeature.DATANODE_NON_ROOT, params.stack_version_formatted)) or params.secure_dn_ports_are_in_use:
       user = "root"
       pid_file = format(
-        "{hadoop_pid_dir_prefix}/{hdfs_user}/hadoop-{hdfs_user}-{root_user}-{name}.pid")
+        "{hadoop_pid_dir_prefix}/{hdfs_user}/hadoop-{hdfs_user}-{current_user}-{name}.pid")
 
     if action == 'stop' and (params.stack_version_formatted and check_stack_feature(StackFeature.DATANODE_NON_ROOT, params.stack_version_formatted)) and \
       os.path.isfile(hadoop_secure_dn_pid_file):
