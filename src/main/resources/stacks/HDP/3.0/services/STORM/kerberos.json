@@ -47,7 +47,7 @@
           "storm-site": {
             "nimbus.authorizer": "org.apache.storm.security.auth.authorizer.SimpleACLAuthorizer",
             "drpc.authorizer": "org.apache.storm.security.auth.authorizer.DRPCSimpleACLAuthorizer",
-            "ui.filter": "org.apache.hadoop.security.authentication.server.AuthenticationFilter",
+            "ui.filter": "org.apache.storm.org.apache.hadoop.security.authentication.server.AuthenticationFilter",
             "storm.principal.tolocal": "org.apache.storm.security.auth.KerberosPrincipalToLocal",
             "supervisor.enable": "true",
             "storm.zookeeper.superACL": "sasl:{{storm_bare_jaas_principal}}",

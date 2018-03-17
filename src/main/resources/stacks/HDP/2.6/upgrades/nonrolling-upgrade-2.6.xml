@@ -347,6 +347,10 @@
         <task xsi:type="configure" id="storm_remove_jmxetric" supports-patch="true"/>
       </execute-stage>
 
+      <execute-stage service="STORM" component="NIMBUS" title="Updating UI filter package">
+        <task xsi:type="configure" id="storm_update_ui_filter_package" supports-patch="true"/>
+      </execute-stage>
+
       <!-- YARN -->
       <execute-stage service="YARN" component="RESOURCEMANAGER" title="Apply config changes for Ranger Yarn plugin">
         <task xsi:type="configure" id="hdp_2_6_maint_ranger_yarn_plugin_cluster_name"/>

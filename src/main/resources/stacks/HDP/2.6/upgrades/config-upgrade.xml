@@ -192,6 +192,11 @@
             <type>storm-env</type>
             <replace key="content" find="export STORM_EXT_CLASSPATH=$STORM_AUTOCREDS_LIB_DIR" replace-with="export STORM_EXT_CLASSPATH=&quot;$STORM_AUTOCREDS_LIB_DIR/*&quot;"/>
           </definition>
+          <definition xsi:type="configure" id="storm_update_ui_filter_package" summary="Updating UI filter package">
+            <type>storm-site</type>
+            <replace key="ui.filter" find="org.apache.hadoop.security.authentication.server.AuthenticationFilter"
+                     replace-with="org.apache.storm.org.apache.hadoop.security.authentication.server.AuthenticationFilter" />
+          </definition>
         </changes>
       </component>
     </service>
