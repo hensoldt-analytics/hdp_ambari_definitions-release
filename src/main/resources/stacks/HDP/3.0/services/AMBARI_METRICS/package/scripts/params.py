@@ -154,6 +154,7 @@ def get_ambari_version():
     pass
   return ambari_version
 
+hostname = config['agentLevelParams']['hostname']
 
 ams_collector_log_dir = config['configurations']['ams-env']['metrics_collector_log_dir']
 ams_collector_conf_dir = "/etc/ambari-metrics-collector/conf"
@@ -208,12 +209,12 @@ security_enabled = False if not is_hbase_distributed else config['configurations
 metric_prop_file_name = "hadoop-metrics2-hbase.properties"
 
 java_home = config['ambariLevelParams']['java_home']
-ambari_java_home = default("/commandParams/ambari_java_home", None)
+ambari_java_home = default("/ambariLevelParams/ambari_java_home", None)
 # not supporting 32 bit jdk.
 java64_home = ambari_java_home if ambari_java_home is not None else java_home
-ambari_java_version = default("/commandParams/ambari_java_version", None)
+ambari_java_version = default("/ambariLevelParams/ambari_java_version", None)
 if ambari_java_version:
-  java_version = expect("/commandParams/ambari_java_version", int)
+  java_version = expect("/ambariLevelParams/ambari_java_version", int)
 else :
   java_version = expect("/ambariLevelParams/java_version", int)
 
@@ -234,8 +235,14 @@ metrics_collector_heapsize = check_append_heap_property(str(metrics_collector_he
 master_heapsize = check_append_heap_property(str(master_heapsize), "m")
 regionserver_heapsize = check_append_heap_property(str(regionserver_heapsize), "m")
 
-host_in_memory_aggregation = default("/configurations/ams-site/timeline.metrics.host.inmemory.aggregation", True)
+host_in_memory_aggregation = default("/configurations/ams-site/timeline.metrics.host.inmemory.aggregation", False)
 host_in_memory_aggregation_port = default("/configurations/ams-site/timeline.metrics.host.inmemory.aggregation.port", 61888)
+is_aggregation_https_enabled = False
+if default("/configurations/ams-site/timeline.metrics.host.inmemory.aggregation.http.policy", "HTTP_ONLY") == "HTTPS_ONLY":
+  host_in_memory_aggregation_protocol = 'https'
+  is_aggregation_https_enabled = True
+else:
+  host_in_memory_aggregation_protocol = 'http'
 host_in_memory_aggregation_jvm_arguments = default("/configurations/ams-env/timeline.metrics.host.inmemory.aggregation.jvm.arguments",
                                                    "-Xmx256m -Xms128m -XX:PermSize=68m")
 
@@ -265,7 +272,6 @@ else:
   hbase_heapsize = master_heapsize
 
 max_open_files_limit = default("/configurations/ams-hbase-env/max_open_files_limit", "32768")
-hostname = config['agentLevelParams']['hostname']
 
 cluster_zookeeper_quorum_hosts = ",".join(config['clusterHostInfo']['zookeeper_server_hosts'])
 if 'zoo.cfg' in config['configurations'] and 'clientPort' in config['configurations']['zoo.cfg']:

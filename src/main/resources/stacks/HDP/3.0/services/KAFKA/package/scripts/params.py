@@ -156,6 +156,15 @@ if has_metric_collector:
     metric_collector_protocol = 'https'
   else:
     metric_collector_protocol = 'http'
+
+  host_in_memory_aggregation = str(default("/configurations/ams-site/timeline.metrics.host.inmemory.aggregation", True)).lower()
+  host_in_memory_aggregation_port = default("/configurations/ams-site/timeline.metrics.host.inmemory.aggregation.port", 61888)
+  is_aggregation_https_enabled = False
+  if default("/configurations/ams-site/timeline.metrics.host.inmemory.aggregation.http.policy", "HTTP_ONLY") == "HTTPS_ONLY":
+    host_in_memory_aggregation_protocol = 'https'
+    is_aggregation_https_enabled = True
+  else:
+    host_in_memory_aggregation_protocol = 'http'
   pass
 
 # Security-related params
