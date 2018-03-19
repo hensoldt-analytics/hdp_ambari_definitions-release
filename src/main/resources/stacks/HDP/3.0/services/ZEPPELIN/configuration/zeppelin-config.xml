@@ -86,6 +86,12 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>zeppelin.config.storage.class</name>
+    <value>org.apache.zeppelin.storage.FileSystemConfigStorage</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>zeppelin.config.fs.dir</name>
     <value>conf</value>
     <description>Location where interpreter.json should be installed</description>
