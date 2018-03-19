@@ -25,12 +25,14 @@
     <display-name>kafka_client_jaas template</display-name>
     <description>Kafka client jaas config</description>
     <value>
+{% if kerberos_security_enabled %}
 KafkaClient {
 com.sun.security.auth.module.Krb5LoginModule required
 useTicketCache=true
 renewTicket=true
 serviceName="{{kafka_bare_jaas_principal}}";
 };
+{% endif %}
    </value>
     <value-attributes>
       <type>content</type>
