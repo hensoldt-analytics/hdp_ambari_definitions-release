@@ -39,7 +39,7 @@ if OSCheck.is_windows_family():
 else:
   hadoop_pid_dir_prefix = config['configurations']['hadoop-env']['hadoop_pid_dir_prefix']
   hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
-  root_user = pwd.getpwuid(os.getuid()).pw_name
+  root_user = "root"
   hadoop_pid_dir = format("{hadoop_pid_dir_prefix}/{hdfs_user}")
   namenode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-namenode.pid")
   snamenode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-secondarynamenode.pid")
