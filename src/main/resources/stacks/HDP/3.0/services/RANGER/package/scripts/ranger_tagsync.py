@@ -20,6 +20,7 @@ limitations under the License.
 from resource_management.libraries.script import Script
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions import upgrade_summary
+from resource_management.libraries.functions.constants import Direction
 from resource_management.core.resources.system import Execute, File
 from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.core.exceptions import ComponentIsNotRunning
