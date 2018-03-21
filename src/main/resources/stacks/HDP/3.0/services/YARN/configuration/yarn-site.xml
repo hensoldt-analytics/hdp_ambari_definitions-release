@@ -709,6 +709,10 @@
         <type>yarn-env</type>
         <name>yarn_cgroups_enabled</name>
       </property>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -721,6 +725,10 @@
         <type>yarn-env</type>
         <name>yarn_cgroups_enabled</name>
       </property>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -732,6 +740,10 @@
       <property>
         <type>yarn-env</type>
         <name>yarn_cgroups_enabled</name>
+      </property>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
@@ -829,6 +841,12 @@
       scheduling decisions. Set to auto (default) let YARN automatically
       discover GPU resource from system
     </description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1419,13 +1437,24 @@ yarn.node-labels.manager-class
     <description>Specify docker command plugin for GPU. By default uses Nvidia
       docker V1.0
     </description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-
-      v1.endpoint</name>
+    <name>yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint</name>
     <value>http://localhost:3476/v1.0/docker/cli</value>
     <description>Specify end point of nvidia-docker-plugin</description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <!-- These configs are related to yarn service -->

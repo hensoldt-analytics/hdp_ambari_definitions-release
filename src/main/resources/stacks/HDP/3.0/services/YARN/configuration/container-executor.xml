@@ -77,6 +77,12 @@
     <description>Comma seperated list of devices that can be mounted into a
       container.
     </description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
@@ -103,6 +109,12 @@
     <description>
       Comma seperated volumes that can be mounted as read-only.
     </description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
@@ -131,6 +143,12 @@
     <description>
       Comma seperated list of allowed volume-drivers.
     </description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
@@ -192,6 +210,12 @@
     <description>This should be same as
       yarn.nodemanager.linux-container-executor.cgroups.mount-path inside
       yarn-site.xml</description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <value-attributes>
       <type>directory</type>
     </value-attributes>
@@ -205,6 +229,12 @@
     <description>This should be same as
       yarn.nodemanager.linux-container-executor.cgroups.hierarchy
       inside yarn-site.xml</description>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
 

@@ -400,6 +400,7 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     putYarnEnvProperty = self.putProperty(configurations, "yarn-env", services)
     putResTypsProperty = self.putProperty(configurations, "resource-types", services)
     putCapScheProperty = self.putProperty(configurations, "capacity-scheduler", services)
+    putCanExecProperty = self.putProperty(configurations, "container-executor", services)
 
     if "yarn-site" in services["configurations"] and \
                     "yarn.resourcemanager.scheduler.monitor.enable" in services["configurations"]["yarn-site"]["properties"]:
@@ -483,9 +484,48 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
                     "gpu_module_enabled" in services["configurations"]["container-executor"]["properties"]:
       gpu_module_enabled = services["configurations"]["container-executor"]["properties"]["gpu_module_enabled"]
 
-    yarn_restyps = services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]
-    restyps_list = yarn_restyps.split(',') if len(yarn_restyps) > 1 else yarn_restyps.split()
-    self.logger.info("new what is yarn_restyps: '{0}'.".format(restyps_list))
+    if "yarn.resource-types" in services["configurations"]["resource-types"]["properties"]:
+      yarn_restyps = services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]
+      restyps_list = yarn_restyps.split(',') if len(yarn_restyps) > 1 else yarn_restyps.split()
+      self.logger.info("new what is yarn_restyps: '{0}'.".format(restyps_list))
+
+    if "docker_allowed_devices" in services["configurations"]["container-executor"]["properties"]:
+      docker_allow_dev = services["configurations"]["container-executor"]["properties"]["docker_allowed_devices"]
+      allow_dev_list = docker_allow_dev.split(',') if len(docker_allow_dev) > 1 else docker_allow_dev.split()
+      self.logger.info("new what is docker_allowed_devices: '{0}'.".format(allow_dev_list))
+
+    if "docker_allowed_volume-drivers" in services["configurations"]["container-executor"]["properties"]:
+      docker_allow_vol_drive = services["configurations"]["container-executor"]["properties"]["docker_allowed_volume-drivers"]
+      allow_vol_drive_list = docker_allow_vol_drive.split(',') if len(docker_allow_vol_drive) > 1 else docker_allow_vol_drive.split()
+      self.logger.info("new what is docker_allowed_volume-drivers: '{0}'.".format(allow_vol_drive_list))
+
+    if "docker_allowed_ro-mounts" in services["configurations"]["container-executor"]["properties"]:
+      docker_allow_romounts = services["configurations"]["container-executor"]["properties"]["docker_allowed_ro-mounts"]
+      allow_romounts_list = docker_allow_romounts.split(',') if len(docker_allow_romounts) > 1 else docker_allow_romounts.split()
+      self.logger.info("new what is docker.allowed.ro-mounts: '{0}'.".format(allow_romounts_list))
+
+    if "yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices" in services["configurations"]["yarn-site"]["properties"]:
+      rp_gpu_agd = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices"];
+      rp_gpu_agd_list = rp_gpu_agd.split(',') if len(rp_gpu_agd) > 1 else rp_gpu_agd.split()
+      self.logger.info("new what is yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices: '{0}'.".format(rp_gpu_agd_list))
+
+    if "yarn.nodemanager.resource-plugins.gpu.docker-plugin" in services["configurations"]["yarn-site"]["properties"]:
+      rp_gpu_dp = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.docker-plugin"];
+      rp_gpu_dp_list = rp_gpu_dp.split(',') if len(rp_gpu_dp) > 1 else rp_gpu_dp.split()
+      self.logger.info("new what is yarn.nodemanager.resource-plugins.gpu.docker-plugin: '{0}'.".format(rp_gpu_dp_list))
+
+    if "yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint" in services["configurations"]["yarn-site"]["properties"]:
+      rp_gpu_dp_nv1_ep = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint"];
+      rp_gpu_dp_nv1_ep_list = rp_gpu_dp_nv1_ep.split(',') if len(rp_gpu_dp_nv1_ep) > 1 else rp_gpu_dp_nv1_ep.split()
+
+    if "cgroup_root" in services["configurations"]["container-executor"]["properties"]:
+      cg_root = services["configurations"]["container-executor"]["properties"]["cgroup_root"];
+      cg_root_list = cg_root.split(',') if len(cg_root) > 1 else cg_root.split()
+
+    if "yarn_hierarchy" in services["configurations"]["container-executor"]["properties"]:
+      yn_hirch = services["configurations"]["container-executor"]["properties"]["yarn_hierarchy"];
+      yn_hirch_list = yn_hirch.split(',') if len(yn_hirch) > 1 else yn_hirch.split()
+
     if gpu_module_enabled.lower() == 'true':
       # put yarn.io/gpu if it is absent in resource-types.xml
       if "resource-types" in services["configurations"] and \
@@ -500,14 +540,107 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       if len(services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]) > 0:
         self.logger.info("auto switch ResourceCalculator to DominantResourceCalculator when GPU enabled and resource types are added other than memory and vcore")
         putCapScheProperty('yarn.scheduler.capacity.resource-calculator', "org.apache.hadoop.yarn.util.resource.DominantResourceCalculator")
+      # auto fill gpu related property values in yarn-site
+      putYarnSiteProperty('yarn.nodemanager.resource-plugins', yarn_restyps)
+
+      putYarnSiteProperty('yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices', 'auto')
+      putYarnSiteProperty('yarn.nodemanager.resource-plugins.gpu.docker-plugin', 'nvidia-docker-v1')
+      putYarnSiteProperty('yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint', 'http://localhost:3476/v1.0/docker/cli')
+      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'true')
+
+      putCanExecProperty('cgroup_root', '/sys/fs/cgroup')
+      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', '/sys/fs/cgroup')
+      putCanExecProperty('yarn_hierarchy', 'yarn')
+      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', 'yarn')
+
+      # add gpu related devices if it is absent in docker section
+      allow_dev_list.append('/dev/nvidiactl')
+      allow_dev_list.append('/dev/nvidia-uvm')
+      allow_dev_list.append('/dev/nvidia-uvm-tools')
+      allow_dev_list.append('/dev/nvidia1')
+      allow_dev_list.append('/dev/nvidia0')
+      docker_allow_dev = ','.join(str(x) for x in allow_dev_list)
+      putCanExecProperty('docker_allowed_devices', docker_allow_dev)
+
+      # add nvidia-docker if it is absent in docker allowed volume-drivers
+      if 'nvidia-docker' in allow_vol_drive_list:
+        self.logger.info("nvidia-docker already in docker_allowed_volume-drivers.")
+      else:
+        allow_vol_drive_list.append("nvidia-docker")
+        docker_allow_vol_drive = ','.join(str(x) for x in allow_vol_drive_list)
+        putCanExecProperty('docker_allowed_volume-drivers', docker_allow_vol_drive)
+
+      # add nvidia_driver_<version> if it is absent in docker allowed ro-mounts
+      if 'nvidia_driver_375.66' in allow_romounts_list:
+        self.logger.info("nvidia_driver_375.66 already in allow_romounts_list.")
+      else:
+        allow_romounts_list.append("nvidia_driver_375.66")
+        docker_allow_romounts = ','.join(str(x) for x in allow_romounts_list)
+        putCanExecProperty('docker_allowed_ro-mounts', docker_allow_romounts)
+
     else:
       # revert gpu types from resource-types.xml
-      if 'yarn.io/gpu' in restyps_list:
+      if "yarn.io/gpu" in restyps_list:
         restyps_list.remove("yarn.io/gpu")
         yarn_restyps = ','.join(str(x) for x in restyps_list)
         putResTypsProperty('yarn.resource-types', yarn_restyps)
+        putYarnSiteProperty('yarn.nodemanager.resource-plugins', yarn_restyps)
       # switch back ResourceCalculator to DefaultResourceCalculator
       putCapScheProperty('yarn.scheduler.capacity.resource-calculator', "org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator")
+
+      # auto revert gpu related property values when gpu is disabled
+      if "auto" in rp_gpu_agd_list:
+        rp_gpu_agd_list.remove("auto")
+        rp_gpu_agd = ','.join(str(x) for x in rp_gpu_agd_list)
+        putYarnSiteProperty('yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices', rp_gpu_agd)
+
+      if "nvidia-docker-v1" in rp_gpu_dp_list:
+        rp_gpu_dp_list.remove("nvidia-docker-v1")
+        rp_gpu_dp = ','.join(str(x) for x in rp_gpu_dp_list)
+        putYarnSiteProperty('yarn.nodemanager.resource-plugins.gpu.docker-plugin', rp_gpu_dp)
+
+      if "http://localhost:3476/v1.0/docker/cli" in rp_gpu_dp_nv1_ep_list:
+        rp_gpu_dp_nv1_ep_list.remove("http://localhost:3476/v1.0/docker/cli")
+        rp_gpu_dp_nv1_ep = ','.join(str(x) for x in rp_gpu_dp_nv1_ep_list)
+        putYarnSiteProperty('yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint', rp_gpu_dp_nv1_ep)
+
+      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'false')
+
+      if "/sys/fs/cgroup" in cg_root_list:
+        cg_root_list.remove("/sys/fs/cgroup")
+        cg_root = ','.join(str(x) for x in cg_root_list)
+        putCanExecProperty('cgroup_root', cg_root)
+        putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', cg_root)
+
+      if "yarn" in yn_hirch_list:
+        yn_hirch_list.remove("yarn")
+        yn_hirch = ','.join(str(x) for x in yn_hirch_list)
+        putCanExecProperty('yarn_hierarchy', yn_hirch)
+        putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', yn_hirch)
+
+      # revert docker related settings from docker section
+      if "/dev/nvidiactl" in allow_dev_list:
+        allow_dev_list.remove("/dev/nvidiactl")
+      if "/dev/nvidia-uvm" in allow_dev_list:
+        allow_dev_list.remove("/dev/nvidia-uvm")
+      if "/dev/nvidia-uvm-tools" in allow_dev_list:
+        allow_dev_list.remove("/dev/nvidia-uvm-tools")
+      if "/dev/nvidia1" in allow_dev_list:
+        allow_dev_list.remove("/dev/nvidia1")
+      if "/dev/nvidia0" in allow_dev_list:
+        allow_dev_list.remove("/dev/nvidia0")
+      docker_allow_dev = ','.join(str(x) for x in allow_dev_list)
+      putCanExecProperty('docker_allowed_devices', docker_allow_dev)
+
+      if "nvidia-docker" in allow_vol_drive_list:
+        allow_vol_drive_list.remove("nvidia-docker")
+        docker_allow_vol_drive = ','.join(str(x) for x in allow_vol_drive_list)
+        putCanExecProperty('docker_allowed_volume-drivers', docker_allow_vol_drive)
+
+      if "nvidia_driver_375.66" in allow_romounts_list:
+        allow_romounts_list.remove("nvidia_driver_375.66")
+        docker_allow_romounts = ','.join(str(x) for x in allow_romounts_list)
+        putCanExecProperty('docker_allowed_ro-mounts', docker_allow_romounts)
 
   """
   Calculate YARN config 'apptimelineserver_heapsize' in MB.
