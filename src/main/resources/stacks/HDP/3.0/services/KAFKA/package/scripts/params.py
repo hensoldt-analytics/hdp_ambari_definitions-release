@@ -277,6 +277,46 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
     'assetType': '1'
   }
 
+  atlas_server_hosts = default('/clusterHostInfo/atlas_server_hosts', [])
+  has_atlas_server = not len(atlas_server_hosts) == 0
+  hive_server_hosts = default('/clusterHostInfo/hive_server_hosts', [])
+  has_hive_server = not len(hive_server_hosts) == 0
+  hbase_master_hosts = default('/clusterHostInfo/hbase_master_hosts', [])
+  has_hbase_master = not len(hbase_master_hosts) == 0
+  ranger_tagsync_hosts = default('/clusterHostInfo/ranger_tagsync_hosts', [])
+  has_ranger_tagsync = not len(ranger_tagsync_hosts) == 0
+
+  if has_atlas_server:
+    atlas_notification_topics = default('/configurations/application-properties/atlas.notification.topics', 'ATLAS_HOOK,ATLAS_ENTITIES')
+    atlas_notification_topics_list = atlas_notification_topics.split(',')
+    hive_user = default('/configurations/hive-env/hive_user', 'hive')
+    hbase_user = default('/configurations/hbase-env/hbase_user', 'hbase')
+    atlas_user = default('/configurations/atlas-env/metadata_user', 'atlas')
+    rangertagsync_user = default('/configurations/ranger-tagsync-site/ranger.tagsync.dest.ranger.username', 'rangertagsync')
+    if len(atlas_notification_topics_list) == 2:
+      atlas_hook = atlas_notification_topics_list[0]
+      atlas_entity = atlas_notification_topics_list[1]
+      ranger_plugin_config['setup.additional.default.policies'] = 'true'
+      ranger_plugin_config['default-policy.1.name'] = atlas_hook
+      ranger_plugin_config['default-policy.1.resource.topic'] = atlas_hook
+      hook_policy_user = []
+      if has_hive_server:
+        hook_policy_user.append(hive_user)
+      if has_hbase_master:
+        hook_policy_user.append(hbase_user)
+      if len(hook_policy_user) > 0:
+        ranger_plugin_config['default-policy.1.policyItem.1.users'] = ",".join(hook_policy_user)
+        ranger_plugin_config['default-policy.1.policyItem.1.accessTypes'] = "publish"
+      ranger_plugin_config['default-policy.1.policyItem.2.users'] = atlas_user
+      ranger_plugin_config['default-policy.1.policyItem.2.accessTypes'] = "consume"
+      ranger_plugin_config['default-policy.2.name'] = atlas_entity
+      ranger_plugin_config['default-policy.2.resource.topic'] = atlas_entity
+      ranger_plugin_config['default-policy.2.policyItem.1.users'] = atlas_user
+      ranger_plugin_config['default-policy.2.policyItem.1.accessTypes'] = "publish"
+      if has_ranger_tagsync:
+        ranger_plugin_config['default-policy.2.policyItem.2.users'] = rangertagsync_user
+        ranger_plugin_config['default-policy.2.policyItem.2.accessTypes'] = "consume"
+
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
   if len(custom_ranger_service_config) > 0:
     ranger_plugin_config.update(custom_ranger_service_config)

@@ -268,7 +268,7 @@
   <property>
     <name>atlas.notification.topics</name>
     <value>ATLAS_HOOK,ATLAS_ENTITIES</value>
-    <description></description>
+    <description>Please enter in sequence as HOOK_TOPIC,ENTITIES_TOPIC</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <!-- End: Atlas Hooks -->
