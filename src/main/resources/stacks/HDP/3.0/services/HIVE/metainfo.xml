@@ -119,7 +119,7 @@
           <name>HIVE_SERVER_INTERACTIVE</name>
           <displayName>HiveServer2 Interactive</displayName>
           <category>MASTER</category>
-          <cardinality>0-1</cardinality>
+          <cardinality>0-2</cardinality>
           <versionAdvertised>true</versionAdvertised>
           <clientsToUpdateConfigs></clientsToUpdateConfigs>
           <dependencies>
