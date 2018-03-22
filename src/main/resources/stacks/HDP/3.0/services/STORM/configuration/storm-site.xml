@@ -170,7 +170,7 @@
   </property>
   <property>
     <name>nimbus.childopts</name>
-    <value>-Xmx1024m</value>
+    <value>-Xmx1024m _JAAS_PLACEHOLDER</value>
     <description>This parameter is used by the storm-deploy project to configure the jvm options for the nimbus daemon.</description>
     <value-attributes>
       <overridable>false</overridable>
@@ -394,7 +394,7 @@
   </property>
   <property>
     <name>supervisor.childopts</name>
-    <value>-Xmx256m</value>
+    <value>-Xmx256m _JAAS_PLACEHOLDER</value>
     <description>This parameter is used by the storm-deploy project to configure the jvm options for the supervisor daemon.</description>
     <value-attributes>
       <overridable>false</overridable>
