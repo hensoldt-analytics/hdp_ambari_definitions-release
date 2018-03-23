@@ -124,7 +124,7 @@ class KafkaServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendKafkaConfigurationsFromHDP22(configurations, clusterData, services, hosts)
     recommender.recommendKAFKAConfigurationsFromHDP23(configurations, clusterData, services, hosts)
     recommender.recommendKAFKAConfigurationsFromHDP26(configurations, clusterData, services, hosts)
-
+    recommender.recommendKAFKAConfigurationsFromHDP30(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
     """
@@ -302,6 +302,13 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
     else:
       self.logger.info("Not setting Kafka Repo user for Ranger.")
 
+  def recommendKAFKAConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
+    number_services = len(services['services'])
+    for each_service in range(0, number_services):
+      if services['services'][each_service]['components'][0]['StackServiceComponents']['service_name'] == 'KAFKA':
+        num_kakfa_brokers = len(services['services'][each_service]['components'][0]['StackServiceComponents']['hostnames'])
+        putKafkaBrokerProperty = self.putProperty(configurations, "kafka-broker", services)
+        putKafkaBrokerProperty('offsets.topic.replication.factor', str(min(3, num_kakfa_brokers)))
 
 class KafkaValidator(service_advisor.ServiceAdvisor):
   """
@@ -363,9 +370,9 @@ class KafkaValidator(service_advisor.ServiceAdvisor):
         num_kakfa_brokers = len(services['services'][each_service]['components'][0]['StackServiceComponents']['hostnames'])
         if int(kafka_broker_properties['offsets.topic.replication.factor']) > num_kakfa_brokers:
           validationItems.append({"config-name": 'offsets.topic.replication.factor',
-                                  "item": self.getWarnItem(
+                                  "item": self.getErrorItem(
                                     "offsets.topic.replication.factor={0} is greater than the number of kafka brokers={1}. " \
-                                    "It is recommended to decrease it or increase the number of kafka brokers." \
+                                    "It must be less or same as number of kafka brokers." \
                                       .format(kafka_broker_properties['offsets.topic.replication.factor'], num_kakfa_brokers))})
 
     if 'KERBEROS' in servicesList and 'security.inter.broker.protocol' in properties:
