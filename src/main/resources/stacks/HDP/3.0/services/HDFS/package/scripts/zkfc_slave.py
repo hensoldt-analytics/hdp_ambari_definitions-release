@@ -162,6 +162,20 @@ def initialize_ha_zookeeper(params):
     Logger.error('HA state initialization in ZooKeeper threw an exception. Reason %s' %(str(ex)))
   return False
 
+  def format():
+    import params
+    env.set_params(params)
+
+    try:
+      self.status(env)
+      raise Fail("ZKFC is running. Cannot format it.")
+    except ComponentIsNotRunning:
+      Execute("hdfs zkfc -formatZK",
+              user=params.hdfs_user,
+              logoutput=True
+      )
+
+
 @OsFamilyImpl(os_family=OSConst.WINSRV_FAMILY)
 class ZkfcSlaveWindows(ZkfcSlave):
   def start(self, env):
