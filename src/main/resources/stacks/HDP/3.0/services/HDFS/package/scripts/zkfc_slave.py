@@ -38,6 +38,7 @@ from resource_management.libraries.functions.security_commons import FILE_TYPE_X
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.script import Script
 from resource_management.core.resources.zkmigrator import ZkMigrator
+from resource_management.core.resources.system import Execute
 
 class ZkfcSlave(Script):
   def install(self, env):
@@ -55,6 +56,15 @@ class ZkfcSlave(Script):
     hdfs("zkfc_slave")
     utils.set_up_zkfc_security(params)
     pass
+
+  def format(self, env):
+    import params
+    env.set_params(params)
+
+    Execute("hdfs zkfc -formatZK",
+            user=params.hdfs_user,
+            logoutput=True
+    )
 
 @OsFamilyImpl(os_family=OsFamilyImpl.DEFAULT)
 class ZkfcSlaveDefault(ZkfcSlave):
@@ -161,19 +171,6 @@ def initialize_ha_zookeeper(params):
   except Exception as ex:
     Logger.error('HA state initialization in ZooKeeper threw an exception. Reason %s' %(str(ex)))
   return False
-
-  def format():
-    import params
-    env.set_params(params)
-
-    try:
-      self.status(env)
-      raise Fail("ZKFC is running. Cannot format it.")
-    except ComponentIsNotRunning:
-      Execute("hdfs zkfc -formatZK",
-              user=params.hdfs_user,
-              logoutput=True
-      )
 
 
 @OsFamilyImpl(os_family=OSConst.WINSRV_FAMILY)
