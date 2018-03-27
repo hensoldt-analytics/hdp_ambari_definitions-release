@@ -555,13 +555,12 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', 'yarn')
 
       # add gpu related devices if it is absent in docker section
-      allow_dev_list.append('/dev/nvidiactl')
-      allow_dev_list.append('/dev/nvidia-uvm')
-      allow_dev_list.append('/dev/nvidia-uvm-tools')
-      allow_dev_list.append('/dev/nvidia1')
-      allow_dev_list.append('/dev/nvidia0')
-      docker_allow_dev = ','.join(str(x) for x in allow_dev_list)
-      putCanExecProperty('docker_allowed_devices', docker_allow_dev)
+      if "regex:^/dev/nvidia.*$" in allow_dev_list:
+        self.logger.info("gpu related devices already in docker.allowed.devices.")
+      else:
+        allow_dev_list.append("regex:^/dev/nvidia.*$")
+        docker_allow_dev = ','.join(str(x) for x in allow_dev_list)
+        putCanExecProperty('docker_allowed_devices', docker_allow_dev)
 
       # add nvidia-docker if it is absent in docker allowed volume-drivers
       if 'nvidia-docker' in allow_vol_drive_list:
@@ -572,10 +571,10 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         putCanExecProperty('docker_allowed_volume-drivers', docker_allow_vol_drive)
 
       # add nvidia_driver_<version> if it is absent in docker allowed ro-mounts
-      if 'nvidia_driver_375.66' in allow_romounts_list:
-        self.logger.info("nvidia_driver_375.66 already in allow_romounts_list.")
+      if "regex:^nvidia_driver_.*$" in allow_romounts_list:
+        self.logger.info("nvidia_driver_<version> already in allow_romounts_list.")
       else:
-        allow_romounts_list.append("nvidia_driver_375.66")
+        allow_romounts_list.append("regex:^nvidia_driver_.*$")
         docker_allow_romounts = ','.join(str(x) for x in allow_romounts_list)
         putCanExecProperty('docker_allowed_ro-mounts', docker_allow_romounts)
 
@@ -620,16 +619,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', yn_hirch)
 
       # revert docker related settings from docker section
-      if "/dev/nvidiactl" in allow_dev_list:
-        allow_dev_list.remove("/dev/nvidiactl")
-      if "/dev/nvidia-uvm" in allow_dev_list:
-        allow_dev_list.remove("/dev/nvidia-uvm")
-      if "/dev/nvidia-uvm-tools" in allow_dev_list:
-        allow_dev_list.remove("/dev/nvidia-uvm-tools")
-      if "/dev/nvidia1" in allow_dev_list:
-        allow_dev_list.remove("/dev/nvidia1")
-      if "/dev/nvidia0" in allow_dev_list:
-        allow_dev_list.remove("/dev/nvidia0")
+      if "regex:^/dev/nvidia.*$" in allow_dev_list:
+        allow_dev_list.remove("regex:^/dev/nvidia.*$")
       docker_allow_dev = ','.join(str(x) for x in allow_dev_list)
       putCanExecProperty('docker_allowed_devices', docker_allow_dev)
 
@@ -638,8 +629,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         docker_allow_vol_drive = ','.join(str(x) for x in allow_vol_drive_list)
         putCanExecProperty('docker_allowed_volume-drivers', docker_allow_vol_drive)
 
-      if "nvidia_driver_375.66" in allow_romounts_list:
-        allow_romounts_list.remove("nvidia_driver_375.66")
+      if "regex:^nvidia_driver_.*$" in allow_romounts_list:
+        allow_romounts_list.remove("regex:^nvidia_driver_.*$")
         docker_allow_romounts = ','.join(str(x) for x in allow_romounts_list)
         putCanExecProperty('docker_allowed_ro-mounts', docker_allow_romounts)
 
