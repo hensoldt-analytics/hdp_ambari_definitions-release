@@ -96,6 +96,7 @@ def kafka(upgrade_type=None):
     )
 
     PropertiesFile("server.properties",
+                      mode=0640,
                       dir=params.conf_dir,
                       properties=kafka_server_config,
                       owner=params.kafka_user,
