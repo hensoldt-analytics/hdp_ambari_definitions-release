@@ -215,6 +215,10 @@ def create_hive_metastore_schema():
       format("-passWord {quoted_hive_metastore_user_passwd}"), "-passWord " + utils.PASSWORDS_HIDE_STRING))
 
   try:
+    if params.security_enabled:
+      hive_kinit_cmd = format("{kinit_path_local} -kt {hive_server2_keytab} {hive_principal}; ")
+      Execute(hive_kinit_cmd, user=params.hive_user)
+
     Execute(create_hive_schema_cmd,
             not_if = check_hive_schema_created_cmd,
             user = params.hive_user
