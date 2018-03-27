@@ -2000,6 +2000,11 @@
               "metric": "Hadoop:service=NameNode,name=NameNodeInfo.CorruptFiles",
               "pointInTime": true,
               "temporal": false
+            },
+            "metrics/dfs/namenode/ClusterId": {
+              "metric": "Hadoop:service=NameNode,name=NameNodeInfo.ClusterId",
+              "pointInTime": true,
+              "temporal": false
             }
           }
         }
@@ -3933,6 +3938,11 @@
             },
             "metrics/dfs/namenode/CorruptFiles": {
               "metric": "Hadoop:service=NameNode,name=NameNodeInfo.CorruptFiles",
+              "pointInTime": true,
+              "temporal": false
+            },
+            "metrics/dfs/namenode/ClusterId": {
+              "metric": "Hadoop:service=NameNode,name=NameNodeInfo.ClusterId",
               "pointInTime": true,
               "temporal": false
             }
