@@ -137,6 +137,7 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendYARNConfigurationsFromHDP23(configurations, clusterData, services, hosts)
     recommender.recommendYARNConfigurationsFromHDP25(configurations, clusterData, services, hosts)
     recommender.recommendYARNConfigurationsFromHDP26(configurations, clusterData, services, hosts)
+    recommender.recommendYARNConfigurationsFromHDP30(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
     """
@@ -641,6 +642,17 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         allow_romounts_list.remove("nvidia_driver_375.66")
         docker_allow_romounts = ','.join(str(x) for x in allow_romounts_list)
         putCanExecProperty('docker_allowed_ro-mounts', docker_allow_romounts)
+
+
+  def recommendYARNConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
+    putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
+
+    hsi_env_poperties = self.getServicesSiteProperties(services, "hive-interactive-env")
+    if hsi_env_poperties and 'enable_hive_interactive' in hsi_env_poperties:
+      if hsi_env_poperties['enable_hive_interactive'] == 'true':
+        services["forced-configurations"].append({"type" : "yarn-site", "name" : "yarn.nodemanager.container-monitor.procfs-tree.smaps-based-rss.enabled"})
+        putYarnSiteProperty("yarn.nodemanager.container-monitor.procfs-tree.smaps-based-rss.enabled", "true")
+
 
   """
   Calculate YARN config 'apptimelineserver_heapsize' in MB.
