@@ -27,12 +27,13 @@ import traceback
 from ambari_commons.constants import UPGRADE_TYPE_ROLLING
 from resource_management.core import shell
 from resource_management.core import utils
-from resource_management.core.exceptions import Fail
+from resource_management.core.exceptions import ComponentIsNotRunning, Fail
 from resource_management.core.logger import Logger
 from resource_management.core.resources.system import File, Execute
 from resource_management.core.shell import as_user, quote_bash_args
 from resource_management.libraries.functions import get_user_call_output
 from resource_management.libraries.functions import StackFeature
+from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.functions.decorator import retry
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.show_logs import show_logs
@@ -177,6 +178,12 @@ def check_fs_root(conf_dir, execution_path):
 @retry(times=30, sleep_time=5, err_class=Fail)
 def wait_for_znode():
   import params
+  import status_params
+  
+  try:
+    check_process_status(status_params.hive_pid)
+  except ComponentIsNotRunning:
+    raise Exception(format("HiveServer2 is no longer running, check the logs at {hive_log_dir}"))
   
   cmd = format("{zk_bin}/zkCli.sh -server {zk_quorum} ls /{hive_server2_zookeeper_namespace} | grep '\[serverUri='")
   code, out = shell.call(cmd)
