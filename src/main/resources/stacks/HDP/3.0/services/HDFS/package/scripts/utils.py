@@ -38,6 +38,7 @@ from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.libraries.script.script import Script
 from ambari_commons.inet_utils import ensure_ssl_using_protocol
 from zkfc_slave import ZkfcSlaveDefault
+from ambari_commons import subprocess32
 
 ensure_ssl_using_protocol(Script.get_force_https_protocol_name())
 
@@ -291,7 +292,7 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
 
     # If stop didn't happen, kill it forcefully
     if code != 0:
-      code, out, err = shell.checked_call(("cat", pid_file), sudo=True, env=hadoop_env_exports, stderr=subprocess.PIPE)
+      code, out, err = shell.checked_call(("cat", pid_file), sudo=True, env=hadoop_env_exports, stderr=subprocess32.PIPE)
       pid = out
       Execute(("kill", "-9", pid), sudo=True)
       
