@@ -133,9 +133,6 @@
             <package>
               <name>oozie_${stack_version}</name>
             </package>
-            <package>
-              <name>falcon_${stack_version}</name>
-            </package>
           </packages>
         </osSpecific>
         <osSpecific>
@@ -143,9 +140,6 @@
           <packages>
             <package>
               <name>oozie-${stack_version}</name>
-            </package>
-            <package>
-              <name>falcon-${stack_version}</name>
             </package>
           </packages>
         </osSpecific>
