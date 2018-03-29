@@ -165,6 +165,11 @@
         </osSpecific>
       </osSpecifics>
 
+      <sso>
+        <supported>true</supported>
+        <enabledConfiguration>ranger-admin-site/ranger.sso.enabled</enabledConfiguration>
+      </sso>
+
       <quickLinksConfigurations>
         <quickLinksConfiguration>
           <fileName>quicklinks.json</fileName>

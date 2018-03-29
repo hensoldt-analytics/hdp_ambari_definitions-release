@@ -111,6 +111,11 @@
         </component>
       </components>
 
+      <sso>
+        <supported>true</supported>
+        <enabledConfiguration>application-properties/atlas.sso.knox.enabled</enabledConfiguration>
+      </sso>
+
       <quickLinksConfigurations>
         <quickLinksConfiguration>
           <fileName>quicklinks.json</fileName>

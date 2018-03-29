@@ -126,6 +126,16 @@ class AtlasServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender = AtlasRecommender()
     recommender.recommendAtlasConfigurationsFromHDP25(configurations, clusterData, services, hosts)
     recommender.recommendAtlasConfigurationsFromHDP26(configurations, clusterData, services, hosts)
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
+
+
+  def getServiceConfigurationRecommendationsForSSO(self, configurations, clusterData, services, hosts):
+    """
+    Entry point.
+    Must be overriden in child class.
+    """
+    recommender = AtlasRecommender()
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
 
 
 
@@ -340,6 +350,25 @@ class AtlasRecommender(service_advisor.ServiceAdvisor):
       putAtlasApplicationProperty('atlas.sso.knox.providerurl', 'https://{0}:{1}/gateway/knoxsso/api/v1/websso'.format(knox_host, knox_port))
 
 
+  def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
+    ambari_configuration = self.get_ambari_configuration(services)
+
+    if ambari_configuration and ambari_configuration.is_managing_services():
+      putAtlasApplicationProperty = self.putProperty(configurations, "application-properties", services)
+
+      # If SSO should be enabled for this service
+      if ambari_configuration.should_enable_sso('ATLAS'):
+        putAtlasApplicationProperty('atlas.sso.knox.enabled', "true")
+
+        ambari_sso_details = ambari_configuration.get_ambari_sso_details()
+        if ambari_sso_details:
+          putAtlasApplicationProperty('atlas.sso.knox.providerurl', ambari_sso_details.get_jwt_provider_url())
+          putAtlasApplicationProperty('atlas.sso.knox.publicKey', ambari_sso_details.get_jwt_public_key(False, True))
+          putAtlasApplicationProperty('atlas.sso.knox.browser.useragent', 'Mozilla,Chrome')
+
+      # If SSO should be disabled for this service
+      elif ambari_configuration.should_disable_sso('ATLAS'):
+        putAtlasApplicationProperty('atlas.sso.knox.enabled', "false")
 
 
 class AtlasValidator(service_advisor.ServiceAdvisor):
