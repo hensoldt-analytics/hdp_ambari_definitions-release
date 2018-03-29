@@ -313,6 +313,10 @@
                 <task xsi:type="configure" id="hdfs_set_hadoop_rpc_protection_on_kerberized_cluster"/>
             </execute-stage>
 
+            <execute-stage service="HDFS" component="HDFS_CLIENT" title="Set User-Agent">
+              <task xsi:type="configure" id="hdfs_user_agent" />
+            </execute-stage>
+
             <!--YARN-->
             <execute-stage service="MAPREDUCE2" component="MAPREDUCE2_CLIENT"
                            title="Apply config changes for Mapreduce2 client">
