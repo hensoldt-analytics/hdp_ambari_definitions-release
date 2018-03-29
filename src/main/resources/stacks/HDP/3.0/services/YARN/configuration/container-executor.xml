@@ -50,6 +50,7 @@
     <description>The binary used to launch docker containers.</description>
     <value-attributes>
       <type>directory</type>
+      <empty-value-valid>true</empty-value-valid>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -218,6 +219,7 @@
     </depends-on>
     <value-attributes>
       <type>directory</type>
+      <empty-value-valid>true</empty-value-valid>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -235,6 +237,9 @@
         <name>gpu_module_enabled</name>
       </property>
     </depends-on>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
 

@@ -836,6 +836,7 @@
   <property>
     <name>yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices</name>
     <value>auto</value>
+    <display-name>GPU allowed devices</display-name>
     <description>Specify GPU devices which can be managed by YARN NodeManager,
       split by comma. Number of GPU devices will be reported to RM to make
       scheduling decisions. Set to auto (default) let YARN automatically
@@ -847,6 +848,9 @@
         <name>gpu_module_enabled</name>
       </property>
     </depends-on>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1434,6 +1438,7 @@ yarn.node-labels.manager-class
   <property>
     <name>yarn.nodemanager.resource-plugins.gpu.docker-plugin</name>
     <value>nvidia-docker-v1</value>
+    <display-name>GPU docker plugin</display-name>
     <description>Specify docker command plugin for GPU. By default uses Nvidia
       docker V1.0
     </description>
@@ -1443,11 +1448,15 @@ yarn.node-labels.manager-class
         <name>gpu_module_enabled</name>
       </property>
     </depends-on>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint</name>
     <value>http://localhost:3476/v1.0/docker/cli</value>
+    <display-name>GPU docker plugin endpoint for Nvidia Docker Version 1</display-name>
     <description>Specify end point of nvidia-docker-plugin</description>
     <depends-on>
       <property>
@@ -1455,6 +1464,9 @@ yarn.node-labels.manager-class
         <name>gpu_module_enabled</name>
       </property>
     </depends-on>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <!-- These configs are related to yarn service -->
