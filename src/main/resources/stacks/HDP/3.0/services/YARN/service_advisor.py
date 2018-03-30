@@ -481,53 +481,68 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       putYarnEnvProperty('apptimelineserver_heapsize', ats_heapsize) # Value in MB
       self.logger.info("Updated YARN config 'apptimelineserver_heapsize' as : {0}, ".format(ats_heapsize))
 
-    if "container-executor" in services["configurations"] and \
-                    "gpu_module_enabled" in services["configurations"]["container-executor"]["properties"]:
-      gpu_module_enabled = services["configurations"]["container-executor"]["properties"]["gpu_module_enabled"]
+    yarn_restyps = []
+    restyps_list = []
+    gpu_module_enabled = None
+    allow_dev_list = []
+    allow_vol_drive_list = []
+    allow_romounts_list = []
+    cg_root_list = []
+    yn_hirch_list = []
+    rp_gpu_agd_list = []
+    rp_gpu_dp_list = []
+    rp_gpu_dp_nv1_ep_list = []
 
-    if "yarn.resource-types" in services["configurations"]["resource-types"]["properties"]:
+    if "resource-types" in services["configurations"] and \
+      "yarn.resource-types" in services["configurations"]["resource-types"]["properties"]:
       yarn_restyps = services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]
       restyps_list = yarn_restyps.split(',') if len(yarn_restyps) > 1 else yarn_restyps.split()
       self.logger.info("new what is yarn_restyps: '{0}'.".format(restyps_list))
 
-    if "docker_allowed_devices" in services["configurations"]["container-executor"]["properties"]:
-      docker_allow_dev = services["configurations"]["container-executor"]["properties"]["docker_allowed_devices"]
-      allow_dev_list = docker_allow_dev.split(',') if len(docker_allow_dev) > 1 else docker_allow_dev.split()
-      self.logger.info("new what is docker_allowed_devices: '{0}'.".format(allow_dev_list))
+    if "container-executor" in services["configurations"]:
+      if "gpu_module_enabled" in services["configurations"]["container-executor"]["properties"]:
+        gpu_module_enabled = services["configurations"]["container-executor"]["properties"]["gpu_module_enabled"]
 
-    if "docker_allowed_volume-drivers" in services["configurations"]["container-executor"]["properties"]:
-      docker_allow_vol_drive = services["configurations"]["container-executor"]["properties"]["docker_allowed_volume-drivers"]
-      allow_vol_drive_list = docker_allow_vol_drive.split(',') if len(docker_allow_vol_drive) > 1 else docker_allow_vol_drive.split()
-      self.logger.info("new what is docker_allowed_volume-drivers: '{0}'.".format(allow_vol_drive_list))
+      if "docker_allowed_devices" in services["configurations"]["container-executor"]["properties"]:
+        docker_allow_dev = services["configurations"]["container-executor"]["properties"]["docker_allowed_devices"]
+        allow_dev_list = docker_allow_dev.split(',') if len(docker_allow_dev) > 1 else docker_allow_dev.split()
+        self.logger.info("new what is docker_allowed_devices: '{0}'.".format(allow_dev_list))
 
-    if "docker_allowed_ro-mounts" in services["configurations"]["container-executor"]["properties"]:
-      docker_allow_romounts = services["configurations"]["container-executor"]["properties"]["docker_allowed_ro-mounts"]
-      allow_romounts_list = docker_allow_romounts.split(',') if len(docker_allow_romounts) > 1 else docker_allow_romounts.split()
-      self.logger.info("new what is docker.allowed.ro-mounts: '{0}'.".format(allow_romounts_list))
+      if "docker_allowed_volume-drivers" in services["configurations"]["container-executor"]["properties"]:
+        docker_allow_vol_drive = services["configurations"]["container-executor"]["properties"]["docker_allowed_volume-drivers"]
+        allow_vol_drive_list = docker_allow_vol_drive.split(',') if len(docker_allow_vol_drive) > 1 else docker_allow_vol_drive.split()
+        self.logger.info("new what is docker_allowed_volume-drivers: '{0}'.".format(allow_vol_drive_list))
 
-    if "yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices" in services["configurations"]["yarn-site"]["properties"]:
-      rp_gpu_agd = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices"];
-      rp_gpu_agd_list = rp_gpu_agd.split(',') if len(rp_gpu_agd) > 1 else rp_gpu_agd.split()
-      self.logger.info("new what is yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices: '{0}'.".format(rp_gpu_agd_list))
+      if "docker_allowed_ro-mounts" in services["configurations"]["container-executor"]["properties"]:
+        docker_allow_romounts = services["configurations"]["container-executor"]["properties"]["docker_allowed_ro-mounts"]
+        allow_romounts_list = docker_allow_romounts.split(',') if len(docker_allow_romounts) > 1 else docker_allow_romounts.split()
+        self.logger.info("new what is docker.allowed.ro-mounts: '{0}'.".format(allow_romounts_list))
 
-    if "yarn.nodemanager.resource-plugins.gpu.docker-plugin" in services["configurations"]["yarn-site"]["properties"]:
-      rp_gpu_dp = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.docker-plugin"];
-      rp_gpu_dp_list = rp_gpu_dp.split(',') if len(rp_gpu_dp) > 1 else rp_gpu_dp.split()
-      self.logger.info("new what is yarn.nodemanager.resource-plugins.gpu.docker-plugin: '{0}'.".format(rp_gpu_dp_list))
+      if "cgroup_root" in services["configurations"]["container-executor"]["properties"]:
+        cg_root = services["configurations"]["container-executor"]["properties"]["cgroup_root"]
+        cg_root_list = cg_root.split(',') if len(cg_root) > 1 else cg_root.split()
 
-    if "yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint" in services["configurations"]["yarn-site"]["properties"]:
-      rp_gpu_dp_nv1_ep = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint"];
-      rp_gpu_dp_nv1_ep_list = rp_gpu_dp_nv1_ep.split(',') if len(rp_gpu_dp_nv1_ep) > 1 else rp_gpu_dp_nv1_ep.split()
+      if "yarn_hierarchy" in services["configurations"]["container-executor"]["properties"]:
+        yn_hirch = services["configurations"]["container-executor"]["properties"]["yarn_hierarchy"]
+        yn_hirch_list = yn_hirch.split(',') if len(yn_hirch) > 1 else yn_hirch.split()
 
-    if "cgroup_root" in services["configurations"]["container-executor"]["properties"]:
-      cg_root = services["configurations"]["container-executor"]["properties"]["cgroup_root"];
-      cg_root_list = cg_root.split(',') if len(cg_root) > 1 else cg_root.split()
+    if "yarn-site" in services["configurations"]:
+      if "yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices" in services["configurations"]["yarn-site"]["properties"]:
+        rp_gpu_agd = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices"]
+        rp_gpu_agd_list = rp_gpu_agd.split(',') if len(rp_gpu_agd) > 1 else rp_gpu_agd.split()
+        self.logger.info("new what is yarn.nodemanager.resource-plugins.gpu.allowed-gpu-devices: '{0}'.".format(rp_gpu_agd_list))
 
-    if "yarn_hierarchy" in services["configurations"]["container-executor"]["properties"]:
-      yn_hirch = services["configurations"]["container-executor"]["properties"]["yarn_hierarchy"];
-      yn_hirch_list = yn_hirch.split(',') if len(yn_hirch) > 1 else yn_hirch.split()
+      if "yarn.nodemanager.resource-plugins.gpu.docker-plugin" in services["configurations"]["yarn-site"]["properties"]:
+        rp_gpu_dp = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.docker-plugin"]
+        rp_gpu_dp_list = rp_gpu_dp.split(',') if len(rp_gpu_dp) > 1 else rp_gpu_dp.split()
+        self.logger.info("new what is yarn.nodemanager.resource-plugins.gpu.docker-plugin: '{0}'.".format(rp_gpu_dp_list))
 
-    if gpu_module_enabled.lower() == 'true':
+      if "yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint" in services["configurations"]["yarn-site"]["properties"]:
+        rp_gpu_dp_nv1_ep = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint"]
+        rp_gpu_dp_nv1_ep_list = rp_gpu_dp_nv1_ep.split(',') if len(rp_gpu_dp_nv1_ep) > 1 else rp_gpu_dp_nv1_ep.split()
+
+
+    if gpu_module_enabled and gpu_module_enabled.lower() == 'true':
       # put yarn.io/gpu if it is absent in resource-types.xml
       if "resource-types" in services["configurations"] and \
                       "yarn.resource-types" in services["configurations"]["resource-types"]["properties"]:
@@ -882,7 +897,7 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     self.logger.info("DBG: Calculated 'min_node_required': {0}, using following : min_memory_required : {1}, yarn_nm_mem_in_mb_normalized "
                 ": {2}".format(min_nodes_required, min_memory_required, yarn_nm_mem_in_mb_normalized))
     if min_nodes_required > node_manager_cnt:
-      self.logger.warning("ERROR: Not enough memory/nodes to run LLAP");
+      self.logger.warning("ERROR: Not enough memory/nodes to run LLAP")
       self.recommendDefaultLlapConfiguration(configurations, services, hosts)
       return
 
@@ -1393,8 +1408,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
               Modify 'llap' queue capacity to 'llap_queue_capacity'
       """
       if 'default' in leafQueueNames and \
-          ((len(leafQueueNames) == 1 and int(yarn_default_queue_capacity) == 100) or \
-               ((len(leafQueueNames) == 2 and llap_queue_name in leafQueueNames) and \
+          ((len(leafQueueNames) == 1 and int(yarn_default_queue_capacity) == 100) or
+               ((len(leafQueueNames) == 2 and llap_queue_name in leafQueueNames) and
                     ((currLlapQueueState == 'STOPPED' and enabled_hive_int_in_changed_configs) or (currLlapQueueState == 'RUNNING' and currLlapQueueCap != llap_queue_cap_perc)))):
         adjusted_default_queue_cap = str(100 - llap_queue_cap_perc)
 
