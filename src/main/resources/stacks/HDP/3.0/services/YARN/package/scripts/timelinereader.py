@@ -53,7 +53,6 @@ class ApplicationTimelineReader(Script):
   def stop(self, env, upgrade_type=None):
     import params
     env.set_params(params)
-    self.configure(env) # FOR SECURITY
     hbase(action='stop')
     service('timelinereader', action='stop')
 
