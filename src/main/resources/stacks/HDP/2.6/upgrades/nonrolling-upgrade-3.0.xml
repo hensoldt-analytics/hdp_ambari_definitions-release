@@ -21,7 +21,14 @@
     <target-stack>HDP-3.0</target-stack>
     <downgrade-allowed>false</downgrade-allowed>
     <type>NON_ROLLING</type>
-    <prerequisite-checks/>
+    <prerequisite-checks>
+        <check>org.apache.ambari.server.checks.ServicePresenceCheck</check>
+        <configuration>
+            <check-properties name="org.apache.ambari.server.checks.ServicePresenceCheck">
+                <property name="removed-service-names">Falcon,Flume,Mahout,Slider,Spark</property>
+            </check-properties>
+        </configuration>
+    </prerequisite-checks>
     <order>
         <group xsi:type="cluster" name="PRE_CLUSTER" title="Prepare Upgrade">
             <direction>UPGRADE</direction>
