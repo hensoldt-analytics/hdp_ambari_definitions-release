@@ -282,6 +282,25 @@
             <set key="ranger.plugin.kafka.ambari.cluster.name" value="{{cluster_name}}"
               if-type="ranger-kafka-plugin-properties" if-key="ranger-kafka-plugin-enabled" if-key-state="present"/>
           </definition>
+          <definition xsi:type="configure" id="kafka_log4j_parameterize" summary="Parameterizing Kafka Log4J Properties">
+            <type>kafka-log4j</type>
+            <set key="kafka_log_maxfilesize" value="256"/>
+            <set key="kafka_log_maxbackupindex" value="20"/>
+            <set key="controller_log_maxfilesize" value="256"/>
+            <set key="controller_log_maxbackupindex" value="20"/>
+            <replace key="content" find="log4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender" replace-with="log4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender&#xA;log4j.appender.kafkaAppender.MaxFileSize = {{kafka_log_maxfilesize}}MB"/>
+            <replace key="content" find="log4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender" replace-with="log4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender&#xA;log4j.appender.kafkaAppender.MaxBackupIndex = {{kafka_log_maxbackupindex}}"/>
+            <replace key="content" find="log4j.appender.controllerAppender=org.apache.log4j.DailyRollingFileAppender" replace-with="log4j.appender.controllerAppender=org.apache.log4j.DailyRollingFileAppender&#xA;log4j.appender.controllerAppender.MaxFileSize = {{controller_log_maxfilesize}}MB"/>
+            <replace key="content" find="log4j.appender.controllerAppender=org.apache.log4j.DailyRollingFileAppender" replace-with="log4j.appender.controllerAppender=org.apache.log4j.DailyRollingFileAppender&#xA;log4j.appender.controllerAppender.MaxBackupIndex = {{controller_log_maxbackupindex}}"/>
+          </definition>
+          <definition xsi:type="configure" id="add_inter_broker_protocol_version">
+            <type>kafka-broker</type>
+              <set key="inter.broker.protocol.version" value="1.0" />
+          </definition>
+          <definition xsi:type="configure" id="add_skip_log_message_format_version">
+            <type>kafka-broker</type>
+              <set key="log.message.format.version" value="1.0" if-type="kafka-broker" if-key="log.message.format.version" if-key-state="absent"/>
+          </definition>
         </changes>
       </component>
     </service>
