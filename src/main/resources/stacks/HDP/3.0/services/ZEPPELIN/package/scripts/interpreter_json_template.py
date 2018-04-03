@@ -128,8 +128,8 @@ template = '''
         "isUserImpersonate": false
       }
     },
-    "2C4U48MY3_spark2": {
-      "id": "2C4U48MY3_spark2",
+    "spark2": {
+      "id": "spark2",
       "name": "spark2",
       "group": "spark",
       "properties": {
@@ -190,8 +190,8 @@ template = '''
         "setPermission": false
       }
     },
-    "2CK8A9MEG": {
-      "id": "2CK8A9MEG",
+    "jdbc": {
+      "id": "jdbc",
       "name": "jdbc",
       "group": "jdbc",
       "properties": {
@@ -411,8 +411,8 @@ template = '''
         "port": -1
       }
     },
-    "2CKAY1A8Y": {
-      "id": "2CKAY1A8Y",
+    "md": {
+      "id": "md",
       "name": "md",
       "group": "md",
       "properties": {
@@ -442,8 +442,8 @@ template = '''
         "isUserImpersonate": false
       }
     },
-    "2CHS8UYQQ": {
-      "id": "2CHS8UYQQ",
+    "sh": {
+      "id": "sh",
       "name": "sh",
       "group": "sh",
       "properties": {
