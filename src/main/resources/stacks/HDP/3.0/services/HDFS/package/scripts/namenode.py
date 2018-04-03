@@ -33,6 +33,7 @@ from resource_management.core import shell
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.constants import Direction
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.resources.execute_hadoop import ExecuteHadoop
 from resource_management.libraries.functions.security_commons import build_expectations, \
   cached_kinit_executor, get_params_from_filesystem, validate_security_config_properties, \
   FILE_TYPE_XML
@@ -98,13 +99,28 @@ class NameNode(Script):
     import params
     env.set_params(params)
 
-    format_namenode()
+    if params.security_enabled:
+        Execute(params.nn_kinit_cmd,
+                user=params.hdfs_user
+        )
+
+    # this is run on a new namenode, format needs to be forced
+    Execute(format("hdfs --config {hadoop_conf_dir} namenode -format -nonInteractive"),
+            user = params.hdfs_user,
+            path = [params.hadoop_bin_dir],
+            logoutput=True
+    )
 
   def bootstrap_standby(self, env):
     import params
     env.set_params(params)
 
-    Execute("hdfs namenode -bootstrapStandby",
+    if params.security_enabled:
+        Execute(params.nn_kinit_cmd,
+                user=params.hdfs_user
+        )
+
+    Execute("hdfs namenode -bootstrapStandby -nonInteractive",
             user=params.hdfs_user,
             logoutput=True
     )
