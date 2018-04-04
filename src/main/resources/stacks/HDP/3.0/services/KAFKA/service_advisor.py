@@ -160,7 +160,6 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
 
     self.updateMountProperties("kafka-broker", kafka_mounts, configurations, services, hosts)
 
-
   def recommendKAFKAConfigurationsFromHDP23(self, configurations, clusterData, services, hosts):
 
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
@@ -177,6 +176,8 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
     putKafkaBrokerAttributes = self.putPropertyAttribute(configurations, "kafka-broker")
 
     if security_enabled:
+      self.update_listeners_to_sasl(services, putKafkaBrokerProperty)
+
       kafka_user = kafka_env.get('kafka_user')
 
       if kafka_user is not None:
@@ -281,6 +282,13 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
         putRangerKafkaPluginProperty = self.putProperty(configurations, 'ranger-kafka-plugin-properties', services)
         putRangerKafkaPluginProperty('zookeeper.connect', zookeeper_host_port)
 
+  def update_listeners_to_sasl(self, services, putKafkaBrokerProperty):
+    try:
+      listeners = services['configurations']['kafka-broker']['properties']['listeners']
+      if listeners and listeners.startswith('PLAINTEXT'):
+        putKafkaBrokerProperty('listeners', listeners.replace('PLAINTEXT', 'PLAINTEXTSASL'))
+    except KeyError as e:
+      self.logger.info('Cannot replace PLAINTEXT to PLAINTEXTSASL in listeners. KeyError: %s' % e)
 
   def recommendKAFKAConfigurationsFromHDP26(self, configurations, clusterData, services, hosts):
     if 'kafka-env' in services['configurations'] and 'kafka_user' in services['configurations']['kafka-env']['properties']:
