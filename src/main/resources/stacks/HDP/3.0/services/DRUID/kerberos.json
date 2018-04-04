@@ -7,10 +7,10 @@
           "name": "druid_spnego",
           "reference": "/spnego",
           "principal": {
-            "configuration": "druid-common/druid.hadoop.security.spnego.principal"
+            "configuration": "druid-common/druid.auth.authenticator.kerberos.serverPrincipal"
           },
           "keytab": {
-            "configuration": "druid-common/druid.hadoop.security.spnego.keytab"
+            "configuration": "druid-common/druid.auth.authenticator.kerberos.serverKeytab"
           }
         },
         {
@@ -18,7 +18,7 @@
           "principal": {
             "value": "${druid-env/druid_user}${principal_suffix}@${realm}",
             "type": "user",
-            "configuration": "druid-common/druid.hadoop.security.kerberos.principal",
+            "configuration": "druid-common/druid.auth.authenticator.kerberos.internalClientPrincipal",
             "local_username": "${druid-env/druid_user}"
           },
           "keytab": {
@@ -31,7 +31,7 @@
               "name": "${cluster-env/user_group}",
               "access": "r"
             },
-            "configuration": "druid-common/druid.hadoop.security.kerberos.keytab"
+            "configuration": "druid-common/druid.auth.authenticator.kerberos.internalClientKeytab"
           }
         },
         {
@@ -62,13 +62,15 @@
       "configurations": [
         {
           "druid-common": {
-            "druid.hadoop.security.spnego.excludedPaths": "[\"/status\"]",
-            "druid.security.extensions.loadList": "[\"druid-kerberos\"]"
+            "druid.auth.authenticator.kerberos.excludedPaths": "[\"/status\"]",
+            "druid.security.extensions.loadList": "[\"druid-kerberos\"]",
+            "druid.auth.authenticatorChain": "[\"kerberos\"]",
+            "druid.auth.authenticator.kerberos.type": "kerberos"
           }
         }
       ],
       "auth_to_local_properties": [
-        "druid-common/druid.hadoop.security.spnego.authToLocal|new_lines_escaped"
+        "druid-common/druid.auth.authenticator.kerberos.authToLocal|new_lines_escaped"
       ]
     }
   ]
