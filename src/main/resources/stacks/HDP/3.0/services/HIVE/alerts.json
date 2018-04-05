@@ -11,7 +11,7 @@
         "enabled": true,
         "source": {
           "type": "SCRIPT",
-          "path": "HIVE/3.0.0.3.0/package/alerts/alert_hive_metastore.py",
+          "path": "HDP/3.0/services/HIVE/package/alerts/alert_hive_metastore.py",
           "parameters": [
             {
               "name": "check.command.timeout",
@@ -60,7 +60,7 @@
         "enabled": true,
         "source": {
           "type": "SCRIPT",
-          "path": "HIVE/3.0.0.3.0/package/alerts/alert_hive_thrift_port.py",
+          "path": "HDP/3.0/services/HIVE/package/alerts/alert_hive_thrift_port.py",
           "parameters": [
             {
               "name": "check.command.timeout",
@@ -109,7 +109,7 @@
         "enabled": true,
         "source": {
           "type": "SCRIPT",
-          "path": "HIVE/3.0.0.3.0/package/alerts/alert_hive_interactive_thrift_port.py",
+          "path": "HDP/3.0/services/HIVE/package/alerts/alert_hive_interactive_thrift_port.py",
           "parameters": [
             {
               "name": "check.command.timeout",
@@ -156,7 +156,7 @@
         "enabled": true,
         "source": {
           "type": "SCRIPT",
-          "path": "HIVE/3.0.0.3.0/package/alerts/alert_llap_app_status.py",
+          "path": "HDP/3.0/services/HIVE/package/alerts/alert_llap_app_status.py",
           "parameters": [
             {
               "name": "check.command.timeout",

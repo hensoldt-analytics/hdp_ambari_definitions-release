@@ -10,7 +10,7 @@
         "scope": "ANY",
         "source": {
           "type": "SCRIPT",
-          "path": "ZEPPELIN/0.8.0/package/scripts/alert_check_zeppelin.py"
+          "path": "HDP/3.0/services/ZEPPELIN/package/scripts/alert_check_zeppelin.py"
         }
       }
     ]
