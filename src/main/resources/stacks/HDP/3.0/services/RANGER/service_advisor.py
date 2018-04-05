@@ -129,6 +129,7 @@ class RangerServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendRangerConfigurationsFromHDP25(configurations, clusterData, services, hosts)
     recommender.recommendRangerConfigurationsFromHDP26(configurations, clusterData, services, hosts)
     recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
+    recommender.recommendConfigurationsForHDP30(configurations, clusterData, services, hosts)
 
 
   def getServiceConfigurationRecommendationsForSSO(self, configurations, clusterData, services, hosts):
@@ -721,6 +722,18 @@ class RangerRecommender(service_advisor.ServiceAdvisor):
       # If SSO should be disabled for this service
       elif ambari_configuration.should_disable_sso('RANGER'):
         putRangerAdminSiteProperty('ranger.sso.enabled', "false")
+
+  def recommendConfigurationsForHDP30(self, configurations, clusterData, services, hosts):
+    putRangerAdminProperty = self.putProperty(configurations, 'ranger-admin-site', services)
+
+    enable_usersync_ldap_starttls = False
+    if 'ranger-ugsync-site' in services['configurations'] and 'ranger.usersync.ldap.starttls' in services['configurations']['ranger-ugsync-site']['properties']:
+      enable_usersync_ldap_starttls = services['configurations']['ranger-ugsync-site']['properties']['ranger.usersync.ldap.starttls'] == "true"
+
+    if enable_usersync_ldap_starttls:
+      putRangerAdminProperty("ranger.ldap.starttls", "true")
+    else:
+      putRangerAdminProperty("ranger.ldap.starttls", "false")
 
 
 class RangerValidator(service_advisor.ServiceAdvisor):

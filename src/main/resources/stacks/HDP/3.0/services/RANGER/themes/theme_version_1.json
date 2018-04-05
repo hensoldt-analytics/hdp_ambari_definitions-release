@@ -641,6 +641,11 @@
           "subsection-tab-name": "ldap-common-configs"
         },
         {
+          "config": "ranger-ugsync-site/ranger.usersync.ldap.starttls",
+          "subsection-name": "subsection-ranger-user-row2-col1",
+          "subsection-tab-name": "ldap-common-configs"
+        },
+        {
           "config": "ranger-ugsync-site/ranger.usersync.ldap.user.nameattribute",
           "subsection-name": "subsection-ranger-user-row2-col1",
           "subsection-tab-name": "ldap-user-configs"
@@ -1666,6 +1671,12 @@
       },
       {
         "config": "ranger-ugsync-site/ranger.usersync.ldap.deltasync",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
+        "config": "ranger-ugsync-site/ranger.usersync.ldap.starttls",
         "widget": {
           "type": "toggle"
         }

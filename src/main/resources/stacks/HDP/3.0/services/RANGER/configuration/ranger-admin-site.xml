@@ -748,4 +748,20 @@
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>ranger.ldap.starttls</name>
+    <value>false</value>
+    <description></description>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>boolean</type>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>ranger-ugsync-site</type>
+        <name>ranger.usersync.ldap.starttls</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
