@@ -30,11 +30,6 @@ from resource_management.core import shell
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.constants import StackFeature
 from resource_management.libraries.functions.check_process_status import check_process_status
-from resource_management.libraries.functions.security_commons import build_expectations
-from resource_management.libraries.functions.security_commons import cached_kinit_executor
-from resource_management.libraries.functions.security_commons import get_params_from_filesystem
-from resource_management.libraries.functions.security_commons import validate_security_config_properties
-from resource_management.libraries.functions.security_commons import FILE_TYPE_XML
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.script import Script
 from resource_management.core.resources.zkmigrator import ZkMigrator
@@ -45,10 +40,10 @@ class ZkfcSlave(Script):
     import params
     env.set_params(params)
     self.install_packages(env)
-    
+
   def configure(env):
     ZkfcSlave.configure_static(env)
-    
+
   @staticmethod
   def configure_static(env):
     import params
@@ -74,7 +69,7 @@ class ZkfcSlaveDefault(ZkfcSlave):
 
   def start(self, env, upgrade_type=None):
     ZkfcSlaveDefault.start_static(env, upgrade_type)
-    
+
   @staticmethod
   def start_static(env, upgrade_type=None):
     import params
@@ -91,8 +86,7 @@ class ZkfcSlaveDefault(ZkfcSlave):
     # only run this format command if the active namenode hostname is set
     # The Ambari UI HA Wizard prompts the user to run this command
     # manually, so this guarantees it is only run in the Blueprints case
-    if params.dfs_ha_enabled and \
-       params.dfs_ha_namenode_active is not None:
+    if params.dfs_ha_enabled and len(params.dfs_ha_namenode_active) > 0:
       success =  initialize_ha_zookeeper(params)
       if not success:
         raise Fail("Could not initialize HA state in zookeeper")
@@ -101,7 +95,7 @@ class ZkfcSlaveDefault(ZkfcSlave):
       action="start", name="zkfc", user=params.hdfs_user, create_pid_dir=True,
       create_log_dir=True
     )
-  
+
   def stop(self, env, upgrade_type=None):
     ZkfcSlaveDefault.stop_static(env, upgrade_type)
 
@@ -118,7 +112,7 @@ class ZkfcSlaveDefault(ZkfcSlave):
 
   def status(self, env):
     ZkfcSlaveDefault.status_static(env)
-    
+
   @staticmethod
   def status_static(env):
     import status_params
@@ -138,7 +132,7 @@ class ZkfcSlaveDefault(ZkfcSlave):
   def get_log_folder(self):
     import params
     return params.hdfs_log_dir
-  
+
   def get_user(self):
     import params
     return params.hdfs_user
