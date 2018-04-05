@@ -155,6 +155,29 @@
       <unique>false</unique>
     </repo>
   </os>
+  <os family="debian9">
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP/debian9/3.x/BUILDS/3.0.0.0-1146</baseurl>
+      <repoid>HDP-3.0</repoid>
+      <reponame>HDP</reponame>
+      <unique>true</unique>
+    </repo>
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/debian9/3.x/BUILDS/3.0.0.0-820</baseurl>
+      <repoid>HDP-3.0-GPL</repoid>
+      <reponame>HDP-GPL</reponame>
+      <unique>true</unique>
+      <tags>
+        <tag>GPL</tag>
+      </tags>
+    </repo>
+    <repo>
+      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-UTILS-1.1.0.22/repos/debian9</baseurl>
+      <repoid>HDP-UTILS-1.1.0.22</repoid>
+      <reponame>HDP-UTILS</reponame>
+      <unique>false</unique>
+    </repo>
+  </os>
   <os family="ubuntu14">
     <repo>
       <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP/ubuntu14/3.x/updates/2.3.0.0</baseurl>

@@ -159,7 +159,7 @@
           </packages>
         </osSpecific>
         <osSpecific>
-          <osFamily>debian7,ubuntu12,ubuntu14,ubuntu16</osFamily>
+          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
           <packages>
             <package>
               <name>atlas-metadata-${stack_version}</name>

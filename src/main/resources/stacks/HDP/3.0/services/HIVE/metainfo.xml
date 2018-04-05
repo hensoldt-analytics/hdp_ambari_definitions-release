@@ -310,7 +310,7 @@
           </packages>
         </osSpecific>
         <osSpecific>
-          <osFamily>debian7,ubuntu12,ubuntu14,ubuntu16</osFamily>
+          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
           <packages>
             <!--
             TODO AMBARI-20753
@@ -325,7 +325,7 @@
           </packages>
         </osSpecific>
         <osSpecific>
-          <osFamily>amazon2015,redhat6,debian7,ubuntu12,ubuntu14,ubuntu16</osFamily>
+          <osFamily>amazon2015,redhat6,debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
           <packages>
             <package>
               <name>mysql-server</name>
