@@ -652,6 +652,7 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
 
   def recommendYARNConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
     putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
+    putCapSchedProperty = self.putProperty(configurations, "capacity-scheduler", services)
 
     hsi_env_poperties = self.getServicesSiteProperties(services, "hive-interactive-env")
     if hsi_env_poperties and 'enable_hive_interactive' in hsi_env_poperties:
@@ -659,6 +660,26 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         services["forced-configurations"].append({"type" : "yarn-site", "name" : "yarn.nodemanager.container-monitor.procfs-tree.smaps-based-rss.enabled"})
         putYarnSiteProperty("yarn.nodemanager.container-monitor.procfs-tree.smaps-based-rss.enabled", "true")
 
+    hive_env_properties = self.getServicesSiteProperties(services, "hive-env")
+    cap_sched_properties, received_as_key_value_pair = self.getCapacitySchedulerProperties(services)
+    if hive_env_properties and "hive_user" in hive_env_properties and \
+       cap_sched_properties and "yarn.scheduler.capacity.root.acl_administer_queue" in cap_sched_properties:
+      hive_user = hive_env_properties["hive_user"]
+      acl_administer_queue = cap_sched_properties["yarn.scheduler.capacity.root.acl_administer_queue"]
+      acl_administer_queue_items = acl_administer_queue.split(",")
+      if not("*" in acl_administer_queue_items or hive_user in acl_administer_queue_items):
+        if not received_as_key_value_pair:
+          updated_cap_sched_configs_str = ""
+          for prop, val in cap_sched_properties.items():
+            if prop == "yarn.scheduler.capacity.root.acl_administer_queue":
+              updated_cap_sched_configs_str = updated_cap_sched_configs_str \
+                + prop + "=" + acl_administer_queue + "," + hive_user + "\n"
+            elif prop:
+                updated_cap_sched_configs_str = updated_cap_sched_configs_str + prop + "=" + val + "\n"
+
+          putCapSchedProperty("capacity-scheduler", updated_cap_sched_configs_str)
+        else:
+          putCapSchedProperty("yarn.scheduler.capacity.root.acl_administer_queue", acl_administer_queue + "," + hive_user)
 
   """
   Calculate YARN config 'apptimelineserver_heapsize' in MB.
