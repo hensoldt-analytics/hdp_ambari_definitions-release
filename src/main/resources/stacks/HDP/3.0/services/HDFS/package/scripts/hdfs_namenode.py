@@ -331,10 +331,13 @@ def format_namenode(force=None):
           )
   else:
     if params.hostname in params.dfs_ha_namenode_active:
+      dfs_ha_initial_cluster_id = params.dfs_ha_initial_cluster_id
+      cluster_id_clause = format("-clusterId '{dfs_ha_initial_cluster_id}'") if dfs_ha_initial_cluster_id else ''
+
       # check and run the format command in the HA deployment scenario
       # only format the "active" namenode in an HA deployment
       if force:
-        ExecuteHadoop('namenode -format',
+        ExecuteHadoop("namenode -format {cluster_id_clause}",
                       bin_dir=params.hadoop_bin_dir,
                       conf_dir=hadoop_conf_dir,
                       logoutput=True)
@@ -342,7 +345,7 @@ def format_namenode(force=None):
         nn_name_dirs = params.dfs_name_dir.split(',')
         if not is_namenode_formatted(params):
           try:
-            Execute(format("hdfs --config {hadoop_conf_dir} namenode -format -nonInteractive"),
+            Execute(format("hdfs --config {hadoop_conf_dir} namenode -format -nonInteractive {cluster_id_clause}"),
                     user = params.hdfs_user,
                     path = [params.hadoop_bin_dir],
                     logoutput=True
