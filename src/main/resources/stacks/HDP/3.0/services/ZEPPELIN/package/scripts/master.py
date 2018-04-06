@@ -457,43 +457,44 @@ class Master(Script):
       interpreter = interpreter_settings[interpreter_setting]
       if interpreter['group'] == 'livy':
         if params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab and params.security_enabled:
-          interpreter['properties']['zeppelin.livy.principal'] = params.zeppelin_kerberos_principal
-          interpreter['properties']['zeppelin.livy.keytab'] = params.zeppelin_kerberos_keytab
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.principal', 'string', params.zeppelin_kerberos_principal)
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.keytab', 'string', params.zeppelin_kerberos_keytab)
         else:
-          interpreter['properties']['zeppelin.livy.principal'] = ""
-          interpreter['properties']['zeppelin.livy.keytab'] = ""
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.principal', 'string', "")
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.keytab', 'string', "")
       elif interpreter['group'] == 'spark':
         if params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab and params.security_enabled:
-          interpreter['properties']['spark.yarn.principal'] = params.zeppelin_kerberos_principal
-          interpreter['properties']['spark.yarn.keytab'] = params.zeppelin_kerberos_keytab
+          self.storePropertyToInterpreter(interpreter, 'spark.yarn.principal', 'string', params.zeppelin_kerberos_principal)
+          self.storePropertyToInterpreter(interpreter, 'spark.yarn.keytab', 'string', params.zeppelin_kerberos_keytab)
         else:
-          interpreter['properties']['spark.yarn.principal'] = ""
-          interpreter['properties']['spark.yarn.keytab'] = ""
+          self.storePropertyToInterpreter(interpreter, 'spark.yarn.principal', 'string', "")
+          self.storePropertyToInterpreter(interpreter, 'spark.yarn.keytab', 'string', "")
       elif interpreter['group'] == 'jdbc':
         if params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab and params.security_enabled:
-          interpreter['properties']['zeppelin.jdbc.auth.type'] = "KERBEROS"
-          interpreter['properties']['zeppelin.jdbc.principal'] = params.zeppelin_kerberos_principal
-          interpreter['properties']['zeppelin.jdbc.keytab.location'] = params.zeppelin_kerberos_keytab
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.auth.type', 'string', "KERBEROS")
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.principal', 'string', params.zeppelin_kerberos_principal)
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.keytab.location', 'string', params.zeppelin_kerberos_keytab)
           if params.zookeeper_znode_parent \
               and params.hbase_zookeeper_quorum \
               and 'phoenix.url' in interpreter['properties'] \
-              and params.zookeeper_znode_parent not in interpreter['properties']['phoenix.url']:
-            interpreter['properties']['phoenix.url'] = "jdbc:phoenix:" + \
-                                                       params.hbase_zookeeper_quorum + ':' + \
-                                                       params.zookeeper_znode_parent
+              and 'value' in interpreter['properties']['phoenix.url'] \
+              and params.zookeeper_znode_parent not in interpreter['properties']['phoenix.url']['value']:
+            self.storePropertyToInterpreter(interpreter, 'phoenix.url', 'string', "jdbc:phoenix:" + \
+                                                                                  params.hbase_zookeeper_quorum + ':' + \
+                                                                                  params.zookeeper_znode_parent)
         else:
-          interpreter['properties']['zeppelin.jdbc.auth.type'] = "SIMPLE"
-          interpreter['properties']['zeppelin.jdbc.principal'] = ""
-          interpreter['properties']['zeppelin.jdbc.keytab.location'] = ""
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.auth.type', 'string', "SIMPLE")
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.principal', 'string', "")
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.keytab.location', 'string', "")
       elif interpreter['group'] == 'sh':
         if params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab and params.security_enabled:
-          interpreter['properties']['zeppelin.shell.auth.type'] = "KERBEROS"
-          interpreter['properties']['zeppelin.shell.principal'] = params.zeppelin_kerberos_principal
-          interpreter['properties']['zeppelin.shell.keytab.location'] = params.zeppelin_kerberos_keytab
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.auth.type', 'string', "KERBEROS")
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.principal', 'string', params.zeppelin_kerberos_principal)
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.keytab.location', 'string', params.zeppelin_kerberos_keytab)
         else:
-          interpreter['properties']['zeppelin.shell.auth.type'] = ""
-          interpreter['properties']['zeppelin.shell.principal'] = ""
-          interpreter['properties']['zeppelin.shell.keytab.location'] = ""
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.auth.type', 'string', "")
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.principal', 'string', "")
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.keytab.location', 'string', "")
 
     self.set_interpreter_settings(config_data)
 
@@ -521,118 +522,129 @@ class Master(Script):
           hive_interactive_properties_key = 'hive'
 
         if params.hive_server_host:
-          interpreter['properties']['hive.driver'] = 'org.apache.hive.jdbc.HiveDriver'
-          interpreter['properties']['hive.user'] = 'hive'
-          interpreter['properties']['hive.password'] = ''
-          interpreter['properties']['hive.proxy.user.property'] = 'hive.server2.proxy.user'
+          self.storePropertyToInterpreter(interpreter, 'hive.driver', 'string', 'org.apache.hive.jdbc.HiveDriver')
+          self.storePropertyToInterpreter(interpreter, 'hive.user', 'string', 'hive')
+          self.storePropertyToInterpreter(interpreter, 'hive.password', 'string', '')
+          self.storePropertyToInterpreter(interpreter, 'hive.proxy.user.property', 'string', 'hive.server2.proxy.user')
           if params.hive_server2_support_dynamic_service_discovery:
-            interpreter['properties']['hive.url'] = 'jdbc:hive2://' + \
+            self.storePropertyToInterpreter(interpreter, 'hive.url', 'string', 'jdbc:hive2://' + \
                                                  params.hive_zookeeper_quorum + \
                                                  '/;' + 'serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=' + \
-                                                    params.hive_zookeeper_namespace
+                                                 params.hive_zookeeper_namespace)
           else:
-            interpreter['properties']['hive.url'] = 'jdbc:hive2://' + \
-                                                 params.hive_server_host + \
-                                                     ':' + params.hive_server_port
+            self.storePropertyToInterpreter(interpreter, 'hive.url', 'string', 'jdbc:hive2://' + \
+                                                                               params.hive_server_host + \
+                                                                               ':' + params.hive_server_port)
           if 'hive.splitQueries' not in interpreter['properties']:
-            interpreter['properties']["hive.splitQueries"] = "true"
+            self.storePropertyToInterpreter(interpreter, "hive.splitQueries", 'string', "true")
 
         if params.hive_server_interactive_hosts:
-          interpreter['properties'][hive_interactive_properties_key + '.driver'] = 'org.apache.hive.jdbc.HiveDriver'
-          interpreter['properties'][hive_interactive_properties_key + '.user'] = 'hive'
-          interpreter['properties'][hive_interactive_properties_key + '.password'] = ''
-          interpreter['properties'][hive_interactive_properties_key + '.proxy.user.property'] = 'hive.server2.proxy.user'
+          self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.driver', 'string', 'org.apache.hive.jdbc.HiveDriver')
+          self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.user', 'string', 'hive')
+          self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.password', 'string', '')
+          self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.proxy.user.property', 'string', 'hive.server2.proxy.user')
           if params.hive_server2_support_dynamic_service_discovery:
-            interpreter['properties'][hive_interactive_properties_key + '.url'] = 'jdbc:hive2://' + \
+            self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.url', 'string', 'jdbc:hive2://' + \
                                                     params.hive_zookeeper_quorum + \
                                                     '/;' + 'serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=' + \
-                                                    params.hive_interactive_zookeeper_namespace
+                                                    params.hive_interactive_zookeeper_namespace)
           else:
-            interpreter['properties'][hive_interactive_properties_key + '.url'] = 'jdbc:hive2://' + \
+            self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.url', 'string', 'jdbc:hive2://' + \
                                                     params.hive_server_interactive_hosts + \
-                                                    ':' + params.hive_server_port
+                                                    ':' + params.hive_server_port)
           if hive_interactive_properties_key + '.splitQueries' not in interpreter['properties']:
-            interpreter['properties'][hive_interactive_properties_key + '.splitQueries'] = "true"
+            self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.splitQueries', 'string', "true")
 
         if params.spark_thrift_server_hosts:
-          interpreter['properties']['spark.driver'] = 'org.apache.hive.jdbc.HiveDriver'
-          interpreter['properties']['spark.user'] = 'hive'
-          interpreter['properties']['spark.password'] = ''
-          interpreter['properties']['spark.proxy.user.property'] = 'hive.server2.proxy.user'
-          interpreter['properties']['spark.url'] = 'jdbc:hive2://' + \
-              params.spark_thrift_server_hosts + ':' + params.spark_hive_thrift_port + '/'
+          self.storePropertyToInterpreter(interpreter, 'spark.driver', 'string', 'org.apache.hive.jdbc.HiveDriver')
+          self.storePropertyToInterpreter(interpreter, 'spark.user', 'string', 'hive')
+          self.storePropertyToInterpreter(interpreter, 'spark.password', 'string', '')
+          self.storePropertyToInterpreter(interpreter, 'spark.proxy.user.property', 'string', 'hive.server2.proxy.user')
+          self.storePropertyToInterpreter(interpreter, 'spark.url', 'string', 'jdbc:hive2://' + \
+                           params.spark_thrift_server_hosts + ':' + params.spark_hive_thrift_port + '/')
           if params.hive_principal:
-            interpreter['properties']['spark.url'] += ';principal=' + params.hive_principal
+            self.storePropertyToInterpreter(interpreter, 'spark.url', 'string', ';principal=' + params.hive_principal, 'add')
           if params.hive_transport_mode:
-            interpreter['properties']['spark.url'] += ';transportMode=' + params.hive_transport_mode
+            self.storePropertyToInterpreter(interpreter, 'spark.url', 'string', ';transportMode=' + params.hive_transport_mode, 'add')
           if 'spark.splitQueries' not in interpreter['properties']:
-            interpreter['properties']['spark.splitQueries'] = "true"
+            self.storePropertyToInterpreter(interpreter, 'spark.splitQueries', 'string', "true")
 
         if params.spark2_thrift_server_hosts:
-          interpreter['properties']['spark2.driver'] = 'org.apache.hive.jdbc.HiveDriver'
-          interpreter['properties']['spark2.user'] = 'hive'
-          interpreter['properties']['spark2.password'] = ''
-          interpreter['properties']['spark2.proxy.user.property'] = 'hive.server2.proxy.user'
-          interpreter['properties']['spark2.url'] = 'jdbc:hive2://' + \
-              params.spark2_thrift_server_hosts + ':' + params.spark2_hive_thrift_port + '/'
+          self.storePropertyToInterpreter(interpreter, 'spark2.driver', 'string', 'org.apache.hive.jdbc.HiveDriver')
+          self.storePropertyToInterpreter(interpreter, 'spark2.user', 'string', 'hive')
+          self.storePropertyToInterpreter(interpreter, 'spark2.password', 'string', '')
+          self.storePropertyToInterpreter(interpreter, 'spark2.proxy.user.property', 'string', 'hive.server2.proxy.user')
+          self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', 'jdbc:hive2://' + \
+                          params.spark2_thrift_server_hosts + ':' + params.spark2_hive_thrift_port + '/')
+
           if params.hive_principal:
-            interpreter['properties']['spark2.url'] += ';principal=' + params.hive_principal
+            self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';principal=' + params.hive_principal, 'add')
           if params.hive_transport_mode:
-            interpreter['properties']['spark2.url'] += ';transportMode=' + params.hive_transport_mode
+            self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';transportMode=' + params.hive_transport_mode, 'add')
           if 'spark2.splitQueries' not in interpreter['properties']:
-            interpreter['properties']['spark2.splitQueries'] = "true"
+            self.storePropertyToInterpreter(interpreter, 'spark2.splitQueries', 'string', "true")
 
         if params.zookeeper_znode_parent \
                 and params.hbase_zookeeper_quorum:
-            interpreter['properties']['phoenix.driver'] = 'org.apache.phoenix.jdbc.PhoenixDriver'
+            self.storePropertyToInterpreter(interpreter, 'phoenix.driver', 'string', 'org.apache.phoenix.jdbc.PhoenixDriver')
             if 'phoenix.hbase.client.retries.number' not in interpreter['properties']:
-              interpreter['properties']['phoenix.hbase.client.retries.number'] = '1'
+              self.storePropertyToInterpreter(interpreter, 'phoenix.hbase.client.retries.number', 'string', '1')
             if 'phoenix.phoenix.query.numberFormat' not in interpreter['properties']:
-              interpreter['properties']['phoenix.phoenix.query.numberFormat'] = '#.#'
+              self.storePropertyToInterpreter(interpreter, 'phoenix.phoenix.query.numberFormat', 'string', '#.#')
             if 'phoenix.user' not in interpreter['properties']:
-              interpreter['properties']['phoenix.user'] = 'phoenixuser'
+              self.storePropertyToInterpreter(interpreter, 'phoenix.user', 'string', 'phoenixuser')
             if 'phoenix.password' not in interpreter['properties']:
-              interpreter['properties']['phoenix.password'] = ''
-            interpreter['properties']['phoenix.url'] = "jdbc:phoenix:" + \
-                                                    params.hbase_zookeeper_quorum + ':' + \
-                                                    params.zookeeper_znode_parent
+              self.storePropertyToInterpreter(interpreter, 'phoenix.password', 'string', "")
+            self.storePropertyToInterpreter(interpreter, 'phoenix.url', 'string', "jdbc:phoenix:" + \
+                                                                                  params.hbase_zookeeper_quorum + ':' + \
+                                                                                  params.zookeeper_znode_parent)
+
             if 'phoenix.splitQueries' not in interpreter['properties']:
-              interpreter['properties']['phoenix.splitQueries'] = "true"
+              self.storePropertyToInterpreter(interpreter, 'phoenix.splitQueries', 'string', "true")
 
 
       elif interpreter['group'] == 'livy' and interpreter['name'] == 'livy':
         if params.livy_livyserver_host:
-          interpreter['properties']['zeppelin.livy.url'] = params.livy_livyserver_protocol + \
-                                                           "://" + params.livy_livyserver_host + \
-                                                           ":" + params.livy_livyserver_port
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.url', 'string', params.livy_livyserver_protocol + \
+                                                                                      "://" + params.livy_livyserver_host + \
+                                                                                      ":" + params.livy_livyserver_port)
         else:
           del interpreter_settings[setting_key]
 
       elif interpreter['group'] == 'livy' and interpreter['name'] == 'livy2':
         if params.livy2_livyserver_host:
-          interpreter['properties']['zeppelin.livy.url'] = params.livy2_livyserver_protocol + \
-                                                           "://" + params.livy2_livyserver_host + \
-                                                           ":" + params.livy2_livyserver_port
+          self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.url', 'string', params.livy2_livyserver_protocol + \
+                                                                                      "://" + params.livy2_livyserver_host + \
+                                                                                      ":" + params.livy2_livyserver_port)
         else:
           del interpreter_settings[setting_key]
 
 
       elif interpreter['group'] == 'spark' and interpreter['name'] == 'spark':
         if 'spark-env' in params.config['configurations']:
-          interpreter['properties']['master'] = "yarn-client"
-          interpreter['properties']['SPARK_HOME'] = "/usr/hdp/current/spark-client/"
+          self.storePropertyToInterpreter(interpreter, 'master', 'string', "yarn-client")
+          self.storePropertyToInterpreter(interpreter, 'SPARK_HOME', 'string', "/usr/hdp/current/spark-client/")
         else:
           del interpreter_settings[setting_key]
 
       elif interpreter['group'] == 'spark' and interpreter['name'] == 'spark2':
         if 'spark2-env' in params.config['configurations']:
-          interpreter['properties']['master'] = "yarn-client"
-          interpreter['properties']['SPARK_HOME'] = "/usr/hdp/current/spark2-client/"
+          self.storePropertyToInterpreter(interpreter, 'master', 'string', "yarn-client")
+          self.storePropertyToInterpreter(interpreter, 'SPARK_HOME', 'string', "/usr/hdp/current/spark2-client/")
         else:
           del interpreter_settings[setting_key]
 
     self.set_interpreter_settings(config_data)
     self.update_kerberos_properties()
+
+  def storePropertyToInterpreter(self, interpreter, property_name, property_type, property_value, mode='set'):
+    if property_name in interpreter['properties'] and 'value' in interpreter['properties'][property_name]:
+      if mode == 'set':
+        interpreter['properties'][property_name]['value'] = property_value
+      elif mode == 'add':
+        interpreter['properties'][property_name]['value'] += property_value
+    else:
+      interpreter['properties'][property_name] = {'name' : property_name, 'type' : property_type, 'value' : property_value}
 
   def create_interpreter_json(self):
     import interpreter_json_template
