@@ -545,49 +545,8 @@
           ]
         },
         {
-          "config": "hive-interactive-site/hive.server2.active.passive.ha.enable",
-          "subsection-name": "interactive-query-row1-col1",
-          "depends-on": [
-            {
-              "configs":[
-                "hive-interactive-env/enable_hive_interactive"
-              ],
-              "if": "${hive-interactive-env/enable_hive_interactive}",
-              "then": {
-                "property_value_attributes": {
-                  "visible": true
-                }
-              },
-              "else": {
-                "property_value_attributes": {
-                  "visible": false
-                }
-              }
-            }
-          ]
-        },
-        {
           "config": "hive-interactive-site/hive.server2.active.passive.ha.registry.namespace",
-          "subsection-name": "interactive-query-row1-col1",
-          "depends-on": [
-            {
-              "configs":[
-                "hive-interactive-env/enable_hive_interactive",
-                "hive-interactive-site/hive.server2.active.passive.ha.enable"
-              ],
-              "if": "${hive-interactive-env/enable_hive_interactive} && ${hive-interactive-site/hive.server2.active.passive.ha.enable}",
-              "then": {
-                "property_value_attributes": {
-                  "visible": true
-                }
-              },
-              "else": {
-                "property_value_attributes": {
-                  "visible": false
-                }
-              }
-            }
-          ]
+          "subsection-name": "interactive-query-row1-col1"
         },
         {
           "config": "hive-env/hive.log.level",

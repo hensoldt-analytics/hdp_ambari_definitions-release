@@ -172,6 +172,7 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     putHiveEnvPropertyAttribute = self.putPropertyAttribute(configurations, "hive-env")
     putHiveServerPropertyAttribute = self.putPropertyAttribute(configurations, "hiveserver2-site")
     putHiveInteractiveEnvPropertyAttribute = self.putPropertyAttribute(configurations, "hive-interactive-env")
+    putHiveInteractiveSitePropertyAttribute = self.putPropertyAttribute(configurations, "hive-interactive-site")
     putHiveAtlasHookPropertyAttribute = self.putPropertyAttribute(configurations,"hive-atlas-application.properties")
 
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
@@ -315,6 +316,11 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     leafQueues = sorted(leafQueues, key=lambda q:q["value"])
     putHiveSitePropertyAttribute("hive.server2.tez.default.queues", "entries", leafQueues)
     putHiveSiteProperty("hive.server2.tez.default.queues", ",".join([leafQueue["value"] for leafQueue in leafQueues]))
+
+    #HSI HA
+    hive_server_interactive_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
+    is_hsi_ha = len(hive_server_interactive_hosts) == 2
+    putHiveInteractiveSitePropertyAttribute("hive.server2.active.passive.ha.registry.namespace", "visible", str(is_hsi_ha).lower())
 
     # Security
     if ("configurations" not in services) or ("hive-env" not in services["configurations"]) or \
