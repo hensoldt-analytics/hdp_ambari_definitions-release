@@ -421,6 +421,11 @@ if stack_supports_atlas_ranger_plugin and enable_ranger_atlas:
     'name': repo_name,
     'type': 'atlas',
     }
+
+# required when Ranger-KMS is SSL enabled
+ranger_kms_hosts = default('/clusterHostInfo/ranger_kms_server_hosts',[])
+has_ranger_kms = len(ranger_kms_hosts) > 0
+is_ranger_kms_ssl_enabled = default('configurations/ranger-kms-site/ranger.service.https.attrib.ssl.enabled',False)
 # ranger atlas plugin section end
 # atlas admin login username password
 atlas_admin_username = config['configurations']['atlas-env']['atlas.admin.username']

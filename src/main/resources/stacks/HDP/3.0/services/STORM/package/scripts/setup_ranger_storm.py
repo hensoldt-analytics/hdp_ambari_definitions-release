@@ -19,8 +19,7 @@ limitations under the License.
 """
 from resource_management.core.logger import Logger
 from resource_management.libraries.functions.setup_ranger_plugin_xml import setup_ranger_plugin
-from resource_management.libraries.functions.setup_ranger_plugin_xml import setup_core_site_for_required_plugins
-from resource_management.libraries.resources.xml_config import XmlConfig
+from resource_management.libraries.functions.setup_ranger_plugin_xml import setup_configuration_file_for_required_plugins
 from resource_management.libraries.functions.format import format
 from resource_management.core.resources import File, Directory
 
@@ -30,6 +29,14 @@ def setup_ranger_storm(upgrade_type=None):
   """
   import params
   if params.enable_ranger_storm and params.security_enabled:
+    site_files_create_path = format('{storm_component_home_dir}/extlib-daemon/ranger-storm-plugin-impl/conf')
+    Directory(site_files_create_path,
+              owner = params.storm_user,
+              group = params.user_group,
+              mode=0775,
+              create_parents = True,
+              cd_access = 'a'
+              )
 
     stack_version = None
     if upgrade_type is not None:
@@ -59,6 +66,13 @@ def setup_ranger_storm(upgrade_type=None):
                            recursive_chmod=True
         )
         params.HdfsResource(None, action="execute")
+        if params.is_ranger_kms_ssl_enabled:
+          Logger.info('Ranger KMS is ssl enabled, configuring ssl-client for hdfs audits.')
+          setup_configuration_file_for_required_plugins(component_user = params.storm_user, component_group = params.user_group,
+                                                        create_core_site_path = site_files_create_path, configurations = params.config['configurations']['ssl-client'],
+                                                        configuration_attributes = params.config['configurationAttributes']['ssl-client'], file_name='ssl-client.xml')
+        else:
+          Logger.info('Ranger KMS is not ssl enabled, skipping ssl-client for hdfs audits.')
       except Exception, err:
         Logger.exception("Audit directory creation in HDFS for STORM Ranger plugin failed with error:\n{0}".format(err))
 
@@ -83,37 +97,25 @@ def setup_ranger_storm(upgrade_type=None):
                         component_user_principal=params.ranger_storm_principal if params.security_enabled else None,
                         component_user_keytab=params.ranger_storm_keytab if params.security_enabled else None)
 
-    site_files_create_path = format('{storm_component_home_dir}/extlib-daemon/ranger-storm-plugin-impl/conf')
-    Directory(site_files_create_path,
-            owner = params.storm_user,
-            group = params.user_group,
-            mode=0775,
-            create_parents = True,
-            cd_access = 'a'
-            )
+
 
     if params.stack_supports_core_site_for_ranger_plugin and params.enable_ranger_storm and params.security_enabled:
       if params.has_namenode:
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is installed, creating create core-site.xml from namenode configurations")
-        setup_core_site_for_required_plugins(component_user = params.storm_user, component_group = params.user_group,
-                                             create_core_site_path = site_files_create_path, configurations = params.config['configurations']['core-site'],
-                                             configuration_attributes = params.config['configuration_attributes']['core-site'])
+        setup_configuration_file_for_required_plugins(component_user = params.storm_user, component_group = params.user_group,
+                                                      create_core_site_path = site_files_create_path, configurations = params.config['configurations']['core-site'],
+                                                      configuration_attributes = params.config['configuration_attributes']['core-site'], file_name='core-site.xml')
       else:
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is not installed, creating create core-site.xml from default configurations")
-        setup_core_site_for_required_plugins(component_user = params.storm_user, component_group = params.user_group,
-                                             create_core_site_path = site_files_create_path, configurations = { 'hadoop.security.authentication' : 'kerberos' if params.security_enabled else 'simple' },
-                                             configuration_attributes = {})
+        setup_configuration_file_for_required_plugins(component_user = params.storm_user, component_group = params.user_group,
+                                                      create_core_site_path = site_files_create_path, configurations = { 'hadoop.security.authentication' : 'kerberos' if params.security_enabled else 'simple' },
+                                                      configuration_attributes = {}, file_name='core-site.xml')
 
       if len(params.namenode_hosts) > 1:
         Logger.info('Ranger Storm plugin is enabled along with security and NameNode is HA , creating hdfs-site.xml')
-        XmlConfig("hdfs-site.xml",
-          conf_dir=site_files_create_path,
-          configurations=params.config['configurations']['hdfs-site'],
-          configuration_attributes=params.config['configurationAttributes']['hdfs-site'],
-          owner=params.storm_user,
-          group=params.user_group,
-          mode=0644
-        )
+        setup_configuration_file_for_required_plugins(component_user = params.storm_user, component_group = params.user_group,
+                                                      create_core_site_path = site_files_create_path, configurations = params.config['configurations']['hdfs-site'],
+                                                      configuration_attributes = params.config['configurationAttributes']['hdfs-site'], file_name = 'hdfs-site.xml')
       else:
         Logger.info('Ranger Storm plugin is not enabled or security is disabled, removing hdfs-site.xml')
         File(format('{site_files_create_path}/hdfs-site.xml'), action="delete")

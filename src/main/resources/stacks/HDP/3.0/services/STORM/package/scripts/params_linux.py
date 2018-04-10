@@ -395,6 +395,10 @@ if enable_ranger_storm:
   if has_ranger_admin and stack_supports_ranger_audit_db and xa_audit_db_flavor.lower() == 'sqla':
     xa_audit_db_is_enabled = False
 
+# required when Ranger-KMS is SSL enabled
+ranger_kms_hosts = default('/clusterHostInfo/ranger_kms_server_hosts',[])
+has_ranger_kms = len(ranger_kms_hosts) > 0
+is_ranger_kms_ssl_enabled = default('configurations/ranger-kms-site/ranger.service.https.attrib.ssl.enabled',False)
 # ranger storm plugin end section
 
 namenode_hosts = default("/clusterHostInfo/namenode_hosts", [])

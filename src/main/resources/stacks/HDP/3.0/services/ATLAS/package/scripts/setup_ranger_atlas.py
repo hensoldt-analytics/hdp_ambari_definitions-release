@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from resource_management.core.logger import Logger
+from resource_management.libraries.functions.setup_ranger_plugin_xml import setup_configuration_file_for_required_plugins
 
 def setup_ranger_atlas(upgrade_type=None):
   import params
@@ -47,6 +48,13 @@ def setup_ranger_atlas(upgrade_type=None):
                             recursive_chmod=True
         )
         params.HdfsResource(None, action="execute")
+        if params.is_ranger_kms_ssl_enabled:
+          Logger.info('Ranger KMS is ssl enabled, configuring ssl-client for hdfs audits.')
+          setup_configuration_file_for_required_plugins(component_user = params.metadata_user, component_group = params.user_group,
+                                                        create_core_site_path = params.conf_dir, configurations = params.config['configurations']['ssl-client'],
+                                                        configuration_attributes = params.config['configurationAttributes']['ssl-client'], file_name='ssl-client.xml')
+        else:
+          Logger.info('Ranger KMS is not ssl enabled, skipping ssl-client for hdfs audits.')
       except Exception, err:
         Logger.exception("Audit directory creation in HDFS for ATLAS Ranger plugin failed with error:\n{0}".format(err))
 

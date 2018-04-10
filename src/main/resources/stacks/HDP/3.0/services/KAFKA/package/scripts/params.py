@@ -361,6 +361,11 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
 # need this to capture cluster name from where ranger kafka plugin is enabled
 cluster_name = config['clusterName']
 
+# required when Ranger-KMS is SSL enabled
+ranger_kms_hosts = default('/clusterHostInfo/ranger_kms_server_hosts',[])
+has_ranger_kms = len(ranger_kms_hosts) > 0
+is_ranger_kms_ssl_enabled = default('configurations/ranger-kms-site/ranger.service.https.attrib.ssl.enabled',False)
+
 # ranger kafka plugin section end
 
 namenode_hosts = default("/clusterHostInfo/namenode_hosts", [])
