@@ -34,7 +34,7 @@ class ServiceCheck(Script):
     component_port = params.config['configurations'][format('{config_name}')]['druid.port']
     for component_host in params.config['clusterHostInfo'][format('{component_name}_hosts')]:
       Execute(format(
-        "curl -s -o /dev/null -w'%{{http_code}}' --negotiate -u: -k {component_host}:{component_port}/status | grep 200"),
+        "curl -s -o /dev/null -w'%{{http_code}}' --negotiate -u: -k {component_host}:{component_port}/status/health | grep 200"),
         tries=10,
         try_sleep=3,
         logoutput=True)
