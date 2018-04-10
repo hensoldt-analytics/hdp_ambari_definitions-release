@@ -110,6 +110,7 @@
                 <script>scripts/namenode.py</script>
                 <scriptType>PYTHON</scriptType>
               </commandScript>
+              <hidden>true</hidden>
             </customCommand>
             <customCommand>
               <name>FORMAT</name>
@@ -117,6 +118,7 @@
                 <script>scripts/namenode.py</script>
                 <scriptType>PYTHON</scriptType>
               </commandScript>
+              <hidden>true</hidden>
             </customCommand>
           </customCommands>
         </component>
@@ -259,6 +261,7 @@
                 <script>scripts/zkfc_slave.py</script>
                 <scriptType>PYTHON</scriptType>
               </commandScript>
+              <hidden>true</hidden>
             </customCommand>
           </customCommands>
         </component>
