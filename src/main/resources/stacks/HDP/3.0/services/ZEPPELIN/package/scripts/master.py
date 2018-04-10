@@ -570,7 +570,7 @@ class Master(Script):
             self.storePropertyToInterpreter(interpreter, 'spark.splitQueries', 'string', "true")
 
         if params.spark2_thrift_server_hosts:
-          self.storePropertyToInterpreter(interpreter, 'spark2.driver', 'string', 'org.apache.hive.jdbc.HiveDriver')
+          self.storePropertyToInterpreter(interpreter, 'spark2.driver', 'string', 'org.apache.spark-project.org.apache.hive.jdbc.HiveDriver')
           self.storePropertyToInterpreter(interpreter, 'spark2.user', 'string', 'hive')
           self.storePropertyToInterpreter(interpreter, 'spark2.password', 'string', '')
           self.storePropertyToInterpreter(interpreter, 'spark2.proxy.user.property', 'string', 'hive.server2.proxy.user')
