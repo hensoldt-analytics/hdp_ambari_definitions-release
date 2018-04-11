@@ -19,6 +19,7 @@ Ambari Agent
 
 """
 
+import os
 import sys
 from resource_management.libraries.script.script import Script
 from resource_management.libraries.resources.execute_hadoop import ExecuteHadoop
@@ -136,10 +137,22 @@ class MapReduce2ServiceCheckDefault(MapReduce2ServiceCheck):
                         type = "directory",
                         dfs_type = params.dfs_type,
     )
+
+    test_file = params.mapred2_service_check_test_file
+    if not os.path.isfile(test_file):
+      try:
+        Execute(format("dd if=/dev/urandom of={test_file} count=1 bs=1024"))
+      except:
+        try:
+          Execute(format("rm {test_file}")) #clean up
+        except:
+          pass
+        test_file = "/etc/passwd"
+
     params.HdfsResource(input_file,
                         action = "create_on_execute",
                         type = "file",
-                        source = "/etc/passwd",
+                        source = test_file,
                         dfs_type = params.dfs_type,
     )
     params.HdfsResource(None, action="execute")

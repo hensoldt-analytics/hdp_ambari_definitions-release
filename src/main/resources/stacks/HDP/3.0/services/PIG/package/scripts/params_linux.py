@@ -69,6 +69,8 @@ smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
 pig_env_sh_template = config['configurations']['pig-env']['content']
 
+pig_service_check_test_file = format('{tmp_dir}/pig-service-check')
+
 # not supporting 32 bit jdk.
 java64_home = config['ambariLevelParams']['java_home']
 

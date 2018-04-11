@@ -16,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
+import os
 
 from resource_management.libraries.script.script import Script
 from resource_management.core.shell import as_user
@@ -73,9 +74,20 @@ class HdfsServiceCheckDefault(HdfsServiceCheck):
                         action="delete_on_execute",
     )
 
+    test_file = params.hdfs_service_check_test_file
+    if not os.path.isfile(test_file):
+      try:
+        Execute(format("dd if=/dev/urandom of={test_file} count=1 bs=1024"))
+      except:
+        try:
+          Execute(format("rm {test_file}")) #clean up
+        except:
+          pass
+        test_file = "/etc/passwd"
+
     params.HdfsResource(tmp_file,
                         type="file",
-                        source="/etc/passwd",
+                        source=test_file,
                         action="create_on_execute"
     )
     params.HdfsResource(None, action="execute")

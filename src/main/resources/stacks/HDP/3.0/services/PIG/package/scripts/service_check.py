@@ -57,9 +57,21 @@ class PigServiceCheckLinux(PigServiceCheck):
                         action="delete_on_execute",
                         owner=params.smokeuser,
                         )
+
+    test_file = params.pig_service_check_test_file
+    if not os.path.isfile(test_file):
+      try:
+        Execute(format("dd if=/dev/urandom of={test_file} count=1 bs=1024"))
+      except:
+        try:
+          Execute(format("rm {test_file}")) #clean up
+        except:
+          pass
+        test_file = "/etc/passwd"
+
     params.HdfsResource(input_file,
                         type="file",
-                        source="/etc/passwd",
+                        source=test_file,
                         action="create_on_execute",
                         owner=params.smokeuser,
     )
@@ -101,7 +113,7 @@ class PigServiceCheckLinux(PigServiceCheck):
       )
       params.HdfsResource(input_file,
                           type="file",
-                          source="/etc/passwd",
+                          source=test_file,
                           action="create_on_execute",
                           owner=params.smokeuser,
       )

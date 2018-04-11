@@ -184,6 +184,8 @@ current_nm_security_state = os.path.isfile(nm_security_marker)
 toggle_nm_security = (current_nm_security_state and not security_enabled) or (not current_nm_security_state and security_enabled)
 smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
 
+mapred2_service_check_test_file = format('{tmp_dir}/mapred2-service-check')
+
 yarn_executor_container_group = config['configurations']['yarn-site']['yarn.nodemanager.linux-container-executor.group']
 yarn_nodemanager_container_executor_class =  config['configurations']['yarn-site']['yarn.nodemanager.container-executor.class']
 is_linux_container_executor = (yarn_nodemanager_container_executor_class == 'org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor')
