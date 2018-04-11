@@ -716,15 +716,6 @@ template = '''
           "defaultInterpreter": false
         },
         {
-          "class": "org.apache.zeppelin.livy.LivyPySpark3Interpreter",
-          "editor": {
-            "editOnDblClick": false,
-            "language": "python"
-          },
-          "name": "pyspark3",
-          "defaultInterpreter": false
-        },
-        {
           "class": "org.apache.zeppelin.livy.LivySparkRInterpreter",
           "editor": {
             "editOnDblClick": false,
