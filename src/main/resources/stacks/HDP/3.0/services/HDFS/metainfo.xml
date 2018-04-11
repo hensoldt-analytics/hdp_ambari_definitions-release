@@ -29,7 +29,7 @@
           <name>NAMENODE</name>
           <displayName>NameNode</displayName>
           <category>MASTER</category>
-          <cardinality>1-2</cardinality>
+          <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
           <reassignAllowed>true</reassignAllowed>
           <dependencies>
