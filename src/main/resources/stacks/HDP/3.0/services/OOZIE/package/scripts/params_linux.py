@@ -100,44 +100,30 @@ if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE,
   if upgrade_stack is not None and len(upgrade_stack) == 2 and upgrade_stack[1] is not None:
     stack_version = upgrade_stack[1]
 
-  # oozie-server or oozie-client, depending on role
-  oozie_root = status_params.component_directory
+# oozie-server or oozie-client, depending on role
+oozie_root = status_params.component_directory
 
-  # using the correct oozie root dir, format the correct location
-  oozie_lib_dir = format("{stack_root}/current/{oozie_root}")
-  oozie_setup_sh = format("{stack_root}/current/{oozie_root}/bin/oozie-setup.sh")
-  oozie_webapps_dir = format("{stack_root}/current/{oozie_root}/oozie-server/webapps")
-  oozie_webapps_conf_dir = format("{stack_root}/current/{oozie_root}/oozie-server/conf")
-  oozie_libext_dir = format("{stack_root}/current/{oozie_root}/libext")
-  oozie_server_dir = format("{stack_root}/current/{oozie_root}/oozie-server")
-  oozie_shared_lib = format("{stack_root}/current/{oozie_root}/share")
-  oozie_home = format("{stack_root}/current/{oozie_root}")
-  oozie_bin_dir = format("{stack_root}/current/{oozie_root}/bin")
-  oozie_examples_regex = format("{stack_root}/current/{oozie_root}/doc")
+# using the correct oozie root dir, format the correct location
+oozie_lib_dir = format("{stack_root}/current/{oozie_root}")
+oozie_setup_sh = format("{stack_root}/current/{oozie_root}/bin/oozie-setup.sh")
+oozie_webapps_dir = format("{stack_root}/current/{oozie_root}/oozie-server/webapps")
+oozie_webapps_conf_dir = format("{stack_root}/current/{oozie_root}/oozie-server/conf")
+oozie_libext_dir = format("{stack_root}/current/{oozie_root}/libext")
+oozie_server_dir = format("{stack_root}/current/{oozie_root}/oozie-server")
+oozie_shared_lib = format("{stack_root}/current/{oozie_root}/share")
+oozie_home = format("{stack_root}/current/{oozie_root}")
+oozie_bin_dir = format("{stack_root}/current/{oozie_root}/bin")
+oozie_examples_regex = format("{stack_root}/current/{oozie_root}/doc")
 
-  # set the falcon home for copying JARs; if in an upgrade, then use the version of falcon that
-  # matches the version of oozie
-  falcon_home = format("{stack_root}/current/falcon-client")
-  if stack_version is not None:
-    falcon_home = '{0}/{1}/falcon'.format(stack_root, stack_version)
+# set the falcon home for copying JARs; if in an upgrade, then use the version of falcon that
+# matches the version of oozie
+falcon_home = format("{stack_root}/current/falcon-client")
+if stack_version is not None:
+  falcon_home = '{0}/{1}/falcon'.format(stack_root, stack_version)
 
-  conf_dir = format("{stack_root}/current/{oozie_root}/conf")
-  hive_conf_dir = format("{conf_dir}/action-conf/hive")
+conf_dir = format("{stack_root}/current/{oozie_root}/conf")
+hive_conf_dir = format("{conf_dir}/action-conf/hive")
 
-else:
-  oozie_lib_dir = "/var/lib/oozie"
-  oozie_setup_sh = "/usr/lib/oozie/bin/oozie-setup.sh"
-  oozie_webapps_dir = "/var/lib/oozie/oozie-server/webapps/"
-  oozie_webapps_conf_dir = "/var/lib/oozie/oozie-server/conf"
-  oozie_libext_dir = "/usr/lib/oozie/libext"
-  oozie_server_dir = "/var/lib/oozie/oozie-server"
-  oozie_shared_lib = "/usr/lib/oozie/share"
-  oozie_home = "/usr/lib/oozie"
-  oozie_bin_dir = "/usr/bin"
-  falcon_home = '/usr/lib/falcon'
-  conf_dir = "/etc/oozie/conf"
-  hive_conf_dir = "/etc/oozie/conf/action-conf/hive"
-  oozie_examples_regex = "/usr/share/doc/oozie-*"
 
 execute_path = oozie_bin_dir + os.pathsep + hadoop_bin_dir
 
