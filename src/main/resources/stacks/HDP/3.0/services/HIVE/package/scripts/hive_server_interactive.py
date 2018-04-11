@@ -140,7 +140,9 @@ class HiveServerInteractive(Script):
         self.do_kinit()
 
       self._llap_stop(env)
-      self._llap_start(env)
+      status = self._llap_start(env)
+      if not status:
+        raise Fail("LLAP app couldn't be STARTED.")
 
     def _llap_stop(self, env):
       import params
