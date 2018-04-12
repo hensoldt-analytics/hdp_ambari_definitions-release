@@ -568,6 +568,7 @@ docker_allowed_networks = config['configurations']['container-executor']['docker
 docker_allowed_ro_mounts = config['configurations']['container-executor']['docker_allowed_ro-mounts']
 docker_allowed_rw_mounts = config['configurations']['container-executor']['docker_allowed_rw-mounts']
 docker_privileged_containers_enabled = str(config['configurations']['container-executor']['docker_privileged-containers_enabled']).lower()
+docker_privileged_containers_registries = config['configurations']['container-executor']['docker_privileged-containers_registries']
 docker_allowed_volume_drivers = config['configurations']['container-executor']['docker_allowed_volume-drivers']
 
 # ATSv2 integration properties started.

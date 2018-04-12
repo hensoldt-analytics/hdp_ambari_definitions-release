@@ -170,6 +170,19 @@
   </property>
 
   <property>
+    <name>docker_privileged-containers_registries</name>
+    <value></value>
+    <display-name>Docker Privileged Registries</display-name>
+    <description>
+      List of registries whose docker images are allowed to mount volumes and launch privileged docker containers.
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
     <name>min_user_id</name>
     <value>1000</value>
     <display-name>Minimum user ID for submitting job</display-name>
