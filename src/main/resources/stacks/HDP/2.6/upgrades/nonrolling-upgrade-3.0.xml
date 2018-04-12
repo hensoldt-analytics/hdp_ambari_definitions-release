@@ -363,8 +363,10 @@
 
             <!--HDFS-->
 
-
             <!--HBASE-->
+            <execute-stage service="HBASE" component="HBASE_REGIONSERVER" title="Apply config changes for HBase Region Servers">
+                <task xsi:type="configure" id="hbase_regionserver_cmsinitiatingoccupancyfraction_replace"/>
+            </execute-stage>
 
             <!--ZOOKEEPER-->
 

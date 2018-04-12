@@ -132,6 +132,14 @@
           </definition>
         </changes>
       </component>
+      <component name="HBASE_REGIONSERVER">
+        <changes>
+          <definition xsi:type="configure" id="hbase_regionserver_cmsinitiatingoccupancyfraction_replace" summary="Apply config changes for HBase Region Servers">
+            <type>hbase-env</type>            
+            <replace key="content" find="-XX:CMSInitiatingOccupancyFraction={{regionserver_cms_initiating_occupancy_fraction}}" replace-with=""/>
+          </definition>
+        </changes>
+      </component>
     </service>
 
     <service name="KNOX">
