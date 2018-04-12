@@ -68,7 +68,7 @@ limitations under the License.
           <osFamily>any</osFamily>
           <packages>
             <package>
-              <name>zeppelin</name>
+              <name>zeppelin_${stack_version}</name>
             </package>
           </packages>
         </osSpecific>
