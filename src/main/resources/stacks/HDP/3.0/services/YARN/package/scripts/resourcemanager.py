@@ -181,7 +181,7 @@ class ResourcemanagerDefault(Resourcemanager):
       File(params.include_file_path,
            content=Template("include_hosts_list.j2"),
            owner=yarn_user,
-           mode="f"
+           group=user_group
            )
 
     if params.update_files_only == False:
