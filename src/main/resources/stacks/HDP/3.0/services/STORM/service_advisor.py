@@ -322,6 +322,8 @@ class StormRecommender(service_advisor.ServiceAdvisor):
 
     def recommendStormConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
 
+        storm_site = self.getServicesSiteProperties(services, "storm-site")
+        security_enabled = self.isSecurityEnabled(services)
         servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
         putStormSiteProperty = self.putProperty(configurations, "storm-site", services)
 
@@ -339,6 +341,13 @@ class StormRecommender(service_advisor.ServiceAdvisor):
         else:
             putStormSiteProperty('storm.cluster.metrics.consumer.register', 'null')
             putStormSiteProperty('topology.metrics.consumer.register', 'null')
+
+        if storm_site and not security_enabled:
+            putStormSitePropertyAttribute = self.putPropertyAttribute(configurations, "storm-site")
+            if 'nimbus.impersonation.acl' in storm_site:
+                putStormSitePropertyAttribute('nimbus.impersonation.acl', 'delete', 'true')
+            if 'nimbus.impersonation.authorizer' in storm_site:
+                putStormSitePropertyAttribute('nimbus.impersonation.authorizer', 'delete', 'true')
 
 
 class StormValidator(service_advisor.ServiceAdvisor):
