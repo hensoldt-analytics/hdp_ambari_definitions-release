@@ -620,11 +620,16 @@ def setup_atsv2_reader():
              owner=params.yarn_hbase_user
         )
     if params.security_enabled:
-        File(os.path.join(params.yarn_hbase_conf_dir, 'yarn_hbase_jaas.conf'),
+        File(os.path.join(params.yarn_hbase_conf_dir, 'yarn_hbase_master_jaas.conf'),
              owner=params.yarn_hbase_user,
              group=params.user_group,
-             content=Template("yarn_hbase_jaas.conf.j2")
+             content=Template("yarn_hbase_master_jaas.conf.j2")
         )
+        File(os.path.join(params.yarn_hbase_conf_dir, 'yarn_hbase_regionserver_jaas.conf'),
+             owner=params.yarn_hbase_user,
+             group=params.user_group,
+             content=Template("yarn_hbase_regionserver_jaas.conf.j2")
+             )
 
 def setup_atsv2_hbase_directories():
     import  params

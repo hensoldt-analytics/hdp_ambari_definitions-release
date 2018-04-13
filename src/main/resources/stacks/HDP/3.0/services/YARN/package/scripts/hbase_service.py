@@ -22,6 +22,7 @@ from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.core.shell import as_sudo
 from resource_management.core.resources.system import Execute, File
+from resource_management.core.source import Template
 
 def hbase_service(
   name,
@@ -88,8 +89,28 @@ def configure_hbase(env):
 
 def createTables():
     import params
+    hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
+    if params.security_enabled:
+        yarn_hbase_grant_premissions_file = format("{tmp_dir}/hbase_grant_permissions.sh")
+        grantprivelegecmd = format("{yarn_hbase_kinit_cmd} {hbase_cmd} shell {yarn_hbase_grant_premissions_file}")
+        File( yarn_hbase_grant_premissions_file,
+              owner   = params.yarn_hbase_user,
+              group   = params.user_group,
+              mode    = 0644,
+              content = Template('yarn_hbase_grant_permissions.j2')
+              )
+        try:
+            Execute( grantprivelegecmd,
+                 user = params.yarn_hbase_user,
+                 timeout = 60,
+                 logoutput = True
+                 )
+        except:
+            show_logs(params.yarn_hbase_log_dir, params.yarn_hbase_user)
+            raise
+
     class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create -s")
-    cmd = format("export HBASE_CLASSPATH_PREFIX={hadoop_yarn_home}/timelineservice/*;{yarn_timelineservice_kinit_cmd} {yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir} {class_name}")
+    cmd = format("export HBASE_CLASSPATH_PREFIX={hadoop_yarn_home}/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")
     try:
         Execute(cmd, user=params.yarn_hbase_user, timeout = 60, logoutput=True)
     except:

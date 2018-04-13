@@ -62,6 +62,24 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>yarn_client_user</name>
+    <display-name>Yarn Client User</display-name>
+    <value>yarn-client</value>
+    <property-type>USER</property-type>
+    <description>YARN Client User for ATSv2 backend</description>
+    <value-attributes>
+      <type>user</type>
+      <overridable>false</overridable>
+      <user-groups>
+        <property>
+          <type>cluster-env</type>
+          <name>user_group</name>
+        </property>
+      </user-groups>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>yarn_heapsize</name>
     <value>1024</value>
     <display-name>YARN Java heap size</display-name>

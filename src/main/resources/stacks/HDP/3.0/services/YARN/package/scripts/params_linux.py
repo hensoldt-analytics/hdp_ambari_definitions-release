@@ -304,6 +304,7 @@ has_hs = not len(hs_host) == 0
 rm_kinit_cmd = ""
 yarn_timelineservice_kinit_cmd = ""
 nodemanager_kinit_cmd = ""
+yarn_hbase_kinit_cmd = ""
 
 rm_zk_address = config['configurations']['yarn-site']['yarn.resourcemanager.zk-address']
 rm_zk_znode = config['configurations']['yarn-site']['yarn.resourcemanager.zk-state-store.parent-path']
@@ -326,6 +327,15 @@ if security_enabled:
     yarn_timelineservice_keytab = config['configurations']['yarn-site']['yarn.timeline-service.keytab']
     yarn_timelineservice_kinit_cmd = format("{kinit_path_local} -kt {yarn_timelineservice_keytab} {yarn_timelineservice_principal_name};")
     yarn_ats_jaas_file = os.path.join(config_dir, 'yarn_ats_jaas.conf')
+
+  if has_atsv2:
+    yarn_hbase_master_principal_name = config['configurations']['yarn-hbase-site']['hbase.master.kerberos.principal']
+    yarn_hbase_master_principal_name = yarn_hbase_master_principal_name.replace('_HOST', hostname.lower())
+    yarn_hbase_master_keytab = config['configurations']['yarn-hbase-site']['hbase.master.keytab.file']
+    yarn_hbase_regionserver_principal_name = config['configurations']['yarn-hbase-site']['hbase.regionserver.kerberos.principal']
+    yarn_hbase_regionserver_principal_name = yarn_hbase_regionserver_principal_name.replace('_HOST', hostname.lower())
+    yarn_hbase_regionserver_keytab = config['configurations']['yarn-hbase-site']['hbase.regionserver.keytab.file']
+    yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_hbase_regionserver_keytab} {yarn_hbase_regionserver_principal_name};")
 
   if has_registry_dns:
     yarn_registry_dns_principal_name = config['configurations']['yarn-env']['yarn.registry-dns.principal']
@@ -626,6 +636,8 @@ yarn_timeline_jar_location = format("file://{stack_root}/current/hadoop-yarn-tim
 
 if security_enabled and has_atsv2:
   yarn_hbase_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_jaas.conf')
+  yarn_hbase_master_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_master_jaas.conf')
+  yarn_hbase_regionserver_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_regionserver_jaas.conf')
 # ATSv2 integration properties ended
 
 gpu_module_enabled = str(config['configurations']['container-executor']['gpu_module_enabled']).lower()

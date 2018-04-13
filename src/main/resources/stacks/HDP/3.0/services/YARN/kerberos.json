@@ -251,15 +251,15 @@
             {
               "name": "yarn_hbase_master",
               "principal": {
-                "value": "yarn/_HOST@${realm}",
+                "value": "yarnhbase/_HOST@${realm}",
                 "type" : "service",
                 "configuration": "yarn-hbase-site/hbase.master.kerberos.principal",
-                "local_username": "${yarn-env/yarn_user}"
+                "local_username": "${yarn-env/yarn_client_user}"
               },
               "keytab": {
-                "file": "${keytab_dir}/yarn.service.keytab",
+                "file": "${keytab_dir}/yarn-hbase.master.service.keytab",
                 "owner": {
-                  "name": "${yarn-env/yarn_user}",
+                  "name": "${yarn-env/yarn_client_user}",
                   "access": "r"
                 },
                 "group": {
@@ -272,15 +272,15 @@
             {
               "name": "yarn_hbase_regionserver",
               "principal": {
-                "value": "yarn/_HOST@${realm}",
+                "value": "yarnhbase/_HOST@${realm}",
                 "type" : "service",
                 "configuration": "yarn-hbase-site/hbase.regionserver.kerberos.principal",
-                "local_username": "${yarn-env/yarn_user}"
+                "local_username": "${yarn-env/yarn_client_user}"
               },
               "keytab": {
-                "file": "${keytab_dir}/yarn.service.keytab",
+                "file": "${keytab_dir}/yarn-hbase.regionserver.service.keytab",
                 "owner": {
-                  "name": "${yarn-env/yarn_user}",
+                  "name": "${yarn-env/yarn_client_user}",
                   "access": "r"
                 },
                 "group": {
