@@ -352,22 +352,20 @@ class AtlasRecommender(service_advisor.ServiceAdvisor):
 
   def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
     ambari_configuration = self.get_ambari_configuration(services)
+    ambari_sso_details = ambari_configuration.get_ambari_sso_details() if ambari_configuration else None
 
-    if ambari_configuration and ambari_configuration.is_managing_services():
+    if ambari_sso_details and ambari_sso_details.is_managing_services():
       putAtlasApplicationProperty = self.putProperty(configurations, "application-properties", services)
 
       # If SSO should be enabled for this service
-      if ambari_configuration.should_enable_sso('ATLAS'):
+      if ambari_sso_details.should_enable_sso('ATLAS'):
         putAtlasApplicationProperty('atlas.sso.knox.enabled', "true")
-
-        ambari_sso_details = ambari_configuration.get_ambari_sso_details()
-        if ambari_sso_details:
-          putAtlasApplicationProperty('atlas.sso.knox.providerurl', ambari_sso_details.get_jwt_provider_url())
-          putAtlasApplicationProperty('atlas.sso.knox.publicKey', ambari_sso_details.get_jwt_public_key(False, True))
-          putAtlasApplicationProperty('atlas.sso.knox.browser.useragent', 'Mozilla,Chrome')
+        putAtlasApplicationProperty('atlas.sso.knox.providerurl', ambari_sso_details.get_sso_provider_url())
+        putAtlasApplicationProperty('atlas.sso.knox.publicKey', ambari_sso_details.get_sso_provider_certificate(False, True))
+        putAtlasApplicationProperty('atlas.sso.knox.browser.useragent', 'Mozilla,Chrome')
 
       # If SSO should be disabled for this service
-      elif ambari_configuration.should_disable_sso('ATLAS'):
+      elif ambari_sso_details.should_disable_sso('ATLAS'):
         putAtlasApplicationProperty('atlas.sso.knox.enabled', "false")
 
 

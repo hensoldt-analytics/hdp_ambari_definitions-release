@@ -705,23 +705,22 @@ class RangerRecommender(service_advisor.ServiceAdvisor):
 
   def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
     ambari_configuration = self.get_ambari_configuration(services)
+    ambari_sso_details = ambari_configuration.get_ambari_sso_details() if ambari_configuration else None
 
-    if ambari_configuration and ambari_configuration.is_managing_services():
+    if ambari_sso_details and ambari_sso_details.is_managing_services():
       putRangerAdminSiteProperty = self.putProperty(configurations, "ranger-admin-site", services)
 
       # If SSO should be enabled for this service, continue
-      if ambari_configuration.should_enable_sso('RANGER'):
+      if ambari_sso_details.should_enable_sso('RANGER'):
         putRangerAdminSiteProperty('ranger.sso.enabled', "true")
-
-        ambari_sso_details = ambari_configuration.get_ambari_sso_details()
-        if ambari_sso_details:
-          putRangerAdminSiteProperty('ranger.sso.providerurl', ambari_sso_details.get_jwt_provider_url())
-          putRangerAdminSiteProperty('ranger.sso.publicKey', ambari_sso_details.get_jwt_public_key(False, True))
-          putRangerAdminSiteProperty('ranger.sso.browser.useragent', 'Mozilla,chrome')
+        putRangerAdminSiteProperty('ranger.sso.providerurl', ambari_sso_details.get_sso_provider_url())
+        putRangerAdminSiteProperty('ranger.sso.publicKey', ambari_sso_details.get_sso_provider_certificate(False, True))
+        putRangerAdminSiteProperty('ranger.sso.browser.useragent', 'Mozilla,chrome')
 
       # If SSO should be disabled for this service
-      elif ambari_configuration.should_disable_sso('RANGER'):
+      elif ambari_sso_details.should_disable_sso('RANGER'):
         putRangerAdminSiteProperty('ranger.sso.enabled', "false")
+
 
   def recommendConfigurationsForHDP30(self, configurations, clusterData, services, hosts):
     putRangerAdminProperty = self.putProperty(configurations, 'ranger-admin-site', services)
