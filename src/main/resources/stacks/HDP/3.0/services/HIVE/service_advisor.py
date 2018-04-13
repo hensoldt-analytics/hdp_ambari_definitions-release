@@ -319,7 +319,7 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
     #HSI HA
     hive_server_interactive_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
-    is_hsi_ha = len(hive_server_interactive_hosts) == 2
+    is_hsi_ha = len(hive_server_interactive_hosts) > 1
     putHiveInteractiveSitePropertyAttribute("hive.server2.active.passive.ha.registry.namespace", "visible", str(is_hsi_ha).lower())
 
     # Security

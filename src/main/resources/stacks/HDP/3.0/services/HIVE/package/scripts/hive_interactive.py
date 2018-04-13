@@ -94,7 +94,7 @@ def hive_interactive(name = None):
       del merged_hive_interactive_site[item]
 
   merged_hive_interactive_site['hive.llap.daemon.vcpus.per.instance'] = format(merged_hive_interactive_site['hive.llap.daemon.vcpus.per.instance'] )
-  merged_hive_interactive_site['hive.server2.active.passive.ha.enable'] = params.hsi_ha_enabled
+  merged_hive_interactive_site['hive.server2.active.passive.ha.enable'] = str(params.hive_server_interactive_ha).lower()
 
   '''
   Config 'hive.llap.io.memory.size' calculated value in stack_advisor is in MB as of now. We need to

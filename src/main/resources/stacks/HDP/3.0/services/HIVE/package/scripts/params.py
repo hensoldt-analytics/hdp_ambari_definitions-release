@@ -611,9 +611,6 @@ if has_hive_interactive:
   if 'hive_heapsize' in config['configurations']['hive-interactive-env']:
     hive_interactive_heapsize = config['configurations']['hive-interactive-env']['hive_heapsize']
 
-  hsi_hosts = default('/clusterHostInfo/hive_server_interactive_hosts', [])
-  hsi_ha_enabled = str(len(hsi_hosts) == 2).lower()
-
   # Service check related
   if hive_transport_mode.lower() == "http":
     hive_server_interactive_port = config['configurations']['hive-interactive-site']['hive.server2.thrift.http.port']
