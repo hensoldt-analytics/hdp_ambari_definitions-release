@@ -202,7 +202,7 @@ class StormRecommender(service_advisor.ServiceAdvisor):
         elif 'ranger-storm-plugin-properties' in services['configurations'] and 'ranger-storm-plugin-enabled' in services['configurations']['ranger-storm-plugin-properties']['properties']:
             rangerPluginEnabled = services['configurations']['ranger-storm-plugin-properties']['properties']['ranger-storm-plugin-enabled']
 
-        nonRangerClass = 'backtype.storm.security.auth.authorizer.SimpleACLAuthorizer'
+        nonRangerClass = 'org.apache.storm.security.auth.authorizer.SimpleACLAuthorizer'
         servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
         rangerServiceVersion=''
         if 'RANGER' in servicesList:
