@@ -87,7 +87,8 @@
             "druid.auth.authenticatorChain": "[\"kerberos\"]",
             "druid.auth.authenticator.kerberos.type": "kerberos",
             "druid.escalator.type": "kerberos",
-            "druid.escalator.authorizerName": "allowAll"
+            "druid.escalator.authorizerName": "allowAll",
+            "druid.auth.authenticator.kerberos.cookieSignatureSecret": "cookie-signature-secret"
           }
         }
       ],
