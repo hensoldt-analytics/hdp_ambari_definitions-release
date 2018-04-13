@@ -258,6 +258,9 @@
             <package>
               <name>hadoop_${stack_version}-hdfs</name>
             </package>
+            <package>
+              <name>hbase_${stack_version}</name>
+            </package>
           </packages>
         </osSpecific>
         <osSpecific>
@@ -269,13 +272,8 @@
             <package>
               <name>hadoop-${stack_version}-mapreduce</name>
             </package>
-          </packages>
-        </osSpecific>
-        <osSpecific>
-          <osFamily>any</osFamily>
-          <packages>
             <package>
-              <name>hbase</name>
+              <name>hbase-${stack_version}</name>
             </package>
           </packages>
         </osSpecific>

@@ -152,17 +152,6 @@
         </component>
       </components>
 
-      <osSpecifics>
-        <osSpecific>
-          <osFamily>any</osFamily>
-          <packages>
-            <package>
-              <name>hbase</name>
-            </package>
-          </packages>
-        </osSpecific>
-      </osSpecifics>
-
       <commandScript>
         <script>scripts/service_check.py</script>
         <scriptType>PYTHON</scriptType>
