@@ -61,6 +61,16 @@
             {
               "name": "hdfs",
               "reference": "/HDFS/NAMENODE/hdfs"
+            },
+            {
+              "name": "history_server_spnego",
+              "reference": "/spnego",
+              "principal": {
+                "configuration": "spark2-defaults/history.server.spnego.kerberos.principal"
+              },
+              "keytab": {
+                "configuration": "spark2-defaults/history.server.spnego.keytab.file"
+              }
             }
           ]
         },

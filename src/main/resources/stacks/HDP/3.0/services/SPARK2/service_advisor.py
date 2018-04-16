@@ -182,6 +182,19 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
     :type services dict
     :type hosts dict
     """
+
+    if self.isSecurityEnabled(services):
+
+      spark2_defaults = self.getServicesSiteProperties(services, "spark2-defaults")
+
+      if spark2_defaults:
+        putSpark2DafaultsProperty = self.putProperty(configurations, "spark2-defaults", services)
+        putSpark2DafaultsProperty('spark.acls.enable', 'true')
+        putSpark2DafaultsProperty('spark.admin.acls', '')
+        putSpark2DafaultsProperty('spark.history.ui.acls.enable', 'true')
+        putSpark2DafaultsProperty('spark.history.ui.admin.acls', '')
+
+
     self.__addZeppelinToLivy2SuperUsers(configurations, services)
 
 

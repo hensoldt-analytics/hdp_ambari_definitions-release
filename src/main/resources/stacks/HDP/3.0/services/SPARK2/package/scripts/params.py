@@ -146,6 +146,10 @@ spark_hive_properties = {
 
 # security settings
 if security_enabled:
+  spnego_principal = config['configurations']['spark2-defaults']['history.server.spnego.kerberos.principal']
+  spnego_principal = spnego_principal.replace('_HOST', socket.getfqdn().lower())
+  spnego_keytab = config['configurations']['spark2-defaults']['history.server.spnego.keytab.file']
+
   spark_principal = spark_kerberos_principal.replace('_HOST',spark_history_server_host.lower())
 
   if is_hive_installed:

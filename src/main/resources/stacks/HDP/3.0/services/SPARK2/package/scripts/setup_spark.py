@@ -22,6 +22,7 @@ import sys
 import fileinput
 import shutil
 import os
+import socket
 
 from resource_management.core.exceptions import ComponentIsNotRunning
 from resource_management.core.logger import Logger
@@ -53,8 +54,13 @@ def setup_spark(env, type, upgrade_type = None, action = None):
     )
     params.HdfsResource(None, action="execute")
 
+  spark2_defaults = dict(params.config['configurations']['spark2-defaults'])
+
+  if params.security_enabled:
+    spark2_defaults['history.server.spnego.kerberos.principal'] = spark2_defaults['history.server.spnego.kerberos.principal'].replace('_HOST', socket.getfqdn().lower())
+
   PropertiesFile(format("{spark_conf}/spark-defaults.conf"),
-    properties = params.config['configurations']['spark2-defaults'],
+    properties = spark2_defaults,
     key_value_delimiter = " ",
     owner=params.spark_user,
     group=params.spark_group,
