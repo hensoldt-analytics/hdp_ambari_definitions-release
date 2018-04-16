@@ -538,7 +538,7 @@
   </property>
   <property>
     <name>hadoop.registry.dns.domain-name</name>
-    <value>hwx.site</value>
+    <value>EXAMPLE.COM</value>
     <description>
       The domain name for Hadoop cluster.
     </description>
