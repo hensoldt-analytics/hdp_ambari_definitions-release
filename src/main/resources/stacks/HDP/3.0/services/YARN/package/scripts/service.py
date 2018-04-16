@@ -21,11 +21,13 @@ Ambari Agent
 
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
+from resource_management.core import shell
 from resource_management.core.shell import as_user, as_sudo
 from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.libraries.functions.format import format
 from resource_management.core.resources.system import Execute, File
 from resource_management.core.signal_utils import TerminateStrategy
+from ambari_commons import subprocess32
 
 @OsFamilyFuncImpl(os_family=OSConst.WINSRV_FAMILY)
 def service(componentName, action='start', serviceName='yarn'):
@@ -69,8 +71,11 @@ def service(componentName, action='start', serviceName='yarn'):
     daemon_cmd = format("{ulimit_cmd} {cmd} start {componentName}")
     check_process = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
 
-    # Remove the pid file if its corresponding process is not running.
-    File(pid_file, action = "delete", not_if = check_process)
+    if componentName == 'registrydns' :
+      checkAndStopRegistyDNS(cmd)
+    else :
+      # Remove the pid file if its corresponding process is not running.
+      File(pid_file, action = "delete", not_if = check_process)
 
     if componentName == 'timelineserver' and serviceName == 'yarn':
       File(params.ats_leveldb_lock_file,
@@ -96,26 +101,8 @@ def service(componentName, action='start', serviceName='yarn'):
 
   elif action == 'stop':
     daemon_cmd = format("{cmd} stop {componentName}")
-
-    # When registry dns is switched from non-privileged to privileged mode or the other way,
-    # then the previous instance of registry dns has a different pid/user.
     if componentName == 'registrydns':
-      rdns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{componentName}.pid")
-      check_process = as_sudo(["test", "-f", rdns_pid_file]) + " && " + as_sudo(["pgrep", "-F", rdns_pid_file])
-      try:
-        Execute(daemon_cmd, only_if = check_process, user=params.yarn_user)
-      except:
-        show_logs(log_dir, params.yarn_user)
-        raise
-
-      privileged_rdns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{status_params.root_user}-{componentName}.pid")
-      check_process = as_sudo(["test", "-f", privileged_rdns_pid_file]) + " && " + as_sudo(["pgrep", "-F", privileged_rdns_pid_file])
-      try:
-        Execute(daemon_cmd, only_if = check_process, user=status_params.root_user)
-      except:
-        show_logs(log_dir, status_params.root_user)
-        raise
-
+      checkAndStopRegistyDNS(cmd)
     else:
       try:
         Execute(daemon_cmd, user=usr)
@@ -123,9 +110,9 @@ def service(componentName, action='start', serviceName='yarn'):
         show_logs(log_dir, usr)
         raise
 
-    # !!! yarn-daemon doesn't need us to delete PIDs
-    if delete_pid_file is True:
-      File(pid_file, action="delete")
+      # !!! yarn-daemon doesn't need us to delete PIDs
+      if delete_pid_file is True:
+        File(pid_file, action="delete")
 
 
   elif action == 'refreshQueues':
@@ -138,3 +125,49 @@ def service(componentName, action='start', serviceName='yarn'):
             try_sleep = 5,
             timeout_kill_strategy = TerminateStrategy.KILL_PROCESS_GROUP, # the process cannot be simply killed by 'kill -15', so kill pg group instread.
     )
+
+def checkAndStopRegistyDNS(cmd):
+  import params
+  import status_params
+
+  hadoop_env_exports = {
+    'HADOOP_LIBEXEC_DIR': params.hadoop_libexec_dir
+  }
+  componentName = 'registrydns'
+  daemon_cmd = format("{cmd} stop {componentName}")
+  log_dir = params.yarn_log_dir
+
+  # When registry dns is switched from non-privileged to privileged mode or the other way,
+  # then the previous instance of registry dns has a different pid/user.
+  # Checking if either of the processes are running and shutting them down if they are.
+  privileged_rdns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{status_params.root_user}-{componentName}.pid")
+  rdns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{componentName}.pid")
+
+  for dns_pid_file, dns_user in [(privileged_rdns_pid_file, status_params.root_user),
+                         (rdns_pid_file, params.yarn_user)]:
+      process_id_exists_command = as_sudo(["test", "-f", dns_pid_file]) + " && " + as_sudo(["pgrep", "-F", dns_pid_file])
+      try:
+          Execute(daemon_cmd, only_if = process_id_exists_command, user = dns_user)
+      except:
+          # When the registry dns port is modified but registry dns is not started
+          # immediately, then the configs in yarn-env.sh & yarn-site.xml related
+          # to registry dns may have already changed. This introduces a discrepancy
+          # between the actual process that is running and the configs.
+          # For example, when port is changed from 5353 to 53,
+          # then dns port = 53 in yarn-site and YARN_REGISTRYDNS_SECURE_* envs in yarn-env.sh
+          # are saved. So, while trying to shutdown the stray non-privileged registry dns process
+          # after sometime, yarn daemon from the configs thinks that it needs privileged
+          # access and throws an exception. In such cases, we try to kill the stray process.
+          show_logs(log_dir, dns_user)
+          pass
+
+      process_id_does_not_exist_command = format("! ( {process_id_exists_command} )")
+      code, out = shell.call(process_id_does_not_exist_command,
+                             env = hadoop_env_exports,
+                             tries = 5,
+                             try_sleep = 5)
+      if code != 0:
+          code, out, err = shell.checked_call(("cat", dns_pid_file), sudo=True, env=hadoop_env_exports, stderr=subprocess32.PIPE)
+          pid = out
+          Execute(("kill", "-9", pid), sudo=True)
+          File(dns_pid_file, action="delete")
