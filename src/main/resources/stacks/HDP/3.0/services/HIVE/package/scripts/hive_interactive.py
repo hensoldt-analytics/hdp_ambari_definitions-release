@@ -239,6 +239,13 @@ def hive_interactive(name = None):
        content = InlineTemplate(params.beeline_log4j2)
   )
 
+  XmlConfig("beeline-site.xml",
+            conf_dir=conf_dir,
+            configurations=params.beeline_site_config,
+            owner=params.hive_user,
+            group=params.user_group,
+            mode=mode_identified)
+
   File(os.path.join(hive_server_interactive_conf_dir, "hadoop-metrics2-hiveserver2.properties"),
        owner = params.hive_user,
        group = params.user_group,

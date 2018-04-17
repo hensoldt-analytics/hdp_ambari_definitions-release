@@ -597,7 +597,13 @@ hive_log4j2 = config['configurations']['hive-log4j2']['content']
 hive_exec_log4j2 = config['configurations']['hive-exec-log4j2']['content']
 beeline_log4j2 = config['configurations']['beeline-log4j2']['content']
 
+hive_server2_zookeeper_namespace = config['configurations']['hive-site']['hive.server2.zookeeper.namespace']
+hive_zookeeper_quorum = config['configurations']['hive-site']['hive.zookeeper.quorum']
+hive_jdbc_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace={hive_server2_zookeeper_namespace}")
+
 if has_hive_interactive:
+  hsi_zookeeper_namespace = config['configurations']['hive-interactive-site']['hive.server2.zookeeper.namespace']
+  hsi_jdbc_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace={hsi_zookeeper_namespace}")
   hive_server_interactive_conf_dir = status_params.hive_server_interactive_conf_dir
   execute_path_hive_interactive = os.path.join(os.environ['PATH'], hive_interactive_bin, hadoop_bin_dir)
   start_hiveserver2_interactive_script = 'startHiveserver2Interactive.sh.j2'
@@ -638,12 +644,6 @@ if has_hive_interactive:
     hive_llap_keytab_file = config['configurations']['hive-interactive-site']['hive.llap.daemon.keytab.file']
     hive_llap_principal = (config['configurations']['hive-interactive-site']['hive.llap.daemon.service.principal']).replace('_HOST',hostname.lower())
   pass
-
-hive_server2_zookeeper_namespace = config['configurations']['hive-site']['hive.server2.zookeeper.namespace']
-hive_zookeeper_quorum = config['configurations']['hive-site']['hive.zookeeper.quorum']
-
-hive_jdbc_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace={hive_server2_zookeeper_namespace}")
-
 
 if security_enabled:
   hive_principal = hive_server_principal.replace('_HOST',hostname.lower())
@@ -803,3 +803,14 @@ if 'zookeeper_server_hosts' in config['clusterHostInfo']:
     if zk_quorum:
       zk_quorum += ','
     zk_quorum += host + ":" + str(zookeeper_port)
+
+
+#beeline-site config
+
+beeline_site_config = {
+  'beeline.hs2.jdbc.url.container': hive_jdbc_url,
+  'beeline.hs2.jdbc.url.default': 'container'
+}
+
+if has_hive_interactive:
+  beeline_site_config['beeline.hs2.jdbc.url.llap'] = hsi_jdbc_url

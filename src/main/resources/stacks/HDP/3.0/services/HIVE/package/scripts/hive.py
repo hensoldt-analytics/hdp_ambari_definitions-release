@@ -402,6 +402,13 @@ def fill_conf_dir(component_conf_dir):
        owner=params.hive_user,
        content=InlineTemplate(params.beeline_log4j2))
 
+  XmlConfig("beeline-site.xml",
+            conf_dir=component_conf_dir,
+            configurations=params.beeline_site_config,
+            owner=params.hive_user,
+            group=params.user_group,
+            mode=mode_identified_for_file)
+
   if params.parquet_logging_properties is not None:
     File(format("{component_conf_dir}/parquet-logging.properties"),
       mode = mode_identified_for_file,
