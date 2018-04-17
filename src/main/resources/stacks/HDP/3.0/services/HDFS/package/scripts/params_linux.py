@@ -293,8 +293,13 @@ dfs_ha_namenode_ids_all_ns = get_properties_for_all_nameservices(hdfs_site, 'dfs
 dfs_ha_automatic_failover_enabled = default("/configurations/hdfs-site/dfs.ha.automatic-failover.enabled", False)
 
 # hostnames of the active HDFS HA Namenodes (only used when HA is enabled)
-dfs_ha_namenode_active = namenode_ha_utils.get_initial_active_namenodes(default("/configurations/hadoop-env", {}))
-dfs_ha_initial_cluster_id = default('/configurations/hadoop-env/dfs_ha_initial_cluster_id', None)
+if command_phase == "INITIAL_START":
+  dfs_ha_namenode_active = namenode_ha_utils.get_initial_active_namenodes(default("/configurations/hadoop-env", {}))
+  dfs_ha_initial_cluster_id = default('/configurations/hadoop-env/dfs_ha_initial_cluster_id', None)
+else:
+  dfs_ha_namenode_active = frozenset()
+  dfs_ha_initial_cluster_id = None
+
 ha_zookeeper_quorum = config['configurations']['core-site']['ha.zookeeper.quorum']
 jaas_file = os.path.join(hadoop_conf_secure_dir, 'hdfs_jaas.conf')
 zk_namespace = default('/configurations/hdfs-site/ha.zookeeper.parent-znode', '/hadoop-ha')
