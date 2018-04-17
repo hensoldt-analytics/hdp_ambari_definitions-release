@@ -352,4 +352,35 @@ export YARN_REGISTRYDNS_SECURE_EXTRA_OPTS="-jvm server"
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>is_system_service_launch</name>
+    <value>false</value>
+    <description>Should Hbase cluster started as system service.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn_system_service_queue_name</name>
+    <value>default</value>
+    <description>
+      The queue that used by service check.
+    </description>
+    <depends-on>
+      <property>
+        <type>capacity-scheduler</type>
+        <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn_client_principal_name</name>
+    <description>Yarn Client principal name</description>
+    <property-type>KERBEROS_PRINCIPAL</property-type>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn_client_user_keytab</name>
+    <description>Yarn Client keytab path</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>

@@ -83,14 +83,20 @@ def yarn(name=None, config_dir=None):
   # Some of these function calls depend on the directories above being created first.
   if name == 'resourcemanager':
     setup_resourcemanager()
+    if params.is_system_service_launch:
+        setup_system_services()
   elif name == 'nodemanager':
     setup_nodemanager()
+    if params.is_system_service_launch:
+        setup_atsv2_backend()
   elif name == 'apptimelineserver':
     setup_ats()
   elif name == 'historyserver':
     setup_historyserver()
   elif name == 'apptimelinereader':
-    setup_atsv2_reader()
+    setup_atsv2_backend()
+    # if not params.is_system_service_launch: TODO after testing uncomment
+    #    setup_atsv2_backend()
 
   XmlConfig("core-site.xml",
             conf_dir=config_dir,
@@ -585,10 +591,13 @@ def yarn(name = None):
                   username = params.yarn_user,
                   password = Script.get_password(params.yarn_user))
 
-def setup_atsv2_reader():
+def setup_atsv2_backend():
     import params
     setup_atsv2_hbase_directories()
+    setup_atsv2_hbase_files()
 
+def setup_atsv2_hbase_files():
+    import params
     if 'yarn-hbase-policy' in params.config['configurations']:
         XmlConfig( "hbase-policy.xml",
                    conf_dir = params.yarn_hbase_conf_dir,
@@ -650,3 +659,57 @@ def setup_atsv2_hbase_directories():
               cd_access="a",
               )
         Execute(("chmod", "1777", parent_dir), sudo=True)
+
+def setup_system_services():
+    import  params
+
+    if params.security_enabled:
+        File(os.path.join(params.yarn_hbase_conf_dir, 'hbase.yarnfile'),
+             owner=params.yarn_hbase_user,
+             group=params.user_group,
+             content=Template("yarn_hbase_secure.yarnfile.j2")
+             )
+    else:
+        File(os.path.join(params.yarn_hbase_conf_dir, 'hbase.yarnfile'),
+             owner=params.yarn_hbase_user,
+             group=params.user_group,
+             content=Template("yarn_hbase_unsecure.yarnfile.j2")
+             )
+
+
+    params.HdfsResource(params.yarn_system_service_dir,
+                        type="directory",
+                        action="create_on_execute",
+                        owner=params.yarn_user,
+                        group=params.user_group
+                        )
+    yarn_system_service_launch_type_dir = format("{yarn_system_service_dir}/{yarn_system_service_launch_mode}")
+    params.HdfsResource(yarn_system_service_launch_type_dir,
+                        type="directory",
+                        action="create_on_execute",
+                        owner=params.yarn_user,
+                        group=params.user_group
+                        )
+    user_dir = format("{yarn_system_service_launch_type_dir}/{yarn_hbase_user}")
+    params.HdfsResource(user_dir,
+                        type="directory",
+                        action="create_on_execute",
+                        owner=params.yarn_user,
+                        group=params.user_group
+                        )
+    params.HdfsResource(format("{user_dir}/hbase.yarnfile"),
+                        type="file",
+                        action="create_on_execute",
+                        source=format("{yarn_hbase_conf_dir}/hbase.yarnfile"),
+                        owner=params.yarn_user,
+                        group=params.user_group,
+                        replace_existing_files=True
+                        )
+    params.HdfsResource(format("/user/{yarn_hbase_user}"),
+                        type="directory",
+                        action="create_on_execute",
+                        owner=params.yarn_hbase_user,
+                        group=params.user_group,
+                        mode=0770,
+                        )
+    params.HdfsResource(None, action="execute")

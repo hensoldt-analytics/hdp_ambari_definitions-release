@@ -632,12 +632,21 @@ if yarn_timeline_service_enabled:
         break
 
 coprocessor_jar_name = "hadoop-yarn-server-timelineservice-hbase-coprocessor.jar"
-yarn_timeline_jar_location = format("file://{stack_root}/current/hadoop-yarn-timelinereader/timelineservice/{coprocessor_jar_name}")
+yarn_timeline_jar_location = format("file://{stack_root}/current/hadoop-yarn-nodemanager/timelineservice/{coprocessor_jar_name}")
+yarn_user_hbase_permissions = "RWXCA"
 
 if security_enabled and has_atsv2:
   yarn_hbase_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_jaas.conf')
   yarn_hbase_master_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_master_jaas.conf')
   yarn_hbase_regionserver_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_regionserver_jaas.conf')
+
+# System service configuration as part of ATSv2.
+is_system_service_launch = config['configurations']['yarn-env']['is_system_service_launch']
+yarn_system_service_dir = config['configurations']['yarn-site']['yarn.service.system-service.dir']
+yarn_system_service_launch_mode = "async"
+yarn_client_user_keytab = config['configurations']['yarn-env']['yarn_client_user_keytab']
+yarn_client_principal_name = config['configurations']['yarn-env']['yarn_client_principal_name']
+yarn_system_service_queue_name = config['configurations']['yarn-env']['yarn_system_service_queue_name']
 # ATSv2 integration properties ended
 
 gpu_module_enabled = str(config['configurations']['container-executor']['gpu_module_enabled']).lower()
