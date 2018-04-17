@@ -19,6 +19,7 @@
 <configuration>
   <property>
     <name>zeppelin_pid_dir</name>
+    <display-name>Zeppelin pid dir</display-name>
     <value>/var/run/zeppelin</value>
     <description>Dir containing process ID file</description>
     <value-attributes>
@@ -64,6 +65,7 @@
   </property>
   <property>
     <name>zeppelin_log_dir</name>
+    <display-name>Zeppelin log dir</display-name>
     <value>/var/log/zeppelin</value>
     <description>Zeppelin Log dir</description>
     <on-ambari-upgrade add="false"/>
