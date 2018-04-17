@@ -1558,4 +1558,16 @@ yarn.node-labels.manager-class
     <description>The auxiliary service classpath to use for Spark 2</description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>yarn.resourcemanager.display.per-user-apps</name>
+    <value>true</value>
+    <description>
+      Flag to enable display of applications per user as an admin
+        configuration.
+    </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
