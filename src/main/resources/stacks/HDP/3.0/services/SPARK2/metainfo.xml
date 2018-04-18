@@ -30,7 +30,7 @@
           <name>SPARK2_JOBHISTORYSERVER</name>
           <displayName>Spark2 History Server</displayName>
           <category>MASTER</category>
-          <cardinality>1</cardinality>
+          <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
           <dependencies>
             <dependency>
