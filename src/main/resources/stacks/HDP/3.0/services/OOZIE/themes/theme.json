@@ -41,9 +41,39 @@
                 }
               ]
             }
+          },
+          {
+            "name": "oozie-security",
+            "display-name": "Security",
+            "layout": {
+              "tab-rows": 1,
+              "tab-columns": 1,
+              "sections": [
+                {
+                  "name": "oozie-security-configurations",
+                  "display-name": "Security Configurations",
+                  "row-index": "0",
+                  "column-index": "0",
+                  "row-span": "0",
+                  "column-span": "0",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "oozie-security-configurations-col",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                }
+              ]
+            }
           }
         ]
       }
+
     ],
     "placement": {
       "configuration-layout": "default",
@@ -71,6 +101,26 @@
         {
           "config": "oozie-site/oozie.service.JPAService.jdbc.password",
           "subsection-name": "oozie-database-configurations-col-2"
+        },
+        {
+          "config": "oozie-site/oozie.authentication.type",
+          "subsection-name": "oozie-security-configurations-col"
+        },
+        {
+          "config": "oozie-site/oozie.authentication.authentication.provider.url",
+          "subsection-name": "oozie-security-configurations-col"
+        },
+        {
+          "config": "oozie-site/oozie.authentication.public.key.pem",
+          "subsection-name": "oozie-security-configurations-col"
+        },
+        {
+          "config": "oozie-site/oozie.authentication.expected.jwt.audiences",
+          "subsection-name": "oozie-security-configurations-col"
+        },
+        {
+          "config": "oozie-site/oozie.authentication.jwt.cookie",
+          "subsection-name": "oozie-security-configurations-col"
         }
       ]
     },
@@ -107,6 +157,36 @@
       },
       {
         "config": "oozie-site/oozie.db.schema.name",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+         "config": "oozie-site/oozie.authentication.type",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+         "config": "oozie-site/oozie.authentication.authentication.provider.url",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+         "config": "oozie-site/oozie.authentication.public.key.pem",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+         "config": "oozie-site/oozie.authentication.expected.jwt.audiences",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+         "config": "oozie-site/oozie.authentication.jwt.cookie",
         "widget": {
           "type": "text-field"
         }

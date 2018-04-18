@@ -123,6 +123,51 @@
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
+    <name>oozie.authentication.authentication.provider.url</name>
+    <value></value>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <description>
+      Example: https://KNOX_HOST:KNOX_PORT/gateway/TOPOLOGY_NAME/knoxsso/api/v1/websso
+    </description>
+    <on-ambari-upgrade add="true"/>
+    <depends-on>
+      <property>
+        <type>oozie-site</type>
+        <name>oozie.authentication.type</name>
+      </property>
+    </depends-on>
+  </property>
+  <property>
+    <name>oozie.authentication.public.key.pem</name>
+    <value></value>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <description>
+      Public key for SSO cookie verification.
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>oozie.authentication.expected.jwt.audiences</name>
+    <value></value>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <description>
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>oozie.authentication.jwt.cookie</name>
+    <value>hadoop-jwt</value>
+    <description>
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>oozie.service.WorkflowAppService.system.libpath</name>
     <value>/user/${user.name}/share/lib</value>
     <description>
