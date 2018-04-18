@@ -247,7 +247,7 @@
 
       <osSpecifics>
         <osSpecific>
-          <osFamily>amazon2015,redhat6,redhat7,suse11,suse12</osFamily>
+          <osFamily>amazonlinux2,redhat6,redhat7,suse11,suse12</osFamily>
           <packages>
             <package>
               <name>hadoop_${stack_version}-yarn</name>
@@ -410,7 +410,7 @@
 
       <osSpecifics>
         <osSpecific>
-          <osFamily>amazon2015,redhat6,redhat7,suse11,suse12</osFamily>
+          <osFamily>amazonlinux2,redhat6,redhat7,suse11,suse12</osFamily>
           <packages>
             <package>
               <name>hadoop_${stack_version}-mapreduce</name>
