@@ -387,6 +387,33 @@
           }
         }
       }
+    ],
+    "YARN_REGISTRY_DNS": [
+      {
+        "name": "YARN_REGISTRY_DNS_PROCESS",
+        "label": "Registry DNS",
+        "description": "This host-level alert is triggered if the Registry DNS Service cannot be determined to be up and listening on the network.",
+        "interval": 1,
+        "scope": "HOST",
+        "source": {
+          "type": "PORT",
+          "uri": "{{yarn-env/registry.dns.bind-port}}",
+          "default_port": 5353,
+          "reporting": {
+            "ok": {
+              "text": "TCP OK - {0:.3f}s response on port {1}"
+            },
+            "warning": {
+              "text": "TCP OK - {0:.3f}s response on port {1}",
+              "value": 1.5
+            },
+            "critical": {
+              "text": "Connection failed: {0} to {1}:{2}",
+              "value": 5
+            }
+          }
+        }
+      }
     ]
   }
 }
