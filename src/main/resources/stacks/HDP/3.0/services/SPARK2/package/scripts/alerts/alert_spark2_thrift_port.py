@@ -35,6 +35,7 @@ OK_MESSAGE = "TCP OK - {0:.3f}s response on port {1}"
 CRITICAL_MESSAGE = "Connection failed on host {0}:{1} ({2})"
 
 HIVE_SERVER_THRIFT_PORT_KEY = '{{spark2-hive-site-override/hive.server2.thrift.port}}'
+HIVE_SERVER_THRIFT_HTTP_PORT_KEY = '{{spark2-hive-site-override/hive.server2.thrift.http.port}}'
 HIVE_SERVER_TRANSPORT_MODE_KEY = '{{spark2-hive-site-override/hive.server2.transport.mode}}'
 SECURITY_ENABLED_KEY = '{{cluster-env/security_enabled}}'
 
@@ -87,6 +88,8 @@ def execute(configurations={}, parameters={}, host_name=None):
     port = THRIFT_PORT_DEFAULT
     if transport_mode.lower() == 'binary' and HIVE_SERVER_THRIFT_PORT_KEY in configurations:
         port = int(configurations[HIVE_SERVER_THRIFT_PORT_KEY])
+    elif transport_mode.lower() == 'http' and HIVE_SERVER_THRIFT_HTTP_PORT_KEY in configurations:
+      port = int(configurations[HIVE_SERVER_THRIFT_HTTP_PORT_KEY])
 
     security_enabled = False
     if SECURITY_ENABLED_KEY in configurations:

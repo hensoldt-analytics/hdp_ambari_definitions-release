@@ -48,6 +48,12 @@ limitations under the License.
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
+    <name>hive.server2.thrift.http.port</name>
+    <value>10002</value>
+    <description>Port number of HiveServer2 Thrift interface when hive.server2.transport.mode is 'http'.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.server2.transport.mode</name>
     <value>binary</value>
     <description>
