@@ -699,8 +699,7 @@ def setup_ranger_admin_passwd_change(username, user_password, user_default_passw
 
   if user_password != user_default_password:
     cmd = format("ambari-python-wrap {ranger_home}/db_setup.py -changepassword {username} {user_default_password!p} {user_password!p}")
-    Logger.info(format("Updating password for {username}"))
-    Execute(cmd, environment={'JAVA_HOME': params.java_home, 'RANGER_ADMIN_HOME': params.ranger_home}, user=params.unix_user, tries=3, try_sleep=5)
+    Execute(cmd, environment={'JAVA_HOME': params.java_home, 'RANGER_ADMIN_HOME': params.ranger_home}, user=params.unix_user, tries=3, try_sleep=5, logoutput=True)
 
 @retry(times=10, sleep_time=5, err_class=Fail)
 def check_znode():

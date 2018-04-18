@@ -749,7 +749,8 @@ class RangerValidator(service_advisor.ServiceAdvisor):
                        ("admin-properties", self.validateRangerAdminConfigurationsFromHDP23),
                        ("ranger-env", self.validateRangerConfigurationsEnvFromHDP23),
                        ("ranger-tagsync-site", self.validateRangerTagsyncConfigurationsFromHDP25),
-                       ("ranger-ugsync-site", self.validateRangerUsersyncConfigurationsFromHDP26)]
+                       ("ranger-ugsync-site", self.validateRangerUsersyncConfigurationsFromHDP26),
+                       ("ranger-env", self.validateRangerPasswordConfigurations)]
 
   def validateRangerConfigurationsEnvFromHDP22(self, properties, recommendedDefaults, configurations, services, hosts):
     ranger_env_properties = properties
@@ -818,3 +819,16 @@ class RangerValidator(service_advisor.ServiceAdvisor):
                             "Need to set ranger.usersync.group.searchenabled as true, as ranger.usersync.ldap.deltasync is enabled")})
 
     return self.toConfigurationValidationProblems(validationItems, "ranger-ugsync-site")
+
+  def validateRangerPasswordConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
+    ranger_env_properties = properties
+    validationItems = []
+
+    ranger_password_properties = ['admin_password', 'ranger_admin_password', 'rangerusersync_user_password', 'rangertagsync_user_password', 'keyadmin_user_password']
+    for password_property in ranger_password_properties:
+      if password_property in ranger_env_properties:
+        password = ranger_env_properties[password_property]
+        if not bool(re.search(r'^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$', password)) or bool(re.search('[\\\`"\']', password)):
+          validationItems.append({"config-name": password_property, "item": self.getErrorItem("Password should be minimum 8 characters with minimum one alphabet and one numeric. Unsupported special characters are  \" ' \ `")})
+
+    return self.toConfigurationValidationProblems(validationItems, "ranger-env")
