@@ -185,6 +185,52 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     putHiveProperty("hive.tez.java.opts", "-server -Xmx" + str(int(round((0.8 * containerSize) + 0.5))) + "m " +
                     "-Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseParallelGC -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps")
     putHiveProperty("hive.tez.container.size", containerSize)
+    
+    # druid is not in list of services to be installed
+    if 'DRUID' in servicesList:
+        if 'druid-coordinator' in services['configurations']:
+            component_hosts = self.getHostsWithComponent("DRUID", 'DRUID_COORDINATOR', services, hosts)
+            if component_hosts is not None and len(component_hosts) > 0:
+                # pick the first
+                host = component_hosts[0]
+            druid_coordinator_host_port = str(host['Hosts']['host_name']) + ":" + str(
+                services['configurations']['druid-coordinator']['properties']['druid.port'])
+        else:
+            druid_coordinator_host_port = "localhost:8081"
+
+        if 'druid-router' in services['configurations']:
+            component_hosts = self.getHostsWithComponent("DRUID", 'DRUID_ROUTER', services, hosts)
+            if component_hosts is not None and len(component_hosts) > 0:
+                # pick the first
+                host = component_hosts[0]
+            druid_broker_host_port = str(host['Hosts']['host_name']) + ":" + str(
+                services['configurations']['druid-router']['properties']['druid.port'])
+        elif 'druid-broker' in services['configurations']:
+            component_hosts = self.getHostsWithComponent("DRUID", 'DRUID_BROKER', services, hosts)
+            if component_hosts is not None and len(component_hosts) > 0:
+                # pick the first
+                host = component_hosts[0]
+            druid_broker_host_port = str(host['Hosts']['host_name']) + ":" + str(
+                services['configurations']['druid-broker']['properties']['druid.port'])
+        else:
+            druid_broker_host_port = "localhost:8083"
+
+        druid_metadata_uri = ""
+        druid_metadata_user = ""
+        druid_metadata_type = ""
+        if 'druid-common' in services['configurations']:
+            druid_metadata_uri = services['configurations']['druid-common']['properties']['druid.metadata.storage.connector.connectURI']
+            druid_metadata_type = services['configurations']['druid-common']['properties']['druid.metadata.storage.type']
+            if 'druid.metadata.storage.connector.user' in services['configurations']['druid-common']['properties']:
+                druid_metadata_user = services['configurations']['druid-common']['properties']['druid.metadata.storage.connector.user']
+            else:
+                druid_metadata_user = ""
+
+        putHiveInteractiveSiteProperty('hive.druid.broker.address.default', druid_broker_host_port)
+        putHiveInteractiveSiteProperty('hive.druid.coordinator.address.default', druid_coordinator_host_port)
+        putHiveInteractiveSiteProperty('hive.druid.metadata.uri', druid_metadata_uri)
+        putHiveInteractiveSiteProperty('hive.druid.metadata.username', druid_metadata_user)
+        putHiveInteractiveSiteProperty('hive.druid.metadata.db.type', druid_metadata_type)
 
     # javax.jdo.option.ConnectionURL recommendations
     if hiveEnvProperties and self.checkSiteProperties(hiveEnvProperties, "hive_database", "hive_database_type"):
