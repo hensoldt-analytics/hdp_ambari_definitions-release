@@ -343,7 +343,7 @@
         </osSpecific>
 
         <osSpecific>
-          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
+          <osFamily>debian7,ubuntu12,ubuntu14</osFamily>
           <packages>
             <package>
               <name>hadoop-${stack_version}-client</name>
@@ -374,6 +374,38 @@
             </package>
           </packages>
         </osSpecific>
+        <osSpecific>
+          <osFamily>debian9,ubuntu16</osFamily>
+          <packages>
+            <package>
+              <name>hadoop-${stack_version}-client</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-datanode</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-journalnode</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-namenode</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-secondarynamenode</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-zkfc</name>
+            </package>
+            <package>
+              <name>libsnappy1v5</name>
+            </package>
+            <package>
+              <name>libsnappy-dev</name>
+            </package>
+            <package>
+              <name>libhdfs0-${stack_version}</name>
+            </package>
+          </packages>
+      </osSpecific>
       </osSpecifics>
 
       <commandScript>
