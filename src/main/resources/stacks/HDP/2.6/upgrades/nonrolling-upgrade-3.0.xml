@@ -21,14 +21,6 @@
     <target-stack>HDP-3.0</target-stack>
     <downgrade-allowed>false</downgrade-allowed>
     <type>NON_ROLLING</type>
-    <prerequisite-checks>
-        <check>org.apache.ambari.server.checks.ServicePresenceCheck</check>
-        <configuration>
-            <check-properties name="org.apache.ambari.server.checks.ServicePresenceCheck">
-                <property name="removed-service-names">Falcon,Flume,Mahout,Slider,Spark</property>
-            </check-properties>
-        </configuration>
-    </prerequisite-checks>
     <order>
         <group xsi:type="cluster" name="PRE_CLUSTER" title="Prepare Upgrade">
             <direction>UPGRADE</direction>
@@ -240,6 +232,14 @@
             <service name="ZOOKEEPER">
                 <component>ZOOKEEPER_SERVER</component>
             </service>
+        </group>
+
+        <group xsi:type="cluster" name="REMOVE_UNSUPPORTED_SERVICES" title="Remove unsupported services and components">
+            <execute-stage title="Remove unsupported services and components">
+                <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.DeleteUnsupportedServicesAndComponents">
+                    <summary>Delete services and components which are removed from the new release</summary>
+                </task>
+            </execute-stage>
         </group>
 
         <group xsi:type="cluster" name="Restore Backups" title="Restore Backups">
@@ -661,16 +661,6 @@
             </priority>
         </group>
 
-        <!-- Slider must be upgraded before higher-level apps that need to run apps on Slider, such as Hive. -->
-        <group xsi:type="restart" name="SLIDER" title="Slider">
-            <service-check>false</service-check>
-            <skippable>true</skippable>
-            <parallel-scheduler/>
-            <service name="SLIDER">
-                <component>SLIDER</component>
-            </service>
-        </group>
-
         <group xsi:type="restart" name="HIVE_MASTERS" title="Hive Masters">
             <service-check>false</service-check>
             <skippable>true</skippable>
@@ -796,7 +786,6 @@
                 <service>HIVE</service>
                 <service>SPARK</service>
                 <service>SPARK2</service>
-                <service>SLIDER</service>
                 <service>ATLAS</service>
                 <service>ZEPPELIN</service>
                 <service>OOZIE</service>
@@ -1355,14 +1344,6 @@
             </component>
 
             <component name="ACCUMULO_CLIENT">
-                <upgrade>
-                    <task xsi:type="restart-task"/>
-                </upgrade>
-            </component>
-        </service>
-
-        <service name="SLIDER">
-            <component name="SLIDER">
                 <upgrade>
                     <task xsi:type="restart-task"/>
                 </upgrade>
