@@ -49,6 +49,11 @@
             <replace  key="content" find="-XX:+PrintGCDateStamps -Xms{{namenode_heapsize}}" replace-with="-XX:+PrintGCDateStamps -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -Xms{{namenode_heapsize}}"/>
             <replace  key="content" find="-XX:+PrintGCDateStamps ${HADOOP_NAMENODE_INIT_HEAPSIZE}" replace-with="-XX:+PrintGCDateStamps -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly ${HADOOP_NAMENODE_INIT_HEAPSIZE}"/>
           </definition>
+
+          <definition xsi:type="configure" id="hdfs_log4j_changes" summary="HDFS log4j properties changes">
+            <type>hdfs-log4j</type>
+            <insert key="content" value="# Adding logging for 3rd party library&#xA;log4j.logger.org.apache.commons.beanutils=WARN" insert-type="append" newline-before="true" />
+          </definition>
         </changes>
       </component>
       <component name="DATANODE">
