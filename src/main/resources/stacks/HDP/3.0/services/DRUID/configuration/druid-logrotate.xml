@@ -22,7 +22,7 @@
 <configuration supports_adding_forbidden="true">
   <property>
     <name>druid_log_maxfilesize</name>
-    <value>256</value>
+    <value>10</value>
     <description>The maximum size of backup file before the log is rotated</description>
     <display-name>Druid Log: backup file size</display-name>
     <value-attributes>
