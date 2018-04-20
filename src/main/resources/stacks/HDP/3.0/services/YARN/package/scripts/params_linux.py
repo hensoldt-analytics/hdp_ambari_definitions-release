@@ -304,7 +304,6 @@ has_hs = not len(hs_host) == 0
 rm_kinit_cmd = ""
 yarn_timelineservice_kinit_cmd = ""
 nodemanager_kinit_cmd = ""
-yarn_hbase_kinit_cmd = ""
 
 rm_zk_address = config['configurations']['yarn-site']['yarn.resourcemanager.zk-address']
 rm_zk_znode = config['configurations']['yarn-site']['yarn.resourcemanager.zk-state-store.parent-path']
@@ -327,15 +326,6 @@ if security_enabled:
     yarn_timelineservice_keytab = config['configurations']['yarn-site']['yarn.timeline-service.keytab']
     yarn_timelineservice_kinit_cmd = format("{kinit_path_local} -kt {yarn_timelineservice_keytab} {yarn_timelineservice_principal_name};")
     yarn_ats_jaas_file = os.path.join(config_dir, 'yarn_ats_jaas.conf')
-
-  if has_atsv2:
-    yarn_hbase_master_principal_name = config['configurations']['yarn-hbase-site']['hbase.master.kerberos.principal']
-    yarn_hbase_master_principal_name = yarn_hbase_master_principal_name.replace('_HOST', hostname.lower())
-    yarn_hbase_master_keytab = config['configurations']['yarn-hbase-site']['hbase.master.keytab.file']
-    yarn_hbase_regionserver_principal_name = config['configurations']['yarn-hbase-site']['hbase.regionserver.kerberos.principal']
-    yarn_hbase_regionserver_principal_name = yarn_hbase_regionserver_principal_name.replace('_HOST', hostname.lower())
-    yarn_hbase_regionserver_keytab = config['configurations']['yarn-hbase-site']['hbase.regionserver.keytab.file']
-    yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_hbase_regionserver_keytab} {yarn_hbase_regionserver_principal_name};")
 
   if has_registry_dns:
     yarn_registry_dns_principal_name = config['configurations']['yarn-env']['yarn.registry-dns.principal']
@@ -609,6 +599,7 @@ yarn_hbase_env_sh_template = config['configurations']['yarn-hbase-env']['content
 yarn_hbase_java_io_tmpdir = default("/configurations/yarn-hbase-env/hbase_java_io_tmpdir", "/tmp")
 yarn_hbase_tmp_dir = config['configurations']['yarn-hbase-site']['hbase.tmp.dir']
 yarn_hbase_local_dir = config['configurations']['yarn-hbase-site']['hbase.local.dir']
+yarn_hbase_master_info_port = config['configurations']['yarn-hbase-site']['hbase.master.info.port']
 
 if (('yarn-hbase-log4j' in config['configurations']) and ('content' in config['configurations']['yarn-hbase-log4j'])):
   yarn_hbase_log4j_props = config['configurations']['yarn-hbase-log4j']['content']
@@ -635,17 +626,34 @@ coprocessor_jar_name = "hadoop-yarn-server-timelineservice-hbase-coprocessor.jar
 yarn_timeline_jar_location = format("file://{stack_root}/current/hadoop-yarn-nodemanager/timelineservice/{coprocessor_jar_name}")
 yarn_user_hbase_permissions = "RWXCA"
 
+yarn_hbase_kinit_cmd = ""
 if security_enabled and has_atsv2:
   yarn_hbase_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_jaas.conf')
   yarn_hbase_master_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_master_jaas.conf')
   yarn_hbase_regionserver_jaas_file = os.path.join(yarn_hbase_conf_dir, 'yarn_hbase_regionserver_jaas.conf')
 
+  yarn_hbase_master_principal_name = config['configurations']['yarn-hbase-site']['hbase.master.kerberos.principal']
+  yarn_hbase_master_principal_name = yarn_hbase_master_principal_name.replace('_HOST', hostname.lower())
+  yarn_hbase_master_keytab = config['configurations']['yarn-hbase-site']['hbase.master.keytab.file']
+
+  yarn_hbase_regionserver_principal_name = config['configurations']['yarn-hbase-site']['hbase.regionserver.kerberos.principal']
+  yarn_hbase_regionserver_principal_name = yarn_hbase_regionserver_principal_name.replace('_HOST', hostname.lower())
+  yarn_hbase_regionserver_keytab = config['configurations']['yarn-hbase-site']['hbase.regionserver.keytab.file']
+
+  yarn_ats_principal_name = config['configurations']['yarn-env']['yarn_ats_principal_name']
+  yarn_ats_user_keytab = config['configurations']['yarn-env']['yarn_ats_user_keytab']
+  yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_ats_user_keytab} {yarn_ats_principal_name};")
+
+yarn_hbase_grant_premissions_file = format("{yarn_hbase_conf_dir}/hbase_grant_permissions.sh")
+hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
+class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create -s")
+yarn_hbase_table_create_cmd = format("export HBASE_CLASSPATH_PREFIX={stack_root}/current/hadoop-yarn-nodemanager/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")
+yarn_hbase_table_grant_premission_cmd = format("{yarn_hbase_kinit_cmd} {hbase_cmd} shell {yarn_hbase_grant_premissions_file}")
+
 # System service configuration as part of ATSv2.
 is_system_service_launch = config['configurations']['yarn-env']['is_system_service_launch']
 yarn_system_service_dir = config['configurations']['yarn-site']['yarn.service.system-service.dir']
-yarn_system_service_launch_mode = "async"
-yarn_client_user_keytab = config['configurations']['yarn-env']['yarn_client_user_keytab']
-yarn_client_principal_name = config['configurations']['yarn-env']['yarn_client_principal_name']
+yarn_system_service_launch_mode = config['configurations']['yarn-env']['yarn_system_service_launch_mode']
 yarn_system_service_queue_name = config['configurations']['yarn-env']['yarn_system_service_queue_name']
 # ATSv2 integration properties ended
 

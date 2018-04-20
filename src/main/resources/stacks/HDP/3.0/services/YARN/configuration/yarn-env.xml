@@ -62,9 +62,9 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>yarn_client_user</name>
-    <display-name>Yarn Client User</display-name>
-    <value>yarn-client</value>
+    <name>yarn_ats_user</name>
+    <display-name>Yarn ATS User</display-name>
+    <value>yarn-ats</value>
     <property-type>USER</property-type>
     <description>YARN Client User for ATSv2 backend</description>
     <value-attributes>
@@ -373,14 +373,20 @@ export YARN_REGISTRYDNS_SECURE_EXTRA_OPTS="-jvm server"
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>yarn_client_principal_name</name>
+    <name>yarn_ats_principal_name</name>
     <description>Yarn Client principal name</description>
     <property-type>KERBEROS_PRINCIPAL</property-type>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>yarn_client_user_keytab</name>
+    <name>yarn_ats_user_keytab</name>
     <description>Yarn Client keytab path</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn_system_service_launch_mode</name>
+    <value>async</value>
+    <description>Should services are launched as sync or async.</description>
     <on-ambari-upgrade add="false"/>
   </property>
 </configuration>

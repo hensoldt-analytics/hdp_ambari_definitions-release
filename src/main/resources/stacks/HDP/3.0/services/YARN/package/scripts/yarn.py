@@ -94,9 +94,8 @@ def yarn(name=None, config_dir=None):
   elif name == 'historyserver':
     setup_historyserver()
   elif name == 'apptimelinereader':
-    setup_atsv2_backend()
-    # if not params.is_system_service_launch: TODO after testing uncomment
-    #    setup_atsv2_backend()
+    if not params.is_system_service_launch:
+       setup_atsv2_backend()
 
   XmlConfig("core-site.xml",
             conf_dir=config_dir,
@@ -592,7 +591,6 @@ def yarn(name = None):
                   password = Script.get_password(params.yarn_user))
 
 def setup_atsv2_backend():
-    import params
     setup_atsv2_hbase_directories()
     setup_atsv2_hbase_files()
 
@@ -615,15 +613,22 @@ def setup_atsv2_hbase_files():
          content=InlineTemplate(params.yarn_hbase_env_sh_template)
     )
 
+    File( format("{yarn_hbase_grant_premissions_file}"),
+          owner   = params.yarn_hbase_user,
+          group   = params.user_group,
+          mode    = 0644,
+          content = Template('yarn_hbase_grant_permissions.j2')
+          )
+
     if (params.yarn_hbase_log4j_props != None):
-        File(format("{params.yarn_hbase_conf_dir}/log4j.properties"),
+        File(format("{yarn_hbase_conf_dir}/log4j.properties"),
              mode=0644,
              group=params.user_group,
              owner=params.yarn_hbase_user,
              content=InlineTemplate(params.yarn_hbase_log4j_props)
         )
-    elif (os.path.exists(format("{params.yarn_hbase_conf_dir}/log4j.properties"))):
-        File(format("{params.yarn_hbase_conf_dir}/log4j.properties"),
+    elif (os.path.exists(format("{yarn_hbase_conf_dir}/log4j.properties"))):
+        File(format("{yarn_hbase_conf_dir}/log4j.properties"),
              mode=0644,
              group=params.user_group,
              owner=params.yarn_hbase_user
@@ -711,5 +716,10 @@ def setup_system_services():
                         owner=params.yarn_hbase_user,
                         group=params.user_group,
                         mode=0770,
+                        )
+    params.HdfsResource(params.yarn_hbase_hdfs_root_dir,
+                        type="directory",
+                        action="create_on_execute",
+                        owner=params.yarn_hbase_user
                         )
     params.HdfsResource(None, action="execute")

@@ -16,19 +16,53 @@
 # limitations under the License.
 #}
 {
-  "name": "sleeper-service",
+  "name": "hbase",
   "version": "1.0.0",
+  "lifetime": "-1",
   "queue": "{{yarn_system_service_queue_name}}",
-  "components" :
-  [
+  "configuration": {
+    "env": {
+      "HBASE_IDENT_STRING": "${USER}"
+    }
+  },
+  "components": [
     {
-      "name": "sleeper",
+      "name": "master",
       "number_of_containers": 1,
-      "launch_command": "sleep infinity",
+      "launch_command": "{{stack_root}}/current/hbase-master/bin/hbase --config {{yarn_hbase_conf_dir}} master start",
+      "readiness_check": {
+        "type": "HTTP",
+        "properties": {
+          "url": "http://${THIS_HOST}:{{yarn_hbase_master_info_port}}/master-status"
+        }
+      },
       "resource": {
         "cpus": 1,
-        "memory": "256"
+        "memory": "4096"
+      }
+    },
+    {
+      "name": "regionserver",
+      "number_of_containers": 1,
+      "launch_command": "sleep 5;{{stack_root}}/current/hbase-regionserver/bin/hbase --config {{yarn_hbase_conf_dir}} regionserver start",
+      "dependencies": [ "master" ],
+      "resource": {
+        "cpus": 1,
+        "memory": "4096"
+      }
+    },
+    {
+      "name": "hbaseclient",
+      "number_of_containers": 1,
+      "launch_command": "sleep 10;{{yarn_hbase_table_create_cmd}};sleep infinity",
+      "dependencies": [ "regionserver" ],
+      "resource": {
+        "cpus": 1,
+        "memory": "1024"
       }
     }
-  ]
+  ],
+  "quicklinks": {
+    "HBase Master Status UI": "http://${MASTER-0_IP}:{{yarn_hbase_master_info_port}}/master-status"
+  }
 }

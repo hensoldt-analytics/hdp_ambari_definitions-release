@@ -36,7 +36,7 @@ if not OSCheck.is_windows_family():
 
 mapred_user = config['configurations']['mapred-env']['mapred_user']
 yarn_user = config['configurations']['yarn-env']['yarn_user']
-yarn_client_user = config['configurations']['yarn-env']['yarn_client_user']
+yarn_ats_user = config['configurations']['yarn-env']['yarn_ats_user']
 yarn_pid_dir_prefix = config['configurations']['yarn-env']['yarn_pid_dir_prefix']
 mapred_pid_dir_prefix = config['configurations']['mapred-env']['mapred_pid_dir_prefix']
 yarn_pid_dir = format("{yarn_pid_dir_prefix}/{yarn_user}")
@@ -69,7 +69,7 @@ security_enabled = config['configurations']['cluster-env']['security_enabled']
 stack_name = default("/clusterLevelParams/stack_name", None)
 
 # ATSv2 backend properties
-yarn_hbase_user = format("{yarn_client_user}") #Use yarn_client_user.
+yarn_hbase_user = format("{yarn_ats_user}") #Use yarn_ats_user.
 yarn_hbase_pid_dir_prefix = config['configurations']['yarn-hbase-env']['yarn_hbase_pid_dir_prefix']
 yarn_hbase_pid_dir = format("{yarn_hbase_pid_dir_prefix}/{yarn_hbase_user}")
 yarn_hbase_conf_dir = "/etc/yarn-hbase/conf"

@@ -89,30 +89,28 @@ def configure_hbase(env):
 
 def createTables():
     import params
-    hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
-    if params.security_enabled:
-        yarn_hbase_grant_premissions_file = format("{tmp_dir}/hbase_grant_permissions.sh")
-        grantprivelegecmd = format("{yarn_hbase_kinit_cmd} {hbase_cmd} shell {yarn_hbase_grant_premissions_file}")
-        File( yarn_hbase_grant_premissions_file,
-              owner   = params.yarn_hbase_user,
-              group   = params.user_group,
-              mode    = 0644,
-              content = Template('yarn_hbase_grant_permissions.j2')
-              )
-        try:
-            Execute( grantprivelegecmd,
-                 user = params.yarn_hbase_user,
-                 timeout = 60,
-                 logoutput = True
-                 )
-        except:
-            show_logs(params.yarn_hbase_log_dir, params.yarn_hbase_user)
-            raise
-
-    class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create -s")
-    cmd = format("export HBASE_CLASSPATH_PREFIX={hadoop_yarn_home}/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")
     try:
-        Execute(cmd, user=params.yarn_hbase_user, timeout = 60, logoutput=True)
+        Execute(format("sleep 10;{yarn_hbase_table_create_cmd}"),
+                user=params.yarn_hbase_user,
+                timeout = 60,
+                logoutput=True)
     except:
         show_logs(params.yarn_hbase_log_dir, params.yarn_hbase_user)
         raise
+
+    if params.security_enabled:
+        try:
+            File( format("{yarn_hbase_grant_premissions_file}"),
+                  owner   = params.yarn_hbase_user,
+                  group   = params.user_group,
+                  mode    = 0644,
+                  content = Template('yarn_hbase_grant_permissions.j2')
+                  )
+            Execute( format("{yarn_hbase_table_grant_premission_cmd}"),
+                     user = params.yarn_hbase_user,
+                     timeout = 60,
+                     logoutput = True
+                     )
+        except:
+            show_logs(params.yarn_hbase_log_dir, params.yarn_hbase_user)
+            raise
