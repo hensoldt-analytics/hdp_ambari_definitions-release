@@ -67,6 +67,11 @@
             <type>core-site</type>
             <set key="hadoop.rpc.protection" value="authentication,privacy" />
           </definition>
+
+          <definition xsi:type="configure" id="hdfs_hadoop_env_datanode_opts" summary="Hadoop env datanode opts changes">
+            <type>hadoop-env</type>
+            <replace  key="content" find="-XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/$USER/hs_err_pid%p.log" replace-with="-XX:+UseConcMarkSweepGC -XX:OnOutOfMemoryError=\&quot;/usr/hdp/current/hadoop-hdfs-datanode/bin/kill-data-node\&quot; -XX:ErrorFile=/var/log/hadoop/$USER/hs_err_pid%p.log"/>
+          </definition>
         </changes>
       </component>
       <component name="HDFS_CLIENT">
