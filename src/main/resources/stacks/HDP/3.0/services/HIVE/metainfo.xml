@@ -196,6 +196,7 @@
             <config-type>llap-cli-log4j2</config-type>
             <config-type>llap-daemon-log4j</config-type>
             <config-type>hiveserver2-site</config-type>
+            <config-type>druid-common</config-type>
           </configuration-dependencies>
         </component>
 

@@ -805,6 +805,18 @@ if 'zookeeper_server_hosts' in config['clusterHostInfo']:
     zk_quorum += host + ":" + str(zookeeper_port)
 
 
+# For druid metadata password
+druid_metadata_password = ""
+if 'druid-common' in config['configurations'] \
+        and 'druid.metadata.storage.connector.password' in config['configurations']['druid-common']:
+  druid_metadata_password = config['configurations']['druid-common']['druid.metadata.storage.connector.password']
+
+# For druid storage directory, hive will write segments here
+druid_storage_dir = ""
+if 'druid-common' in config['configurations'] \
+        and 'druid.storage.storageDirectory' in config['configurations']['druid-common']:
+  druid_storage_dir = config['configurations']['druid-common']['druid.storage.storageDirectory']
+
 #beeline-site config
 
 beeline_site_config = {
