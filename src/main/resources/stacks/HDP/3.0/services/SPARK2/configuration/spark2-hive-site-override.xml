@@ -62,4 +62,10 @@ limitations under the License.
     </description>
     <on-ambari-upgrade add="true"/>
   </property>
+  <property>
+    <name>metastore.catalog.default</name>
+    <value>spark</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
