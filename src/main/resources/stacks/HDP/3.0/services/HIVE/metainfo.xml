@@ -394,6 +394,7 @@
         <config-type>application.properties</config-type>
         <config-type>hive-atlas-application.properties</config-type>
         <config-type>tez-site</config-type>
+        <config-type>druid-common</config-type>
       </configuration-dependencies>
     </service>
   </services>
