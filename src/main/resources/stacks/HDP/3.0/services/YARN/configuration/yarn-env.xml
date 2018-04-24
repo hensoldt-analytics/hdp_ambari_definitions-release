@@ -304,25 +304,27 @@ fi
 # restore ordinary behaviour
 unset IFS
 
-
-YARN_OPTS="$YARN_OPTS -Dhadoop.log.dir=$YARN_LOG_DIR"
-YARN_OPTS="$YARN_OPTS -Dyarn.log.dir=$YARN_LOG_DIR"
-YARN_OPTS="$YARN_OPTS -Dhadoop.log.file=$YARN_LOGFILE"
-YARN_OPTS="$YARN_OPTS -Dyarn.log.file=$YARN_LOGFILE"
-YARN_OPTS="$YARN_OPTS -Dyarn.home.dir=$YARN_COMMON_HOME"
-YARN_OPTS="$YARN_OPTS -Dyarn.id.str=$YARN_IDENT_STRING"
-YARN_OPTS="$YARN_OPTS -Dhadoop.root.logger=${YARN_ROOT_LOGGER:-INFO,console}"
-YARN_OPTS="$YARN_OPTS -Dyarn.root.logger=${YARN_ROOT_LOGGER:-INFO,console}"
+# YARN now uses specific subcommand options of the pattern (command)_(subcommand)_OPTS for every
+# component. Because of this, HADDOP_OPTS is now used as a simple way to specify common properties
+# between all YARN components.
+HADOOP_OPTS="$HADOOP_OPTS -Dhadoop.log.dir=$YARN_LOG_DIR"
+HADOOP_OPTS="$HADOOP_OPTS -Dyarn.log.dir=$YARN_LOG_DIR"
+HADOOP_OPTS="$HADOOP_OPTS -Dhadoop.log.file=$YARN_LOGFILE"
+HADOOP_OPTS="$HADOOP_OPTS -Dyarn.log.file=$YARN_LOGFILE"
+HADOOP_OPTS="$HADOOP_OPTS -Dyarn.home.dir=$YARN_COMMON_HOME"
+HADOOP_OPTS="$HADOOP_OPTS -Dyarn.id.str=$YARN_IDENT_STRING"
+HADOOP_OPTS="$HADOOP_OPTS -Dhadoop.root.logger=${YARN_ROOT_LOGGER:-INFO,console}"
+HADOOP_OPTS="$HADOOP_OPTS -Dyarn.root.logger=${YARN_ROOT_LOGGER:-INFO,console}"
 export YARN_NODEMANAGER_OPTS="$YARN_NODEMANAGER_OPTS -Dnm.audit.logger=INFO,NMAUDIT"
 export YARN_RESOURCEMANAGER_OPTS="$YARN_RESOURCEMANAGER_OPTS -Dyarn.server.resourcemanager.appsummary.logger=INFO,RMSUMMARY -Drm.audit.logger=INFO,RMAUDIT"
 if [ "x$JAVA_LIBRARY_PATH" != "x" ]; then
-YARN_OPTS="$YARN_OPTS -Djava.library.path=$JAVA_LIBRARY_PATH"
+HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$JAVA_LIBRARY_PATH"
 fi
-YARN_OPTS="$YARN_OPTS -Dyarn.policy.file=$YARN_POLICYFILE"
-YARN_OPTS="$YARN_OPTS -Djava.io.tmpdir={{hadoop_java_io_tmpdir}}"
+HADOOP_OPTS="$HADOOP_OPTS -Dyarn.policy.file=$YARN_POLICYFILE"
+HADOOP_OPTS="$HADOOP_OPTS -Djava.io.tmpdir={{hadoop_java_io_tmpdir}}"
 
 {% if security_enabled %}
-YARN_OPTS="$YARN_OPTS -Djavax.security.auth.useSubjectCredsOnly=false"
+HADOOP_OPTS="$HADOOP_OPTS -Djavax.security.auth.useSubjectCredsOnly=false"
 {% endif %}
 
 {% if registry_dns_needs_privileged_access %}

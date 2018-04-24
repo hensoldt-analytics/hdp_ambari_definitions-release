@@ -269,6 +269,11 @@
             <type>yarn-site</type>
             <replace key="yarn.application.classpath" find="/usr/hdp/current/hadoop-client" replace-with="{{hadoop_home}}"/>
           </definition>
+
+          <definition xsi:type="configure" id="hdp_30_convert_yarn_opts_to_hadoop_opts" summary="Convert YARN_OPTS to HADOOP_OPTS">
+            <type>yarn-env</type>
+            <replace key="content" find="YARN_OPTS" replace-with="HADOOP_OPTS"/>
+          </definition>
         </changes>
       </component>
 
