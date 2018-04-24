@@ -83,18 +83,18 @@ def yarn(name=None, config_dir=None):
   # Some of these function calls depend on the directories above being created first.
   if name == 'resourcemanager':
     setup_resourcemanager()
-    if params.is_system_service_launch:
+    if params.is_hbase_system_service_launch:
         setup_system_services()
   elif name == 'nodemanager':
     setup_nodemanager()
-    if params.is_system_service_launch:
+    if params.is_hbase_system_service_launch:
         setup_atsv2_backend()
   elif name == 'apptimelineserver':
     setup_ats()
   elif name == 'historyserver':
     setup_historyserver()
   elif name == 'apptimelinereader':
-    if not params.is_system_service_launch:
+    if not params.is_hbase_system_service_launch:
        setup_atsv2_backend()
 
   XmlConfig("core-site.xml",

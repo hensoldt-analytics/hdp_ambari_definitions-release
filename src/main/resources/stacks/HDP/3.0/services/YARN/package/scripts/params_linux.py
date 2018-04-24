@@ -651,10 +651,20 @@ yarn_hbase_table_create_cmd = format("export HBASE_CLASSPATH_PREFIX={stack_root}
 yarn_hbase_table_grant_premission_cmd = format("{yarn_hbase_kinit_cmd} {hbase_cmd} shell {yarn_hbase_grant_premissions_file}")
 
 # System service configuration as part of ATSv2.
-is_system_service_launch = config['configurations']['yarn-env']['is_system_service_launch']
 yarn_system_service_dir = config['configurations']['yarn-site']['yarn.service.system-service.dir']
-yarn_system_service_launch_mode = config['configurations']['yarn-env']['yarn_system_service_launch_mode']
-yarn_system_service_queue_name = config['configurations']['yarn-env']['yarn_system_service_queue_name']
+is_hbase_system_service_launch = config['configurations']['yarn-hbase-env']['is_hbase_system_service_launch']
+yarn_system_service_launch_mode = config['configurations']['yarn-hbase-env']['yarn_hbase_system_service_launch_mode']
+yarn_hbase_service_queue_name = config['configurations']['yarn-hbase-env']['yarn_hbase_system_service_queue_name']
+
+yarn_hbase_master_cpu = config['configurations']['yarn-hbase-env']['yarn_hbase_master_cpu']
+yarn_hbase_master_memory = config['configurations']['yarn-hbase-env']['yarn_hbase_master_memory']
+yarn_hbase_master_containers = config['configurations']['yarn-hbase-env']['yarn_hbase_master_containers']
+yarn_hbase_regionserver_cpu = config['configurations']['yarn-hbase-env']['yarn_hbase_regionserver_cpu']
+yarn_hbase_regionserver_memory = config['configurations']['yarn-hbase-env']['yarn_hbase_regionserver_memory']
+yarn_hbase_regionserver_containers = config['configurations']['yarn-hbase-env']['yarn_hbase_regionserver_containers']
+yarn_hbase_client_cpu = config['configurations']['yarn-hbase-env']['yarn_hbase_client_cpu']
+yarn_hbase_client_memory = config['configurations']['yarn-hbase-env']['yarn_hbase_client_memory']
+yarn_hbase_client_containers = config['configurations']['yarn-hbase-env']['yarn_hbase_client_containers']
 # ATSv2 integration properties ended
 
 gpu_module_enabled = str(config['configurations']['container-executor']['gpu_module_enabled']).lower()

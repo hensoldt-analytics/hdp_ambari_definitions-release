@@ -47,14 +47,14 @@ class ApplicationTimelineReader(Script):
     import params
     env.set_params(params)
     self.configure(env) # FOR SECURITY
-    if not params.is_system_service_launch:
+    if not params.is_hbase_system_service_launch:
        hbase(action='start')
     service('timelinereader', action='start')
 
   def stop(self, env, upgrade_type=None):
     import params
     env.set_params(params)
-    if not params.is_system_service_launch:
+    if not params.is_hbase_system_service_launch:
        hbase(action='stop')
     service('timelinereader', action='stop')
 
@@ -62,7 +62,7 @@ class ApplicationTimelineReader(Script):
     import params
     env.set_params(params)
     yarn(name='apptimelinereader')
-    if not params.is_system_service_launch:
+    if not params.is_hbase_system_service_launch:
        configure_hbase(env)
 
 @OsFamilyImpl(os_family=OSConst.WINSRV_FAMILY)
@@ -99,7 +99,7 @@ class ApplicationTimelineReaderDefault(ApplicationTimelineReader):
     import params
     pid_files = []
     pid_files.append(format("{yarn_timelinereader_pid_file}"))
-    if not params.is_system_service_launch:
+    if not params.is_hbase_system_service_launch:
        pid_files.append(format("{yarn_hbase_pid_dir}/hbase-{yarn_hbase_user}-master.pid"))
        pid_files.append(format("{yarn_hbase_pid_dir}/hbase-{yarn_hbase_user}-regionserver.pid"))
     return pid_files

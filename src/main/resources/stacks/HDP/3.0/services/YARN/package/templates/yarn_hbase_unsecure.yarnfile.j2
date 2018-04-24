@@ -16,19 +16,22 @@
 # limitations under the License.
 #}
 {
-  "name": "hbase",
+  "name": "ats-hbase",
   "version": "1.0.0",
   "lifetime": "-1",
-  "queue": "{{yarn_system_service_queue_name}}",
+  "queue": "{{yarn_hbase_service_queue_name}}",
   "configuration": {
     "env": {
-      "HBASE_IDENT_STRING": "${USER}"
+      "HBASE_IDENT_STRING": "${USER}",
+      "HBASE_LOG_DIR": "<LOG_DIR>",
+      "HBASE_PID_DIR": "$PWD/pids",
+      "HBASE_ROOT_LOGGER": "INFO,RFA"
     }
   },
   "components": [
     {
       "name": "master",
-      "number_of_containers": 1,
+      "number_of_containers": {{yarn_hbase_master_containers}},
       "launch_command": "{{stack_root}}/current/hbase-master/bin/hbase --config {{yarn_hbase_conf_dir}} master start",
       "readiness_check": {
         "type": "HTTP",
@@ -37,28 +40,46 @@
         }
       },
       "resource": {
-        "cpus": 1,
-        "memory": "4096"
+        "cpus": {{yarn_hbase_master_cpu}},
+        "memory": "{{yarn_hbase_master_memory}}"
+      },
+      "configuration": {
+        "env": {
+          "HBASE_LOG_PREFIX": "hbase-$HBASE_IDENT_STRING-master-$HOSTNAME",
+          "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log"
+        }
       }
     },
     {
       "name": "regionserver",
-      "number_of_containers": 1,
-      "launch_command": "sleep 5;{{stack_root}}/current/hbase-regionserver/bin/hbase --config {{yarn_hbase_conf_dir}} regionserver start",
+      "number_of_containers": {{yarn_hbase_regionserver_containers}},
+      "launch_command": "{{stack_root}}/current/hbase-regionserver/bin/hbase --config {{yarn_hbase_conf_dir}} regionserver start",
       "dependencies": [ "master" ],
       "resource": {
-        "cpus": 1,
-        "memory": "4096"
+        "cpus": {{yarn_hbase_regionserver_cpu}},
+        "memory": "{{yarn_hbase_regionserver_memory}}"
+      },
+      "configuration": {
+        "env": {
+          "HBASE_LOG_PREFIX": "hbase-$HBASE_IDENT_STRING-regionserver-$HOSTNAME",
+          "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log"
+        }
       }
     },
     {
       "name": "hbaseclient",
-      "number_of_containers": 1,
+      "number_of_containers": {{yarn_hbase_client_containers}},
       "launch_command": "sleep 10;{{yarn_hbase_table_create_cmd}};sleep infinity",
       "dependencies": [ "regionserver" ],
       "resource": {
-        "cpus": 1,
-        "memory": "1024"
+        "cpus": {{yarn_hbase_client_cpu}},
+        "memory": "{{yarn_hbase_client_memory}}"
+      },
+      "configuration": {
+        "env": {
+          "HBASE_LOG_PREFIX": "hbase-$HBASE_IDENT_STRING-hbaseclient-$HOSTNAME",
+          "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log"
+        }
       }
     }
   ],
