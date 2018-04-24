@@ -299,8 +299,12 @@ dfs_ha_automatic_failover_enabled = default("/configurations/hdfs-site/dfs.ha.au
 
 # hostnames of the active HDFS HA Namenodes (only used when HA is enabled)
 if command_phase == "INITIAL_START":
-  dfs_ha_namenode_active = namenode_ha_utils.get_initial_active_namenodes(default("/configurations/hadoop-env", {}))
-  dfs_ha_initial_cluster_id = default('/configurations/hadoop-env/dfs_ha_initial_cluster_id', None)
+  dfs_ha_namenode_active = namenode_ha_utils.get_initial_active_namenodes(default("/configurations/cluster-env", {}))
+  dfs_ha_initial_cluster_id = default('/configurations/cluster-env/dfs_ha_initial_cluster_id', None)
+  # temporary backward compatibility for CI
+  if not dfs_ha_namenode_active:
+    dfs_ha_namenode_active = namenode_ha_utils.get_initial_active_namenodes(default("/configurations/hadoop-env", {}))
+    dfs_ha_initial_cluster_id = default('/configurations/hadoop-env/dfs_ha_initial_cluster_id', None)
 else:
   dfs_ha_namenode_active = frozenset()
   dfs_ha_initial_cluster_id = None

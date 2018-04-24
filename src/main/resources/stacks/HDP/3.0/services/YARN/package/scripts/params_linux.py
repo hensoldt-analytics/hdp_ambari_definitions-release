@@ -37,7 +37,6 @@ from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.expect import expect
 from resource_management.libraries import functions
 from resource_management.libraries.functions import is_empty
-from resource_management.libraries.functions import namenode_ha_utils
 from resource_management.libraries.functions.get_architecture import get_architecture
 from resource_management.libraries.functions.setup_ranger_plugin_xml import get_audit_configs, generate_ranger_service_config
 import status_params
@@ -411,13 +410,6 @@ node_labels_dir = default("/configurations/yarn-site/yarn.node-labels.fs-store.r
 node_label_enable = config['configurations']['yarn-site']['yarn.node-labels.enabled']
 
 cgroups_dir = "/cgroups_test/cpu"
-
-# hostname of the active HDFS HA Namenode (only used when HA is enabled)
-dfs_ha_namenode_active = namenode_ha_utils.get_initial_active_namenodes(default("/configurations/hadoop-env", {}))
-if dfs_ha_namenode_active:
-  namenode_hostname = iter(dfs_ha_namenode_active).next()
-else:
-  namenode_hostname = config['clusterHostInfo']['namenode_hosts'][0]
 
 ranger_admin_log_dir = default("/configurations/ranger-env/ranger_admin_log_dir","/var/log/ranger/admin")
 
