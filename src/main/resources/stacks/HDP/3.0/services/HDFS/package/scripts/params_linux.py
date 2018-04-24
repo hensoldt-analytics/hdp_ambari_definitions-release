@@ -82,7 +82,6 @@ current_user = pwd.getpwuid(os.getuid()).pw_name
 hadoop_pid_dir_prefix = status_params.hadoop_pid_dir_prefix
 namenode_pid_file = status_params.namenode_pid_file
 zkfc_pid_file = status_params.zkfc_pid_file
-datanode_pid_file = status_params.datanode_pid_file
 
 # Some datanode settings
 dfs_dn_addr = default('/configurations/hdfs-site/dfs.datanode.address', None)
@@ -127,6 +126,12 @@ if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE,
       hadoop_secure_dn_user = hdfs_user
     else:
       hadoop_secure_dn_user = '""'
+
+hadoop_pid_dir = format("{hadoop_pid_dir_prefix}/{hdfs_user}")
+if secure_dn_ports_are_in_use:
+  datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-{current_user}-datanode.pid")
+else:
+  datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-datanode.pid")
 
 ambari_libs_dir = "/var/lib/ambari-agent/lib"
 limits_conf_dir = "/etc/security/limits.d"

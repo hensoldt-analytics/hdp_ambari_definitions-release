@@ -69,8 +69,8 @@ def datanode(action=None):
       create_log_dir=True
     )
   elif action == "status":
-    import status_params
-    check_process_status(status_params.datanode_pid_file)
+    import params
+    check_process_status(params.datanode_pid_file)
 
 
 @OsFamilyFuncImpl(os_family=OSConst.WINSRV_FAMILY)

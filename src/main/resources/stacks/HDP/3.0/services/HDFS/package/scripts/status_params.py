@@ -53,11 +53,6 @@ else:
   hdfs_user_principal = config['configurations']['hadoop-env']['hdfs_principal_name']
   hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
 
-  if security_enabled:
-    datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-{root_user}-datanode.pid")
-  else:
-    datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-datanode.pid")
-
   hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 
   kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))

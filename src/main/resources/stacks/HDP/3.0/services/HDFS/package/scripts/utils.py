@@ -187,6 +187,8 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
       'HADOOP_PRIVILEGED_NFS_LOG_DIR': log_dir
     }
     hadoop_env_exports.update(custom_export)
+  elif name == "datanode":
+    pid_file = params.datanode_pid_file
 
   process_id_exists_command = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
 
@@ -222,34 +224,16 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
                   group=params.user_group,
                   create_parents = True)
 
-  if params.security_enabled and name == "datanode":
-    ## The directory where pid files are stored in the secure data environment.
-    hadoop_secure_dn_pid_dir = format("{hadoop_pid_dir_prefix}/{hdfs_user}")
-    hadoop_secure_dn_pid_file = params.datanode_pid_file
-    process_id_exists_command = as_sudo(["test", "-f", hadoop_secure_dn_pid_file]) + " && " + as_sudo(["pgrep", "-F", hadoop_secure_dn_pid_file])
-
-    # At datanode_non_root stack version and further, we may start datanode as a non-root even in secure cluster
-    if not (params.stack_version_formatted and check_stack_feature(StackFeature.DATANODE_NON_ROOT, params.stack_version_formatted)) or params.secure_dn_ports_are_in_use:
-      user = "root"
-      pid_file = format(
-        "{hadoop_pid_dir_prefix}/{hdfs_user}/hadoop-{hdfs_user}-{current_user}-{name}.pid")
-
-    if action == 'stop' and (params.stack_version_formatted and check_stack_feature(StackFeature.DATANODE_NON_ROOT, params.stack_version_formatted)) and \
-      os.path.isfile(hadoop_secure_dn_pid_file):
+  if params.secure_dn_ports_are_in_use and name == "datanode":
+    user = "root"
+    if action == 'stop' and os.path.isfile(pid_file):
         # We need special handling for this case to handle the situation
         # when we configure non-root secure DN and then restart it
         # to handle new configs. Otherwise we will not be able to stop
         # a running instance 
-        user = "root"
-        
         try:
-          check_process_status(hadoop_secure_dn_pid_file)
-          
-          custom_export = {
-            'HADOOP_SECURE_DN_USER': params.hdfs_user
-          }
-          hadoop_env_exports.update(custom_export)
-          
+          check_process_status(pid_file)
+          hadoop_env_exports.update({'HADOOP_SECURE_DN_USER': params.hdfs_user})
         except ComponentIsNotRunning:
           pass
 

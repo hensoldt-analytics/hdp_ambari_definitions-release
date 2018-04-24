@@ -113,8 +113,8 @@ class DataNodeDefault(DataNode):
     return params.hdfs_user
 
   def get_pid_files(self):
-    import status_params
-    return [status_params.datanode_pid_file]
+    import params
+    return [params.datanode_pid_file]
 
 @OsFamilyImpl(os_family=OSConst.WINSRV_FAMILY)
 class DataNodeWindows(DataNode):
