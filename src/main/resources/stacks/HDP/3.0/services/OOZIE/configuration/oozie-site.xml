@@ -310,7 +310,8 @@
       org.apache.oozie.service.GroupsService,
       org.apache.oozie.service.ProxyUserService,
       org.apache.oozie.service.JobsConcurrencyService,
-      org.apache.oozie.service.ShareLibService
+      org.apache.oozie.service.ShareLibService,
+      org.apache.oozie.service.SparkConfigurationService
     </value>
     <description>List of Oozie services</description>
     <on-ambari-upgrade add="true"/>
