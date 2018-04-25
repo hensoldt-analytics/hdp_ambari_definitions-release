@@ -275,6 +275,7 @@ DEFAULT
     <value>true</value>
     <description>
     </description>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>fs.s3a.fast.upload.buffer</name>
@@ -301,6 +302,7 @@ DEFAULT
     fs.s3a.threads.max, with fs.s3a.max.total.tasks values setting the number of queued
     work items.
     </description>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>fs.s3a.multipart.size</name>
@@ -309,6 +311,7 @@ DEFAULT
     How big (in bytes) to split upload or copy operations up into.
     A suffix from the set {K,M,G,T,P} may be used to scale the numeric value.
     </description>
+    <on-ambari-upgrade add="false"/>
   </property>  
 
 </configuration>
