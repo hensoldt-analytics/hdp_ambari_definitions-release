@@ -99,6 +99,12 @@
             &lt;/service&gt;
 
             &lt;service&gt;
+                &lt;role&gt;OOZIEUI&lt;/role&gt;
+                &lt;url&gt;http://{{oozie_server_host}}:{{oozie_server_port}}/oozie/&lt;/url&gt;
+            &lt;/service&gt;
+
+
+            &lt;service&gt;
                 &lt;role&gt;WEBHBASE&lt;/role&gt;
                 &lt;url&gt;http://{{hbase_master_host}}:{{hbase_master_port}}&lt;/url&gt;
             &lt;/service&gt;
