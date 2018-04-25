@@ -129,7 +129,7 @@ if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE,
 
 hadoop_pid_dir = format("{hadoop_pid_dir_prefix}/{hdfs_user}")
 if secure_dn_ports_are_in_use:
-  datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-{current_user}-datanode.pid")
+  datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-{root_user}-datanode.pid")
 else:
   datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-datanode.pid")
 
