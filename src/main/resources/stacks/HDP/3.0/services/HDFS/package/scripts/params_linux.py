@@ -555,6 +555,9 @@ if enable_ranger_hdfs:
       'type': 'hdfs'
     }
 
+  if is_https_enabled:
+    hdfs_ranger_plugin_config['hadoop.rpc.protection'] = 'privacy'
+
   xa_audit_db_is_enabled = False
   if xml_configurations_supported and stack_supports_ranger_audit_db:
     xa_audit_db_is_enabled = config['configurations']['ranger-hdfs-audit']['xasecure.audit.destination.db']
