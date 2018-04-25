@@ -158,6 +158,10 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  def isComponentUsingCardinalityForLayout(self, componentName):
+    return componentName == 'NFS_GATEWAY'
+
+
 class HDFSRecommender(service_advisor.ServiceAdvisor):
   """
   HDFS Recommender suggests properties when adding the service for the first time or modifying configs via the UI.

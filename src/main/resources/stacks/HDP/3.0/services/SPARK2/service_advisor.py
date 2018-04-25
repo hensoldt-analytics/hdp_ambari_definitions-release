@@ -145,6 +145,8 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  def isComponentUsingCardinalityForLayout(self, componentName):
+    return componentName in ('SPARK2_THRIFTSERVER', 'LIVY2_SERVER')
 
 
 class Spark2Recommender(service_advisor.ServiceAdvisor):

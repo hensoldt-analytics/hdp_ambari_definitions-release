@@ -149,6 +149,8 @@ class HBASEServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  def isComponentUsingCardinalityForLayout(self, componentName):
+    return componentName == 'PHOENIX_QUERY_SERVER'
 
 
 class HBASERecommender(service_advisor.ServiceAdvisor):
