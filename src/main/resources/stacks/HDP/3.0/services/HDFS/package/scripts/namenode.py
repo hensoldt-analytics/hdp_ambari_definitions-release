@@ -165,6 +165,11 @@ class NameNode(Script):
     hdfs_binary = self.get_hdfs_binary()
     namenode(action="decommission", hdfs_binary=hdfs_binary)
 
+  def refresh_nodes(self, env):
+    import params
+    env.set_params(params)
+    namenode(action="refresh_nodes")
+
 @OsFamilyImpl(os_family=OsFamilyImpl.DEFAULT)
 class NameNodeDefault(NameNode):
 

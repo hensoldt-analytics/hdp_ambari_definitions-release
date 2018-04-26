@@ -120,6 +120,14 @@
               </commandScript>
               <hidden>true</hidden>
             </customCommand>
+            <customCommand>
+              <name>REFRESH_NODES</name>
+              <commandScript>
+                <script>scripts/namenode.py</script>
+                <scriptType>PYTHON</scriptType>
+              <timeout>600</timeout>
+              </commandScript>
+            </customCommand>
           </customCommands>
         </component>
 

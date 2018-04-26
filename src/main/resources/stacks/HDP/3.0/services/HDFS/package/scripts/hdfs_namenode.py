@@ -243,6 +243,8 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
     check_process_status(status_params.namenode_pid_file)
   elif action == "decommission":
     decommission()
+  elif action == "refresh_nodes":
+    refresh_nodes()
 
 @OsFamilyFuncImpl(os_family=OSConst.WINSRV_FAMILY)
 def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
@@ -431,13 +433,28 @@ def is_namenode_formatted(params):
   return False
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
+def refresh_nodes():
+  import params
+  if params.dfs_ha_enabled:
+    # due to a bug in hdfs, refreshNodes will not run on both namenodes so we
+    # need to execute each command scoped to a particular namenode
+    nn_refresh_cmd = format('dfsadmin -fs hdfs://{namenode_rpc} -refreshNodes')
+  else:
+    nn_refresh_cmd = format('dfsadmin -fs {namenode_address} -refreshNodes')
+  Execute(params.nn_kinit_cmd, user=params.hdfs_user)
+  ExecuteHadoop(nn_refresh_cmd,
+                user=params.hdfs_user,
+                conf_dir=params.hadoop_conf_dir,
+                bin_dir=params.hadoop_bin_dir)
+
+
+@OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def decommission():
   import params
 
   hdfs_user = params.hdfs_user
   conf_dir = params.hadoop_conf_dir
   user_group = params.user_group
-  nn_kinit_cmd = params.nn_kinit_cmd
 
   File(params.exclude_file_path,
        content=Template("exclude_hosts_list.j2"),
@@ -454,20 +471,7 @@ def decommission():
     pass
 
   if not params.update_files_only:
-    Execute(nn_kinit_cmd,
-            user=hdfs_user
-    )
-
-    if params.dfs_ha_enabled:
-      # due to a bug in hdfs, refreshNodes will not run on both namenodes so we
-      # need to execute each command scoped to a particular namenode
-      nn_refresh_cmd = format('dfsadmin -fs hdfs://{namenode_rpc} -refreshNodes')
-    else:
-      nn_refresh_cmd = format('dfsadmin -fs {namenode_address} -refreshNodes')
-    ExecuteHadoop(nn_refresh_cmd,
-                  user=hdfs_user,
-                  conf_dir=conf_dir,
-                  bin_dir=params.hadoop_bin_dir)
+    refresh_nodes()
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def refreshProxyUsers():
