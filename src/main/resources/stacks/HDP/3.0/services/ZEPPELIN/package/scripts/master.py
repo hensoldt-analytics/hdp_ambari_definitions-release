@@ -138,16 +138,9 @@ class Master(Script):
     )
     self.chown_zeppelin_pid_dir(env)
 
-    # write out zeppelin-site.xml
-    my_map = {}
-    for key, value in params.config['configurations']['zeppelin-config'].iteritems():
-      my_map[key]=value
-    my_map['zeppelin.server.kerberos.keytab']=params.zeppelin_kerberos_keytab
-    my_map['zeppelin.server.kerberos.principal']=params.zeppelin_kerberos_principal
-
     XmlConfig("zeppelin-site.xml",
               conf_dir=params.conf_dir,
-              configurations=my_map,
+              configurations=params.config['configurations']['zeppelin-site'],
               owner=params.zeppelin_user,
               group=params.zeppelin_group
               )
@@ -194,11 +187,11 @@ class Master(Script):
                 mode=0644)
 
   def check_and_copy_notebook_in_hdfs(self, params):
-    if params.config['configurations']['zeppelin-config']['zeppelin.notebook.dir'].startswith("/"):
-      notebook_directory = params.config['configurations']['zeppelin-config']['zeppelin.notebook.dir']
+    if params.config['configurations']['zeppelin-site']['zeppelin.notebook.dir'].startswith("/"):
+      notebook_directory = params.config['configurations']['zeppelin-site']['zeppelin.notebook.dir']
     else:
       notebook_directory = "/user/" + format("{zeppelin_user}") + "/" + \
-                           params.config['configurations']['zeppelin-config']['zeppelin.notebook.dir']
+                           params.config['configurations']['zeppelin-site']['zeppelin.notebook.dir']
 
     if not self.is_directory_exists_in_HDFS(notebook_directory, params.zeppelin_user):
       # hdfs dfs -mkdir {notebook_directory}
@@ -242,8 +235,8 @@ class Master(Script):
       zeppelin_kinit_cmd = format("{kinit_path_local} -kt {zeppelin_kerberos_keytab} {zeppelin_kerberos_principal}; ")
       Execute(zeppelin_kinit_cmd, user=params.zeppelin_user)
 
-    if 'zeppelin.notebook.storage' in params.config['configurations']['zeppelin-config'] \
-        and params.config['configurations']['zeppelin-config']['zeppelin.notebook.storage'] == 'org.apache.zeppelin.notebook.repo.FileSystemNotebookRepo':
+    if 'zeppelin.notebook.storage' in params.config['configurations']['zeppelin-site'] \
+        and params.config['configurations']['zeppelin-site']['zeppelin.notebook.storage'] == 'org.apache.zeppelin.notebook.repo.FileSystemNotebookRepo':
       self.check_and_copy_notebook_in_hdfs(params)
 
     zeppelin_spark_dependencies = self.get_zeppelin_spark_dependencies()
@@ -343,7 +336,7 @@ class Master(Script):
       stack_select.select_packages(params.version)
 
   def get_zeppelin_conf_FS_directory(self, params):
-    hdfs_interpreter_config = params.config['configurations']['zeppelin-config']['zeppelin.config.fs.dir']
+    hdfs_interpreter_config = params.config['configurations']['zeppelin-site']['zeppelin.config.fs.dir']
 
     # if it doesn't start from "/" or doesn't contains "://" as in hdfs://, file://, etc then make it a absolute path
     if not (hdfs_interpreter_config.startswith("/") or '://' in hdfs_interpreter_config):

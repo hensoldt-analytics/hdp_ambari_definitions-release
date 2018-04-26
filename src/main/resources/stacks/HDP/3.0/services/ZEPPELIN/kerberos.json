@@ -27,6 +27,16 @@
             },
             "configuration": "zeppelin-env/zeppelin.server.kerberos.keytab"
           }
+        },
+        {
+          "name": "zeppelin_user2",
+          "reference": "/ZEPPELIN/zeppelin_user",
+          "principal": {
+            "configuration": "zeppelin-site/zeppelin.server.kerberos.principal"
+          },
+          "keytab": {
+            "configuration": "zeppelin-site/zeppelin.server.kerberos.keytab"
+          }
         }
       ],
       "components": [

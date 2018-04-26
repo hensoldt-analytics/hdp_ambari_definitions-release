@@ -9,7 +9,7 @@
         {
           "property":"zeppelin.ssl",
           "desired":"true",
-          "site":"zeppelin-config"
+          "site":"zeppelin-site"
         }
       ]
     },
@@ -27,7 +27,7 @@
           "https_property": "zeppelin.server.port",
           "https_default_port": "9995",
           "regex": "^(\\d+)$",
-          "site": "zeppelin-config"
+          "site": "zeppelin-site"
         }
       }
     ]

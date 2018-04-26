@@ -84,11 +84,11 @@ if 'spark2-defaults' in config['configurations']:
 version = default("/commandParams/version", None)
 stack_name = default("/clusterLevelParams/stack_name", None)
 
-# params from zeppelin-config
-zeppelin_port = str(config['configurations']['zeppelin-config']['zeppelin.server.port'])
+# params from zeppelin-site
+zeppelin_port = str(config['configurations']['zeppelin-site']['zeppelin.server.port'])
 zeppelin_interpreter = None
-if 'zeppelin.interpreter.group.order' in config['configurations']['zeppelin-config']:
-  zeppelin_interpreter = str(config['configurations']['zeppelin-config']
+if 'zeppelin.interpreter.group.order' in config['configurations']['zeppelin-site']:
+  zeppelin_interpreter = str(config['configurations']['zeppelin-site']
                              ['zeppelin.interpreter.group.order']).split(",")
 
 # params from zeppelin-env
@@ -105,8 +105,8 @@ external_dependency_conf = "/etc/zeppelin/conf/external-dependency-conf"
 notebook_dir = os.path.join(*[install_dir, zeppelin_dirname, 'notebook'])
 
 conf_stored_in_hdfs = False
-if 'zeppelin.config.fs.dir' in config['configurations']['zeppelin-config'] and \
-  not config['configurations']['zeppelin-config']['zeppelin.config.fs.dir'].startswith('file://'):
+if 'zeppelin.config.fs.dir' in config['configurations']['zeppelin-site'] and \
+  not config['configurations']['zeppelin-site']['zeppelin.config.fs.dir'].startswith('file://'):
   conf_stored_in_hdfs = True
 
 # zeppelin-env.sh
@@ -123,7 +123,7 @@ master_configs = config['clusterHostInfo']
 java64_home = config['ambariLevelParams']['java_home']
 ambari_host = str(config['ambariLevelParams']['ambari_server_host'])
 zeppelin_host = str(master_configs['zeppelin_master_hosts'][0])
-ui_ssl_enabled = config['configurations']['zeppelin-config']['zeppelin.ssl']
+ui_ssl_enabled = config['configurations']['zeppelin-site']['zeppelin.ssl']
 
 # detect HS2 details, if installed
 
@@ -204,8 +204,8 @@ else:
 
 zeppelin_kerberos_keytab = config['configurations']['zeppelin-env']['zeppelin.server.kerberos.keytab']
 zeppelin_kerberos_principal = config['configurations']['zeppelin-env']['zeppelin.server.kerberos.principal']
-if 'zeppelin.interpreter.config.upgrade' in config['configurations']['zeppelin-config']:
-  zeppelin_interpreter_config_upgrade = config['configurations']['zeppelin-config']['zeppelin.interpreter.config.upgrade']
+if 'zeppelin.interpreter.config.upgrade' in config['configurations']['zeppelin-site']:
+  zeppelin_interpreter_config_upgrade = config['configurations']['zeppelin-site']['zeppelin.interpreter.config.upgrade']
 else:
   zeppelin_interpreter_config_upgrade = False
 
