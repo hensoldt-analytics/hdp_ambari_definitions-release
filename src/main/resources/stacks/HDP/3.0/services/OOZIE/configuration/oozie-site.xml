@@ -210,7 +210,6 @@
     <name>oozie.service.ActionService.executor.ext.classes</name>
     <value>
       org.apache.oozie.action.email.EmailActionExecutor,
-      org.apache.oozie.action.hadoop.HiveActionExecutor,
       org.apache.oozie.action.hadoop.ShellActionExecutor,
       org.apache.oozie.action.hadoop.SqoopActionExecutor,
       org.apache.oozie.action.hadoop.DistcpActionExecutor
