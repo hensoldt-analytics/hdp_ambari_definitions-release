@@ -1374,6 +1374,13 @@
 
     <service name="ATLAS">
       <component name="ATLAS_SERVER">
+        <pre-upgrade>
+          <task xsi:type="execute" hosts="all">
+            <script>scripts/metadata_server.py</script>
+            <function>rename_ranger_atlas_policycache_file</function>
+          </task>
+        </pre-upgrade>
+        <pre-downgrade/> <!--  no-op to prevent config changes on downgrade -->
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>

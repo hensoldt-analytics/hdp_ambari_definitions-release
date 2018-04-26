@@ -300,6 +300,7 @@ if check_stack_feature(StackFeature.ATLAS_UPGRADE_SUPPORT, version_for_stack_fea
 namenode_host = set(default("/clusterHostInfo/namenode_hosts", []))
 has_namenode = not len(namenode_host) == 0
 
+upgrade_direction = default("/commandParams/upgrade_direction", None)
 # ranger altas plugin section start
 
 # ranger host

@@ -25,6 +25,7 @@ from resource_management import Fail
 from resource_management.libraries.functions import stack_select
 from resource_management.core.resources.system import Execute, File
 from resource_management.libraries.script.script import Script
+from resource_management.libraries.functions.constants import Direction
 from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.functions.format import format
@@ -178,6 +179,16 @@ class MetadataServer(Script):
   def get_pid_files(self):
     import status_params
     return [status_params.pid_file]
+
+  def rename_ranger_atlas_policycache_file(self, env):
+    import params
+    env.set_params(params)
+
+    if params.upgrade_direction == Direction.UPGRADE and params.stack_supports_atlas_ranger_plugin and params.enable_ranger_atlas:
+      atlas_policycache_file_v1 = os.path.join('/etc', 'ranger', params.repo_name, 'policycache', format('atlas_{repo_name}.json'))
+      atlas_policycache_file_v1_rename = os.path.join('/etc', 'ranger', params.repo_name, 'policycache', format('atlas_{repo_name}_v1.json'))
+      if os.path.isfile(atlas_policycache_file_v1):
+        Execute(format('mv {atlas_policycache_file_v1} {atlas_policycache_file_v1_rename}'), user = params.metadata_user, logoutput = True)
 
 if __name__ == "__main__":
   MetadataServer().execute()
