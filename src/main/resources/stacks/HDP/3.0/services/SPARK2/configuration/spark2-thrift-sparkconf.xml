@@ -261,9 +261,12 @@
   </property>
   <property>
     <name>spark.master</name>
-    <value>yarn</value>
-    <description>The deploying mode of spark application.</description>
-    <on-ambari-upgrade add="false"/>
+    <value>{{spark_thrift_master}}</value>
+    <description>
+      The deploying mode of spark application, by default it is yarn-client for thrift-server but local mode for there's
+      only one nodemanager.
+    </description>
+    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>spark.executor.extraJavaOptions</name>
