@@ -114,4 +114,108 @@
     <description>The address of the Spark history server (i.e. host.com:18081). The address should not contain a scheme (http://). Defaults to not being set since the history server is an optional service. This address is given to the YARN ResourceManager when the Spark application finishes to link the application from the ResourceManager UI to the Spark history server UI.</description>
     <on-ambari-upgrade add="true"/>
   </property>
+
+
+  <property>
+    <name>spark.history.fs.cleaner.enabled</name>
+    <value>true</value>
+    <description>Specifies whether the History Server should periodically clean up event logs from storage.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.history.fs.cleaner.interval</name>
+    <value>7d</value>
+    <description>How often the filesystem job history cleaner checks for files to delete. Files are only deleted if they are older than spark.history.fs.cleaner.maxAge</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.history.fs.cleaner.maxAge</name>
+    <value>90d</value>
+    <description>Job history files older than this will be deleted when the filesystem history cleaner runs.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+
+  <property>
+    <name>spark.sql.statistics.fallBackToHdfs</name>
+    <value>true</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.sql.autoBroadcastJoinThreshold</name>
+    <value>26214400</value>
+    <description>Configures the maximum size in bytes for a table that will be broadcast to all worker nodes when performing a join.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.io.compression.lz4.blockSize</name>
+    <value>128kb</value>
+    <description>Block size in bytes used in LZ4 compression, in the case when LZ4 compression codec is used. Lowering this block size will also lower shuffle memory usage when LZ4 is used.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+
+  <property>
+    <name>spark.sql.orc.impl</name>
+    <value>native</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.sql.orc.filterPushdown</name>
+    <value>true</value>
+    <description>Enables filter pushdown for ORC formats.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+    <property>
+    <name>spark.sql.hive.convertMetastoreOrc</name>
+    <value>true</value>
+    <description>Enables new ORC format to read/write Hive Tables.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+
+  <property>
+    <name>spark.shuffle.io.serverThreads</name>
+    <value>128</value>
+    <description>Number of threads used in the server thread pool.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.shuffle.io.backLog</name>
+    <value>8192</value>
+    <description>Requested maximum length of the queue of incoming connections.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.shuffle.file.buffer</name>
+    <value>1m</value>
+    <description>Size of the in-memory buffer for each shuffle file output stream, in KiB unless otherwise specified. These buffers reduce the number of disk seeks and system calls made in creating intermediate shuffle files.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.shuffle.unsafe.file.output.buffer</name>
+    <value>5m</value>
+    <description>The file system for this buffer size after each partition is written in unsafe shuffle writer. In KiB unless otherwise specified.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+    <property>
+    <name>spark.unsafe.sorter.spill.reader.buffer.size</name>
+    <value>1m</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.master</name>
+    <value>yarn</value>
+    <description>The deploying mode of spark application.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.executor.extraJavaOptions</name>
+    <value>-XX:UseNUMA</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
