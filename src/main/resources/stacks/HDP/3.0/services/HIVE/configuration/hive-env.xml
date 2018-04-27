@@ -38,21 +38,6 @@
     </depends-on>
   </property>
   <property>
-    <name>hive.client.heapsize</name>
-    <value>512</value>
-    <description>Hive Client Java heap size</description>
-    <display-name>Client Heap Size</display-name>
-    <value-attributes>
-      <type>int</type>
-      <minimum>512</minimum>
-      <maximum>2048</maximum>
-      <unit>MB</unit>
-      <increment-step>512</increment-step>
-      <overridable>false</overridable>
-    </value-attributes>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
     <name>hive.metastore.heapsize</name>
     <value>1024</value>
     <description>Hive Metastore Java heap size</description>

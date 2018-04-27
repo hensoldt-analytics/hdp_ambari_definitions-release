@@ -216,10 +216,6 @@
           "subsection-name": "optimization-row2-col2"
         },
         {
-          "config": "hive-env/hive.client.heapsize",
-          "subsection-name": "optimization-row2-col2"
-        },
-        {
           "config": "hive-site/hive.auto.convert.join.noconditionaltask.size",
           "subsection-name": "optimization-row2-col3"
         },
@@ -591,17 +587,6 @@
       },
       {
         "config": "hive-env/hive.metastore.heapsize",
-        "widget": {
-          "type": "slider",
-          "units": [
-            {
-              "unit-name": "MB"
-            }
-          ]
-        }
-      },
-      {
-        "config": "hive-env/hive.client.heapsize",
         "widget": {
           "type": "slider",
           "units": [

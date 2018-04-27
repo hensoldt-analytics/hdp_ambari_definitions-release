@@ -498,10 +498,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
       putHiveEnvPropertyAttribute("hive.metastore.heapsize", "maximum", max(1024, hs_host_ram))
       putHiveEnvPropertyAttribute("hive.heapsize", "maximum", max(1024, hs_host_ram))
 
-    if hive_client_hosts is not None and len(hive_client_hosts):
-      putHiveEnvProperty("hive.client.heapsize", 1024)
-      putHiveEnvPropertyAttribute("hive.client.heapsize", "maximum", max(1024, int(hive_client_hosts[0]["Hosts"]["total_mem"]/1024)))
-
     # TEZ JVM options
     jvmGCParams = "-XX:+UseParallelGC"
     if "ambari-server-properties" in services and "java.home" in services["ambari-server-properties"]:
