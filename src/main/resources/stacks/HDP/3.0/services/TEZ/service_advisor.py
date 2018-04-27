@@ -24,7 +24,7 @@ import traceback
 import re
 import socket
 import fnmatch
-
+import subprocess
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -158,7 +158,7 @@ class TezRecommender(service_advisor.ServiceAdvisor):
     putTezProperty("tez.am.resource.memory.mb", int(clusterData['amMemory']))
     putTezProperty("tez.am.java.opts",
                    "-server -Xmx" + str(int(0.8 * clusterData["amMemory"]))
-                   + "m -Djava.net.preferIPv4Stack=true -XX:+UseNUMA -XX:+UseParallelGC")
+                   + "m -Djava.net.preferIPv4Stack=true")
     recommended_tez_queue = self.recommendYarnQueue(services, "tez-site", "tez.queue.name")
     if recommended_tez_queue is not None:
       putTezProperty("tez.queue.name", recommended_tez_queue)
@@ -287,12 +287,9 @@ class TezRecommender(service_advisor.ServiceAdvisor):
     jvmGCParams = "-XX:+UseParallelGC"
     if "ambari-server-properties" in services and "java.home" in services["ambari-server-properties"]:
       # JDK8 needs different parameters
-      match = re.match(".*\/jdk(1\.\d+)[\-\_\.][^/]*$", services["ambari-server-properties"]["java.home"])
-      if match and len(match.groups()) > 0:
-        # Is version >= 1.8
-        versionSplits = re.split("\.", match.group(1))
-        if versionSplits and len(versionSplits) > 1 and int(versionSplits[0]) > 0 and int(versionSplits[1]) > 7:
-          jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
+      jdkMajorVersion = self.__getJdkMajorVersion(services["ambari-server-properties"]["java.home"])
+      if jdkMajorVersion and len(jdkMajorVersion) > 1 and int(jdkMajorVersion[0]) > 0 and int(jdkMajorVersion[1]) > 7:
+        jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
       # Note: Same calculation is done in 2.6/stack_advisor::recommendTezConfigurations() for 'tez.task.launch.cmd-opts',
     # and along with it, are appended heap dump opts. If something changes here, make sure to change it in 2.6 stack.
     putTezProperty('tez.am.launch.cmd-opts', "-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA " + jvmGCParams)
@@ -306,12 +303,9 @@ class TezRecommender(service_advisor.ServiceAdvisor):
     jvmGCParams = "-XX:+UseParallelGC"
     if "ambari-server-properties" in services and "java.home" in services["ambari-server-properties"]:
       # JDK8 needs different parameters
-      match = re.match(".*\/jdk(1\.\d+)[\-\_\.][^/]*$", services["ambari-server-properties"]["java.home"])
-      if match and len(match.groups()) > 0:
-        # Is version >= 1.8
-        versionSplits = re.split("\.", match.group(1))
-        if versionSplits and len(versionSplits) > 1 and int(versionSplits[0]) > 0 and int(versionSplits[1]) > 7:
-          jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
+      jdkMajorVersion = self.__getJdkMajorVersion(services["ambari-server-properties"]["java.home"])
+      if jdkMajorVersion and len(jdkMajorVersion) > 1 and int(jdkMajorVersion[0]) > 0 and int(jdkMajorVersion[1]) > 7:
+        jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
     tez_jvm_opts = "-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA "
     # Append 'jvmGCParams' and 'Heap Dump related option' (({{heap_dump_opts}}) Expanded while writing the
     # configurations at start/restart time).
@@ -320,6 +314,16 @@ class TezRecommender(service_advisor.ServiceAdvisor):
     putTezProperty('tez.task.launch.cmd-opts', tez_jvm_updated_opts)
     self.logger.info("Updated 'tez-site' config 'tez.task.launch.cmd-opts' and 'tez.am.launch.cmd-opts' as "
                 ": {0}".format(tez_jvm_updated_opts))
+
+
+  def __getJdkMajorVersion(self, javaHome):
+    jdkVersion = subprocess.check_output([javaHome + "/bin/java", "-version"], stderr=subprocess.STDOUT)
+    pattern = '\"(\d+\.\d+).*\"'
+    majorVersionString = re.search(pattern, jdkVersion).groups()[0]
+    if majorVersionString:
+      return re.split("\.", majorVersionString)
+    else:
+      return None
 
 
 class TezValidator(service_advisor.ServiceAdvisor):
