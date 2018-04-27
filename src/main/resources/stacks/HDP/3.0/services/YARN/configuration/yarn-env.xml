@@ -172,9 +172,9 @@
   <property>
     <name>registry.dns.bind-port</name>
     <display-name>RegistryDNS Bind Port</display-name>
-    <value>5353</value>
+    <value>53</value>
     <description>
-      The port number for the DNS listener. The default port is 5353.
+      The port number for the DNS listener. The default port is 53.
     </description>
     <on-ambari-upgrade add="false"/>
   </property>

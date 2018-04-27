@@ -398,7 +398,7 @@
         "source": {
           "type": "PORT",
           "uri": "{{yarn-env/registry.dns.bind-port}}",
-          "default_port": 5353,
+          "default_port": 53,
           "reporting": {
             "ok": {
               "text": "TCP OK - {0:.3f}s response on port {1}"

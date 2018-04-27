@@ -153,7 +153,7 @@ def checkAndStopRegistyDNS(cmd):
           # immediately, then the configs in yarn-env.sh & yarn-site.xml related
           # to registry dns may have already changed. This introduces a discrepancy
           # between the actual process that is running and the configs.
-          # For example, when port is changed from 5353 to 53,
+          # For example, when port is changed from 5300 to 53,
           # then dns port = 53 in yarn-site and YARN_REGISTRYDNS_SECURE_* envs in yarn-env.sh
           # are saved. So, while trying to shutdown the stray non-privileged registry dns process
           # after sometime, yarn daemon from the configs thinks that it needs privileged
