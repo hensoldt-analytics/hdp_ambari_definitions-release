@@ -32,7 +32,7 @@ from resource_management.libraries.functions.default import default
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 if not OSCheck.is_windows_family():
-    root_user = pwd.getpwuid(os.getuid()).pw_name
+    root_user = 'root'
 
 mapred_user = config['configurations']['mapred-env']['mapred_user']
 yarn_user = config['configurations']['yarn-env']['yarn_user']
