@@ -117,14 +117,6 @@
                       "column-span": "1"
                     },
                     {
-                      "name": "optimization-row1-col3",
-                      "display-name": "CBO",
-                      "row-index": "0",
-                      "column-index": "2",
-                      "row-span": "1",
-                      "column-span": "1"
-                    },
-                    {
                       "name": "optimization-row2-col1",
                       "display-name": "Storage",
                       "row-index": "1",
@@ -294,14 +286,6 @@
         {
           "config": "hive-site/hive.prewarm.numcontainers",
           "subsection-name": "optimization-row1-col2"
-        },
-        {
-          "config": "hive-site/hive.cbo.enable",
-          "subsection-name": "optimization-row1-col3"
-        },
-        {
-          "config": "hive-site/hive.stats.fetch.column.stats",
-          "subsection-name": "optimization-row1-col3"
         },
         {
           "config": "hive-env/hive_security_authorization",
@@ -685,18 +669,6 @@
               "unit-name": "int"
             }
           ]
-        }
-      },
-      {
-        "config": "hive-site/hive.cbo.enable",
-        "widget": {
-          "type": "toggle"
-        }
-      },
-      {
-        "config": "hive-site/hive.stats.fetch.column.stats",
-        "widget": {
-          "type": "toggle"
         }
       },
       {
