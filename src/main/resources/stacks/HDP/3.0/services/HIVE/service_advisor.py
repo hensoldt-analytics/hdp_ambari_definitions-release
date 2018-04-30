@@ -499,15 +499,8 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
       putHiveEnvPropertyAttribute("hive.heapsize", "maximum", max(1024, hs_host_ram))
 
     # TEZ JVM options
-    jvmGCParams = "-XX:+UseParallelGC"
-    if "ambari-server-properties" in services and "java.home" in services["ambari-server-properties"]:
-      # JDK8 needs different parameters
-      match = re.match(".*\/jdk(1\.\d+)[\-\_\.][^/]*$", services["ambari-server-properties"]["java.home"])
-      if match and len(match.groups()) > 0:
-        # Is version >= 1.8
-        versionSplits = re.split("\.", match.group(1))
-        if versionSplits and len(versionSplits) > 1 and int(versionSplits[0]) > 0 and int(versionSplits[1]) > 7:
-          jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
+    # These jvm params are jdk8 only may not work on prior jdk versions but thats ok since HDP3 is jdk8 only
+    jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
     putHiveSiteProperty("hive.tez.java.opts", "-server -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA " + jvmGCParams + " -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps")
 
     # if hive using sqla db, then we should add DataNucleus property
