@@ -467,6 +467,16 @@
         "name": "kafka_extended_sasl_support",
         "description": "Support SASL PLAIN and GSSAPI",
         "min_version": "3.0.0.0"
+      },
+      {
+        "name": "registry_support_db_user_creation",
+        "description": "Supports registry's database and user creation on the fly",
+        "min_version": "3.0.0.0"
+      },
+      {
+        "name": "streamline_support_db_user_creation",
+        "description": "Supports Streamline's database and user creation on the fly",
+        "min_version": "3.0.0.0"
       }
     ]
   }
