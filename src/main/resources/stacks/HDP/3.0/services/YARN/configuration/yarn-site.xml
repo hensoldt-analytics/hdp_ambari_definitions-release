@@ -127,6 +127,13 @@
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>yarn.resourcemanager.placement-constraints.handler</name>
+    <value>scheduler</value>
+    <description> allows applications to specify placement constraints in the
+      form of data locality or node labels.  </description>
+    <on-ambari-upgrade add="false"/>
+  </property>
   <!-- NodeManager -->
   <property>
     <name>yarn.nodemanager.address</name>
