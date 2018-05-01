@@ -474,7 +474,12 @@
   </property>
   <property>
     <name>tez.history.logging.service.class</name>
-    <value>org.apache.tez.dag.history.logging.ats.ATSV15HistoryLoggingService</value>
+    <value>org.apache.tez.dag.history.logging.proto.ProtoHistoryLoggingService</value>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>tez.history.logging.proto-base-dir</name>
+    <value>{{hive_metastore_warehouse_dir}}/sys</value>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>

@@ -1957,6 +1957,20 @@ limitations under the License.
     </description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>hive.hook.proto.base-directory</name>
+    <value>{{hive_metastore_warehouse_dir}}/sys/query_data/</value>
+    <description>
+      Base directory for hive proto hook.
+    </description>
+    <depends-on>
+      <property>
+        <type>hive-site</type>
+        <name>hive.metastore.warehouse.dir</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
 
   <!-- Hive properties from interactive -->
   <property>

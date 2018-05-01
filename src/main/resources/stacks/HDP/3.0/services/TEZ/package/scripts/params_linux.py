@@ -112,5 +112,10 @@ HdfsResource = functools.partial(
   dfs_type = dfs_type
 )
 
+hive_metastore_warehouse_dir = ""
+if 'hive-site' in config['configurations'] \
+  and 'hive.metastore.warehouse.dir' in config['configurations']['hive-site']:
+  hive_metastore_warehouse_dir = config['configurations']['hive-site']['hive.metastore.warehouse.dir']
+
 
 

@@ -262,10 +262,9 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     if hiveMetastoreHost is not None and len(hiveMetastoreHost) > 0:
       putHiveSiteProperty("hive.metastore.uris", "thrift://" + hiveMetastoreHost["Hosts"]["host_name"] + ":9083")
 
-    # ATS
+    # DAS Hook
     putHiveEnvProperty("hive_timeline_logging_enabled", "false")
-    include_ats_hook = False
-    ats_hook_class = "org.apache.hadoop.hive.ql.hooks.ATSHook"
+    das_hook_class = "org.apache.tez.dag.history.logging.proto.ProtoHistoryLoggingService"
 
     hooks_properties = ["hive.exec.pre.hooks", "hive.exec.post.hooks", "hive.exec.failure.hooks"]
     for hooks_property in hooks_properties:
@@ -273,22 +272,13 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
         hooks_value = configurations["hive-site"]["properties"][hooks_property]
       else:
         hooks_value = " "
-      if include_ats_hook and ats_hook_class not in hooks_value:
+      if das_hook_class not in hooks_value:
         if hooks_value == " ":
-          hooks_value = ats_hook_class
+          hooks_value = das_hook_class
         else:
-          hooks_value = hooks_value + "," + ats_hook_class
-      if not include_ats_hook and ats_hook_class in hooks_value:
-        hooks_classes = []
-        for hook_class in hooks_value.split(","):
-          if hook_class != ats_hook_class and hook_class != " ":
-            hooks_classes.append(hook_class)
-        if hooks_classes:
-          hooks_value = ",".join(hooks_classes)
-        else:
-          hooks_value = " "
-
-      putHiveSiteProperty(hooks_property, hooks_value)
+          hooks_value = hooks_value + "," + das_hook_class
+        # Put updated hooks property
+        putHiveSiteProperty(hooks_property, hooks_value)
 
     # Tez Engine
     putHiveSiteProperty("hive.execution.engine", "tez" if "TEZ" in servicesList else "mr")

@@ -458,8 +458,8 @@ hive_env_sh_template = config['configurations']['hive-env']['content']
 
 hive_hdfs_user_dir = format("/user/{hive_user}")
 hive_hdfs_user_mode = 0755
-hive_apps_whs_dir = config['configurations']['hive-site']["hive.metastore.warehouse.dir"]
-whs_dir_protocol = urlparse(hive_apps_whs_dir).scheme
+hive_metastore_warehouse_dir = config['configurations']['hive-site']["hive.metastore.warehouse.dir"]
+whs_dir_protocol = urlparse(hive_metastore_warehouse_dir).scheme
 hive_exec_scratchdir = config['configurations']['hive-site']["hive.exec.scratchdir"]
 #for create_hdfs_directory
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
