@@ -13,25 +13,6 @@
               "tab-rows": 6,
               "tab-columns": 3,
               "sections": [
-                 {
-                  "name": "acid-transactions",
-                  "display-name": "ACID Transactions",
-                  "row-index": "0",
-                  "column-index": "0",
-                  "row-span": "1",
-                  "column-span": "1",
-                  "section-columns": "1",
-                  "section-rows": "1",
-                  "subsections": [
-                    {
-                      "name": "acid-transactions-row1-col1-1",
-                      "row-index": "0",
-                      "column-index": "0",
-                      "row-span": "1",
-                      "column-span": "1"
-                    }
-                  ]
-                },
                 {
                   "name": "misc-settings",
                   "display-name": "Miscellaneous Settings",
@@ -56,7 +37,7 @@
                   "name": "interactive-query",
                   "display-name": "Interactive Query",
                   "row-index": "0",
-                  "column-index": "1",
+                  "column-index": "0",
                   "row-span": "1",
                   "column-span": "1",
                   "section-columns": "1",
@@ -75,7 +56,7 @@
                   "name": "security",
                   "display-name": "Security",
                   "row-index": "0",
-                  "column-index": "2",
+                  "column-index": "1",
                   "row-span": "1",
                   "column-span": "1",
                   "section-columns": "1",
@@ -194,62 +175,6 @@
         {
           "config": "hive-site/hive.exec.reducers.bytes.per.reducer",
           "subsection-name": "optimization-row2-col3"
-        },
-        {
-          "config": "hive-env/hive_txn_acid",
-          "subsection-name": "acid-transactions-row1-col1-1"
-        },
-        {
-          "config": "hive-site/hive.compactor.initiator.on",
-          "subsection-name": "acid-transactions-row1-col1-1"
-        },
-        {
-          "config": "hive-site/hive.compactor.worker.threads",
-          "subsection-name": "acid-transactions-row1-col1-1"
-        },
-        {
-          "config": "hive-site/hive.create.as.insert.only",
-          "subsection-name": "acid-transactions-row1-col1-1",
-          "depends-on": [
-            {
-              "configs":[
-                "hive-env/hive_txn_acid"
-              ],
-              "if": "${hive-env/hive_txn_acid} === on",
-              "then": {
-                "property_value_attributes": {
-                  "visible": true
-                }
-              },
-              "else": {
-                "property_value_attributes": {
-                  "visible": false
-                }
-              }
-            }
-          ]
-        },
-        {
-          "config": "hive-site/metastore.create.as.acid",
-          "subsection-name": "acid-transactions-row1-col1-1",
-          "depends-on": [
-            {
-              "configs":[
-                "hive-env/hive_txn_acid"
-              ],
-              "if": "${hive-env/hive_txn_acid} === on",
-              "then": {
-                "property_value_attributes": {
-                  "visible": true
-                }
-              },
-              "else": {
-                "property_value_attributes": {
-                  "visible": false
-                }
-              }
-            }
-          ]
         },
         {
           "config": "hive-site/hive.execution.engine",
@@ -557,41 +482,6 @@
               "unit-name": "MB"
             }
           ]
-        }
-      },
-      {
-        "config": "hive-env/hive_txn_acid",
-        "widget": {
-          "type": "toggle"
-        }
-      },
-      {
-        "config": "hive-site/hive.compactor.initiator.on",
-        "widget": {
-          "type": "toggle"
-        }
-      },
-      {
-        "config": "hive-site/hive.compactor.worker.threads",
-        "widget": {
-          "type": "slider",
-          "units": [
-            {
-              "unit-name": "int"
-            }
-          ]
-        }
-      },
-      {
-        "config": "hive-site/hive.create.as.insert.only",
-        "widget": {
-          "type": "toggle"
-        }
-      },
-      {
-        "config": "hive-site/metastore.create.as.acid",
-        "widget": {
-          "type": "toggle"
         }
       },
       {

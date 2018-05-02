@@ -252,23 +252,11 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
           putHiveProperty("javax.jdo.option.ConnectionURL", dbConnection)
 
     # Transactions
-    putHiveEnvProperty("hive_txn_acid", "on")
-    if str(configurations["hive-env"]["properties"]["hive_txn_acid"]).lower() == "on":
-      putHiveSiteProperty("hive.txn.manager", "org.apache.hadoop.hive.ql.lockmgr.DbTxnManager")
-      putHiveSiteProperty("hive.support.concurrency", "true")
-      putHiveSiteProperty("hive.compactor.initiator.on", "true")
-      putHiveSiteProperty("hive.compactor.worker.threads", "1")
-      putHiveSiteProperty("hive.exec.dynamic.partition.mode", "nonstrict")
-      putHiveSiteProperty("metastore.create.as.acid", "true")
-      putHiveSiteProperty("hive.create.as.insert.only", "true")
-    else:
-      putHiveSiteProperty("hive.txn.manager", "org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager")
-      putHiveSiteProperty("hive.support.concurrency", "false")
-      putHiveSiteProperty("hive.compactor.initiator.on", "false")
-      putHiveSiteProperty("hive.compactor.worker.threads", "0")
-      putHiveSiteProperty("hive.exec.dynamic.partition.mode", "strict")
-      putHiveSiteProperty("metastore.create.as.acid", "false")
-      putHiveSiteProperty("hive.create.as.insert.only", "false")
+    hs2Hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER", services, hosts)
+    cpu_count = 0
+    for hostData in hs2Hosts:
+      cpu_count = max(cpu_count, hostData["Hosts"]["cpu_count"])
+    putHiveSiteProperty("hive.compactor.worker.threads", str(max(cpu_count / 8, 1)))
 
     hiveMetastoreHost = self.getHostWithComponent("HIVE", "HIVE_METASTORE", services, hosts)
     if hiveMetastoreHost is not None and len(hiveMetastoreHost) > 0:

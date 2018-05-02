@@ -117,7 +117,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.compactor.initiator.on</name>
-    <value>false</value>
+    <value>true</value>
     <description>Whether to run the compactor's initiator thread in this metastore instance or not. If there is more than one instance of the thrift metastore this should be set to true on only one instance. Setting true on only one host can be achieved by creating a config-group containing the metastore host, and overriding the default value to true in it.</description>
     <display-name>Run Compactor</display-name>
     <value-attributes>
@@ -134,13 +134,7 @@ limitations under the License.
       </entries>
       <selection-cardinality>1</selection-cardinality>
     </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_txn_acid</name>
-      </property>
-    </depends-on>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.compactor.worker.threads</name>
@@ -153,17 +147,11 @@ limitations under the License.
       <maximum>20</maximum>
       <increment-step>1</increment-step>
     </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_txn_acid</name>
-      </property>
-    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.create.as.insert.only</name>
-    <value>false</value>
+    <value>true</value>
     <description>Whether the eligible tables should be created as ACID insert-only by default. Does not apply to external tables, the ones using storage handlers, etc.</description>
     <display-name>Create Tables as ACID Insert Only</display-name>
     <value-attributes>
@@ -180,17 +168,11 @@ limitations under the License.
       </entries>
       <selection-cardinality>1</selection-cardinality>
     </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_txn_acid</name>
-      </property>
-    </depends-on>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>metastore.create.as.acid</name>
-    <value>false</value>
+    <value>true</value>
     <description>Whether the eligible tables should be created as full ACID by default. Does not apply to external tables, the ones using storage handlers, etc.</description>
     <display-name>Create Tables as Full ACID</display-name>
     <value-attributes>
@@ -207,13 +189,7 @@ limitations under the License.
       </entries>
       <selection-cardinality>1</selection-cardinality>
     </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_txn_acid</name>
-      </property>
-    </depends-on>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.compactor.delta.num.threshold</name>
@@ -503,12 +479,6 @@ limitations under the License.
       </entries>
       <selection-cardinality>1</selection-cardinality>
     </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_txn_acid</name>
-      </property>
-    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1017,7 +987,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.txn.manager</name>
-    <value>org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager</value>
+    <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
     <description/>
     <display-name>Transaction Manager</display-name>
     <value-attributes>
@@ -1034,13 +1004,7 @@ limitations under the License.
       </entries>
       <selection-cardinality>1</selection-cardinality>
     </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_txn_acid</name>
-      </property>
-    </depends-on>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.txn.max.open.batch</name>
@@ -1055,7 +1019,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.support.concurrency</name>
-    <value>false</value>
+    <value>true</value>
     <description>
       Support concurrency and use locks, needed for Transactions. Requires Zookeeper.
     </description>
@@ -1074,13 +1038,7 @@ limitations under the License.
       </entries>
       <selection-cardinality>1</selection-cardinality>
     </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_txn_acid</name>
-      </property>
-    </depends-on>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.cli.print.header</name>
