@@ -270,7 +270,7 @@
   </property>
   <property>
     <name>spark.executor.extraJavaOptions</name>
-    <value>-XX:UseNUMA</value>
+    <value>-XX:+UseNUMA</value>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
