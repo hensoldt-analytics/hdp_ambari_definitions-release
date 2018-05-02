@@ -517,6 +517,20 @@ limitations under the License.
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>hive.metastore.db.type</name>
+    <value>{{hive_metastore_db_type}}</value>
+    <display-name>Hive Metastore Database Type</display-name>
+    <description>Hive Metastore Database Type.</description>
+    <depends-on>
+      <property>
+        <type>hive-env</type>
+        <name>hive_database_type</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
   <property require-input="true">
     <name>javax.jdo.option.ConnectionPassword</name>
     <value/>
