@@ -84,7 +84,7 @@
   <appender name="console" class="org.apache.log4j.ConsoleAppender">
     <param name="Target" value="System.out"/>
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d %-5p - [%t:%x] ~ %m (%c{1}:%L)%n"/>
+      <param name="ConversionPattern" value="%d{ISO8601} %-5p - [%t:%x] ~ %m (%c{1}:%L)%n"/>
     </layout>
   </appender>
 
@@ -94,7 +94,7 @@
     <param name="MaxFileSize" value="{{atlas_log_max_backup_size}}MB" />
     <param name="MaxBackupIndex" value="{{atlas_log_number_of_backup_files}}" />
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d %-5p - [%t:%x] ~ %m (%c{1}:%L)%n"/>
+      <param name="ConversionPattern" value="%d{ISO8601} %-5p - [%t:%x] ~ %m (%c{1}:%L)%n"/>
     </layout>
   </appender>
 
@@ -104,7 +104,7 @@
     <param name="datePattern" value="'.'yyyy-MM-dd" />
     <param name="append" value="true" />
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d|%t|%m%n" />
+      <param name="ConversionPattern" value="%d{ISO8601}|%t|%m%n" />
     </layout>
   </appender>
 
@@ -119,7 +119,7 @@
     <param name="Append" value="true"/>
     <param name="Threshold" value="info"/>
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%d %x %m%n"/>
+      <param name="ConversionPattern" value="%d{ISO8601} %x %m%n"/>
     </layout>
   </appender>
 

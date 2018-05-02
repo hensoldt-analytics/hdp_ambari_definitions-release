@@ -73,7 +73,7 @@ log4j.appender.xa_log_appender.file=${logdir}/xa_portal.log
 log4j.appender.xa_log_appender.datePattern='.'yyyy-MM-dd
 log4j.appender.xa_log_appender.append=true
 log4j.appender.xa_log_appender.layout=org.apache.log4j.PatternLayout
-log4j.appender.xa_log_appender.layout.ConversionPattern=%d [%t] %-5p %C{6} (%F:%L) - %m%n
+log4j.appender.xa_log_appender.layout.ConversionPattern=%d{ISO8601} [%t] %-5p %C{6} (%F:%L) - %m%n
 log4j.appender.xa_log_appender.MaxFileSize={{ranger_xa_log_maxfilesize}}MB
 
 # xa_log_appender : category and additivity
@@ -92,7 +92,7 @@ log4j.appender.perf_appender.file=${logdir}/ranger_admin_perf.log
 log4j.appender.perf_appender.datePattern='.'yyyy-MM-dd
 log4j.appender.perf_appender.append=true
 log4j.appender.perf_appender.layout=org.apache.log4j.PatternLayout
-log4j.appender.perf_appender.layout.ConversionPattern=%d [%t] %m%n
+log4j.appender.perf_appender.layout.ConversionPattern=%d{ISO8601} [%t] %m%n
 
 
 # sql_appender
@@ -101,7 +101,7 @@ log4j.appender.sql_appender.file=${logdir}/xa_portal_sql.log
 log4j.appender.sql_appender.datePattern='.'yyyy-MM-dd
 log4j.appender.sql_appender.append=true
 log4j.appender.sql_appender.layout=org.apache.log4j.PatternLayout
-log4j.appender.sql_appender.layout.ConversionPattern=%d [%t] %-5p %C{6} (%F:%L) - %m%n
+log4j.appender.sql_appender.layout.ConversionPattern=%d{ISO8601} [%t] %-5p %C{6} (%F:%L) - %m%n
 
 # sql_appender : category and additivity
 log4j.category.org.hibernate.SQL=warn,sql_appender

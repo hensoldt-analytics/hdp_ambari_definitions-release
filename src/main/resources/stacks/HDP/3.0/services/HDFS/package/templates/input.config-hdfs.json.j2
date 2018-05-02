@@ -33,7 +33,7 @@
       "path":"{{default('/configurations/hadoop-env/hdfs_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/hadoop-env/hdfs_user', 'hdfs')}}/hadoop-{{default('configurations/hadoop-env/hdfs_user', 'hdfs')}}-journalnode-*.log"
     },
     {
-      "type":"hdfs_secondarynamenode",
+      "type":"hdfs_secondary_namenode",
       "rowtype":"service",
       "path":"{{default('/configurations/hadoop-env/hdfs_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/hadoop-env/hdfs_user', 'hdfs')}}/hadoop-{{default('configurations/hadoop-env/hdfs_user', 'hdfs')}}-secondarynamenode-*.log"
     },
@@ -68,7 +68,7 @@
           "type":[
             "hdfs_datanode",
             "hdfs_journalnode",
-            "hdfs_secondarynamenode",
+            "hdfs_secondary_namenode",
             "hdfs_namenode",
             "hdfs_zkfc",
             "hdfs_nfs3"
