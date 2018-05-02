@@ -72,7 +72,7 @@
 
 
       # The maximum amount of heap to use. Default is left to JVM default.
-      export HBASE_HEAPSIZE=4G
+      # export HBASE_HEAPSIZE=4G
 
       # Extra Java runtime options.
       # Below are what we set by default. May only work with SUN JVM.
@@ -122,8 +122,8 @@
       {% endif %}
 
       export HBASE_OPTS="$HBASE_OPTS -XX:+UseConcMarkSweepGC -XX:ErrorFile=$HBASE_LOG_DIR/hs_err_pid%p.log -Djava.io.tmpdir={{yarn_hbase_java_io_tmpdir}}"
-      export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS $JDK_DEPENDED_OPTS"
-      export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -XX:CMSInitiatingOccupancyFraction=70 -XX:ReservedCodeCacheSize=256m $JDK_DEPENDED_OPTS"
+      export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx{{yarn_hbase_master_heapsize}} $JDK_DEPENDED_OPTS"
+      export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -XX:CMSInitiatingOccupancyFraction=70 -XX:ReservedCodeCacheSize=256m -Xms{{yarn_hbase_regionserver_heapsize}} -Xmx{{yarn_hbase_regionserver_heapsize}} $JDK_DEPENDED_OPTS"
 
       {% if security_enabled %}
       export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Djava.security.auth.login.config={{yarn_hbase_master_jaas_file}}"
@@ -139,6 +139,9 @@
     <name>is_hbase_system_service_launch</name>
     <value>false</value>
     <description>Should Hbase cluster started as system service.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -157,7 +160,7 @@
   </property>
   <property>
     <name>yarn_hbase_system_service_launch_mode</name>
-    <value>async</value>
+    <value>sync</value>
     <description>Should services are launched as sync or async.</description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -172,6 +175,13 @@
     <name>yarn_hbase_master_memory</name>
     <value>4096</value>
     <description>master container memory in MB.</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>2048</minimum>
+      <maximum>4096</maximum>
+      <unit>MB</unit>
+      <increment-step>256</increment-step>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -191,6 +201,13 @@
     <name>yarn_hbase_regionserver_memory</name>
     <value>4096</value>
     <description>regionserver container memory in MB.</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>2048</minimum>
+      <maximum>4096</maximum>
+      <unit>MB</unit>
+      <increment-step>256</increment-step>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -208,14 +225,27 @@
   </property>
   <property>
     <name>yarn_hbase_client_memory</name>
-    <value>1024</value>
+    <value>1536</value>
     <description>client container memory in MB.</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1024</minimum>
+      <maximum>2048</maximum>
+      <unit>MB</unit>
+      <increment-step>256</increment-step>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>yarn_hbase_client_containers</name>
     <value>1</value>
     <description>Number of containers to launch for client.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn_hbase_heap_memory_factor</name>
+    <value>0.8</value>
+    <description>Heap memory is auto derived using this factor.</description>
     <on-ambari-upgrade add="false"/>
   </property>
 </configuration>

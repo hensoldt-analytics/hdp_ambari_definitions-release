@@ -24,15 +24,41 @@
     "env": {
       "HBASE_IDENT_STRING": "${USER}",
       "HBASE_LOG_DIR": "<LOG_DIR>",
+      "HBASE_CONF_DIR": "$PWD/conf",
       "HBASE_PID_DIR": "$PWD/pids",
-      "HBASE_ROOT_LOGGER": "INFO,RFA"
-    }
+      "JAVA_HOME": "{{java64_home}}",
+      "HBASE_ROOT_LOGGER": "INFO,RFA",
+      "SERVER_GC_OPTS": "-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:${HBASE_LOG_DIR}/gc.log-`date +'%Y%m%d%H%M'`",
+      "HBASE_OPTS": "-XX:+UseConcMarkSweepGC -XX:ErrorFile=${HBASE_LOG_DIR}/hs_err_pid%p.log -Djava.io.tmpdir=/tmp"
+    },
+    "files": [
+      {
+        "type": "TEMPLATE",
+        "dest_file": "log4j.properties",
+        "src_file": "{{yarn_hbase_user_home}}/log4j.properties"
+      },
+      {
+        "type": "TEMPLATE",
+        "dest_file": "hbase-site.xml",
+        "src_file": "{{yarn_hbase_user_home}}/hbase-site.xml"
+      },
+      {
+        "type": "TEMPLATE",
+        "dest_file": "hbase-policy.xml",
+        "src_file": "{{yarn_hbase_user_home}}/hbase-policy.xml"
+      },
+      {
+        "type": "TEMPLATE",
+        "dest_file": "core-site.xml",
+        "src_file": "{{yarn_hbase_user_home}}/core-site.xml"
+      }
+    ]
   },
   "components": [
     {
       "name": "master",
       "number_of_containers": {{yarn_hbase_master_containers}},
-      "launch_command": "{{stack_root}}/current/hbase-master/bin/hbase --config {{yarn_hbase_conf_dir}} master start",
+      "launch_command": "{{stack_root}}/current/hbase-master/bin/hbase master start",
       "readiness_check": {
         "type": "HTTP",
         "properties": {
@@ -46,14 +72,15 @@
       "configuration": {
         "env": {
           "HBASE_LOG_PREFIX": "hbase-$HBASE_IDENT_STRING-master-$HOSTNAME",
-          "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log"
+          "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log",
+          "HBASE_MASTER_OPTS": "-Xms{{yarn_hbase_master_heapsize}} -Xmx{{yarn_hbase_master_heapsize}}"
         }
       }
     },
     {
       "name": "regionserver",
       "number_of_containers": {{yarn_hbase_regionserver_containers}},
-      "launch_command": "{{stack_root}}/current/hbase-regionserver/bin/hbase --config {{yarn_hbase_conf_dir}} regionserver start",
+      "launch_command": "{{stack_root}}/current/hbase-regionserver/bin/hbase regionserver start",
       "dependencies": [ "master" ],
       "resource": {
         "cpus": {{yarn_hbase_regionserver_cpu}},
@@ -62,7 +89,8 @@
       "configuration": {
         "env": {
           "HBASE_LOG_PREFIX": "hbase-$HBASE_IDENT_STRING-regionserver-$HOSTNAME",
-          "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log"
+          "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log",
+          "HBASE_REGIONSERVER_OPTS": "-XX:CMSInitiatingOccupancyFraction=70 -XX:ReservedCodeCacheSize=256m -Xms{{yarn_hbase_regionserver_heapsize}} -Xmx{{yarn_hbase_regionserver_heapsize}}"
         }
       }
     },

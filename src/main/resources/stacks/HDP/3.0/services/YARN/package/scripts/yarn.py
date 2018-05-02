@@ -83,19 +83,16 @@ def yarn(name=None, config_dir=None):
   # Some of these function calls depend on the directories above being created first.
   if name == 'resourcemanager':
     setup_resourcemanager()
-    if params.is_hbase_system_service_launch:
-        setup_system_services()
   elif name == 'nodemanager':
     setup_nodemanager()
-    if params.is_hbase_system_service_launch:
-        setup_atsv2_backend()
   elif name == 'apptimelineserver':
     setup_ats()
   elif name == 'historyserver':
     setup_historyserver()
   elif name == 'apptimelinereader':
     if not params.is_hbase_system_service_launch:
-       setup_atsv2_backend()
+       setup_atsv2_hbase_directories()
+       setup_atsv2_hbase_files()
 
    # if there is the viewFS mount table content, create separate xml config and include in in the core-site
    # else just create core-site
@@ -349,6 +346,8 @@ def yarn(name=None, config_dir=None):
          owner=params.mapred_user,
          group=params.user_group
     )
+
+  setup_atsv2_backend(name,config_dir)
 
 def setup_historyserver():
   import params
@@ -610,9 +609,14 @@ def yarn(name = None):
                   username = params.yarn_user,
                   password = Script.get_password(params.yarn_user))
 
-def setup_atsv2_backend():
-    setup_atsv2_hbase_directories()
-    setup_atsv2_hbase_files()
+def setup_atsv2_backend(name=None, config_dir=None):
+    import params
+    if params.is_hbase_system_service_launch:
+       if name == 'resourcemanager':
+          setup_system_services(config_dir)
+       elif name == 'nodemanager':
+          setup_atsv2_hbase_files()
+
 
 def setup_atsv2_hbase_files():
     import params
@@ -685,9 +689,9 @@ def setup_atsv2_hbase_directories():
               )
         Execute(("chmod", "1777", parent_dir), sudo=True)
 
-def setup_system_services():
+def setup_system_services(config_dir=None):
     import  params
-
+    setup_atsv2_hbase_files()
     if params.security_enabled:
         File(os.path.join(params.yarn_hbase_conf_dir, 'hbase.yarnfile'),
              owner=params.yarn_hbase_user,
@@ -730,12 +734,44 @@ def setup_system_services():
                         group=params.user_group,
                         replace_existing_files=True
                         )
-    params.HdfsResource(format("/user/{yarn_hbase_user}"),
+    params.HdfsResource(format("{yarn_hbase_user_home}"),
                         type="directory",
                         action="create_on_execute",
                         owner=params.yarn_hbase_user,
                         group=params.user_group,
                         mode=0770,
+                        )
+    params.HdfsResource(format("{yarn_hbase_user_home}/core-site.xml"),
+                        type="file",
+                        action="create_on_execute",
+                        source=format("{config_dir}/core-site.xml"),
+                        owner=params.yarn_hbase_user,
+                        group=params.user_group,
+                        replace_existing_files=True
+                        )
+    params.HdfsResource(format("{yarn_hbase_user_home}/hbase-site.xml"),
+                        type="file",
+                        action="create_on_execute",
+                        source=format("{yarn_hbase_conf_dir}/hbase-site.xml"),
+                        owner=params.yarn_hbase_user,
+                        group=params.user_group,
+                        replace_existing_files=True
+                        )
+    params.HdfsResource(format("{yarn_hbase_user_home}/hbase-policy.xml"),
+                        type="file",
+                        action="create_on_execute",
+                        source=format("{yarn_hbase_conf_dir}/hbase-policy.xml"),
+                        owner=params.yarn_hbase_user,
+                        group=params.user_group,
+                        replace_existing_files=True
+                        )
+    params.HdfsResource(format("{yarn_hbase_user_home}/log4j.properties"),
+                        type="file",
+                        action="create_on_execute",
+                        source=format("{yarn_hbase_conf_dir}/log4j.properties"),
+                        owner=params.yarn_hbase_user,
+                        group=params.user_group,
+                        replace_existing_files=True
                         )
     params.HdfsResource(params.yarn_hbase_hdfs_root_dir,
                         type="directory",

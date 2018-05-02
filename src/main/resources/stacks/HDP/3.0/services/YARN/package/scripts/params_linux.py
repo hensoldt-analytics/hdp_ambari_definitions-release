@@ -40,6 +40,7 @@ from resource_management.libraries.functions import is_empty
 from resource_management.libraries.functions.get_architecture import get_architecture
 from resource_management.libraries.functions.setup_ranger_plugin_xml import get_audit_configs, generate_ranger_service_config
 import status_params
+from functions import calc_heap_memory, ensure_unit_for_memory
 
 # a map of the Ambari role to the component name
 # for use with <stack-root>/current/<component>
@@ -582,6 +583,7 @@ else:
 zookeeper_quorum_hosts = cluster_zookeeper_quorum_hosts
 zookeeper_clientPort = cluster_zookeeper_clientPort
 yarn_hbase_user = status_params.yarn_hbase_user
+yarn_hbase_user_home = format("/user/{yarn_hbase_user}")
 yarn_hbase_log_dir_prefix = config['configurations']['yarn-hbase-env']['yarn_hbase_log_dir_prefix']
 yarn_hbase_log_dir = format("{yarn_hbase_log_dir_prefix}/{yarn_hbase_user}")
 yarn_hbase_pid_dir_prefix = status_params.yarn_hbase_pid_dir_prefix
@@ -637,26 +639,34 @@ if security_enabled and has_atsv2:
   yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_ats_user_keytab} {yarn_ats_principal_name};")
 
 yarn_hbase_grant_premissions_file = format("{yarn_hbase_conf_dir}/hbase_grant_permissions.sh")
-hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
+is_hbase_system_service_launch = config['configurations']['yarn-hbase-env']['is_hbase_system_service_launch']
+if is_hbase_system_service_launch:
+   hbase_cmd = format("{stack_root}/current/hbase-client/bin/hbase")
+else:
+  hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
 class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create -s")
 yarn_hbase_table_create_cmd = format("export HBASE_CLASSPATH_PREFIX={stack_root}/current/hadoop-yarn-nodemanager/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")
 yarn_hbase_table_grant_premission_cmd = format("{yarn_hbase_kinit_cmd} {hbase_cmd} shell {yarn_hbase_grant_premissions_file}")
 
 # System service configuration as part of ATSv2.
 yarn_system_service_dir = config['configurations']['yarn-site']['yarn.service.system-service.dir']
-is_hbase_system_service_launch = config['configurations']['yarn-hbase-env']['is_hbase_system_service_launch']
 yarn_system_service_launch_mode = config['configurations']['yarn-hbase-env']['yarn_hbase_system_service_launch_mode']
 yarn_hbase_service_queue_name = config['configurations']['yarn-hbase-env']['yarn_hbase_system_service_queue_name']
 
 yarn_hbase_master_cpu = config['configurations']['yarn-hbase-env']['yarn_hbase_master_cpu']
-yarn_hbase_master_memory = config['configurations']['yarn-hbase-env']['yarn_hbase_master_memory']
+yarn_hbase_master_memory = expect("/configurations/yarn-hbase-env/yarn_hbase_master_memory", int)
 yarn_hbase_master_containers = config['configurations']['yarn-hbase-env']['yarn_hbase_master_containers']
 yarn_hbase_regionserver_cpu = config['configurations']['yarn-hbase-env']['yarn_hbase_regionserver_cpu']
-yarn_hbase_regionserver_memory = config['configurations']['yarn-hbase-env']['yarn_hbase_regionserver_memory']
+yarn_hbase_regionserver_memory = expect("/configurations/yarn-hbase-env/yarn_hbase_regionserver_memory", int)
 yarn_hbase_regionserver_containers = config['configurations']['yarn-hbase-env']['yarn_hbase_regionserver_containers']
 yarn_hbase_client_cpu = config['configurations']['yarn-hbase-env']['yarn_hbase_client_cpu']
-yarn_hbase_client_memory = config['configurations']['yarn-hbase-env']['yarn_hbase_client_memory']
+yarn_hbase_client_memory = expect("/configurations/yarn-hbase-env/yarn_hbase_client_memory", int)
 yarn_hbase_client_containers = config['configurations']['yarn-hbase-env']['yarn_hbase_client_containers']
+
+yarn_hbase_heap_memory_factor = expect("/configurations/yarn-hbase-env/yarn_hbase_heap_memory_factor", float)
+yarn_hbase_master_heapsize = ensure_unit_for_memory(calc_heap_memory(yarn_hbase_master_memory, yarn_hbase_heap_memory_factor))
+yarn_hbase_regionserver_heapsize = ensure_unit_for_memory(calc_heap_memory(yarn_hbase_regionserver_memory, yarn_hbase_heap_memory_factor))
+
 # ATSv2 integration properties ended
 
 gpu_module_enabled = str(config['configurations']['container-executor']['gpu_module_enabled']).lower()
