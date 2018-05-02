@@ -5,160 +5,160 @@
         "type": "ganglia",
         "metrics": {
           "default": {
-            "metrics/cpu/cpu_idle": {
-              "metric": "cpu_idle",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/cpu/cpu_idle":{
+              "metric":"cpu_idle",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/cpu/cpu_nice": {
-              "metric": "cpu_nice",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/cpu/cpu_nice":{
+              "metric":"cpu_nice",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/cpu/cpu_system": {
-              "metric": "cpu_system",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/cpu/cpu_system":{
+              "metric":"cpu_system",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/cpu/cpu_user": {
-              "metric": "cpu_user",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/cpu/cpu_user":{
+              "metric":"cpu_user",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/cpu/cpu_wio": {
-              "metric": "cpu_wio",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/cpu/cpu_wio":{
+              "metric":"cpu_wio",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/disk_free": {
-              "metric": "disk_free",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/disk_free":{
+              "metric":"disk_free",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/disk_total": {
-              "metric": "disk_total",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/disk_total":{
+              "metric":"disk_total",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/read_bps": {
-              "metric": "read_bps",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/read_bps":{
+              "metric":"read_bps",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/write_bps": {
-              "metric": "write_bps",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/write_bps":{
+              "metric":"write_bps",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/load/load_fifteen": {
-              "metric": "load_fifteen",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/load/load_fifteen":{
+              "metric":"load_fifteen",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/load/load_five": {
-              "metric": "load_five",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/load/load_five":{
+              "metric":"load_five",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/load/load_one": {
-              "metric": "load_one",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/load/load_one":{
+              "metric":"load_one",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/memory/mem_buffers": {
-              "metric": "mem_buffers",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/memory/mem_buffers":{
+              "metric":"mem_buffers",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/memory/mem_cached": {
-              "metric": "mem_cached",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/memory/mem_cached":{
+              "metric":"mem_cached",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/memory/mem_free": {
-              "metric": "mem_free",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/memory/mem_free":{
+              "metric":"mem_free",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/memory/mem_shared": {
-              "metric": "mem_shared",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/memory/mem_shared":{
+              "metric":"mem_shared",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/memory/mem_total": {
-              "metric": "mem_total",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/memory/mem_total":{
+              "metric":"mem_total",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/memory/swap_free": {
-              "metric": "swap_free",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/memory/swap_free":{
+              "metric":"swap_free",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/memory/swap_total": {
-              "metric": "swap_total",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/memory/swap_total":{
+              "metric":"swap_total",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/network/bytes_in": {
-              "metric": "bytes_in",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/network/bytes_in":{
+              "metric":"bytes_in",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/network/bytes_out": {
-              "metric": "bytes_out",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/network/bytes_out":{
+              "metric":"bytes_out",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/network/pkts_in": {
-              "metric": "pkts_in",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/network/pkts_in":{
+              "metric":"pkts_in",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/network/pkts_out": {
-              "metric": "pkts_out",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/network/pkts_out":{
+              "metric":"pkts_out",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/process/proc_run": {
-              "metric": "proc_run",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/process/proc_run":{
+              "metric":"proc_run",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/process/proc_total": {
-              "metric": "proc_total",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/process/proc_total":{
+              "metric":"proc_total",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/read_count": {
-              "metric": "read_count",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/read_count":{
+              "metric":"read_count",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/write_count": {
-              "metric": "write_count",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/write_count":{
+              "metric":"write_count",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/read_bytes": {
-              "metric": "read_bytes",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/read_bytes":{
+              "metric":"read_bytes",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/write_bytes": {
-              "metric": "write_bytes",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/write_bytes":{
+              "metric":"write_bytes",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/read_time": {
-              "metric": "read_time",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/read_time":{
+              "metric":"read_time",
+              "pointInTime":true,
+              "temporal":true
             },
-            "metrics/disk/write_time": {
-              "metric": "write_time",
-              "pointInTime": true,
-              "temporal": true
+            "metrics/disk/write_time":{
+              "metric":"write_time",
+              "pointInTime":true,
+              "temporal":true
             },
             "metrics/hbase/regionserver/mutationsWithoutWALSize": {
               "metric": "regionserver.Server.mutationsWithoutWALSize",
@@ -219,11 +219,11 @@
               "metric": "boottime",
               "pointInTime": true,
               "temporal": true,
-              "amsHostMetric": true
+              "amsHostMetric":true
             },
             "metrics/hbase/regionserver/writeRequestsCount": {
               "metric": "regionserver.Server.writeRequestCount",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/getRequestLatency_min": {
@@ -278,7 +278,7 @@
             },
             "metrics/hbase/regionserver/readRequestsCount": {
               "metric": "regionserver.Server.readRequestCount",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/putRequestLatency_min": {
@@ -373,17 +373,17 @@
               "temporal": true
             },
             "metrics/hbase/ipc/IPC/numOpenConnections": {
-              "metric": "ipc.IPC.numOpenConnections",
+              "metric": "regionserver.RegionServer.numOpenConnections",
               "pointInTime": false,
               "temporal": true
             },
             "metrics/hbase/ipc/IPC/numActiveHandler": {
-              "metric": "ipc.IPC.numActiveHandler",
+              "metric": "regionserver.RegionServer.numActiveHandler",
               "pointInTime": false,
               "temporal": true
             },
             "metrics/hbase/ipc/IPC/numCallsInGeneralQueue": {
-              "metric": "ipc.IPC.numCallsInGeneralQueue",
+              "metric": "regionserver.RegionServer.numCallsInGeneralQueue",
               "pointInTime": false,
               "temporal": true
             },
@@ -397,7 +397,7 @@
               "pointInTime": true,
               "temporal": true
             },
-            "metrics/rpc/rpcAuthenticationFailures": {
+           "metrics/rpc/rpcAuthenticationFailures": {
               "metric": "regionserver.RegionServer.authenticationFailures",
               "pointInTime": true,
               "temporal": true
@@ -464,7 +464,7 @@
             },
             "metrics/hbase/regionserver/compactionQueueSize": {
               "metric": "regionserver.Server.compactionQueueLength",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/flushTime_num_ops": {
@@ -524,7 +524,7 @@
             },
             "metrics/hbase/regionserver/regions": {
               "metric": "regionserver.Server.regionCount",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/blockCacheFree": {
@@ -660,7 +660,7 @@
             },
             "metrics/hbase/regionserver/memstoreSize": {
               "metric": "regionserver.Server.memStoreSize",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/deleteRequestLatency_75th_percentile": {
@@ -1471,11 +1471,6 @@
               "pointInTime": true,
               "temporal": false
             },
-            "metrics/hbase/regionserver/compactionQueueSize": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.compactionQueueLength",
-              "pointInTime": true,
-              "temporal": false
-            },
             "metrics/hbase/regionserver/putRequestLatency_median": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Mutate_median",
               "pointInTime": true,
@@ -1498,11 +1493,6 @@
             },
             "metrics/hbase/regionserver/getRequestLatency_75th_percentile": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Get_75th_percentile",
-              "pointInTime": true,
-              "temporal": false
-            },
-            "metrics/hbase/regionserver/readRequestsCount": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.readRequestCount",
               "pointInTime": true,
               "temporal": false
             },
@@ -1556,11 +1546,6 @@
               "pointInTime": true,
               "temporal": false
             },
-            "metrics/hbase/regionserver/writeRequestsCount": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.writeRequestCount",
-              "pointInTime": true,
-              "temporal": false
-            },
             "metrics/hbase/regionserver/getRequestLatency_median": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Get_median",
               "pointInTime": true,
@@ -1598,11 +1583,6 @@
               "pointInTime": true,
               "temporal": false
             },
-            "metrics/hbase/regionserver/memstoreSize": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.memStoreSize",
-              "pointInTime": true,
-              "temporal": false
-            },
             "metrics/hbase/regionserver/getRequestLatency_max": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Get_max",
               "pointInTime": true,
@@ -1625,11 +1605,6 @@
             },
             "metrics/hbase/regionserver/putRequestLatency_75th_percentile": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Mutate_75th_percentile",
-              "pointInTime": true,
-              "temporal": false
-            },
-            "metrics/hbase/regionserver/regions": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.regionCount",
               "pointInTime": true,
               "temporal": false
             },
@@ -1657,191 +1632,191 @@
         "type": "ganglia",
         "metrics": {
           "default": {
-            "metrics/cpu/cpu_idle": {
-              "metric": "cpu_idle",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/cpu/cpu_idle":{
+              "metric":"cpu_idle",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/cpu/cpu_nice": {
-              "metric": "cpu_nice",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/cpu/cpu_nice":{
+              "metric":"cpu_nice",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/cpu/cpu_system": {
-              "metric": "cpu_system",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/cpu/cpu_system":{
+              "metric":"cpu_system",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/cpu/cpu_user": {
-              "metric": "cpu_user",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/cpu/cpu_user":{
+              "metric":"cpu_user",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/cpu/cpu_wio": {
-              "metric": "cpu_wio",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/cpu/cpu_wio":{
+              "metric":"cpu_wio",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/disk_free": {
-              "metric": "disk_free",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/disk_free":{
+              "metric":"disk_free",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/disk_total": {
-              "metric": "disk_total",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/disk_total":{
+              "metric":"disk_total",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/read_bps": {
-              "metric": "read_bps",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/read_bps":{
+              "metric":"read_bps",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/write_bps": {
-              "metric": "write_bps",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/write_bps":{
+              "metric":"write_bps",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/load/load_fifteen": {
-              "metric": "load_fifteen",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/load/load_fifteen":{
+              "metric":"load_fifteen",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/load/load_five": {
-              "metric": "load_five",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/load/load_five":{
+              "metric":"load_five",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/load/load_one": {
-              "metric": "load_one",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/load/load_one":{
+              "metric":"load_one",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/memory/mem_buffers": {
-              "metric": "mem_buffers",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/memory/mem_buffers":{
+              "metric":"mem_buffers",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/memory/mem_cached": {
-              "metric": "mem_cached",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/memory/mem_cached":{
+              "metric":"mem_cached",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/memory/mem_free": {
-              "metric": "mem_free",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/memory/mem_free":{
+              "metric":"mem_free",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/memory/mem_shared": {
-              "metric": "mem_shared",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/memory/mem_shared":{
+              "metric":"mem_shared",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/memory/mem_total": {
-              "metric": "mem_total",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/memory/mem_total":{
+              "metric":"mem_total",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/memory/swap_free": {
-              "metric": "swap_free",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/memory/swap_free":{
+              "metric":"swap_free",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/memory/swap_total": {
-              "metric": "swap_total",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/memory/swap_total":{
+              "metric":"swap_total",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/network/bytes_in": {
-              "metric": "bytes_in",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/network/bytes_in":{
+              "metric":"bytes_in",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/network/bytes_out": {
-              "metric": "bytes_out",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/network/bytes_out":{
+              "metric":"bytes_out",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/network/pkts_in": {
-              "metric": "pkts_in",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/network/pkts_in":{
+              "metric":"pkts_in",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/network/pkts_out": {
-              "metric": "pkts_out",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/network/pkts_out":{
+              "metric":"pkts_out",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/process/proc_run": {
-              "metric": "proc_run",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/process/proc_run":{
+              "metric":"proc_run",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/process/proc_total": {
-              "metric": "proc_total",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/process/proc_total":{
+              "metric":"proc_total",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/read_count": {
-              "metric": "read_count",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/read_count":{
+              "metric":"read_count",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/write_count": {
-              "metric": "write_count",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/write_count":{
+              "metric":"write_count",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/read_bytes": {
-              "metric": "read_bytes",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/read_bytes":{
+              "metric":"read_bytes",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/write_bytes": {
-              "metric": "write_bytes",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/write_bytes":{
+              "metric":"write_bytes",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/read_time": {
-              "metric": "read_time",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/read_time":{
+              "metric":"read_time",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
-            "metrics/disk/write_time": {
-              "metric": "write_time",
-              "pointInTime": true,
-              "temporal": true,
-              "amsHostMetric": true
+            "metrics/disk/write_time":{
+              "metric":"write_time",
+              "pointInTime":true,
+              "temporal":true,
+              "amsHostMetric":true
             },
             "metrics/hbase/regionserver/mutationsWithoutWALSize": {
               "metric": "regionserver.Server.mutationsWithoutWALSize",
@@ -1881,7 +1856,7 @@
             },
             "metrics/hbase/regionserver/compactionQueueSize": {
               "metric": "regionserver.Server.compactionQueueLength",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/disk/part_max_used": {
@@ -1998,11 +1973,11 @@
               "metric": "boottime",
               "pointInTime": true,
               "temporal": true,
-              "amsHostMetric": true
+              "amsHostMetric":true
             },
             "metrics/hbase/regionserver/writeRequestsCount": {
               "metric": "regionserver.Server.writeRequestCount",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/getRequestLatency_min": {
@@ -2032,7 +2007,7 @@
             },
             "metrics/hbase/regionserver/regions": {
               "metric": "regionserver.Server.regionCount",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/blockCacheHitCount": {
@@ -2097,7 +2072,7 @@
             },
             "metrics/hbase/regionserver/readRequestsCount": {
               "metric": "regionserver.Server.readRequestCount",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/putRequestLatency_min": {
@@ -2264,7 +2239,7 @@
             },
             "metrics/hbase/regionserver/memstoreSize": {
               "metric": "regionserver.Server.memStoreSize",
-              "pointInTime": false,
+              "pointInTime": true,
               "temporal": true
             },
             "metrics/hbase/regionserver/deleteRequestLatency_75th_percentile": {
@@ -3178,11 +3153,6 @@
               "pointInTime": true,
               "temporal": false
             },
-            "metrics/hbase/regionserver/compactionQueueSize": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.compactionQueueLength",
-              "pointInTime": true,
-              "temporal": false
-            },
             "metrics/hbase/regionserver/putRequestLatency_median": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Mutate_median",
               "pointInTime": true,
@@ -3205,11 +3175,6 @@
             },
             "metrics/hbase/regionserver/getRequestLatency_75th_percentile": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Get_75th_percentile",
-              "pointInTime": true,
-              "temporal": false
-            },
-            "metrics/hbase/regionserver/readRequestsCount": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.readRequestCount",
               "pointInTime": true,
               "temporal": false
             },
@@ -3263,11 +3228,6 @@
               "pointInTime": true,
               "temporal": false
             },
-            "metrics/hbase/regionserver/writeRequestsCount": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.writeRequestCount",
-              "pointInTime": true,
-              "temporal": false
-            },
             "metrics/hbase/regionserver/getRequestLatency_median": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Get_median",
               "pointInTime": true,
@@ -3305,11 +3265,6 @@
               "pointInTime": true,
               "temporal": false
             },
-            "metrics/hbase/regionserver/memstoreSize": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.memStoreSize",
-              "pointInTime": true,
-              "temporal": false
-            },
             "metrics/hbase/regionserver/getRequestLatency_max": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Get_max",
               "pointInTime": true,
@@ -3332,11 +3287,6 @@
             },
             "metrics/hbase/regionserver/putRequestLatency_75th_percentile": {
               "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.Mutate_75th_percentile",
-              "pointInTime": true,
-              "temporal": false
-            },
-            "metrics/hbase/regionserver/regions": {
-              "metric": "Hadoop:service=HBase,name=RegionServer,sub=Server.regionCount",
               "pointInTime": true,
               "temporal": false
             },
@@ -3475,7 +3425,7 @@
               "metric": "boottime",
               "pointInTime": true,
               "temporal": true,
-              "amsHostMetric": true
+              "amsHostMetric":true
             },
             "metrics/rpc/RpcProcessingTime_num_ops": {
               "metric": "master.Master.ProcessCallTime_num_ops",
@@ -3598,717 +3548,717 @@
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/GcCountConcurrentMarkSweep": {
-              "metric": "jvm.JvmMetrics.GcCountConcurrentMarkSweep",
+              "metric":"jvm.JvmMetrics.GcCountConcurrentMarkSweep",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/GcCountParNew": {
-              "metric": "jvm.JvmMetrics.GcCountParNew",
+              "metric":"jvm.JvmMetrics.GcCountParNew",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/GcTimeMillisConcurrentMarkSweep": {
-              "metric": "jvm.JvmMetrics.GcTimeMillisConcurrentMarkSweep",
+              "metric":"jvm.JvmMetrics.GcTimeMillisConcurrentMarkSweep",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/GcTimeMillisParNew": {
-              "metric": "jvm.JvmMetrics.GcTimeMillisParNew",
+              "metric":"jvm.JvmMetrics.GcTimeMillisParNew",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/MemHeapMaxM": {
-              "metric": "jvm.JvmMetrics.MemHeapMaxM",
+              "metric":"jvm.JvmMetrics.MemHeapMaxM",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/MemMaxM": {
-              "metric": "jvm.JvmMetrics.MemMaxM",
+              "metric":"jvm.JvmMetrics.MemMaxM",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/MemNonHeapMaxM": {
-              "metric": "jvm.JvmMetrics.MemNonHeapMaxM",
+              "metric":"jvm.JvmMetrics.MemNonHeapMaxM",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_75th_percentile": {
-              "metric": "master.AssignmentManger.Assign_75th_percentile",
+              "metric":"master.AssignmentManger.Assign_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_95th_percentile": {
-              "metric": "master.AssignmentManger.Assign_95th_percentile",
+              "metric":"master.AssignmentManger.Assign_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_99th_percentile": {
-              "metric": "master.AssignmentManger.Assign_99th_percentile",
+              "metric":"master.AssignmentManger.Assign_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_max": {
-              "metric": "master.AssignmentManger.Assign_max",
+              "metric":"master.AssignmentManger.Assign_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_mean": {
-              "metric": "master.AssignmentManger.Assign_mean",
+              "metric":"master.AssignmentManger.Assign_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_median": {
-              "metric": "master.AssignmentManger.Assign_median",
+              "metric":"master.AssignmentManger.Assign_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_min": {
-              "metric": "master.AssignmentManger.Assign_min",
+              "metric":"master.AssignmentManger.Assign_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_num_ops": {
-              "metric": "master.AssignmentManger.Assign_num_ops",
+              "metric":"master.AssignmentManger.Assign_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_75th_percentile": {
-              "metric": "master.AssignmentManger.BulkAssign_75th_percentile",
+              "metric":"master.AssignmentManger.BulkAssign_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_95th_percentile": {
-              "metric": "master.AssignmentManger.BulkAssign_95th_percentile",
+              "metric":"master.AssignmentManger.BulkAssign_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_99th_percentile": {
-              "metric": "master.AssignmentManger.BulkAssign_99th_percentile",
+              "metric":"master.AssignmentManger.BulkAssign_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_max": {
-              "metric": "master.AssignmentManger.BulkAssign_max",
+              "metric":"master.AssignmentManger.BulkAssign_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_mean": {
-              "metric": "master.AssignmentManger.BulkAssign_mean",
+              "metric":"master.AssignmentManger.BulkAssign_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_median": {
-              "metric": "master.AssignmentManger.BulkAssign_median",
+              "metric":"master.AssignmentManger.BulkAssign_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_min": {
-              "metric": "master.AssignmentManger.BulkAssign_min",
+              "metric":"master.AssignmentManger.BulkAssign_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_num_ops": {
-              "metric": "master.AssignmentManger.BulkAssign_num_ops",
+              "metric":"master.AssignmentManger.BulkAssign_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/ritCount": {
-              "metric": "master.AssignmentManger.ritCount",
+              "metric":"master.AssignmentManger.ritCount",
               "pointInTime": false,
               "temporal": true
             },
             "metrics/master/AssignmentManger/ritCountOverThreshold": {
-              "metric": "master.AssignmentManger.ritCountOverThreshold",
+              "metric":"master.AssignmentManger.ritCountOverThreshold",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/ritOldestAge": {
-              "metric": "master.AssignmentManger.ritOldestAge",
+              "metric":"master.AssignmentManger.ritOldestAge",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_75th_percentile": {
-              "metric": "master.Balancer.BalancerCluster_75th_percentile",
+              "metric":"master.Balancer.BalancerCluster_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_95th_percentile": {
-              "metric": "master.Balancer.BalancerCluster_95th_percentile",
+              "metric":"master.Balancer.BalancerCluster_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_99th_percentile": {
-              "metric": "master.Balancer.BalancerCluster_99th_percentile",
+              "metric":"master.Balancer.BalancerCluster_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_max": {
-              "metric": "master.Balancer.BalancerCluster_max",
+              "metric":"master.Balancer.BalancerCluster_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_mean": {
-              "metric": "master.Balancer.BalancerCluster_mean",
+              "metric":"master.Balancer.BalancerCluster_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_min": {
-              "metric": "master.Balancer.BalancerCluster_min",
+              "metric":"master.Balancer.BalancerCluster_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/miscInvocationCount": {
-              "metric": "master.Balancer.miscInvocationCount",
+              "metric":"master.Balancer.miscInvocationCount",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_75th_percentile": {
-              "metric": "master.FileSystem.HlogSplitSize_75th_percentile",
+              "metric":"master.FileSystem.HlogSplitSize_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_95th_percentile": {
-              "metric": "master.FileSystem.HlogSplitSize_95th_percentile",
+              "metric":"master.FileSystem.HlogSplitSize_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_99th_percentile": {
-              "metric": "master.FileSystem.HlogSplitSize_99th_percentile",
+              "metric":"master.FileSystem.HlogSplitSize_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_max": {
-              "metric": "master.FileSystem.HlogSplitSize_max",
+              "metric":"master.FileSystem.HlogSplitSize_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_median": {
-              "metric": "master.FileSystem.HlogSplitSize_median",
+              "metric":"master.FileSystem.HlogSplitSize_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_min": {
-              "metric": "master.FileSystem.HlogSplitSize_min",
+              "metric":"master.FileSystem.HlogSplitSize_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_75th_percentile": {
-              "metric": "master.FileSystem.HlogSplitTime_75th_percentile",
+              "metric":"master.FileSystem.HlogSplitTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_95th_percentile": {
-              "metric": "master.FileSystem.HlogSplitTime_95th_percentile",
+              "metric":"master.FileSystem.HlogSplitTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_99th_percentile": {
-              "metric": "master.FileSystem.HlogSplitTime_99th_percentile",
+              "metric":"master.FileSystem.HlogSplitTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_max": {
-              "metric": "master.FileSystem.HlogSplitTime_max",
+              "metric":"master.FileSystem.HlogSplitTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_mean": {
-              "metric": "master.FileSystem.HlogSplitTime_mean",
+              "metric":"master.FileSystem.HlogSplitTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_median": {
-              "metric": "master.FileSystem.HlogSplitTime_median",
+              "metric":"master.FileSystem.HlogSplitTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_min": {
-              "metric": "master.FileSystem.HlogSplitTime_min",
+              "metric":"master.FileSystem.HlogSplitTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_75th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_75th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitSize_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_95th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_95th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitSize_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_99th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_99th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitSize_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_max": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_max",
+              "metric":"master.FileSystem.MetaHlogSplitSize_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_mean": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_mean",
+              "metric":"master.FileSystem.MetaHlogSplitSize_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_median": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_median",
+              "metric":"master.FileSystem.MetaHlogSplitSize_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_min": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_min",
+              "metric":"master.FileSystem.MetaHlogSplitSize_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_num_ops": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_num_ops",
+              "metric":"master.FileSystem.MetaHlogSplitSize_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_75th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_75th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_95th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_95th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_99th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_99th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_max": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_max",
+              "metric":"master.FileSystem.MetaHlogSplitTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_mean": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_mean",
+              "metric":"master.FileSystem.MetaHlogSplitTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_median": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_median",
+              "metric":"master.FileSystem.MetaHlogSplitTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_min": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_min",
+              "metric":"master.FileSystem.MetaHlogSplitTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_num_ops": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_num_ops",
+              "metric":"master.FileSystem.MetaHlogSplitTime_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numActiveHandler": {
-              "metric": "master.Master.numActiveHandler",
+              "metric":"master.Master.numActiveHandler",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numCallsInGeneralQueue": {
-              "metric": "master.Master.numCallsInGeneralQueue",
+              "metric":"master.Master.numCallsInGeneralQueue",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numCallsInPriorityQueue": {
-              "metric": "master.Master.numCallsInPriorityQueue",
+              "metric":"master.Master.numCallsInPriorityQueue",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numCallsInReplicationQueue": {
-              "metric": "master.Master.numCallsInReplicationQueue",
+              "metric":"master.Master.numCallsInReplicationQueue",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numOpenConnections": {
-              "metric": "master.Master.numOpenConnections",
+              "metric":"master.Master.numOpenConnections",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_75th_percentile": {
-              "metric": "master.Master.ProcessCallTime_75th_percentile",
+              "metric":"master.Master.ProcessCallTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_95th_percentile": {
-              "metric": "master.Master.ProcessCallTime_95th_percentile",
+              "metric":"master.Master.ProcessCallTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_99th_percentile": {
-              "metric": "master.Master.ProcessCallTime_99th_percentile",
+              "metric":"master.Master.ProcessCallTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_max": {
-              "metric": "master.Master.ProcessCallTime_max",
+              "metric":"master.Master.ProcessCallTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_mean": {
-              "metric": "master.Master.ProcessCallTime_mean",
+              "metric":"master.Master.ProcessCallTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_median": {
-              "metric": "master.Master.ProcessCallTime_median",
+              "metric":"master.Master.ProcessCallTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_min": {
-              "metric": "master.Master.ProcessCallTime_min",
+              "metric":"master.Master.ProcessCallTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_75th_percentile": {
-              "metric": "master.Master.QueueCallTime_75th_percentile",
+              "metric":"master.Master.QueueCallTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_95th_percentile": {
-              "metric": "master.Master.QueueCallTime_95th_percentile",
+              "metric":"master.Master.QueueCallTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_99th_percentile": {
-              "metric": "master.Master.QueueCallTime_99th_percentile",
+              "metric":"master.Master.QueueCallTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_max": {
-              "metric": "master.Master.QueueCallTime_max",
+              "metric":"master.Master.QueueCallTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_mean": {
-              "metric": "master.Master.QueueCallTime_mean",
+              "metric":"master.Master.QueueCallTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_min": {
-              "metric": "master.Master.QueueCallTime_min",
+              "metric":"master.Master.QueueCallTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/queueSize": {
-              "metric": "master.Master.queueSize",
+              "metric":"master.Master.queueSize",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/receivedBytes": {
-              "metric": "master.Master.receivedBytes",
+              "metric":"master.Master.receivedBytes",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/sentBytes": {
-              "metric": "master.Master.sentBytes",
+              "metric":"master.Master.sentBytes",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_75th_percentile": {
-              "metric": "master.Master.TotalCallTime_75th_percentile",
+              "metric":"master.Master.TotalCallTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_95th_percentile": {
-              "metric": "master.Master.TotalCallTime_95th_percentile",
+              "metric":"master.Master.TotalCallTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_99th_percentile": {
-              "metric": "master.Master.TotalCallTime_99th_percentile",
+              "metric":"master.Master.TotalCallTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_max": {
-              "metric": "master.Master.TotalCallTime_max",
+              "metric":"master.Master.TotalCallTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_mean": {
-              "metric": "master.Master.TotalCallTime_mean",
+              "metric":"master.Master.TotalCallTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_median": {
-              "metric": "master.Master.TotalCallTime_median",
+              "metric":"master.Master.TotalCallTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_min": {
-              "metric": "master.Master.TotalCallTime_min",
+              "metric":"master.Master.TotalCallTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_num_ops": {
-              "metric": "master.Master.TotalCallTime_num_ops",
+              "metric":"master.Master.TotalCallTime_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/averageLoad": {
-              "metric": "master.Server.averageLoad",
+              "metric":"master.Server.averageLoad",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/masterActiveTime": {
-              "metric": "master.Server.masterActiveTime",
+              "metric":"master.Server.masterActiveTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/masterStartTime": {
-              "metric": "master.Server.masterStartTime",
+              "metric":"master.Server.masterStartTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/numDeadRegionServers": {
-              "metric": "master.Server.numDeadRegionServers",
+              "metric":"master.Server.numDeadRegionServers",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/numRegionServers": {
-              "metric": "master.Server.numRegionServers",
+              "metric":"master.Server.numRegionServers",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/DroppedPubAll": {
-              "metric": "metricssystem.MetricsSystem.DroppedPubAll",
+              "metric":"metricssystem.MetricsSystem.DroppedPubAll",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/NumActiveSinks": {
-              "metric": "metricssystem.MetricsSystem.NumActiveSinks",
+              "metric":"metricssystem.MetricsSystem.NumActiveSinks",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/NumActiveSources": {
-              "metric": "metricssystem.MetricsSystem.NumActiveSources",
+              "metric":"metricssystem.MetricsSystem.NumActiveSources",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/NumAllSinks": {
-              "metric": "metricssystem.MetricsSystem.NumAllSinks",
+              "metric":"metricssystem.MetricsSystem.NumAllSinks",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/NumAllSources": {
-              "metric": "metricssystem.MetricsSystem.NumAllSources",
+              "metric":"metricssystem.MetricsSystem.NumAllSources",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/PublishAvgTime": {
-              "metric": "metricssystem.MetricsSystem.PublishAvgTime",
+              "metric":"metricssystem.MetricsSystem.PublishAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/PublishNumOps": {
-              "metric": "metricssystem.MetricsSystem.PublishNumOps",
+              "metric":"metricssystem.MetricsSystem.PublishNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/Sink_timelineAvgTime": {
-              "metric": "metricssystem.MetricsSystem.Sink_timelineAvgTime",
+              "metric":"metricssystem.MetricsSystem.Sink_timelineAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/Sink_timelineDropped": {
-              "metric": "metricssystem.MetricsSystem.Sink_timelineDropped",
+              "metric":"metricssystem.MetricsSystem.Sink_timelineDropped",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/Sink_timelineNumOps": {
-              "metric": "metricssystem.MetricsSystem.Sink_timelineNumOps",
+              "metric":"metricssystem.MetricsSystem.Sink_timelineNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/Sink_timelineQsize": {
-              "metric": "metricssystem.MetricsSystem.Sink_timelineQsize",
+              "metric":"metricssystem.MetricsSystem.Sink_timelineQsize",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/SnapshotAvgTime": {
-              "metric": "metricssystem.MetricsSystem.SnapshotAvgTime",
+              "metric":"metricssystem.MetricsSystem.SnapshotAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/SnapshotNumOps": {
-              "metric": "metricssystem.MetricsSystem.SnapshotNumOps",
+              "metric":"metricssystem.MetricsSystem.SnapshotNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/appendCount": {
-              "metric": "regionserver.WAL.appendCount",
+              "metric":"regionserver.WAL.appendCount",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_75th_percentile": {
-              "metric": "regionserver.WAL.AppendSize_75th_percentile",
+              "metric":"regionserver.WAL.AppendSize_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_95th_percentile": {
-              "metric": "regionserver.WAL.AppendSize_95th_percentile",
+              "metric":"regionserver.WAL.AppendSize_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_99th_percentile": {
-              "metric": "regionserver.WAL.AppendSize_99th_percentile",
+              "metric":"regionserver.WAL.AppendSize_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_max": {
-              "metric": "regionserver.WAL.AppendSize_max",
+              "metric":"regionserver.WAL.AppendSize_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_mean": {
-              "metric": "regionserver.WAL.AppendSize_mean",
+              "metric":"regionserver.WAL.AppendSize_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_median": {
-              "metric": "regionserver.WAL.AppendSize_median",
+              "metric":"regionserver.WAL.AppendSize_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_min": {
-              "metric": "regionserver.WAL.AppendSize_min",
+              "metric":"regionserver.WAL.AppendSize_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_num_ops": {
-              "metric": "regionserver.WAL.AppendSize_num_ops",
+              "metric":"regionserver.WAL.AppendSize_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_75th_percentile": {
-              "metric": "regionserver.WAL.AppendTime_75th_percentile",
+              "metric":"regionserver.WAL.AppendTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_95th_percentile": {
-              "metric": "regionserver.WAL.AppendTime_95th_percentile",
+              "metric":"regionserver.WAL.AppendTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_99th_percentile": {
-              "metric": "regionserver.WAL.AppendTime_99th_percentile",
+              "metric":"regionserver.WAL.AppendTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_max": {
-              "metric": "regionserver.WAL.AppendTime_max",
+              "metric":"regionserver.WAL.AppendTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_mean": {
-              "metric": "regionserver.WAL.AppendTime_mean",
+              "metric":"regionserver.WAL.AppendTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_median": {
-              "metric": "regionserver.WAL.AppendTime_median",
+              "metric":"regionserver.WAL.AppendTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_min": {
-              "metric": "regionserver.WAL.AppendTime_min",
+              "metric":"regionserver.WAL.AppendTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_num_ops": {
-              "metric": "regionserver.WAL.AppendTime_num_ops",
+              "metric":"regionserver.WAL.AppendTime_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/lowReplicaRollRequest": {
-              "metric": "regionserver.WAL.lowReplicaRollRequest",
+              "metric":"regionserver.WAL.lowReplicaRollRequest",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/rollRequest": {
-              "metric": "regionserver.WAL.rollRequest",
+              "metric":"regionserver.WAL.rollRequest",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/slowAppendCount": {
-              "metric": "regionserver.WAL.slowAppendCount",
+              "metric":"regionserver.WAL.slowAppendCount",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_75th_percentile": {
-              "metric": "regionserver.WAL.SyncTime_75th_percentile",
+              "metric":"regionserver.WAL.SyncTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_95th_percentile": {
-              "metric": "regionserver.WAL.SyncTime_95th_percentile",
+              "metric":"regionserver.WAL.SyncTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_99th_percentile": {
-              "metric": "regionserver.WAL.SyncTime_99th_percentile",
+              "metric":"regionserver.WAL.SyncTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_max": {
-              "metric": "regionserver.WAL.SyncTime_max",
+              "metric":"regionserver.WAL.SyncTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_mean": {
-              "metric": "regionserver.WAL.SyncTime_mean",
+              "metric":"regionserver.WAL.SyncTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_median": {
-              "metric": "regionserver.WAL.SyncTime_median",
+              "metric":"regionserver.WAL.SyncTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_min": {
-              "metric": "regionserver.WAL.SyncTime_min",
+              "metric":"regionserver.WAL.SyncTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_num_ops": {
-              "metric": "regionserver.WAL.SyncTime_num_ops",
+              "metric":"regionserver.WAL.SyncTime_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/GetGroupsAvgTime": {
-              "metric": "ugi.UgiMetrics.GetGroupsAvgTime",
+              "metric":"ugi.UgiMetrics.GetGroupsAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/GetGroupsNumOps": {
-              "metric": "ugi.UgiMetrics.GetGroupsNumOps",
+              "metric":"ugi.UgiMetrics.GetGroupsNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/LoginFailureAvgTime": {
-              "metric": "ugi.UgiMetrics.LoginFailureAvgTime",
+              "metric":"ugi.UgiMetrics.LoginFailureAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/LoginFailureNumOps": {
-              "metric": "ugi.UgiMetrics.LoginFailureNumOps",
+              "metric":"ugi.UgiMetrics.LoginFailureNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/LoginSuccessAvgTime": {
-              "metric": "ugi.UgiMetrics.LoginSuccessAvgTime",
+              "metric":"ugi.UgiMetrics.LoginSuccessAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/LoginSuccessNumOps": {
-              "metric": "ugi.UgiMetrics.LoginSuccessNumOps",
+              "metric":"ugi.UgiMetrics.LoginSuccessNumOps",
               "pointInTime": true,
               "temporal": true
             }
@@ -6517,7 +6467,7 @@
               "metric": "boottime",
               "pointInTime": true,
               "temporal": true,
-              "amsHostMetric": true
+              "amsHostMetric":true
             },
             "metrics/rpc/RpcProcessingTime_num_ops": {
               "metric": "master.Master.ProcessCallTime_num_ops",
@@ -6640,717 +6590,717 @@
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/GcCountConcurrentMarkSweep": {
-              "metric": "jvm.JvmMetrics.GcCountConcurrentMarkSweep",
+              "metric":"jvm.JvmMetrics.GcCountConcurrentMarkSweep",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/GcCountParNew": {
-              "metric": "jvm.JvmMetrics.GcCountParNew",
+              "metric":"jvm.JvmMetrics.GcCountParNew",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/GcTimeMillisConcurrentMarkSweep": {
-              "metric": "jvm.JvmMetrics.GcTimeMillisConcurrentMarkSweep",
+              "metric":"jvm.JvmMetrics.GcTimeMillisConcurrentMarkSweep",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/GcTimeMillisParNew": {
-              "metric": "jvm.JvmMetrics.GcTimeMillisParNew",
+              "metric":"jvm.JvmMetrics.GcTimeMillisParNew",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/MemHeapMaxM": {
-              "metric": "jvm.JvmMetrics.MemHeapMaxM",
+              "metric":"jvm.JvmMetrics.MemHeapMaxM",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/MemMaxM": {
-              "metric": "jvm.JvmMetrics.MemMaxM",
+              "metric":"jvm.JvmMetrics.MemMaxM",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/jvm/JvmMetrics/MemNonHeapMaxM": {
-              "metric": "jvm.JvmMetrics.MemNonHeapMaxM",
+              "metric":"jvm.JvmMetrics.MemNonHeapMaxM",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_75th_percentile": {
-              "metric": "master.AssignmentManger.Assign_75th_percentile",
+              "metric":"master.AssignmentManger.Assign_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_95th_percentile": {
-              "metric": "master.AssignmentManger.Assign_95th_percentile",
+              "metric":"master.AssignmentManger.Assign_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_99th_percentile": {
-              "metric": "master.AssignmentManger.Assign_99th_percentile",
+              "metric":"master.AssignmentManger.Assign_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_max": {
-              "metric": "master.AssignmentManger.Assign_max",
+              "metric":"master.AssignmentManger.Assign_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_mean": {
-              "metric": "master.AssignmentManger.Assign_mean",
+              "metric":"master.AssignmentManger.Assign_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_median": {
-              "metric": "master.AssignmentManger.Assign_median",
+              "metric":"master.AssignmentManger.Assign_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_min": {
-              "metric": "master.AssignmentManger.Assign_min",
+              "metric":"master.AssignmentManger.Assign_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/Assign_num_ops": {
-              "metric": "master.AssignmentManger.Assign_num_ops",
+              "metric":"master.AssignmentManger.Assign_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_75th_percentile": {
-              "metric": "master.AssignmentManger.BulkAssign_75th_percentile",
+              "metric":"master.AssignmentManger.BulkAssign_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_95th_percentile": {
-              "metric": "master.AssignmentManger.BulkAssign_95th_percentile",
+              "metric":"master.AssignmentManger.BulkAssign_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_99th_percentile": {
-              "metric": "master.AssignmentManger.BulkAssign_99th_percentile",
+              "metric":"master.AssignmentManger.BulkAssign_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_max": {
-              "metric": "master.AssignmentManger.BulkAssign_max",
+              "metric":"master.AssignmentManger.BulkAssign_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_mean": {
-              "metric": "master.AssignmentManger.BulkAssign_mean",
+              "metric":"master.AssignmentManger.BulkAssign_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_median": {
-              "metric": "master.AssignmentManger.BulkAssign_median",
+              "metric":"master.AssignmentManger.BulkAssign_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_min": {
-              "metric": "master.AssignmentManger.BulkAssign_min",
+              "metric":"master.AssignmentManger.BulkAssign_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/BulkAssign_num_ops": {
-              "metric": "master.AssignmentManger.BulkAssign_num_ops",
+              "metric":"master.AssignmentManger.BulkAssign_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/ritCount": {
-              "metric": "master.AssignmentManger.ritCount",
+              "metric":"master.AssignmentManger.ritCount",
               "pointInTime": false,
               "temporal": true
             },
             "metrics/master/AssignmentManger/ritCountOverThreshold": {
-              "metric": "master.AssignmentManger.ritCountOverThreshold",
+              "metric":"master.AssignmentManger.ritCountOverThreshold",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/AssignmentManger/ritOldestAge": {
-              "metric": "master.AssignmentManger.ritOldestAge",
+              "metric":"master.AssignmentManger.ritOldestAge",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_75th_percentile": {
-              "metric": "master.Balancer.BalancerCluster_75th_percentile",
+              "metric":"master.Balancer.BalancerCluster_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_95th_percentile": {
-              "metric": "master.Balancer.BalancerCluster_95th_percentile",
+              "metric":"master.Balancer.BalancerCluster_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_99th_percentile": {
-              "metric": "master.Balancer.BalancerCluster_99th_percentile",
+              "metric":"master.Balancer.BalancerCluster_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_max": {
-              "metric": "master.Balancer.BalancerCluster_max",
+              "metric":"master.Balancer.BalancerCluster_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_mean": {
-              "metric": "master.Balancer.BalancerCluster_mean",
+              "metric":"master.Balancer.BalancerCluster_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/BalancerCluster_min": {
-              "metric": "master.Balancer.BalancerCluster_min",
+              "metric":"master.Balancer.BalancerCluster_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Balancer/miscInvocationCount": {
-              "metric": "master.Balancer.miscInvocationCount",
+              "metric":"master.Balancer.miscInvocationCount",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_75th_percentile": {
-              "metric": "master.FileSystem.HlogSplitSize_75th_percentile",
+              "metric":"master.FileSystem.HlogSplitSize_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_95th_percentile": {
-              "metric": "master.FileSystem.HlogSplitSize_95th_percentile",
+              "metric":"master.FileSystem.HlogSplitSize_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_99th_percentile": {
-              "metric": "master.FileSystem.HlogSplitSize_99th_percentile",
+              "metric":"master.FileSystem.HlogSplitSize_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_max": {
-              "metric": "master.FileSystem.HlogSplitSize_max",
+              "metric":"master.FileSystem.HlogSplitSize_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_median": {
-              "metric": "master.FileSystem.HlogSplitSize_median",
+              "metric":"master.FileSystem.HlogSplitSize_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitSize_min": {
-              "metric": "master.FileSystem.HlogSplitSize_min",
+              "metric":"master.FileSystem.HlogSplitSize_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_75th_percentile": {
-              "metric": "master.FileSystem.HlogSplitTime_75th_percentile",
+              "metric":"master.FileSystem.HlogSplitTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_95th_percentile": {
-              "metric": "master.FileSystem.HlogSplitTime_95th_percentile",
+              "metric":"master.FileSystem.HlogSplitTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_99th_percentile": {
-              "metric": "master.FileSystem.HlogSplitTime_99th_percentile",
+              "metric":"master.FileSystem.HlogSplitTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_max": {
-              "metric": "master.FileSystem.HlogSplitTime_max",
+              "metric":"master.FileSystem.HlogSplitTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_mean": {
-              "metric": "master.FileSystem.HlogSplitTime_mean",
+              "metric":"master.FileSystem.HlogSplitTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_median": {
-              "metric": "master.FileSystem.HlogSplitTime_median",
+              "metric":"master.FileSystem.HlogSplitTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/HlogSplitTime_min": {
-              "metric": "master.FileSystem.HlogSplitTime_min",
+              "metric":"master.FileSystem.HlogSplitTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_75th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_75th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitSize_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_95th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_95th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitSize_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_99th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_99th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitSize_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_max": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_max",
+              "metric":"master.FileSystem.MetaHlogSplitSize_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_mean": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_mean",
+              "metric":"master.FileSystem.MetaHlogSplitSize_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_median": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_median",
+              "metric":"master.FileSystem.MetaHlogSplitSize_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_min": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_min",
+              "metric":"master.FileSystem.MetaHlogSplitSize_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitSize_num_ops": {
-              "metric": "master.FileSystem.MetaHlogSplitSize_num_ops",
+              "metric":"master.FileSystem.MetaHlogSplitSize_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_75th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_75th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_95th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_95th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_99th_percentile": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_99th_percentile",
+              "metric":"master.FileSystem.MetaHlogSplitTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_max": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_max",
+              "metric":"master.FileSystem.MetaHlogSplitTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_mean": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_mean",
+              "metric":"master.FileSystem.MetaHlogSplitTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_median": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_median",
+              "metric":"master.FileSystem.MetaHlogSplitTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_min": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_min",
+              "metric":"master.FileSystem.MetaHlogSplitTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/FileSystem/MetaHlogSplitTime_num_ops": {
-              "metric": "master.FileSystem.MetaHlogSplitTime_num_ops",
+              "metric":"master.FileSystem.MetaHlogSplitTime_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numActiveHandler": {
-              "metric": "master.Master.numActiveHandler",
+              "metric":"master.Master.numActiveHandler",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numCallsInGeneralQueue": {
-              "metric": "master.Master.numCallsInGeneralQueue",
+              "metric":"master.Master.numCallsInGeneralQueue",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numCallsInPriorityQueue": {
-              "metric": "master.Master.numCallsInPriorityQueue",
+              "metric":"master.Master.numCallsInPriorityQueue",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numCallsInReplicationQueue": {
-              "metric": "master.Master.numCallsInReplicationQueue",
+              "metric":"master.Master.numCallsInReplicationQueue",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/numOpenConnections": {
-              "metric": "master.Master.numOpenConnections",
+              "metric":"master.Master.numOpenConnections",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_75th_percentile": {
-              "metric": "master.Master.ProcessCallTime_75th_percentile",
+              "metric":"master.Master.ProcessCallTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_95th_percentile": {
-              "metric": "master.Master.ProcessCallTime_95th_percentile",
+              "metric":"master.Master.ProcessCallTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_99th_percentile": {
-              "metric": "master.Master.ProcessCallTime_99th_percentile",
+              "metric":"master.Master.ProcessCallTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_max": {
-              "metric": "master.Master.ProcessCallTime_max",
+              "metric":"master.Master.ProcessCallTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_mean": {
-              "metric": "master.Master.ProcessCallTime_mean",
+              "metric":"master.Master.ProcessCallTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_median": {
-              "metric": "master.Master.ProcessCallTime_median",
+              "metric":"master.Master.ProcessCallTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/ProcessCallTime_min": {
-              "metric": "master.Master.ProcessCallTime_min",
+              "metric":"master.Master.ProcessCallTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_75th_percentile": {
-              "metric": "master.Master.QueueCallTime_75th_percentile",
+              "metric":"master.Master.QueueCallTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_95th_percentile": {
-              "metric": "master.Master.QueueCallTime_95th_percentile",
+              "metric":"master.Master.QueueCallTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_99th_percentile": {
-              "metric": "master.Master.QueueCallTime_99th_percentile",
+              "metric":"master.Master.QueueCallTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_max": {
-              "metric": "master.Master.QueueCallTime_max",
+              "metric":"master.Master.QueueCallTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_mean": {
-              "metric": "master.Master.QueueCallTime_mean",
+              "metric":"master.Master.QueueCallTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/QueueCallTime_min": {
-              "metric": "master.Master.QueueCallTime_min",
+              "metric":"master.Master.QueueCallTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/queueSize": {
-              "metric": "master.Master.queueSize",
+              "metric":"master.Master.queueSize",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/receivedBytes": {
-              "metric": "master.Master.receivedBytes",
+              "metric":"master.Master.receivedBytes",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/sentBytes": {
-              "metric": "master.Master.sentBytes",
+              "metric":"master.Master.sentBytes",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_75th_percentile": {
-              "metric": "master.Master.TotalCallTime_75th_percentile",
+              "metric":"master.Master.TotalCallTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_95th_percentile": {
-              "metric": "master.Master.TotalCallTime_95th_percentile",
+              "metric":"master.Master.TotalCallTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_99th_percentile": {
-              "metric": "master.Master.TotalCallTime_99th_percentile",
+              "metric":"master.Master.TotalCallTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_max": {
-              "metric": "master.Master.TotalCallTime_max",
+              "metric":"master.Master.TotalCallTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_mean": {
-              "metric": "master.Master.TotalCallTime_mean",
+              "metric":"master.Master.TotalCallTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_median": {
-              "metric": "master.Master.TotalCallTime_median",
+              "metric":"master.Master.TotalCallTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_min": {
-              "metric": "master.Master.TotalCallTime_min",
+              "metric":"master.Master.TotalCallTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Master/TotalCallTime_num_ops": {
-              "metric": "master.Master.TotalCallTime_num_ops",
+              "metric":"master.Master.TotalCallTime_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/averageLoad": {
-              "metric": "master.Server.averageLoad",
+              "metric":"master.Server.averageLoad",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/masterActiveTime": {
-              "metric": "master.Server.masterActiveTime",
+              "metric":"master.Server.masterActiveTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/masterStartTime": {
-              "metric": "master.Server.masterStartTime",
+              "metric":"master.Server.masterStartTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/numDeadRegionServers": {
-              "metric": "master.Server.numDeadRegionServers",
+              "metric":"master.Server.numDeadRegionServers",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/master/Server/numRegionServers": {
-              "metric": "master.Server.numRegionServers",
+              "metric":"master.Server.numRegionServers",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/DroppedPubAll": {
-              "metric": "metricssystem.MetricsSystem.DroppedPubAll",
+              "metric":"metricssystem.MetricsSystem.DroppedPubAll",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/NumActiveSinks": {
-              "metric": "metricssystem.MetricsSystem.NumActiveSinks",
+              "metric":"metricssystem.MetricsSystem.NumActiveSinks",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/NumActiveSources": {
-              "metric": "metricssystem.MetricsSystem.NumActiveSources",
+              "metric":"metricssystem.MetricsSystem.NumActiveSources",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/NumAllSinks": {
-              "metric": "metricssystem.MetricsSystem.NumAllSinks",
+              "metric":"metricssystem.MetricsSystem.NumAllSinks",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/NumAllSources": {
-              "metric": "metricssystem.MetricsSystem.NumAllSources",
+              "metric":"metricssystem.MetricsSystem.NumAllSources",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/PublishAvgTime": {
-              "metric": "metricssystem.MetricsSystem.PublishAvgTime",
+              "metric":"metricssystem.MetricsSystem.PublishAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/PublishNumOps": {
-              "metric": "metricssystem.MetricsSystem.PublishNumOps",
+              "metric":"metricssystem.MetricsSystem.PublishNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/Sink_timelineAvgTime": {
-              "metric": "metricssystem.MetricsSystem.Sink_timelineAvgTime",
+              "metric":"metricssystem.MetricsSystem.Sink_timelineAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/Sink_timelineDropped": {
-              "metric": "metricssystem.MetricsSystem.Sink_timelineDropped",
+              "metric":"metricssystem.MetricsSystem.Sink_timelineDropped",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/Sink_timelineNumOps": {
-              "metric": "metricssystem.MetricsSystem.Sink_timelineNumOps",
+              "metric":"metricssystem.MetricsSystem.Sink_timelineNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/Sink_timelineQsize": {
-              "metric": "metricssystem.MetricsSystem.Sink_timelineQsize",
+              "metric":"metricssystem.MetricsSystem.Sink_timelineQsize",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/SnapshotAvgTime": {
-              "metric": "metricssystem.MetricsSystem.SnapshotAvgTime",
+              "metric":"metricssystem.MetricsSystem.SnapshotAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/metricssystem/MetricsSystem/SnapshotNumOps": {
-              "metric": "metricssystem.MetricsSystem.SnapshotNumOps",
+              "metric":"metricssystem.MetricsSystem.SnapshotNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/appendCount": {
-              "metric": "regionserver.WAL.appendCount",
+              "metric":"regionserver.WAL.appendCount",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_75th_percentile": {
-              "metric": "regionserver.WAL.AppendSize_75th_percentile",
+              "metric":"regionserver.WAL.AppendSize_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_95th_percentile": {
-              "metric": "regionserver.WAL.AppendSize_95th_percentile",
+              "metric":"regionserver.WAL.AppendSize_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_99th_percentile": {
-              "metric": "regionserver.WAL.AppendSize_99th_percentile",
+              "metric":"regionserver.WAL.AppendSize_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_max": {
-              "metric": "regionserver.WAL.AppendSize_max",
+              "metric":"regionserver.WAL.AppendSize_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_mean": {
-              "metric": "regionserver.WAL.AppendSize_mean",
+              "metric":"regionserver.WAL.AppendSize_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_median": {
-              "metric": "regionserver.WAL.AppendSize_median",
+              "metric":"regionserver.WAL.AppendSize_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_min": {
-              "metric": "regionserver.WAL.AppendSize_min",
+              "metric":"regionserver.WAL.AppendSize_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendSize_num_ops": {
-              "metric": "regionserver.WAL.AppendSize_num_ops",
+              "metric":"regionserver.WAL.AppendSize_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_75th_percentile": {
-              "metric": "regionserver.WAL.AppendTime_75th_percentile",
+              "metric":"regionserver.WAL.AppendTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_95th_percentile": {
-              "metric": "regionserver.WAL.AppendTime_95th_percentile",
+              "metric":"regionserver.WAL.AppendTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_99th_percentile": {
-              "metric": "regionserver.WAL.AppendTime_99th_percentile",
+              "metric":"regionserver.WAL.AppendTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_max": {
-              "metric": "regionserver.WAL.AppendTime_max",
+              "metric":"regionserver.WAL.AppendTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_mean": {
-              "metric": "regionserver.WAL.AppendTime_mean",
+              "metric":"regionserver.WAL.AppendTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_median": {
-              "metric": "regionserver.WAL.AppendTime_median",
+              "metric":"regionserver.WAL.AppendTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_min": {
-              "metric": "regionserver.WAL.AppendTime_min",
+              "metric":"regionserver.WAL.AppendTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/AppendTime_num_ops": {
-              "metric": "regionserver.WAL.AppendTime_num_ops",
+              "metric":"regionserver.WAL.AppendTime_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/lowReplicaRollRequest": {
-              "metric": "regionserver.WAL.lowReplicaRollRequest",
+              "metric":"regionserver.WAL.lowReplicaRollRequest",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/rollRequest": {
-              "metric": "regionserver.WAL.rollRequest",
+              "metric":"regionserver.WAL.rollRequest",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/slowAppendCount": {
-              "metric": "regionserver.WAL.slowAppendCount",
+              "metric":"regionserver.WAL.slowAppendCount",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_75th_percentile": {
-              "metric": "regionserver.WAL.SyncTime_75th_percentile",
+              "metric":"regionserver.WAL.SyncTime_75th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_95th_percentile": {
-              "metric": "regionserver.WAL.SyncTime_95th_percentile",
+              "metric":"regionserver.WAL.SyncTime_95th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_99th_percentile": {
-              "metric": "regionserver.WAL.SyncTime_99th_percentile",
+              "metric":"regionserver.WAL.SyncTime_99th_percentile",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_max": {
-              "metric": "regionserver.WAL.SyncTime_max",
+              "metric":"regionserver.WAL.SyncTime_max",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_mean": {
-              "metric": "regionserver.WAL.SyncTime_mean",
+              "metric":"regionserver.WAL.SyncTime_mean",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_median": {
-              "metric": "regionserver.WAL.SyncTime_median",
+              "metric":"regionserver.WAL.SyncTime_median",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_min": {
-              "metric": "regionserver.WAL.SyncTime_min",
+              "metric":"regionserver.WAL.SyncTime_min",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/regionserver/WAL/SyncTime_num_ops": {
-              "metric": "regionserver.WAL.SyncTime_num_ops",
+              "metric":"regionserver.WAL.SyncTime_num_ops",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/GetGroupsAvgTime": {
-              "metric": "ugi.UgiMetrics.GetGroupsAvgTime",
+              "metric":"ugi.UgiMetrics.GetGroupsAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/GetGroupsNumOps": {
-              "metric": "ugi.UgiMetrics.GetGroupsNumOps",
+              "metric":"ugi.UgiMetrics.GetGroupsNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/LoginFailureAvgTime": {
-              "metric": "ugi.UgiMetrics.LoginFailureAvgTime",
+              "metric":"ugi.UgiMetrics.LoginFailureAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/LoginFailureNumOps": {
-              "metric": "ugi.UgiMetrics.LoginFailureNumOps",
+              "metric":"ugi.UgiMetrics.LoginFailureNumOps",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/LoginSuccessAvgTime": {
-              "metric": "ugi.UgiMetrics.LoginSuccessAvgTime",
+              "metric":"ugi.UgiMetrics.LoginSuccessAvgTime",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/ugi/UgiMetrics/LoginSuccessNumOps": {
-              "metric": "ugi.UgiMetrics.LoginSuccessNumOps",
+              "metric":"ugi.UgiMetrics.LoginSuccessNumOps",
               "pointInTime": true,
               "temporal": true
             }
