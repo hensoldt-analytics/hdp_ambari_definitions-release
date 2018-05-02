@@ -776,41 +776,6 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>hive.exec.orc.default.stripe.size</name>
-    <value>67108864</value>
-    <description>Define the default ORC stripe size</description>
-    <display-name>Default ORC Stripe Size</display-name>
-    <value-attributes>
-      <type>int</type>
-      <minimum>8388608</minimum>
-      <maximum>268435456</maximum>
-      <unit>B</unit>
-      <increment-step>8388608</increment-step>
-    </value-attributes>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>hive.exec.orc.default.compress</name>
-    <value>ZLIB</value>
-    <description>Define the default compression codec for ORC file</description>
-    <display-name>ORC Compression Algorithm</display-name>
-    <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>ZLIB</value>
-          <label>zlib Compression Library</label>
-        </entry>
-        <entry>
-          <value>SNAPPY</value>
-          <label>Snappy Compression Library</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
-    </value-attributes>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
     <name>hive.orc.splits.include.file.footer</name>
     <value>false</value>
     <description>
@@ -1872,68 +1837,6 @@ limitations under the License.
     <name>hive.server2.webui.use.ssl</name>
     <value>false</value>
     <description>Enable SSL for HiveServer2 Interactive</description>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>hive.exec.orc.encoding.strategy</name>
-    <value>SPEED</value>
-    <description>
-      Define the encoding strategy to use while writing data. Changing this
-      will only affect the light weight encoding for integers. This flag will not change
-      the compression level of higher level compression codec (like ZLIB). Possible
-      options are SPEED and COMPRESSION.
-    </description>
-    <display-name>ORC Encoding Strategy</display-name>
-    <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>SPEED</value>
-          <label>Speed</label>
-        </entry>
-        <entry>
-          <value>COMPRESSION</value>
-          <label>Compression</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
-    </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_exec_orc_storage_strategy</name>
-      </property>
-    </depends-on>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>hive.exec.orc.compression.strategy</name>
-    <value>SPEED</value>
-    <description>
-      Define the compression strategy to use while writing data. This changes the
-      compression level of higher level compression codec (like ZLIB).
-    </description>
-    <display-name>ORC Compression Strategy</display-name>
-    <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>SPEED</value>
-          <label>Speed</label>
-        </entry>
-        <entry>
-          <value>COMPRESSION</value>
-          <label>Compression</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
-    </value-attributes>
-    <depends-on>
-      <property>
-        <type>hive-env</type>
-        <name>hive_exec_orc_storage_strategy</name>
-      </property>
-    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>

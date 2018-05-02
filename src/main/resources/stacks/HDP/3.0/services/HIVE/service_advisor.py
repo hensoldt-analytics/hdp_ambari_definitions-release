@@ -737,15 +737,6 @@ class HiveValidator(service_advisor.ServiceAdvisor):
       if hiveTezContainerSize is not None and yarnSchedulerMaximumAllocationMb is not None and hiveTezContainerSize > yarnSchedulerMaximumAllocationMb:
         validationItems.append({"config-name": "hive.tez.container.size", "item": self.getWarnItem("hive.tez.container.size is greater than the maximum container size specified in yarn.scheduler.maximum-allocation-mb")})
     
-    stripe_size_values = [8388608, 16777216, 33554432, 67108864, 134217728, 268435456]
-    stripe_size_property = "hive.exec.orc.default.stripe.size"
-    if stripe_size_property in properties and \
-        int(properties[stripe_size_property]) not in stripe_size_values:
-      validationItems.append({"config-name": stripe_size_property,
-                              "item": self.getWarnItem("Correct values are {0}".format(stripe_size_values))
-                             }
-      )
-    
     authentication_property = "hive.server2.authentication"
     ldap_baseDN_property = "hive.server2.authentication.ldap.baseDN"
     ldap_domain_property = "hive.server2.authentication.ldap.Domain"

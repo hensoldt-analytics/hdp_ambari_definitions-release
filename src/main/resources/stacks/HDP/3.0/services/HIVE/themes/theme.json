@@ -117,14 +117,6 @@
                       "column-span": "1"
                     },
                     {
-                      "name": "optimization-row2-col1",
-                      "display-name": "Storage",
-                      "row-index": "1",
-                      "column-index": "0",
-                      "row-span": "1",
-                      "column-span": "1"
-                    },
-                    {
                       "name": "optimization-row2-col2",
                       "display-name": "",
                       "row-index": "1",
@@ -187,18 +179,6 @@
     "placement": {
       "configuration-layout": "default",
       "configs": [
-        {
-          "config": "hive-site/hive.exec.orc.default.stripe.size",
-          "subsection-name": "optimization-row2-col1"
-        },
-        {
-          "config": "hive-site/hive.exec.orc.default.compress",
-          "subsection-name": "optimization-row2-col1"
-        },
-        {
-          "config": "hive-env/hive_exec_orc_storage_strategy",
-          "subsection-name": "optimization-row2-col1"
-        },
         {
           "config": "hive-env/hive.heapsize",
           "subsection-name": "optimization-row2-col2"
@@ -535,29 +515,6 @@
       ]
     },
     "widgets": [
-      {
-        "config": "hive-site/hive.exec.orc.default.stripe.size",
-        "widget": {
-          "type": "slider",
-          "units": [
-            {
-              "unit-name": "MB"
-            }
-          ]
-        }
-      },
-      {
-        "config": "hive-site/hive.exec.orc.default.compress",
-        "widget": {
-          "type": "combo"
-        }
-      },
-      {
-        "config": "hive-env/hive_exec_orc_storage_strategy",
-        "widget": {
-          "type": "toggle"
-        }
-      },
       {
         "config": "hive-env/hive.heapsize",
         "widget": {
