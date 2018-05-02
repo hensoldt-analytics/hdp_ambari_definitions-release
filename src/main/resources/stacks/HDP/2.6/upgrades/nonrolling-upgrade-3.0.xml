@@ -313,6 +313,10 @@
       <!-- ZEPPELIN -->
 
       <!--HDFS-->
+      <execute-stage service="HDFS" component="NAMENODE" title="Remove temporary HDFS HA properties">
+        <task xsi:type="configure" id="hdfs_remove_initial_ha_properties"/>
+      </execute-stage>
+
       <execute-stage service="HDFS" component="DATANODE" title="Enables SASL for authentication of data transfer protocol">
         <condition xsi:type="security" type="kerberos"/>
         <task xsi:type="configure" id="hdfs_set_data_transfer_protection"/>

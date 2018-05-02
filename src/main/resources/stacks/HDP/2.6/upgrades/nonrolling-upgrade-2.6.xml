@@ -307,6 +307,10 @@
         <task xsi:type="configure" id="hdfs_namenode_prevent_gc_heuristics"/>
       </execute-stage>
 
+      <execute-stage service="HDFS" component="NAMENODE" title="Remove temporary HDFS HA properties">
+        <task xsi:type="configure" id="hdfs_remove_initial_ha_properties"/>
+      </execute-stage>
+
       <execute-stage service="HDFS" component="HDFS_CLIENT" title="Set User-Agent">
         <task xsi:type="configure" id="hdfs_user_agent" />
       </execute-stage>

@@ -54,6 +54,15 @@
             <type>hdfs-log4j</type>
             <insert key="content" value="# Adding logging for 3rd party library&#xA;log4j.logger.org.apache.commons.beanutils=WARN" insert-type="append" newline-before="true" />
           </definition>
+
+          <definition xsi:type="configure" id="hdfs_remove_initial_ha_properties" summary="Remove temporary HDFS HA properties">
+            <type>hadoop-env</type>
+            <transfer operation="delete" delete-key="dfs_ha_initial_namenode_active" />
+            <transfer operation="delete" delete-key="dfs_ha_initial_namenode_standby" />
+            <transfer operation="delete" delete-key="dfs_ha_initial_namenode_active_set" />
+            <transfer operation="delete" delete-key="dfs_ha_initial_namenode_standby_set" />
+            <transfer operation="delete" delete-key="dfs_ha_initial_cluster_id" />
+          </definition>
         </changes>
       </component>
       <component name="DATANODE">
