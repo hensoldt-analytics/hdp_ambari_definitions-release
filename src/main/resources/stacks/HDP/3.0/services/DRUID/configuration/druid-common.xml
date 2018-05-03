@@ -75,11 +75,11 @@
     </description>
     <on-ambari-upgrade add="false"/>
   </property>
-  <property>
+  <property require-input="true">
     <name>druid.storage.type</name>
     <value></value>
     <description>
-      Choices:local, noop, s3, hdfs, c*. The type of deep storage to use.
+      Choices:local, s3, hdfs. The type of deep storage to use. Note:- local storage only works with single node cluster.
     </description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -87,7 +87,7 @@
     <name>druid.storage.storageDirectory</name>
     <value></value>
     <description>
-      directory to use as deep storage.
+      directory to use as deep storage. Used only when druid.storage.type is local or hdfs
     </description>
     <on-ambari-upgrade add="false"/>
   </property>
