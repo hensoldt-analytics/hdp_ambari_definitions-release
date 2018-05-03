@@ -760,6 +760,14 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.exec.orc.default.stripe.size</name>
+    <on-ambari-upgrade delete="true"/>
+  </property>
+  <property>
+    <name>hive.exec.orc.default.compress</name>
+ <on-ambari-upgrade delete="true"/>
+  </property>
+   <property>
     <name>hive.orc.splits.include.file.footer</name>
     <value>false</value>
     <description>
@@ -1810,6 +1818,14 @@ limitations under the License.
     <value>false</value>
     <description>Enable SSL for HiveServer2 Interactive</description>
     <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.exec.orc.encoding.strategy</name>
+    <on-ambari-upgrade delete="true"/>
+  </property>
+  <property>
+    <name>hive.exec.orc.compression.strategy</name>
+    <on-ambari-upgrade delete="true"/>
   </property>
   <property>
     <name>hive.exec.orc.split.strategy</name>
