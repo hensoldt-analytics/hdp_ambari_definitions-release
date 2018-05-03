@@ -71,17 +71,17 @@
   </property>
   <property>
     <name>superset_admin_firstname</name>
-    <value></value>
+    <value>unspecified</value>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>superset_admin_lastname</name>
-    <value></value>
+    <value>unspecified</value>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>superset_admin_email</name>
-    <value></value>
+    <value>unspecified</value>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
