@@ -2068,6 +2068,16 @@ class YARNValidator(service_advisor.ServiceAdvisor):
       validationItems = [
                       {"config-name": "yarn.log.server.web-service.url",
                        "item": self.getWarnItem("Value should be %s" % propertyValue)}]
+
+    if "yarn_hierarchy" in services["configurations"]["container-executor"]["properties"] \
+              and "yarn.nodemanager.linux-container-executor.cgroups.hierarchy" in services["configurations"]["yarn-site"]["properties"]:
+      yn_hirch = services["configurations"]["container-executor"]["properties"]["yarn_hierarchy"]
+      yn_crp_hirch = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.linux-container-executor.cgroups.hierarchy"]
+      if yn_hirch != yn_crp_hirch:
+        validationItems.append({"config-name": 'yarn.nodemanager.linux-container-executor.cgroups.hierarchy',
+                              "item": self.getWarnItem(
+                                "yarn.nodemanager.linux-container-executor.cgroups.hierarchy and yarn_hierarchy should always have same value")})
+
     return self.toConfigurationValidationProblems(validationItems, "yarn-site")
 
   def validateYARNEnvConfigurationsFromHDP206(self, properties, recommendedDefaults, configurations, services, hosts):
