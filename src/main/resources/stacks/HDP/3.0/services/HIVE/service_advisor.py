@@ -264,7 +264,7 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
     # DAS Hook
     putHiveEnvProperty("hive_timeline_logging_enabled", "false")
-    das_hook_class = "org.apache.tez.dag.history.logging.proto.ProtoHistoryLoggingService"
+    das_hook_class = "org.apache.hadoop.hive.ql.hooks.HiveProtoLoggingHook"
 
     hooks_properties = ["hive.exec.pre.hooks", "hive.exec.post.hooks", "hive.exec.failure.hooks"]
     for hooks_property in hooks_properties:
