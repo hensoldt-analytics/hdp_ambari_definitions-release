@@ -195,7 +195,7 @@ def hive_interactive(name = None):
   File(format("{hive_server_interactive_conf_dir}/hive-env.sh"),
        owner = params.hive_user,
        group = params.user_group,
-       mode = mode_identified,
+       mode = 0755,
        content = InlineTemplate(params.hive_interactive_env_sh_template)
   )
 

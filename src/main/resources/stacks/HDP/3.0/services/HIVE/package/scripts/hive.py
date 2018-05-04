@@ -45,10 +45,6 @@ from resource_management.libraries.resources.xml_config import XmlConfig
 def hive(name=None):
   import params
 
-  hive_client_conf_path = format("{stack_root}/current/{component_directory}/conf")
-  # Permissions 644 for conf dir (client) files, and 600 for conf.server
-  mode_identified = 0644 if params.hive_config_dir == hive_client_conf_path else 0600
-
   # We should change configurations for client as well as for server.
   # The reason is that stale-configs are service-level, not component.
   Logger.info("Directories to fill with configs: %s" % str(params.hive_conf_dirs_list))
@@ -78,7 +74,7 @@ def hive(name=None):
        owner=params.hive_user,
        group=params.user_group,
        content=InlineTemplate(params.hive_env_sh_template),
-       mode=mode_identified
+       mode=0755
   )
 
   # On some OS this folder could be not exists, so we will create it before pushing there files
@@ -357,7 +353,7 @@ def fill_conf_dir(component_conf_dir):
   File(format("{component_conf_dir}/hive-env.sh.template"),
        owner=params.hive_user,
        group=params.user_group,
-       mode=mode_identified_for_file
+       mode=0755
   )
 
   # Create properties files under conf dir
