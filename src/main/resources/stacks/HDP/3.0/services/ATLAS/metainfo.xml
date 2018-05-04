@@ -186,6 +186,7 @@
         <config-type>atlas-env</config-type>
         <config-type>atlas-log4j</config-type>
         <config-type>core-site</config-type>
+        <config-type>mount-table</config-type>
         <config-type>hdfs-site</config-type>
         <config-type>atlas-solrconfig</config-type>
         <config-type>ranger-atlas-audit</config-type>

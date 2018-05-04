@@ -184,7 +184,16 @@ class Master(Script):
                 configuration_attributes=params.config['configurationAttributes']['core-site'],
                 owner=params.zeppelin_user,
                 group=params.zeppelin_group,
-                mode=0644)
+                mode=0644,
+                xml_include_file=params.mount_table_xml_inclusion_file_full_path)
+
+      if params.mount_table_content:
+        File(params.mount_table_xml_inclusion_file_full_path,
+             owner=params.zeppelin_user,
+             group=params.zeppelin_group,
+             content=params.mount_table_content,
+             mode=0644
+        )
 
   def check_and_copy_notebook_in_hdfs(self, params):
     if params.config['configurations']['zeppelin-site']['zeppelin.notebook.dir'].startswith("/"):

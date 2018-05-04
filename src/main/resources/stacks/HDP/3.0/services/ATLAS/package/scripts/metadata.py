@@ -211,8 +211,17 @@ def metadata(type='server'):
         configuration_attributes=params.config['configurationAttributes']['core-site'],
         owner=params.metadata_user,
         group=params.user_group,
-        mode=0644
+        mode=0644,
+        xml_include_file=params.mount_table_xml_inclusion_file_full_path
       )
+
+      if params.mount_table_content:
+        File(params.mount_table_xml_inclusion_file_full_path,
+             owner=params.metadata_user,
+             group=params.user_group,
+             content=params.mount_table_content,
+             mode=0644
+        )
 
     Directory(format('{metadata_home}/'),
       owner = params.metadata_user,

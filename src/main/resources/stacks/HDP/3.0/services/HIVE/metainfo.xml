@@ -388,6 +388,7 @@
 
       <configuration-dependencies>
         <config-type>core-site</config-type>
+        <config-type>mount-table</config-type>
         <config-type>hive-log4j</config-type>
         <config-type>hive-exec-log4j</config-type>
         <config-type>hive-env</config-type>

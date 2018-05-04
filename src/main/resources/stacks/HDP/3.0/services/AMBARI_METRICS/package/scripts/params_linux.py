@@ -68,3 +68,12 @@ hbase_regionserver_shutdown_timeout = expect('/configurations/ams-hbase-env/hbas
 
 grafana_pid_file = format("{ams_grafana_pid_dir}/grafana-server.pid")
 grafana_process_exists_cmd = as_user(format("test -f {grafana_pid_file} && ps -p `cat {grafana_pid_file}`"), ams_user)
+
+
+mount_table_content = None
+if 'mount-table' in config['configurations']:
+  xml_inclusion_file_name = 'mount-table.xml'
+  mount_table = config['configurations']['mount-table']
+
+  if 'content' in mount_table and mount_table['content'].strip():
+    mount_table_content = mount_table['content']

@@ -309,6 +309,17 @@ else:
   dfs_ha_namenode_active = frozenset()
   dfs_ha_initial_cluster_id = None
 
+
+mount_table_xml_inclusion_file_full_path = None
+mount_table_content = None
+if 'mount-table' in config['configurations']:
+  xml_inclusion_file_name = 'mount-table.xml'
+  mount_table = config['configurations']['mount-table']
+
+  if 'content' in mount_table and mount_table['content'].strip():
+    mount_table_xml_inclusion_file_full_path = os.path.join(hadoop_conf_dir, xml_inclusion_file_name)
+    mount_table_content = mount_table['content']
+
 ha_zookeeper_quorum = config['configurations']['core-site']['ha.zookeeper.quorum']
 jaas_file = os.path.join(hadoop_conf_secure_dir, 'hdfs_jaas.conf')
 zk_namespace = default('/configurations/hdfs-site/ha.zookeeper.parent-znode', '/hadoop-ha')

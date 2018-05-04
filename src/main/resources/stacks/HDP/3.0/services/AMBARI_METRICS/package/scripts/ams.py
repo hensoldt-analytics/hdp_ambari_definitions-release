@@ -352,23 +352,60 @@ def ams(name=None, action=None):
         truncated_core_site.pop('hadoop.http.authentication.type')
         truncated_core_site.pop('hadoop.http.filter.initializers')
 
-      XmlConfig("core-site.xml",
-                conf_dir=params.ams_collector_conf_dir,
-                configurations=truncated_core_site,
-                configuration_attributes=params.config['configurationAttributes']['core-site'],
-                owner=params.ams_user,
-                group=params.user_group,
-                mode=0644
-      )
+      # if there is the viewFS mount table content, create separate xml config and include in in the core-sites
+      # else just create core-sites
+      if params.mount_table_content:
+        XmlConfig("core-site.xml",
+                  conf_dir=params.ams_collector_conf_dir,
+                  configurations=truncated_core_site,
+                  configuration_attributes=params.config['configurationAttributes']['core-site'],
+                  owner=params.ams_user,
+                  group=params.user_group,
+                  mode=0644,
+                  xml_include_file=os.path.join(params.ams_collector_conf_dir, params.xml_inclusion_file_name)
+        )
 
-      XmlConfig("core-site.xml",
-                conf_dir=params.hbase_conf_dir,
-                configurations=truncated_core_site,
-                configuration_attributes=params.config['configurationAttributes']['core-site'],
-                owner=params.ams_user,
-                group=params.user_group,
-                mode=0644
-      )
+        File(os.path.join(params.ams_collector_conf_dir, params.xml_inclusion_file_name),
+             owner=params.ams_user,
+             group=params.user_group,
+             content=params.mount_table_content,
+             mode=0644
+        )
+
+        XmlConfig("core-site.xml",
+                  conf_dir=params.hbase_conf_dir,
+                  configurations=truncated_core_site,
+                  configuration_attributes=params.config['configurationAttributes']['core-site'],
+                  owner=params.ams_user,
+                  group=params.user_group,
+                  mode=0644,
+                  xml_include_file=os.path.join(params.hbase_conf_dir, params.xml_inclusion_file_name)
+        )
+
+        File(os.path.join(params.hbase_conf_dir, params.xml_inclusion_file_name),
+             owner=params.ams_user,
+             group=params.user_group,
+             content=params.mount_table_content,
+             mode=0644
+        )
+      else:
+        XmlConfig("core-site.xml",
+                  conf_dir=params.ams_collector_conf_dir,
+                  configurations=truncated_core_site,
+                  configuration_attributes=params.config['configurationAttributes']['core-site'],
+                  owner=params.ams_user,
+                  group=params.user_group,
+                  mode=0644
+        )
+
+        XmlConfig("core-site.xml",
+                  conf_dir=params.hbase_conf_dir,
+                  configurations=truncated_core_site,
+                  configuration_attributes=params.config['configurationAttributes']['core-site'],
+                  owner=params.ams_user,
+                  group=params.user_group,
+                  mode=0644
+        )
 
     if params.metric_collector_https_enabled:
       export_ca_certs(params.ams_collector_conf_dir)

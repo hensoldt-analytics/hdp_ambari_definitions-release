@@ -135,8 +135,17 @@ def hdfs(name=None):
             configuration_attributes=params.config['configurationAttributes']['core-site'],
             owner=params.hdfs_user,
             group=params.user_group,
-            mode=0644
+            mode=0644,
+            xml_include_file=params.mount_table_xml_inclusion_file_full_path
   )
+
+  if params.mount_table_content:
+     File(params.mount_table_xml_inclusion_file_full_path,
+          owner=params.hdfs_user,
+          group=params.user_group,
+          content=params.mount_table_content,
+          mode=0644
+     )
 
   File(os.path.join(params.hadoop_conf_dir, 'slaves'),
        owner=tc_owner,

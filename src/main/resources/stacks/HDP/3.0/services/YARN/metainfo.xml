@@ -315,6 +315,7 @@
         <config-type>hdfs-site</config-type>
         <config-type>hadoop-env</config-type>
         <config-type>core-site</config-type>
+        <config-type>mount-table</config-type>
         <config-type>mapred-site</config-type>
         <config-type>yarn-log4j</config-type>
         <config-type>ams-ssl-client</config-type>
@@ -463,6 +464,7 @@
         <config-type>hdfs-site</config-type>
         <config-type>hadoop-env</config-type>
         <config-type>core-site</config-type>
+        <config-type>mount-table</config-type>
         <config-type>mapred-site</config-type>
         <config-type>mapred-env</config-type>
         <config-type>ssl-client</config-type>

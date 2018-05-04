@@ -431,3 +431,13 @@ is_ranger_kms_ssl_enabled = default('configurations/ranger-kms-site/ranger.servi
 # atlas admin login username password
 atlas_admin_username = config['configurations']['atlas-env']['atlas.admin.username']
 atlas_admin_password = config['configurations']['atlas-env']['atlas.admin.password']
+
+mount_table_xml_inclusion_file_full_path = None
+mount_table_content = None
+if 'mount-table' in config['configurations']:
+  xml_inclusion_file_name = 'mount-table.xml'
+  mount_table = config['configurations']['mount-table']
+
+  if 'content' in mount_table and mount_table['content'].strip():
+    mount_table_xml_inclusion_file_full_path = os.path.join(conf_dir, xml_inclusion_file_name)
+    mount_table_content = mount_table['content']

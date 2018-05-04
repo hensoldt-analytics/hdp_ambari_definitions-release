@@ -598,14 +598,35 @@ def create_core_site_xml(conf_dir):
 
   if params.stack_supports_ranger_kerberos:
     if params.has_namenode:
-      XmlConfig("core-site.xml",
-                conf_dir=conf_dir,
-                configurations=params.config['configurations']['core-site'],
-                configuration_attributes=params.config['configurationAttributes']['core-site'],
-                owner=params.unix_user,
-                group=params.unix_group,
-                mode=0644
-      )
+      # if there is the viewFS mount table content, create separate xml config and include in in the core-site
+      # else just create core-site
+      if params.mount_table_content:
+        XmlConfig("core-site.xml",
+                  conf_dir=conf_dir,
+                  configurations=params.config['configurations']['core-site'],
+                  configuration_attributes=params.config['configurationAttributes']['core-site'],
+                  owner=params.unix_user,
+                  group=params.unix_group,
+                  mode=0644,
+                  xml_include_file=os.path.join(conf_dir, params.xml_inclusion_file_name)
+        )
+
+
+        File(os.path.join(conf_dir, params.xml_inclusion_file_name),
+               owner=params.unix_user,
+               group=params.unix_group,
+               content=params.mount_table_content,
+               mode=0644
+        )
+      else:
+        XmlConfig("core-site.xml",
+                  conf_dir=conf_dir,
+                  configurations=params.config['configurations']['core-site'],
+                  configuration_attributes=params.config['configurationAttributes']['core-site'],
+                  owner=params.unix_user,
+                  group=params.unix_group,
+                  mode=0644
+        )
     else:
       Logger.warning('HDFS service not installed. Creating core-site.xml file.')
       XmlConfig("core-site.xml",
