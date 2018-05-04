@@ -332,6 +332,15 @@
       </execute-stage>
 
       <!--YARN-->
+      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Remove invalid HADOOP_OPTS and YARN_OPTS">
+        <task xsi:type="configure" id="hdp_30_remove_invalid_hadoop_and_yarn_opts"/>
+      </execute-stage>
+
+      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Fix Hadoop and YARN loggers">
+        <task xsi:type="configure" id="hdp_30_update_hadoop_and_yarn_loggers"/>
+      </execute-stage>
+
+      <!-- Do this last to convert any YARN_OPTS which remained -->
       <execute-stage service="YARN" component="RESOURCEMANAGER" title="Convert YARN_OPTS to HADOOP_OPTS">
         <task xsi:type="configure" id="hdp_30_convert_yarn_opts_to_hadoop_opts"/>
       </execute-stage>

@@ -279,6 +279,41 @@
             <replace key="yarn.application.classpath" find="/usr/hdp/current/hadoop-client" replace-with="{{hadoop_home}}"/>
           </definition>
 
+          <!--
+          ^\s* - line starts with any amount of whitespace
+          YARN_OPTS=(.*)-Dhadoop.log.dir(.*) - Find any YARN_OPTS= with the property -Dhadoop.log.dir
+          $[\r\n]+ - stopping at the end of line
+          -->
+          <definition xsi:type="configure" id="hdp_30_remove_invalid_hadoop_and_yarn_opts" summary="Remove Invalid HADOOP_OPTS and YARN_OPTS">
+            <type>yarn-env</type>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dhadoop.log.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dyarn.log.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dhadoop.log.file(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dyarn.log.file(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dyarn.home.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dhadoop.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dyarn.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Djava.library.path(.*)$[\r\n]+" replace-with="" match-all="true"/>
+
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dhadoop.log.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dyarn.log.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dhadoop.log.file(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dyarn.log.file(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dyarn.home.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dhadoop.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dyarn.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Djava.library.path(.*)$[\r\n]+" replace-with="" match-all="true"/>
+          </definition>
+
+          <definition xsi:type="configure" id="hdp_30_update_hadoop_and_yarn_loggers" summary="Fix Hadoop and YARN loggers">
+            <type>yarn-env</type>
+            <replace key="content" find="YARN_LOG_DIR" replace-with="HADOOP_LOG_DIR"/>
+            <replace key="content" find="YARN_LOGFILE" replace-with="HADOOP_LOGFILE"/>
+            <replace key="content" find="YARN_PID_DIR" replace-with="HADOOP_PID_DIR"/>
+            <replace key="content" find="YARN_ROOT_LOGGER" replace-with="HADOOP_ROOT_LOGGER"/>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value="export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}"/>
+          </definition>
+
           <definition xsi:type="configure" id="hdp_30_convert_yarn_opts_to_hadoop_opts" summary="Convert YARN_OPTS to HADOOP_OPTS">
             <type>yarn-env</type>
             <replace key="content" find="YARN_OPTS" replace-with="HADOOP_OPTS"/>

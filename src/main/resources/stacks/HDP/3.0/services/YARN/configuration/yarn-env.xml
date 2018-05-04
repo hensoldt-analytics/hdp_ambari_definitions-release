@@ -186,7 +186,7 @@
     <description>This is the jinja template for yarn-env.sh file</description>
     <value>
 export HADOOP_YARN_HOME={{hadoop_yarn_home}}
-export YARN_LOG_DIR={{yarn_log_dir}}
+export HADOOP_LOG_DIR={{yarn_log_dir}}
 export YARN_PID_DIR={{yarn_pid_dir}}
 export HADOOP_LIBEXEC_DIR={{hadoop_libexec_dir}}
 export JAVA_HOME={{java64_home}}
@@ -199,6 +199,9 @@ INVOKER="${0##*/}"
 if [ "$INVOKER" == "yarn-daemon.sh" ]; then
 export YARN_ROOT_LOGGER=${YARN_ROOT_LOGGER:-INFO,EWMA,RFA}
 fi
+
+# root hadoop logger
+export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}
 
 # User for YARN daemons
 export HADOOP_YARN_USER=${HADOOP_YARN_USER:-yarn}
@@ -289,8 +292,8 @@ IFS=
 
 
 # default log directory and file
-if [ "$YARN_LOG_DIR" = "" ]; then
-YARN_LOG_DIR="$HADOOP_YARN_HOME/logs"
+if [ "$HADOOP_LOG_DIR" = "" ]; then
+HADOOP_LOG_DIR="$HADOOP_YARN_HOME/logs"
 fi
 if [ "$YARN_LOGFILE" = "" ]; then
 YARN_LOGFILE='yarn.log'
@@ -307,25 +310,16 @@ unset IFS
 # YARN now uses specific subcommand options of the pattern (command)_(subcommand)_OPTS for every
 # component. Because of this, HADDOP_OPTS is now used as a simple way to specify common properties
 # between all YARN components.
-HADOOP_OPTS="$HADOOP_OPTS -Dhadoop.log.dir=$YARN_LOG_DIR"
-HADOOP_OPTS="$HADOOP_OPTS -Dyarn.log.dir=$YARN_LOG_DIR"
-HADOOP_OPTS="$HADOOP_OPTS -Dhadoop.log.file=$YARN_LOGFILE"
-HADOOP_OPTS="$HADOOP_OPTS -Dyarn.log.file=$YARN_LOGFILE"
-HADOOP_OPTS="$HADOOP_OPTS -Dyarn.home.dir=$YARN_COMMON_HOME"
 HADOOP_OPTS="$HADOOP_OPTS -Dyarn.id.str=$YARN_IDENT_STRING"
-HADOOP_OPTS="$HADOOP_OPTS -Dhadoop.root.logger=${YARN_ROOT_LOGGER:-INFO,console}"
-HADOOP_OPTS="$HADOOP_OPTS -Dyarn.root.logger=${YARN_ROOT_LOGGER:-INFO,console}"
-export YARN_NODEMANAGER_OPTS="$YARN_NODEMANAGER_OPTS -Dnm.audit.logger=INFO,NMAUDIT"
-export YARN_RESOURCEMANAGER_OPTS="$YARN_RESOURCEMANAGER_OPTS -Dyarn.server.resourcemanager.appsummary.logger=INFO,RMSUMMARY -Drm.audit.logger=INFO,RMAUDIT"
-if [ "x$JAVA_LIBRARY_PATH" != "x" ]; then
-HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$JAVA_LIBRARY_PATH"
-fi
 HADOOP_OPTS="$HADOOP_OPTS -Dyarn.policy.file=$YARN_POLICYFILE"
 HADOOP_OPTS="$HADOOP_OPTS -Djava.io.tmpdir={{hadoop_java_io_tmpdir}}"
 
 {% if security_enabled %}
 HADOOP_OPTS="$HADOOP_OPTS -Djavax.security.auth.useSubjectCredsOnly=false"
 {% endif %}
+
+export YARN_NODEMANAGER_OPTS="$YARN_NODEMANAGER_OPTS -Dnm.audit.logger=INFO,NMAUDIT"
+export YARN_RESOURCEMANAGER_OPTS="$YARN_RESOURCEMANAGER_OPTS -Dyarn.server.resourcemanager.appsummary.logger=INFO,RMSUMMARY -Drm.audit.logger=INFO,RMAUDIT"
 
 {% if registry_dns_needs_privileged_access %}
 # If the DNS server is configured to use the standard privileged port 53,
