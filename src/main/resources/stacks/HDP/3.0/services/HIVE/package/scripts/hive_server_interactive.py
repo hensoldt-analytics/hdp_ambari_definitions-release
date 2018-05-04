@@ -224,7 +224,7 @@ class HiveServerInteractive(Script):
 
       unique_name = "llap-yarn-service_%s" % datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')
 
-      cmd = format("{stack_root}/current/hive-server2/bin/hive --service llap --size {params.llap_daemon_container_size}m "
+      cmd = format("{stack_root}/current/hive-server2/bin/hive --service llap --size {params.llap_daemon_container_size}m --startImmediately --name {params.llap_app_name} "
                    "--cache {params.hive_llap_io_mem_size}m --xmx {params.llap_heap_size}m --loglevel {params.llap_log_level} "
                    "--output {LLAP_PACKAGE_CREATION_PATH}/{unique_name}")
 
@@ -270,7 +270,6 @@ class HiveServerInteractive(Script):
           metaspaceSize = "1024m"
         cmd = cmd[:-1] + " -XX:MetaspaceSize="+metaspaceSize+ "\""
 
-      run_file_path = None
       try:
         Logger.info(format("LLAP start command: {cmd}"))
         code, output, error = shell.checked_call(cmd,
@@ -283,25 +282,6 @@ class HiveServerInteractive(Script):
         if code != 0 or output is None:
           raise Fail("Command failed with either non-zero return code or no output.")
 
-        # E.g., output:
-        # Prepared llap-yarn-service-05Apr2016/run.sh for running LLAP on YARN Service
-        exp = r"(.*)Prepared (.*?run.sh) for running LLAP"
-        run_file_path = None
-        out_splits = output.split("\n")
-        for line in out_splits:
-          line = line.strip()
-          m = re.match(exp, line, re.I)
-          if m and len(m.groups()) == 2:
-            run_file_name = m.group(2)
-            run_file_path = os.path.join(params.hive_user_home_dir, run_file_name)
-            break
-        if not run_file_path:
-          raise Fail("Did not find run.sh file in output: " + str(output))
-
-        Logger.info(format("Run file path: {run_file_path}"))
-        Execute(run_file_path, user=params.hive_user, logoutput=True)
-        Logger.info("Submitted LLAP app name : {0}".format(params.llap_app_name))
-
         # We need to check the status of LLAP app to figure out it got
         # launched properly and is in running state. Then go ahead with Hive Interactive Server start.
         status = self.check_llap_app_status(params.llap_app_name, params.num_retries_for_checking_llap_status)
@@ -312,14 +292,6 @@ class HiveServerInteractive(Script):
           Logger.error("LLAP app '{0}' deployment unsuccessful.".format(params.llap_app_name))
           return False
       except:
-        # Attempt to clean up the packaged application, or potentially rename it with a .bak
-        if run_file_path is not None and cleanup:
-          parent_dir = os.path.dirname(run_file_path)
-          Directory(parent_dir,
-                    action = "delete",
-                    ignore_failures = True,
-          )
-
         # throw the original exception
         raise
 
