@@ -424,7 +424,7 @@
       
       <configuration-dependencies>
         <config-type>core-site</config-type>
-        <config-type>mount-table</config-type>
+        <config-type>viewfs-mount-table</config-type>
         <config-type>hdfs-site</config-type>
         <config-type>hadoop-env</config-type>
         <config-type>hadoop-policy</config-type>

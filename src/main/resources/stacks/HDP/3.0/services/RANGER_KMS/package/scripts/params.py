@@ -342,9 +342,9 @@ zookeeper_principal_primary = get_bare_principal(zookeeper_principal)
 
 mount_table_xml_inclusion_file_full_path = None
 mount_table_content = None
-if 'mount-table' in config['configurations']:
-  xml_inclusion_file_name = 'mount-table.xml'
-  mount_table = config['configurations']['mount-table']
+if 'viewfs-mount-table' in config['configurations']:
+  xml_inclusion_file_name = 'viewfs-mount-table.xml'
+  mount_table = config['configurations']['viewfs-mount-table']
 
   if 'content' in mount_table and mount_table['content'].strip():
     mount_table_xml_inclusion_file_full_path = os.path.join(kms_conf_dir, xml_inclusion_file_name)
