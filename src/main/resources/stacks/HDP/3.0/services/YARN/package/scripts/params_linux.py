@@ -673,3 +673,8 @@ if 'mount-table' in config['configurations']:
 
   if 'content' in mount_table and mount_table['content'].strip():
     mount_table_content = mount_table['content']
+
+hbase_log_maxfilesize = default('configurations/yarn-hbase-log4j/hbase_log_maxfilesize',256)
+hbase_log_maxbackupindex = default('configurations/yarn-hbase-log4j/hbase_log_maxbackupindex',20)
+hbase_security_log_maxfilesize = default('configurations/yarn-hbase-log4j/hbase_security_log_maxfilesize',256)
+hbase_security_log_maxbackupindex = default('configurations/yarn-hbase-log4j/hbase_security_log_maxbackupindex',20)
