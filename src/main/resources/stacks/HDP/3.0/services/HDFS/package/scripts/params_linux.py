@@ -586,16 +586,20 @@ if enable_ranger_hdfs:
   if has_ranger_admin and stack_supports_ranger_audit_db and xa_audit_db_flavor.lower() == 'sqla':
     xa_audit_db_is_enabled = False
 
+  # saving default repo name value
+  repo_name_default = repo_name
+
   # Configuration when HDFS federation is enabled
   # TODO: This will need to be updated when Ambari supports Namenode-Federation without enabling Namenode-HA.
   is_hdfs_federation_enabled = False if dfs_ha_nameservices is None else "," in dfs_ha_nameservices
   is_namenode_host = 'role' in config and config['role'] == "NAMENODE"
   if is_hdfs_federation_enabled and is_namenode_host:
-    namenode_nameservice,namenode_logical_name = namenode_ha_utils.get_namespace_mapping_for_hostname(hostname, hdfs_site, security_enabled, hdfs_user)
+    namenode_nameservice, namenode_logical_name = namenode_ha_utils.get_namespace_mapping_for_hostname(hostname, hdfs_site, security_enabled, hdfs_user)
     if namenode_nameservice is not None:
       repo_name = repo_name + '_' + namenode_nameservice
       hdfs_ranger_plugin_repo['name'] = repo_name
       hdfs_ranger_plugin_repo['configs']['fs.default.name'] = "hdfs://"+ namenode_nameservice
+      credential_file = format('/etc/ranger/{repo_name}/cred.jceks')
 
 # need this to capture cluster name from where ranger hdfs plugin is enabled
 cluster_name = config['clusterName']
