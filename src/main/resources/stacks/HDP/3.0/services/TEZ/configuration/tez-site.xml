@@ -479,7 +479,7 @@
   </property>
   <property>
     <name>tez.history.logging.proto-base-dir</name>
-    <value>{{hive_metastore_warehouse_dir}}/sys</value>
+    <value>{{hive_metastore_warehouse_dir}}/sys.db</value>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
