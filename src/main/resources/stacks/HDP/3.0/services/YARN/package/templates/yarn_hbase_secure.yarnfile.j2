@@ -75,6 +75,17 @@
           "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log",
           "HBASE_MASTER_OPTS": "-Xms{{yarn_hbase_master_heapsize}} -Xmx{{yarn_hbase_master_heapsize}} -Djava.security.auth.login.config={{yarn_hbase_master_jaas_file}}"
         }
+      },
+      "placement_policy": {
+        "constraints": [
+          {
+            "type": "ANTI_AFFINITY",
+            "scope": "NODE",
+            "target_tags": [
+                  "master"
+            ]
+          }
+        ]
       }
     },
     {
@@ -92,6 +103,17 @@
           "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log",
           "HBASE_REGIONSERVER_OPTS": "-XX:CMSInitiatingOccupancyFraction=70 -XX:ReservedCodeCacheSize=256m -Xms{{yarn_hbase_regionserver_heapsize}} -Xmx{{yarn_hbase_regionserver_heapsize}} -Djava.security.auth.login.config={{yarn_hbase_regionserver_jaas_file}}"
         }
+      },
+      "placement_policy": {
+        "constraints": [
+          {
+            "type": "ANTI_AFFINITY",
+            "scope": "NODE",
+            "target_tags": [
+                  "regionserver"
+            ]
+          }
+        ]
       }
     },
     {
@@ -108,6 +130,17 @@
           "HBASE_LOG_PREFIX": "hbase-$HBASE_IDENT_STRING-hbaseclient-$HOSTNAME",
           "HBASE_LOGFILE": "$HBASE_LOG_PREFIX.log"
         }
+      },
+      "placement_policy": {
+        "constraints": [
+          {
+            "type": "ANTI_AFFINITY",
+            "scope": "NODE",
+            "target_tags": [
+                  "hbaseclient"
+            ]
+          }
+        ]
       }
     }
   ],
