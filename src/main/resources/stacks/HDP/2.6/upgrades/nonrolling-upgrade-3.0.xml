@@ -662,10 +662,6 @@
         <component>TEZ_CLIENT</component>
       </service>
 
-      <service name="MAHOUT">
-        <component>MAHOUT</component>
-      </service>
-
       <service name="PIG">
         <component>PIG</component>
       </service>
@@ -821,25 +817,6 @@
       </priority>
     </group>
 
-    <group xsi:type="restart" name="FALCON" title="Falcon">
-      <service-check>false</service-check>
-      <skippable>true</skippable>
-      <supports-auto-skip-failure>false</supports-auto-skip-failure>
-      <parallel-scheduler/>
-      <service name="FALCON">
-        <component>FALCON_SERVER</component>
-      </service>
-    </group>
-
-    <group xsi:type="restart" name="FALCON_CLIENTS" title="Falcon Clients">
-      <service-check>false</service-check>
-      <skippable>true</skippable>
-      <parallel-scheduler/>
-      <service name="FALCON">
-        <component>FALCON_CLIENT</component>
-      </service>
-    </group>
-
     <group xsi:type="restart" name="KNOX" title="Knox">
       <service-check>false</service-check>
       <skippable>true</skippable>
@@ -861,15 +838,6 @@
       </service>
     </group>
 
-    <group xsi:type="restart" name="FLUME" title="Flume">
-      <service-check>false</service-check>
-      <skippable>true</skippable>
-      <parallel-scheduler/>
-      <service name="FLUME">
-        <component>FLUME_HANDLER</component>
-      </service>
-    </group>
-
     <group xsi:type="restart" name="ACCUMULO" title="Accumulo">
       <service-check>false</service-check>
       <skippable>true</skippable>
@@ -888,10 +856,8 @@
       <direction>UPGRADE</direction>
       <skippable>true</skippable>
       <priority>
-        <service>FALCON</service>
         <service>KNOX</service>
         <service>STORM</service>
-        <service>FLUME</service>
         <service>ACCUMULO</service>
       </priority>
     </group>
@@ -1152,14 +1118,6 @@
       </component>
     </service>
 
-    <service name="MAHOUT">
-      <component name="MAHOUT">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-    </service>
-
     <service name="PIG">
       <component name="PIG">
         <upgrade>
@@ -1296,19 +1254,6 @@
       </component>
     </service>
 
-    <service name="FALCON">
-      <component name="FALCON_SERVER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="FALCON_CLIENT">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-    </service>
-
     <service name="KNOX">
       <component name="KNOX_GATEWAY">
         <upgrade>
@@ -1375,14 +1320,6 @@
       </component>
 
       <component name="ACCUMULO_CLIENT">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-    </service>
-
-    <service name="FLUME">
-      <component name="FLUME_HANDLER">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
