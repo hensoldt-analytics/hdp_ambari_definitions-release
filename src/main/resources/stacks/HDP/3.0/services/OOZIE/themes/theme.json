@@ -103,6 +103,13 @@
           "subsection-name": "oozie-database-configurations-col-2"
         },
         {
+          "config": "oozie-env/test_db_connection",
+          "subsection-name": "oozie-database-configurations-col-2",
+          "property_value_attributes": {
+            "ui_only_property": true
+          }
+        },
+        {
           "config": "oozie-site/oozie.authentication.type",
           "subsection-name": "oozie-security-configurations-col"
         },
@@ -159,6 +166,22 @@
         "config": "oozie-site/oozie.db.schema.name",
         "widget": {
           "type": "text-field"
+        }
+      },
+      {
+        "config": "oozie-env/test_db_connection",
+        "widget": {
+          "type": "test-db-connection",
+          "display-name": "Test Connection",
+          "required-properties": {
+            "jdbc.driver.class": "oozie-site/oozie.service.JPAService.jdbc.driver",
+            "jdbc.driver.url": "oozie-site/oozie.service.JPAService.jdbc.url",
+            "db.connection.source.host": "oozie-site/oozie_server_hosts",
+            "db.type": "oozie-env/oozie_database",
+            "db.connection.user": "oozie-site/oozie.service.JPAService.jdbc.username",
+            "db.connection.password": "oozie-site/oozie.service.JPAService.jdbc.password",
+            "db.type.label": "oozie-env/oozie_database"
+          }
         }
       },
       {

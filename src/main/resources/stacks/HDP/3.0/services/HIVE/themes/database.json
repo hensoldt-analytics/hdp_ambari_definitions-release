@@ -37,6 +37,15 @@
           "config" : "hive-site/javax.jdo.option.ConnectionPassword",
           "removed" : false,
           "subsection-name" : "hive-database-configurations-col-2"
+        },
+        {
+          "config" : "hive-env/test_db_connection",
+          "removed" : false,
+          "subsection-name" : "hive-database-configurations-col-2",
+          "property_value_attributes" : {
+            "keyStore" : false,
+            "ui_only_property" : true
+          }
         }
       ],
       "configuration-layout": "database"
@@ -82,6 +91,22 @@
         "config": "hive-env/hive_database_type",
         "widget": {
           "type": "text-field"
+        }
+      },
+      {
+        "config" : "hive-env/test_db_connection",
+        "widget" : {
+          "type" : "test-db-connection",
+          "required-properties" : {
+            "jdbc.driver.class" : "hive-site/javax.jdo.option.ConnectionDriverName",
+            "jdbc.driver.url" : "hive-site/javax.jdo.option.ConnectionURL",
+            "db.connection.source.host" : "hive-site/hive_server_hosts",
+            "db.type" : "hive-env/hive_database",
+            "db.connection.user" : "hive-site/javax.jdo.option.ConnectionUserName",
+            "db.connection.password" : "hive-site/javax.jdo.option.ConnectionPassword",
+            "db.type.label" : "hive-env/hive_database"
+          },
+          "display-name" : "Test Connection"
         }
       }
     ],
