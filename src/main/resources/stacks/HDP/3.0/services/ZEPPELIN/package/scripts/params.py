@@ -58,14 +58,9 @@ service_packagedir = os.path.realpath(__file__).split('/scripts')[0]
 zeppelin_dirname = 'zeppelin-server'
 
 install_dir = os.path.join(stack_root, "current")
-executor_mem = config['configurations']['zeppelin-env']['zeppelin.executor.mem']
-executor_instances = config['configurations']['zeppelin-env'][
-  'zeppelin.executor.instances']
 
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
-spark_jar_dir = config['configurations']['zeppelin-env']['zeppelin.spark.jar.dir']
-spark_jar = format("{spark_jar_dir}/zeppelin-spark-0.5.5-SNAPSHOT.jar")
 setup_view = True
 temp_file = config['configurations']['zeppelin-env']['zeppelin.temp.file']
 
@@ -202,8 +197,10 @@ elif 'spark2-defaults' in config['configurations'] and 'spark.yarn.queue' in con
 else:
   spark_queue = 'default'
 
-zeppelin_kerberos_keytab = config['configurations']['zeppelin-env']['zeppelin.server.kerberos.keytab']
-zeppelin_kerberos_principal = config['configurations']['zeppelin-env']['zeppelin.server.kerberos.principal']
+if security_enabled:
+  zeppelin_kerberos_keytab = config['configurations']['zeppelin-site']['zeppelin.server.kerberos.keytab']
+  zeppelin_kerberos_principal = config['configurations']['zeppelin-site']['zeppelin.server.kerberos.principal']
+
 if 'zeppelin.interpreter.config.upgrade' in config['configurations']['zeppelin-site']:
   zeppelin_interpreter_config_upgrade = config['configurations']['zeppelin-site']['zeppelin.interpreter.config.upgrade']
 else:
@@ -246,7 +243,6 @@ if stack_version_formatted and check_stack_feature(StackFeature.SPARK_LIVY2, sta
     livy2_livyserver_protocol = 'https'
 
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
-security_enabled = config['configurations']['cluster-env']['security_enabled']
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin")

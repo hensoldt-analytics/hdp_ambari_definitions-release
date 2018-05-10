@@ -81,15 +81,7 @@ class Master(Script):
     spark_deps_full_path = self.get_zeppelin_spark_dependencies()[0]
     spark_dep_file_name = os.path.basename(spark_deps_full_path)
 
-    params.HdfsResource(params.spark_jar_dir + "/" + spark_dep_file_name,
-                        type="file",
-                        action="create_on_execute",
-                        source=spark_deps_full_path,
-                        group=params.zeppelin_group,
-                        owner=params.zeppelin_user,
-                        mode=0444,
-                        replace_existing_files=True,
-                        )
+
 
     params.HdfsResource(None, action="execute")
 
@@ -357,9 +349,12 @@ class Master(Script):
     return self.get_zeppelin_conf_FS_directory(params) + "/interpreter.json"
 
   def is_directory_exists_in_HDFS(self, path, as_user):
+    import params
     kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
-    kinit_if_needed = format("{kinit_path_local} -kt {zeppelin_kerberos_keytab} {zeppelin_kerberos_principal};")
-
+    if params.security_enabled:
+      kinit_if_needed = format("{kinit_path_local} -kt {zeppelin_kerberos_keytab} {zeppelin_kerberos_principal};")
+    else:
+      kinit_if_needed = ''
     #-d: if the path is a directory, return 0.
     path_exists = shell.call(format("{kinit_if_needed} hdfs --config {hadoop_conf_dir} dfs -test -d {path};echo $?"),
                              user=as_user)[1]
@@ -375,8 +370,12 @@ class Master(Script):
       return False
 
   def is_file_exists_in_HDFS(self, path, as_user):
+    import params
     kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
-    kinit_if_needed = format("{kinit_path_local} -kt {zeppelin_kerberos_keytab} {zeppelin_kerberos_principal};")
+    if params.security_enabled:
+      kinit_if_needed = format("{kinit_path_local} -kt {zeppelin_kerberos_keytab} {zeppelin_kerberos_principal};")
+    else:
+      kinit_if_needed = ''
 
     #-f: if the path is a file, return 0.
     path_exists = shell.call(format("{kinit_if_needed} hdfs --config {hadoop_conf_dir} dfs -test -f {path};echo $?"),
@@ -406,7 +405,10 @@ class Master(Script):
       if self.is_file_exists_in_HDFS(zeppelin_conf_fs, params.zeppelin_user):
         # copy from hdfs to /etc/zeppelin/conf/interpreter.json
         kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
-        kinit_if_needed = format("{kinit_path_local} -kt {zeppelin_kerberos_keytab} {zeppelin_kerberos_principal};")
+        if params.security_enabled:
+          kinit_if_needed = format("{kinit_path_local} -kt {zeppelin_kerberos_keytab} {zeppelin_kerberos_principal};")
+        else:
+          kinit_if_needed = ''
         interpreter_config = os.path.join(params.conf_dir, "interpreter.json")
         shell.call(format("rm {interpreter_config};"
             "{kinit_if_needed} hdfs --config {hadoop_conf_dir} dfs -get {zeppelin_conf_fs} {interpreter_config}"),
@@ -637,7 +639,8 @@ class Master(Script):
           del interpreter_settings[setting_key]
 
     self.set_interpreter_settings(config_data)
-    self.update_kerberos_properties()
+    if params.security_enabled:
+      self.update_kerberos_properties()
 
   def storePropertyToInterpreter(self, interpreter, property_name, property_type, property_value, mode='set'):
     if property_name in interpreter['properties'] and 'value' in interpreter['properties'][property_name]:
