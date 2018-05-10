@@ -299,7 +299,7 @@
             <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dyarn.home.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
             <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dhadoop.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
             <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dyarn.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
-            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Djava.library.path(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Djava.library.path(.*)$" replace-with="# Removed during upgrade" match-all="true"/>
 
             <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dhadoop.log.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
             <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dyarn.log.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
