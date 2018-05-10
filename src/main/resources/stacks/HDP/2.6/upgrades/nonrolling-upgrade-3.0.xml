@@ -317,6 +317,10 @@
         <task xsi:type="configure" id="hdfs_remove_initial_ha_properties"/>
       </execute-stage>
 
+      <execute-stage service="HDFS" component="NAMENODE" title="Enable USER variable for hadoop-env">
+        <task xsi:type="configure" id="hdfs_fix_user_variable"/>
+      </execute-stage>
+
       <execute-stage service="HDFS" component="DATANODE" title="Enables SASL for authentication of data transfer protocol">
         <condition xsi:type="security" type="kerberos"/>
         <task xsi:type="configure" id="hdfs_set_data_transfer_protection"/>
