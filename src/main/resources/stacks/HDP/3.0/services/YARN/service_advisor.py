@@ -677,27 +677,17 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
           putCapSchedProperty("yarn.scheduler.capacity.root.acl_administer_queue", acl_administer_queue + "," + hive_user)
 
     # auto detect whether system service launch is required or not
-    yarn_hbase_env = self.getServicesSiteProperties(services, "yarn-hbase-env")
-    if 'is_hbase_system_service_launch' in yarn_hbase_env:
-      self.isSystemServiceLaunch(configurations,services)
-
-  """
-  Based on number of NM and cluster capacity, set system service launch flag.
-  """
-  def isSystemServiceLaunch(self,configurations,services):
-    """
-    Set is_hbase_system_service_launch flag based on number of NM and cluster capacity.
-      (1). if each NM capacity is greater than 10GB and cluster capacity greater than 50GB
-    """
-    putYarnHBaseEnv = self.putProperty(configurations, "yarn-hbase-env", services)
-    node_manager_host_list = self.getHostsForComponent(services, "YARN", "NODEMANAGER")
-    node_manager_cnt = len(node_manager_host_list)
-    yarn_nm_mem_in_mb = self.get_yarn_nm_mem_in_mb(services, configurations)
-    total_cluster_capacity = node_manager_cnt * yarn_nm_mem_in_mb
-
-    if yarn_nm_mem_in_mb >= 10240 and total_cluster_capacity >= 51200:
-       putYarnHBaseEnv("is_hbase_system_service_launch", "true")
-       # Do not set to false in else
+    # Set is_hbase_system_service_launch flag based on number of NM and cluster capacity.
+    # (1). if each NM capacity is greater than 10GB and cluster capacity greater than 50GB
+    if 'yarn-hbase-env' in services['configurations'] and 'is_hbase_system_service_launch' in services['configurations']['yarn-hbase-env']['properties']:
+        putYarnHBaseEnv = self.putProperty(configurations, "yarn-hbase-env", services)
+        node_manager_host_list = self.getHostsForComponent(services, "YARN", "NODEMANAGER")
+        node_manager_cnt = len(node_manager_host_list)
+        yarn_nm_mem_in_mb = self.get_yarn_nm_mem_in_mb(services, configurations)
+        total_cluster_capacity = node_manager_cnt * yarn_nm_mem_in_mb
+        if yarn_nm_mem_in_mb >= 10240 and total_cluster_capacity >= 51200:
+           putYarnHBaseEnv("is_hbase_system_service_launch", "true")
+        # Do not set to false in else
 
   """
   Calculate YARN config 'apptimelineserver_heapsize' in MB.
