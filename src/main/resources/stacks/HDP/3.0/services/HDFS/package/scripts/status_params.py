@@ -46,6 +46,7 @@ else:
   journalnode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-journalnode.pid")
   zkfc_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-zkfc.pid")
   nfsgateway_pid_file = format("{hadoop_pid_dir_prefix}/root/privileged-root-nfs3.pid")
+  unprivileged_nfsgateway_pid_file = format("{hadoop_pid_dir_prefix}/root/hadoop-{hdfs_user}-root-nfs3.pid")
 
   # Security related/required params
   hostname = config['agentLevelParams']['hostname']

@@ -168,6 +168,7 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
   :param create_log_dir: Crate log file directory
   """
   import params
+  import status_params
 
   options = options if options else ""
   pid_dir = format("{hadoop_pid_dir_prefix}/{user}")
@@ -191,6 +192,9 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
     pid_file = params.datanode_pid_file
 
   process_id_exists_command = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
+
+  if name == "nfs3":
+    process_id_exists_command += " || " + as_sudo(["test", "-f", status_params.unprivileged_nfsgateway_pid_file]) + " && " + as_sudo(["pgrep", "-F", status_params.unprivileged_nfsgateway_pid_file])
 
   # on STOP directories shouldn't be created
   # since during stop still old dirs are used (which were created during previous start)

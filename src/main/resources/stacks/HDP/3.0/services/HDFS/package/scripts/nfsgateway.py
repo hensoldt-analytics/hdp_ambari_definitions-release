@@ -82,7 +82,7 @@ class NFSGateway(Script):
 
   def get_pid_files(self):
     import status_params
-    return [status_params.nfsgateway_pid_file]
+    return [status_params.nfsgateway_pid_file, status_params.unprivileged_nfsgateway_pid_file]
 
 if __name__ == "__main__":
   NFSGateway().execute()
