@@ -599,8 +599,12 @@ hive_zookeeper_quorum = config['configurations']['hive-site']['hive.zookeeper.qu
 hive_jdbc_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace={hive_server2_zookeeper_namespace}")
 
 if has_hive_interactive:
-  hsi_zookeeper_namespace = config['configurations']['hive-interactive-site']['hive.server2.zookeeper.namespace']
-  hsi_jdbc_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace={hsi_zookeeper_namespace}")
+  if hive_server_interactive_ha:
+    hsi_zookeeper_namespace = config['configurations']['hive-interactive-site']['hive.server2.active.passive.ha.registry.namespace']
+    hsi_jdbc_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeperHA;zooKeeperNamespace={hsi_zookeeper_namespace}")
+  else:
+    hsi_zookeeper_namespace = config['configurations']['hive-interactive-site']['hive.server2.zookeeper.namespace']
+    hsi_jdbc_url = format("jdbc:hive2://{hive_zookeeper_quorum}/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace={hsi_zookeeper_namespace}")
   hive_server_interactive_conf_dir = status_params.hive_server_interactive_conf_dir
   execute_path_hive_interactive = os.path.join(os.environ['PATH'], hive_interactive_bin, hadoop_bin_dir)
   start_hiveserver2_interactive_script = 'startHiveserver2Interactive.sh.j2'
