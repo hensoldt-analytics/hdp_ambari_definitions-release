@@ -258,9 +258,9 @@ limitations under the License.
   </property>
   <property>
     <name>hive.server2.zookeeper.namespace</name>
-    <value>hiveserver2-hive2</value>
+    <value>hiveserver2-interactive</value>
     <description>The parent node in ZooKeeper used by HiveServer2 when supporting dynamic service discovery.</description>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.server2.active.passive.ha.registry.namespace</name>
