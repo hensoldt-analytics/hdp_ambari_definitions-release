@@ -160,7 +160,7 @@
       <component name="HBASE_REGIONSERVER">
         <changes>
           <definition xsi:type="configure" id="hbase_regionserver_cmsinitiatingoccupancyfraction_replace" summary="Apply config changes for HBase Region Servers">
-            <type>hbase-env</type>            
+            <type>hbase-env</type>
             <replace key="content" find="-XX:CMSInitiatingOccupancyFraction={{regionserver_cms_initiating_occupancy_fraction}}" replace-with=""/>
           </definition>
         </changes>
@@ -299,7 +299,7 @@
             <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dyarn.home.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
             <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dhadoop.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
             <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Dyarn.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
-            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Djava.library.path(.*)$" replace-with="# Removed during upgrade" match-all="true"/>
+            <regex-replace key="content" find="^\s*YARN_OPTS=(.*)-Djava.library.path(.*)$" replace-with="        : # Removed during upgrade" match-all="true"/>
 
             <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dhadoop.log.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
             <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dyarn.log.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
@@ -308,7 +308,7 @@
             <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dyarn.home.dir(.*)$[\r\n]+" replace-with="" match-all="true"/>
             <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dhadoop.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
             <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Dyarn.root.logger(.*)$[\r\n]+" replace-with="" match-all="true"/>
-            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Djava.library.path(.*)$[\r\n]+" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*HADOOP_OPTS=(.*)-Djava.library.path(.*)$[\r\n]+" replace-with="        : # Removed during upgrade" match-all="true"/>
           </definition>
 
           <definition xsi:type="configure" id="hdp_30_update_hadoop_and_yarn_loggers" summary="Fix Hadoop and YARN loggers">
@@ -317,6 +317,7 @@
             <replace key="content" find="YARN_LOGFILE" replace-with="HADOOP_LOGFILE"/>
             <replace key="content" find="YARN_PID_DIR" replace-with="HADOOP_PID_DIR"/>
             <replace key="content" find="YARN_ROOT_LOGGER" replace-with="HADOOP_ROOT_LOGGER"/>
+            <replace key="content" find="YARN_CONF_DIR" replace-with="HADOOP_CONF_DIR"/>
             <insert key="content" insert-type="append" newline-before="true" newline-after="true" value="export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}"/>
           </definition>
 
