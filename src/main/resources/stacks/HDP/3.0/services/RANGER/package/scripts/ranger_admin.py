@@ -90,6 +90,9 @@ class RangerAdmin(Script):
     import params
     env.set_params(params)
 
+    if upgrade_type is None:
+      setup_ranger_xml.validate_user_password()
+
     # setup db only if in case stack version is > 2.6
     self.configure(env, upgrade_type=upgrade_type, setup_db=params.stack_supports_ranger_setup_db_on_start)
 

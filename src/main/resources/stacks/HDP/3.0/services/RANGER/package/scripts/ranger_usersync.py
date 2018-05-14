@@ -27,8 +27,8 @@ from resource_management.core import shell
 from ranger_service import ranger_service
 from ambari_commons.constants import UPGRADE_TYPE_NON_ROLLING, UPGRADE_TYPE_ROLLING
 from resource_management.libraries.functions.constants import Direction
-from setup_ranger_xml import ranger
 import upgrade
+import setup_ranger_xml
 import os
 
 class RangerUsersync(Script):
@@ -38,9 +38,10 @@ class RangerUsersync(Script):
     import params
     env.set_params(params)
 
+    setup_ranger_xml.validate_user_password('rangerusersync_user_password')
+
     if params.stack_supports_usersync_passwd:
-      from setup_ranger_xml import ranger_credential_helper
-      ranger_credential_helper(params.ugsync_cred_lib, params.ugsync_policymgr_alias, params.rangerusersync_user_password, params.ugsync_policymgr_keystore)
+      setup_ranger_xml.ranger_credential_helper(params.ugsync_cred_lib, params.ugsync_policymgr_alias, params.rangerusersync_user_password, params.ugsync_policymgr_keystore)
 
       File(params.ugsync_policymgr_keystore,
         owner = params.unix_user,
@@ -48,13 +49,11 @@ class RangerUsersync(Script):
         mode = 0640
       )
 
-    self.configure(env)
-
   def configure(self, env, upgrade_type=None):
     import params
     env.set_params(params)
 
-    ranger('ranger_usersync', upgrade_type=upgrade_type)
+    setup_ranger_xml.ranger('ranger_usersync', upgrade_type=upgrade_type)
 
   def start(self, env, upgrade_type=None):
     import params

@@ -28,8 +28,8 @@ from resource_management.libraries.functions.format import format
 from resource_management.core.logger import Logger
 from resource_management.core import shell
 from ranger_service import ranger_service
-from setup_ranger_xml import ranger, ranger_credential_helper
 from resource_management.core.exceptions import Fail
+import setup_ranger_xml
 import upgrade
 
 class RangerTagsync(Script):
@@ -39,7 +39,9 @@ class RangerTagsync(Script):
     import params
     env.set_params(params)
 
-    ranger_credential_helper(params.tagsync_cred_lib, 'tagadmin.user.password', params.rangertagsync_user_password, params.tagsync_jceks_path)
+    setup_ranger_xml.validate_user_password('rangertagsync_user_password')
+
+    setup_ranger_xml.ranger_credential_helper(params.tagsync_cred_lib, 'tagadmin.user.password', params.rangertagsync_user_password, params.tagsync_jceks_path)
     File(params.tagsync_jceks_path,
        owner = params.unix_user,
        group = params.unix_group,
@@ -51,12 +53,10 @@ class RangerTagsync(Script):
     else:
       Logger.info("Stack does not support Atlas user for Tagsync, skipping keystore creation for same.")
 
-    self.configure(env)
-
   def configure(self, env, upgrade_type=None):
     import params
     env.set_params(params)
-    ranger('ranger_tagsync', upgrade_type=upgrade_type)
+    setup_ranger_xml.ranger('ranger_tagsync', upgrade_type=upgrade_type)
 
   def start(self, env, upgrade_type=None):
     import params
@@ -114,7 +114,8 @@ class RangerTagsync(Script):
   def create_atlas_user_keystore(self,env):
     import params
     env.set_params(params)
-    ranger_credential_helper(params.tagsync_cred_lib, 'atlas.user.password', params.atlas_admin_password, params.atlas_tagsync_jceks_path)
+
+    setup_ranger_xml.ranger_credential_helper(params.tagsync_cred_lib, 'atlas.user.password', params.atlas_admin_password, params.atlas_tagsync_jceks_path)
     File(params.atlas_tagsync_jceks_path,
          owner = params.unix_user,
          group = params.unix_group,

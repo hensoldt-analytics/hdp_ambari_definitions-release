@@ -911,6 +911,13 @@
         </task>
       </execute-stage>
 
+      <execute-stage service="RANGER" component="RANGER_ADMIN" title="Update password properties">
+        <direction>UPGRADE</direction>
+        <task xsi:type="manual">
+          <message>Post upgrade, please update passwords for Ranger Usersync, Tagsync and Keyadmin under Ranger Service Config Tab from Ambari.</message>
+        </task>
+      </execute-stage>
+
       <execute-stage service="HDFS" component="NAMENODE" title="Execute HDFS Finalize">
         <task xsi:type="execute" hosts="master">
           <script>scripts/namenode.py</script>

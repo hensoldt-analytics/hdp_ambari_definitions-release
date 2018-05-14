@@ -723,9 +723,8 @@ def setup_ranger_audit_solr():
 def setup_ranger_admin_passwd_change(username, user_password, user_default_password):
   import params
 
-  if user_password != user_default_password:
-    cmd = format("ambari-python-wrap {ranger_home}/db_setup.py -changepassword {username} {user_default_password!p} {user_password!p}")
-    Execute(cmd, environment={'JAVA_HOME': params.java_home, 'RANGER_ADMIN_HOME': params.ranger_home}, user=params.unix_user, tries=3, try_sleep=5, logoutput=True)
+  cmd = format("ambari-python-wrap {ranger_home}/db_setup.py -changepassword {username} {user_default_password!p} {user_password!p}")
+  Execute(cmd, environment={'JAVA_HOME': params.java_home, 'RANGER_ADMIN_HOME': params.ranger_home}, user=params.unix_user, tries=3, try_sleep=5, logoutput=True)
 
 @retry(times=10, sleep_time=5, err_class=Fail)
 def check_znode():
@@ -830,3 +829,21 @@ def update_password_configs():
     properties = password_configs,
     owner = params.unix_user,
   )
+
+def validate_user_password(password_property = None):
+  import params
+
+  validation = []
+
+  if password_property is None:
+    ranger_password_properties = ['admin_password', 'ranger_admin_password', 'rangerusersync_user_password', 'rangertagsync_user_password', 'keyadmin_user_password']
+  else:
+    ranger_password_properties = [password_property]
+
+  for index in range(len(ranger_password_properties)):
+    password = params.config['configurations']['ranger-env'][ranger_password_properties[index]]
+    if not bool(re.search(r'^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$', password)) or bool(re.search('[\\\`"\']', password)):
+      validation.append(ranger_password_properties[index])
+
+  if len(validation) > 0:
+    raise Fail("Password validation failed for : " + ", ".join(validation) + ". Password should be minimum 8 characters with minimum one alphabet and one numeric. Unsupported special characters are \" ' \ `")
