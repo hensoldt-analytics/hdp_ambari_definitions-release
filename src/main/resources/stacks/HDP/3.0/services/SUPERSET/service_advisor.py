@@ -146,3 +146,5 @@ class SupersetRecommender(service_advisor.ServiceAdvisor):
         putSupersetProperty("SUPERSET_DATABASE_PORT", "3306")
       elif superset_database_type == "postgresql":
         putSupersetProperty("SUPERSET_DATABASE_PORT", "5432")
+      elif superset_database_type == "sqlite":
+        putSupersetProperty("SUPERSET_DATABASE_PORT", "")
