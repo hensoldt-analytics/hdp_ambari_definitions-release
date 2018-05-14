@@ -14,6 +14,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+import os
+
 from resource_management.core.logger import Logger
 from resource_management.core.resources import File, Execute
 from resource_management.libraries.functions.format import format
@@ -91,6 +93,9 @@ def setup_ranger_kafka():
         mode = 0755
       )
     if params.stack_supports_core_site_for_ranger_plugin and params.enable_ranger_kafka and params.kerberos_security_enabled:
+      # sometimes this is a link for missing /etc/hdp directory, just remove link/file and create regular file.
+      Execute(('rm', '-f', os.path.join(params.conf_dir, "core-site.xml")), sudo=True)
+
       if params.has_namenode:
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is installed, creating create core-site.xml from namenode configurations")
         setup_configuration_file_for_required_plugins(component_user = params.kafka_user, component_group = params.user_group,
