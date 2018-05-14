@@ -109,8 +109,18 @@ def hbase(name=None):
                configurations = params.config['configurations']['core-site'],
                configuration_attributes=params.config['configurationAttributes']['core-site'],
                owner = params.hbase_user,
-               group = params.user_group
-    )
+               group = params.user_group,
+               xml_include_file=params.mount_table_xml_inclusion_file_full_path
+               )
+
+    if params.mount_table_content:
+      File(params.mount_table_xml_inclusion_file_full_path,
+           owner=params.hbase_user,
+           group=params.user_group,
+           content=params.mount_table_content,
+           mode=0644
+           )
+
     if 'hdfs-site' in params.config['configurations']:
       XmlConfig( "hdfs-site.xml",
               conf_dir = params.hbase_conf_dir,

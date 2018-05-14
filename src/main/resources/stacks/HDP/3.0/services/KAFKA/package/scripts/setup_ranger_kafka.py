@@ -100,7 +100,8 @@ def setup_ranger_kafka():
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is installed, creating create core-site.xml from namenode configurations")
         setup_configuration_file_for_required_plugins(component_user = params.kafka_user, component_group = params.user_group,
                                              create_core_site_path = params.conf_dir, configurations = params.config['configurations']['core-site'],
-                                             configuration_attributes = params.config['configurationAttributes']['core-site'], file_name='core-site.xml')
+                                             configuration_attributes = params.config['configurationAttributes']['core-site'], file_name='core-site.xml',
+                                             xml_include_file=params.mount_table_xml_inclusion_file_full_path, xml_include_file_content=params.mount_table_content)
       else:
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is not installed, creating create core-site.xml from default configurations")
         setup_configuration_file_for_required_plugins(component_user = params.kafka_user, component_group = params.user_group,

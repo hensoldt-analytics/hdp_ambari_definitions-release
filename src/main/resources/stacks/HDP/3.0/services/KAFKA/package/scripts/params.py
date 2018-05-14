@@ -386,6 +386,16 @@ hadoop_bin_dir = stack_select.get_hadoop_dir("bin") if has_namenode else None
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir() if has_namenode else None
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
 
+mount_table_xml_inclusion_file_full_path = None
+mount_table_content = None
+if 'viewfs-mount-table' in config['configurations']:
+  xml_inclusion_file_name = 'viewfs-mount-table.xml'
+  mount_table = config['configurations']['viewfs-mount-table']
+
+  if 'content' in mount_table and mount_table['content'].strip():
+    mount_table_xml_inclusion_file_full_path = os.path.join(conf_dir, xml_inclusion_file_name)
+    mount_table_content = mount_table['content']
+
 import functools
 #create partial functions with common arguments for every HdfsResource call
 #to create/delete hdfs directory/file/copyfromlocal we need to call params.HdfsResource in code

@@ -18,6 +18,7 @@ limitations under the License.
 Ambari Agent
 
 """
+import os
 import status_params
 
 from resource_management.core.logger import Logger
@@ -565,3 +566,13 @@ if "zeppelin-site" in config['configurations']:
 # for stack 3.0 +
 knox_descriptors_dir = format('{knox_conf_dir}/descriptors')
 knox_shared_providers_dir = format('{knox_conf_dir}/shared-providers')
+
+mount_table_xml_inclusion_file_full_path = None
+mount_table_content = None
+if 'viewfs-mount-table' in config['configurations']:
+  xml_inclusion_file_name = 'viewfs-mount-table.xml'
+  mount_table = config['configurations']['viewfs-mount-table']
+
+  if 'content' in mount_table and mount_table['content'].strip():
+    mount_table_xml_inclusion_file_full_path = os.path.join(knox_conf_dir, xml_inclusion_file_name)
+    mount_table_content = mount_table['content']

@@ -17,6 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
+import os
+
 from resource_management.core.logger import Logger
 from resource_management.libraries.functions.setup_ranger_plugin_xml import setup_ranger_plugin
 from resource_management.libraries.functions.setup_ranger_plugin_xml import setup_configuration_file_for_required_plugins
@@ -101,10 +103,22 @@ def setup_ranger_storm(upgrade_type=None):
 
     if params.stack_supports_core_site_for_ranger_plugin and params.enable_ranger_storm and params.security_enabled:
       if params.has_namenode:
+
+        mount_table_xml_inclusion_file_full_path = None
+        mount_table_content = None
+        if 'viewfs-mount-table' in params.config['configurations']:
+          xml_inclusion_file_name = 'viewfs-mount-table.xml'
+          mount_table = params.config['configurations']['viewfs-mount-table']
+
+          if 'content' in mount_table and mount_table['content'].strip():
+            mount_table_xml_inclusion_file_full_path = os.path.join(site_files_create_path, xml_inclusion_file_name)
+            mount_table_content = mount_table['content']
+
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is installed, creating create core-site.xml from namenode configurations")
         setup_configuration_file_for_required_plugins(component_user = params.storm_user, component_group = params.user_group,
                                                       create_core_site_path = site_files_create_path, configurations = params.config['configurations']['core-site'],
-                                                      configuration_attributes = params.config['configuration_attributes']['core-site'], file_name='core-site.xml')
+                                                      configuration_attributes = params.config['configuration_attributes']['core-site'], file_name='core-site.xml',
+                                                      xml_include_file=mount_table_xml_inclusion_file_full_path, xml_include_file_content=mount_table_content)
       else:
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is not installed, creating create core-site.xml from default configurations")
         setup_configuration_file_for_required_plugins(component_user = params.storm_user, component_group = params.user_group,

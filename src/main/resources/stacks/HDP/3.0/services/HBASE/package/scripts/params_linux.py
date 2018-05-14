@@ -17,6 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
+import os
 import status_params
 import ambari_simplejson as json # simplejson is much faster comparing to Python 2.6 json module and has the same functions set.
 
@@ -442,3 +443,13 @@ else:
 atlas_hook_filename = default('/configurations/atlas-env/metadata_conf_file', 'atlas-application.properties')
 enable_hbase_atlas_hook = default('/configurations/hbase-env/hbase.atlas.hook', False)
 hbase_atlas_hook_properties = default('/configurations/hbase-atlas-application-properties', {})
+
+mount_table_xml_inclusion_file_full_path = None
+mount_table_content = None
+if 'viewfs-mount-table' in config['configurations']:
+  xml_inclusion_file_name = 'viewfs-mount-table.xml'
+  mount_table = config['configurations']['viewfs-mount-table']
+
+  if 'content' in mount_table and mount_table['content'].strip():
+    mount_table_xml_inclusion_file_full_path = os.path.join(hbase_conf_dir, xml_inclusion_file_name)
+    mount_table_content = mount_table['content']
