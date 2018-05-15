@@ -696,9 +696,12 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>yarn.nodemanager.linux-container-executor.resources-handler.class</name>
-    <value>org.apache.hadoop.yarn.server.nodemanager.util.DefaultLCEResourcesHandler</value>
-    <description>Pre-requisite to use CGroups</description>
+    <name>yarn.nodemanager.resource.cpu.enabled</name>
+    <value>true</value>
+    <description>Pre-requisite to use CGroups (initiates LCE resource handler)</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <depends-on>
       <property>
         <type>yarn-env</type>
@@ -709,16 +712,12 @@
   </property>
   <property>
     <name>yarn.nodemanager.linux-container-executor.cgroups.hierarchy</name>
-    <value>hadoop-yarn</value>
+    <value>/yarn</value>
     <description>Name of the Cgroups hierarchy under which all YARN jobs will be launched</description>
     <depends-on>
       <property>
         <type>yarn-env</type>
         <name>yarn_cgroups_enabled</name>
-      </property>
-      <property>
-        <type>container-executor</type>
-        <name>gpu_module_enabled</name>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
@@ -732,25 +731,17 @@
         <type>yarn-env</type>
         <name>yarn_cgroups_enabled</name>
       </property>
-      <property>
-        <type>container-executor</type>
-        <name>gpu_module_enabled</name>
-      </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>yarn.nodemanager.linux-container-executor.cgroups.mount-path</name>
-    <value>/cgroup</value>
+    <value>/sys/fs/cgroup</value>
     <description>Path used by the LCE to mount cgroups if not found. This path must exist before the NodeManager is launched.</description>
     <depends-on>
       <property>
         <type>yarn-env</type>
         <name>yarn_cgroups_enabled</name>
-      </property>
-      <property>
-        <type>container-executor</type>
-        <name>gpu_module_enabled</name>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
@@ -788,9 +779,45 @@
   </property>
   <property>
     <name>yarn.nodemanager.resource.percentage-physical-cpu-limit</name>
-    <value>80</value>
+    <value>100</value>
     <description>The amount of CPU allocated for YARN containers - only effective when used with CGroups</description>
     <display-name>Percentage of physical CPU allocated for all containers on a node</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>0</minimum>
+      <maximum>100</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn.nodemanager.resource.memory.enabled</name>
+    <value>true</value>
+    <description>This needs to be set to true in order to enable the cgroups based memory monitoring</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn.nodemanager.resource.memory.cgroups.soft-limit-percentage</name>
+    <value>90</value>
+    <description>The default value is 90.0, which means in memory congestion case, the container can still keep/reserve 90% resource for its claimed value</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>0</minimum>
+      <maximum>100</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn.nodemanager.resource.memory.cgroups.swappiness</name>
+    <value>0</value>
+    <description>
+    The percentage that memory can be swapped or not. The default value is 0, which means container memory cannot be swapped out.
+    If not set, linux cgroup setting by default set to 60 which means 60% of memory can potentially be swapped out when system memory is not enough
+    </description>
     <value-attributes>
       <type>int</type>
       <minimum>0</minimum>
@@ -1093,7 +1120,7 @@
   </property>
   <property>
     <name>yarn.nodemanager.container-executor.class</name>
-    <value>org.apache.hadoop.yarn.server.nodemanager.DefaultContainerExecutor</value>
+    <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
     <description>ContainerExecutor for launching containers</description>
     <depends-on>
       <property>
@@ -1327,8 +1354,6 @@ yarn.node-labels.manager-class
     <description>Time in milliseconds between invocations of this ProportionalCapacityPreemptionPolicy policy.</description>
     <on-ambari-upgrade add="false"/>
   </property>
-
-  <!-- These configs are related to docker -->
   <property>
     <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
     <value>true</value>
@@ -1341,6 +1366,14 @@ yarn.node-labels.manager-class
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user</name>
+    <value>yarn</value>
+    <description>Indicates the local user when security is disabled (it should be changed to 'nobody' in case security is enabled)</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <!-- These configs are related to docker -->
   <property>
     <name>yarn.nodemanager.runtime.linux.allowed-runtimes</name>
     <value>default,docker</value>

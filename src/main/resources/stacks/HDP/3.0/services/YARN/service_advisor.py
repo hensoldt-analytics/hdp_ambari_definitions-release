@@ -25,6 +25,7 @@ import inspect
 import socket
 import math
 from math import floor, ceil
+from ambari_commons.os_check import OSCheck
 
 # Local imports
 
@@ -32,6 +33,9 @@ from math import floor, ceil
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 STACKS_DIR = os.path.join(SCRIPT_DIR, '../../../../../stacks/')
 PARENT_FILE = os.path.join(STACKS_DIR, 'service_advisor.py')
+
+DEFAULT_CGROUP_MOUNT_PATH = '/sys/fs/cgroup'
+DEFAULT_CGROUP_HIERARCHY = '/yarn'
 
 try:
   if "BASE_SERVICE_ADVISOR" in os.environ:
@@ -282,7 +286,11 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
 
     self.calculateYarnAllocationSizes(configurations, services, hosts)
 
-    putYarnEnvProperty('min_user_id', self.get_system_min_uid())
+    min_user_id = self.get_system_min_uid() if self.isSecurityEnabled(services) else 50
+    putYarnEnvProperty('min_user_id', min_user_id)
+
+    putContainerExecutorProperty = self.putProperty(configurations, "container-executor", services)
+    putContainerExecutorProperty('min_user_id', min_user_id)
 
     yarn_mount_properties = [
       ("yarn.nodemanager.local-dirs", "NODEMANAGER", "/hadoop/yarn/local", "multi"),
@@ -343,17 +351,28 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         if yarn_cgroups_enabled:
           putYarnProperty('yarn.nodemanager.container-executor.class', 'org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor')
           putYarnProperty('yarn.nodemanager.linux-container-executor.group', 'hadoop')
-          putYarnProperty('yarn.nodemanager.linux-container-executor.resources-handler.class', 'org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler')
-          putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', '/yarn')
-          putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'true')
-          putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', '/cgroup')
+          putYarnProperty('yarn.nodemanager.resource.cpu.enabled', 'true')
+          putYarnProperty('yarn.nodemanager.resource.memory.enabled', 'true')
+          putYarnProperty('yarn.nodemanager.pmem-check-enabled', 'false')
+          putYarnProperty('yarn.nodemanager.vmem-check-enabled', 'false')
+
+          ## OS versions are used based on YARN documentation: https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/NodeManagerCgroups.html#CGroups_mount_options
+          if OSCheck.is_redhat_family() and int(OSCheck.get_os_major_version()) <= 6:
+            putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'true')
+          else:
+            putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'false')
+            putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', DEFAULT_CGROUP_MOUNT_PATH)
+            putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', DEFAULT_CGROUP_HIERARCHY)
         else:
           if not kerberos_authentication_enabled:
             putYarnProperty('yarn.nodemanager.container-executor.class', 'org.apache.hadoop.yarn.server.nodemanager.DefaultContainerExecutor')
-          putYarnPropertyAttribute('yarn.nodemanager.linux-container-executor.resources-handler.class', 'delete', 'true')
-          putYarnPropertyAttribute('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', 'delete', 'true')
           putYarnPropertyAttribute('yarn.nodemanager.linux-container-executor.cgroups.mount', 'delete', 'true')
           putYarnPropertyAttribute('yarn.nodemanager.linux-container-executor.cgroups.mount-path', 'delete', 'true')
+          putYarnPropertyAttribute('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', 'delete', 'true')
+          putYarnPropertyAttribute('yarn.nodemanager.resource.cpu.enabled', 'delete', 'true')
+          putYarnPropertyAttribute('yarn.nodemanager.resource.memory.enabled', 'delete', 'true')
+          putYarnPropertyAttribute('yarn.nodemanager.pmem-check-enabled', 'delete', 'true')
+          putYarnPropertyAttribute('yarn.nodemanager.vmem-check-enabled', 'delete', 'true')
 
   def recommendYARNConfigurationsFromHDP23(self, configurations, clusterData, services, hosts):
     putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
@@ -536,6 +555,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         rp_gpu_dp_nv1_ep = services["configurations"]["yarn-site"]["properties"]["yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint"]
         rp_gpu_dp_nv1_ep_list = rp_gpu_dp_nv1_ep.split(',') if len(rp_gpu_dp_nv1_ep) > 1 else rp_gpu_dp_nv1_ep.split()
 
+    # default resource calculator is DominantResourceCalculator
+    putCapScheProperty('yarn.scheduler.capacity.resource-calculator', "org.apache.hadoop.yarn.util.resource.DominantResourceCalculator")
 
     if gpu_module_enabled and gpu_module_enabled.lower() == 'true':
       # put yarn.io/gpu if it is absent in resource-types.xml
@@ -547,10 +568,6 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
           restyps_list.append("yarn.io/gpu")
           yarn_restyps = ','.join(str(x) for x in restyps_list)
           putResTypsProperty('yarn.resource-types', yarn_restyps)
-      # ResourceCalculator must switch to DominantResourceCalculator when GPU enabled and additional resource types are added other than memory and vcore
-      if len(services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]) > 0:
-        self.logger.info("auto switch ResourceCalculator to DominantResourceCalculator when GPU enabled and resource types are added other than memory and vcore")
-        putCapScheProperty('yarn.scheduler.capacity.resource-calculator', "org.apache.hadoop.yarn.util.resource.DominantResourceCalculator")
       # auto fill gpu related property values in yarn-site
       putYarnSiteProperty('yarn.nodemanager.resource-plugins', yarn_restyps)
 
@@ -559,10 +576,10 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       putYarnSiteProperty('yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint', 'http://localhost:3476/v1.0/docker/cli')
       putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'true')
 
-      putCanExecProperty('cgroup_root', '/sys/fs/cgroup')
-      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', '/sys/fs/cgroup')
-      putCanExecProperty('yarn_hierarchy', 'yarn')
-      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', 'yarn')
+      putCanExecProperty('cgroup_root', DEFAULT_CGROUP_MOUNT_PATH)
+      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', DEFAULT_CGROUP_MOUNT_PATH)
+      putCanExecProperty('yarn_hierarchy', DEFAULT_CGROUP_HIERARCHY)
+      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', DEFAULT_CGROUP_HIERARCHY)
 
       # add gpu related devices if it is absent in docker section
       if "regex:^/dev/nvidia.*$" in allow_dev_list:
@@ -595,8 +612,6 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         yarn_restyps = ','.join(str(x) for x in restyps_list)
         putResTypsProperty('yarn.resource-types', yarn_restyps)
         putYarnSiteProperty('yarn.nodemanager.resource-plugins', yarn_restyps)
-      # switch back ResourceCalculator to DefaultResourceCalculator
-      putCapScheProperty('yarn.scheduler.capacity.resource-calculator', "org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator")
 
       # auto revert gpu related property values when gpu is disabled
       if "auto" in rp_gpu_agd_list:
@@ -613,20 +628,6 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         rp_gpu_dp_nv1_ep_list.remove("http://localhost:3476/v1.0/docker/cli")
         rp_gpu_dp_nv1_ep = ','.join(str(x) for x in rp_gpu_dp_nv1_ep_list)
         putYarnSiteProperty('yarn.nodemanager.resource-plugins.gpu.docker-plugin.nvidiadocker-v1.endpoint', rp_gpu_dp_nv1_ep)
-
-      putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'false')
-
-      if "/sys/fs/cgroup" in cg_root_list:
-        cg_root_list.remove("/sys/fs/cgroup")
-        cg_root = ','.join(str(x) for x in cg_root_list)
-        putCanExecProperty('cgroup_root', cg_root)
-        putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', cg_root)
-
-      if "yarn" in yn_hirch_list:
-        yn_hirch_list.remove("yarn")
-        yn_hirch = ','.join(str(x) for x in yn_hirch_list)
-        putCanExecProperty('yarn_hierarchy', yn_hirch)
-        putYarnSiteProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', yn_hirch)
 
       # revert docker related settings from docker section
       if "regex:^/dev/nvidia.*$" in allow_dev_list:
@@ -1989,7 +1990,6 @@ class YARNValidator(service_advisor.ServiceAdvisor):
                        ("yarn-site", self.validateYARNSiteConfigurationsFromHDP25),
                        ("yarn-site" , self.validateYARNSiteConfigurationsFromHDP26),
                        ("yarn-env", self.validateYARNEnvConfigurationsFromHDP206),
-                       ("yarn-env", self.validateYARNEnvConfigurationsFromHDP22),
                        ("ranger-yarn-plugin-properties", self.validateYARNRangerPluginConfigurationsFromHDP22)]
 
     # **********************************************************
@@ -2077,24 +2077,6 @@ class YARNValidator(service_advisor.ServiceAdvisor):
     """
     validationItems = [{"config-name": 'service_check.queue.name', "item": self.validatorYarnQueue(properties, recommendedDefaults, 'service_check.queue.name', services)} ]
     return self.toConfigurationValidationProblems(validationItems, "yarn-env")
-
-  def validateYARNEnvConfigurationsFromHDP22(self, properties, recommendedDefaults, configurations, services, hosts):
-    """
-    This was copied from HDP 2.2; validate yarn-env
-    :return: A list of configuration validation problems.
-    """
-    validationItems = []
-    if "yarn_cgroups_enabled" in properties:
-      yarn_cgroups_enabled = properties["yarn_cgroups_enabled"].lower() == "true"
-      core_site_properties = self.getSiteProperties(configurations, "core-site")
-      security_enabled = False
-      if core_site_properties:
-        security_enabled = core_site_properties['hadoop.security.authentication'] == 'kerberos' and core_site_properties['hadoop.security.authorization'] == 'true'
-      if not security_enabled and yarn_cgroups_enabled:
-        validationItems.append({"config-name": "yarn_cgroups_enabled",
-                                "item": self.getWarnItem("CPU Isolation should only be enabled if security is enabled")})
-    validationProblems = self.toConfigurationValidationProblems(validationItems, "yarn-env")
-    return validationProblems
 
   def validateYARNRangerPluginConfigurationsFromHDP22(self, properties, recommendedDefaults, configurations, services, hosts):
     """

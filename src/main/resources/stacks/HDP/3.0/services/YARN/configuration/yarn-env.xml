@@ -149,7 +149,7 @@
   <!-- These properties were inherited from HDP 2.2 -->
   <property>
     <name>yarn_cgroups_enabled</name>
-    <value>false</value>
+    <value>true</value>
     <description>You can use CGroups to isolate CPU-heavy processes in a Hadoop cluster.</description>
     <display-name>CPU Isolation</display-name>
     <value-attributes>

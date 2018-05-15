@@ -210,7 +210,7 @@
 
   <property>
     <name>yarn_hierarchy</name>
-    <value>yarn</value>
+    <value>/yarn</value>
     <display-name>Yarn CGroup Hierarchy</display-name>
     <description>This should be same as
       yarn.nodemanager.linux-container-executor.cgroups.hierarchy
