@@ -31,8 +31,7 @@ from resource_management.libraries.functions.default import default
 
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
-if not OSCheck.is_windows_family():
-    root_user = 'root'
+root_user = 'root'
 
 mapred_user = config['configurations']['mapred-env']['mapred_user']
 yarn_user = config['configurations']['yarn-env']['yarn_user']
@@ -51,10 +50,13 @@ yarn_historyserver_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-timeline
 registry_dns_bind_port = int(config['configurations']['yarn-env']['registry.dns.bind-port'])
 registry_dns_needs_privileged_access = True if registry_dns_bind_port < 1024 else False
 
+yarn_registry_dns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{root_user}-registrydns.pid")
 if registry_dns_needs_privileged_access:
-    yarn_registry_dns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{root_user}-registrydns.pid")
+  yarn_registry_dns_priv_pid_file = format("{yarn_pid_dir}/privileged-{root_user}-registrydns.pid")
 else:
-    yarn_registry_dns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-registrydns.pid")
+  yarn_registry_dns_priv_pid_file = yarn_registry_dns_pid_file
+
+
 mapred_historyserver_pid_file = format("{mapred_pid_dir}/hadoop-{mapred_user}-historyserver.pid")
 
 yarn_timelinereader_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-timelinereader.pid")

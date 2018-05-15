@@ -68,7 +68,12 @@
 
         <component>
           <name>APP_TIMELINE_SERVER</name>
-          <deleted>true</deleted>
+          <displayName>Timeline Service V1.5</displayName>
+          <category>MASTER</category>
+          <cardinality>1</cardinality>
+          <versionAdvertised>true</versionAdvertised>
+          <reassignAllowed>true</reassignAllowed>
+
           <commandScript>
             <script>scripts/application_timeline_server.py</script>
             <scriptType>PYTHON</scriptType>

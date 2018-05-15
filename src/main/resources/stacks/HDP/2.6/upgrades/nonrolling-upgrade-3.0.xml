@@ -344,6 +344,15 @@
         <task xsi:type="configure" id="hdp_30_update_hadoop_and_yarn_loggers"/>
       </execute-stage>
 
+      <!-- adds options required if Registry DNS is added -->
+      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Add Registry DNS OPTS">
+        <task xsi:type="configure" id="hdp_30_add_registry_dns_secure_opts"/>
+      </execute-stage>
+
+      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Add Secure PID and Log Directory Exports">
+        <task xsi:type="configure" id="hdp_30_add_secure_pid_and_log_dirs"/>
+      </execute-stage>
+
       <!-- Do this last to convert any YARN_OPTS which remained -->
       <execute-stage service="YARN" component="RESOURCEMANAGER" title="Convert YARN_OPTS to HADOOP_OPTS">
         <task xsi:type="configure" id="hdp_30_convert_yarn_opts_to_hadoop_opts"/>
@@ -609,6 +618,7 @@
       </service>
 
       <service name="YARN">
+        <component>APP_TIMELINE_SERVER</component>
         <component>RESOURCEMANAGER</component>
         <component>YARN_CLIENT</component>
       </service>
@@ -1056,6 +1066,12 @@
     </service>
 
     <service name="YARN">
+      <component name="APP_TIMELINE_SERVER">
+        <upgrade>
+          <task xsi:type="restart-task"/>
+        </upgrade>
+      </component>
+
       <component name="RESOURCEMANAGER">
         <upgrade>
           <task xsi:type="restart-task"/>

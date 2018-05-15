@@ -200,7 +200,7 @@ def yarn(name=None, config_dir=None):
        content=InlineTemplate(params.yarn_env_sh_template)
   )
 
-  File(format("{yarn_container_bin}/container-executor"),
+  File(format("{yarn_bin}/container-executor"),
       group=params.yarn_executor_container_group,
       mode=params.container_executor_mode
   )

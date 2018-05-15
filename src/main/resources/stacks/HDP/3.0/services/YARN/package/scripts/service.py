@@ -56,24 +56,25 @@ def service(componentName, action='start', serviceName='yarn'):
     # !!! yarn-daemon.sh deletes the PID for us; if we remove it the script
     # may not work correctly when stopping the service
     delete_pid_file = False
-    daemon = format("{yarn_bin}/yarn-daemon.sh")
+    daemon = format("{yarn_bin}/yarn")
     if componentName == 'registrydns' and status_params.registry_dns_needs_privileged_access:
-      pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{status_params.root_user}-{componentName}.pid")
+      pid_file = status_params.yarn_registry_dns_priv_pid_file
       usr = status_params.root_user
-    else :
+    else:
       pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{componentName}.pid")
       usr = params.yarn_user
+
     log_dir = params.yarn_log_dir
 
-    cmd = format("export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {daemon} --config {hadoop_conf_dir}")
+    cmd = format("export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {daemon} --config {hadoop_conf_dir} --daemon")
 
   if action == 'start':
     daemon_cmd = format("{ulimit_cmd} {cmd} start {componentName}")
     check_process = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
 
-    if componentName == 'registrydns' :
+    if componentName == 'registrydns':
       checkAndStopRegistyDNS(cmd)
-    else :
+    else:
       # Remove the pid file if its corresponding process is not running.
       File(pid_file, action = "delete", not_if = check_process)
 
@@ -114,10 +115,9 @@ def service(componentName, action='start', serviceName='yarn'):
       if delete_pid_file is True:
         File(pid_file, action="delete")
 
-
   elif action == 'refreshQueues':
     rm_kinit_cmd = params.rm_kinit_cmd
-    refresh_cmd = format("{rm_kinit_cmd} export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {yarn_container_bin}/yarn rmadmin -refreshQueues")
+    refresh_cmd = format("{rm_kinit_cmd} export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {yarn_bin}/yarn rmadmin -refreshQueues")
     Execute(refresh_cmd,
             user = usr,
             timeout = 20, # when Yarn is not started command hangs forever and should be killed
@@ -140,8 +140,8 @@ def checkAndStopRegistyDNS(cmd):
   # When registry dns is switched from non-privileged to privileged mode or the other way,
   # then the previous instance of registry dns has a different pid/user.
   # Checking if either of the processes are running and shutting them down if they are.
-  privileged_rdns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{status_params.root_user}-{componentName}.pid")
-  rdns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{componentName}.pid")
+  privileged_rdns_pid_file = status_params.yarn_registry_dns_priv_pid_file
+  rdns_pid_file = status_params.yarn_registry_dns_pid_file
 
   for dns_pid_file, dns_user in [(privileged_rdns_pid_file, status_params.root_user),
                          (rdns_pid_file, params.yarn_user)]:

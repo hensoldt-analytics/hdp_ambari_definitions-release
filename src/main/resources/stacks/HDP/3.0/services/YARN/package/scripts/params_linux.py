@@ -101,8 +101,7 @@ hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 hadoop_yarn_home = '/usr/lib/hadoop-yarn'
 hadoop_mapred2_jar_location = "/usr/lib/hadoop-mapreduce"
 mapred_bin = "/usr/lib/hadoop-mapreduce/bin"
-yarn_bin = "/usr/lib/hadoop-yarn/sbin"
-yarn_container_bin = "/usr/lib/hadoop-yarn/bin"
+yarn_bin = "/usr/lib/hadoop-yarn/bin"
 hadoop_java_io_tmpdir = os.path.join(tmp_dir, "hadoop_java_io_tmpdir")
 
 # hadoop parameters stack supporting rolling_uprade
@@ -142,8 +141,7 @@ if stack_supports_ru:
   hadoop_mapred2_jar_location = hadoop_mapr_home
   mapred_bin = format("{hadoop_mapr_home}/bin")
 
-  yarn_bin = format("{hadoop_yarn_home}/sbin")
-  yarn_container_bin = format("{hadoop_yarn_home}/bin")
+  yarn_bin = format("{hadoop_yarn_home}/bin")
 
 
 if stack_supports_timeline_state_store:
@@ -165,7 +163,7 @@ yarn_user_nproc_limit = default("/configurations/yarn-env/yarn_user_nproc_limit"
 mapred_user_nofile_limit = default("/configurations/mapred-env/mapred_user_nofile_limit", "32768")
 mapred_user_nproc_limit = default("/configurations/mapred-env/mapred_user_nproc_limit", "65536")
 
-execute_path = os.environ['PATH'] + os.pathsep + hadoop_bin_dir + os.pathsep + yarn_container_bin
+execute_path = os.environ['PATH'] + os.pathsep + hadoop_bin_dir + os.pathsep + yarn_bin
 
 ulimit_cmd = "ulimit -c unlimited;"
 

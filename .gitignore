@@ -1,5 +1,8 @@
+.classpath
 .project
 .pydevproject
 **/*.iml
 *.idea/
 *.iml/
+*.pyc
+*.py~
