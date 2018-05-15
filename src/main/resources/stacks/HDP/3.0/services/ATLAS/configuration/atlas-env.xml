@@ -181,7 +181,7 @@
   <property>
     <name>atlas.admin.password</name>
     <display-name>Admin password</display-name>
-    <description>Admin Login password</description>
+    <description>Admin Login password. Password should be minimum 8 characters with minimum one alphabet and one numeric. Unsupported special characters are &quot; &apos; &#92; &#96; &#180;.</description>
     <value/>
     <property-type>PASSWORD</property-type>
     <value-attributes>
