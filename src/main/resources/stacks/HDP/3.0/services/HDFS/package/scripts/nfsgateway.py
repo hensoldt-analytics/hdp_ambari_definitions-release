@@ -70,7 +70,10 @@ class NFSGateway(Script):
 
     env.set_params(status_params)
 
-    check_process_status(status_params.nfsgateway_pid_file)
+    try:
+      check_process_status(status_params.nfsgateway_pid_file)
+    except ComponentIsNotRunning:
+      check_process_status(status_params.unprivileged_nfsgateway_pid_file)
 
   def get_log_folder(self):
     import params
