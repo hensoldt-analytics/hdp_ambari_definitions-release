@@ -37,6 +37,9 @@ def tez(config_dir):
   """
   import params
 
+  if config_dir is None:
+    config_dir = params.config_dir
+
   Directory(params.tez_etc_dir, mode=0755)
 
   Directory(config_dir,
