@@ -788,11 +788,13 @@
       The default serializer will be ListDelegateSerializer</description>
     <on-ambari-upgrade add="true"/>
   </property>
+  <!-- Deleted configs via BUG-102796. Please refer the issue to find detailed reason to delete. -->
   <property>
     <name>client.jartransformer.class</name>
     <description>Storm Topology backward comptability transformer</description>
     <value>org.apache.storm.hack.StormShadeTransformer</value>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
+    <deleted>true</deleted>
   </property>
   <property>
     <name>nimbus.impersonation.authorizer</name>
