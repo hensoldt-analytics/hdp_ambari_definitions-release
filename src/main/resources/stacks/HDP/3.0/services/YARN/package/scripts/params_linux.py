@@ -76,7 +76,6 @@ version_for_stack_feature_checks = get_stack_feature_version(config)
 # This is expected to be of the form #.#.#.#
 stack_version_unformatted = config['clusterLevelParams']['stack_version']
 stack_version_formatted_major = format_stack_version(stack_version_unformatted)
-stack_version_formatted = functions.get_stack_version('hadoop-yarn-resourcemanager')
 major_stack_version = get_major_version(stack_version_formatted_major)
 
 stack_supports_ru = check_stack_feature(StackFeature.ROLLING_UPGRADE, version_for_stack_feature_checks)
@@ -98,50 +97,42 @@ hadoop_bin = stack_select.get_hadoop_dir("sbin")
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
 hadoop_lib_home = stack_select.get_hadoop_dir("lib")
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
-hadoop_yarn_home = '/usr/lib/hadoop-yarn'
-hadoop_mapred2_jar_location = "/usr/lib/hadoop-mapreduce"
-mapred_bin = "/usr/lib/hadoop-mapreduce/bin"
-yarn_bin = "/usr/lib/hadoop-yarn/bin"
 hadoop_java_io_tmpdir = os.path.join(tmp_dir, "hadoop_java_io_tmpdir")
 
-# hadoop parameters stack supporting rolling_uprade
-if stack_supports_ru:
-  # MapR directory root
-  mapred_role_root = "hadoop-mapreduce-client"
-  command_role = default("/role", "")
-  if command_role in MAPR_SERVER_ROLE_DIRECTORY_MAP:
-    mapred_role_root = MAPR_SERVER_ROLE_DIRECTORY_MAP[command_role]
+# MapR directory root
+mapred_role_root = "hadoop-mapreduce-client"
+command_role = default("/role", "")
+if command_role in MAPR_SERVER_ROLE_DIRECTORY_MAP:
+  mapred_role_root = MAPR_SERVER_ROLE_DIRECTORY_MAP[command_role]
 
-  # YARN directory root
-  yarn_role_root = "hadoop-yarn-client"
-  if command_role in YARN_SERVER_ROLE_DIRECTORY_MAP:
-    yarn_role_root = YARN_SERVER_ROLE_DIRECTORY_MAP[command_role]
+# YARN directory root
+yarn_role_root = "hadoop-yarn-client"
+if command_role in YARN_SERVER_ROLE_DIRECTORY_MAP:
+  yarn_role_root = YARN_SERVER_ROLE_DIRECTORY_MAP[command_role]
 
-  # defaults set to current based on role
-  hadoop_mapr_home = format("{stack_root}/current/{mapred_role_root}")
-  hadoop_yarn_home = format("{stack_root}/current/{yarn_role_root}")
+# defaults set to current based on role
+hadoop_mapr_home = format("{stack_root}/current/{mapred_role_root}")
+hadoop_yarn_home = format("{stack_root}/current/{yarn_role_root}")
 
-  # try to render the specific version
-  version = component_version.get_component_repository_version()
-  if version is None:
-    version = default("/commandParams/version", None)
+# try to render the specific version
+version = component_version.get_component_repository_version()
+if version is None:
+  version = default("/commandParams/version", None)
 
 
-  if version is not None:
-    hadoop_mapr_versioned_home = format("{stack_root}/{version}/hadoop-mapreduce")
-    hadoop_yarn_versioned_home = format("{stack_root}/{version}/hadoop-yarn")
+if version is not None:
+  hadoop_mapr_versioned_home = format("{stack_root}/{version}/hadoop-mapreduce")
+  hadoop_yarn_versioned_home = format("{stack_root}/{version}/hadoop-yarn")
 
-    if sudo.path_isdir(hadoop_mapr_versioned_home):
-      hadoop_mapr_home = hadoop_mapr_versioned_home
+  if sudo.path_isdir(hadoop_mapr_versioned_home):
+    hadoop_mapr_home = hadoop_mapr_versioned_home
 
-    if sudo.path_isdir(hadoop_yarn_versioned_home):
-      hadoop_yarn_home = hadoop_yarn_versioned_home
+  if sudo.path_isdir(hadoop_yarn_versioned_home):
+    hadoop_yarn_home = hadoop_yarn_versioned_home
 
-
-  hadoop_mapred2_jar_location = hadoop_mapr_home
-  mapred_bin = format("{hadoop_mapr_home}/bin")
-
-  yarn_bin = format("{hadoop_yarn_home}/bin")
+hadoop_mapred2_jar_location = hadoop_mapr_home
+mapred_bin = format("{hadoop_mapr_home}/bin")
+yarn_bin = format("{hadoop_yarn_home}/bin")
 
 
 if stack_supports_timeline_state_store:
@@ -569,7 +560,8 @@ docker_allowed_volume_drivers = config['configurations']['container-executor']['
 
 # ATSv2 integration properties started.
 yarn_timelinereader_pid_file = status_params.yarn_timelinereader_pid_file
-yarn_atsv2_hbase_versioned_home = format("{stack_root}/{stack_version_formatted}/hbase")
+
+yarn_atsv2_hbase_versioned_home = format("{stack_root}/{version}/hbase")
 yarn_hbase_bin = format("{yarn_atsv2_hbase_versioned_home}/bin")
 yarn_hbase_hdfs_root_dir = config['configurations']['yarn-hbase-site']['hbase.rootdir']
 cluster_zookeeper_quorum_hosts = ",".join(config['clusterHostInfo']['zookeeper_server_hosts'])
