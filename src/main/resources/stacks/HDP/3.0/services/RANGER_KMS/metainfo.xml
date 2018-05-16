@@ -101,6 +101,10 @@
 
       <themes>
         <theme>
+          <fileName>database.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
           <fileName>theme_version_1.json</fileName>
           <default>true</default>
         </theme>
