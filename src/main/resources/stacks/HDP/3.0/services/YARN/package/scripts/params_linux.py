@@ -625,9 +625,8 @@ if security_enabled and has_atsv2:
   yarn_hbase_regionserver_keytab = config['configurations']['yarn-hbase-site']['hbase.regionserver.keytab.file']
 
   yarn_ats_principal_name = config['configurations']['yarn-env']['yarn_ats_principal_name']
-  yarn_ats_principal_name_with_hostname = yarn_ats_principal_name.replace('_HOST', '$HOSTNAME')
   yarn_ats_user_keytab = config['configurations']['yarn-env']['yarn_ats_user_keytab']
-  yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_ats_user_keytab} {yarn_ats_principal_name_with_hostname};")
+  yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_ats_user_keytab} {yarn_ats_principal_name};")
 
 yarn_hbase_grant_premissions_file = format("{yarn_hbase_conf_dir}/hbase_grant_permissions.sh")
 is_hbase_system_service_launch = config['configurations']['yarn-hbase-env']['is_hbase_system_service_launch']
