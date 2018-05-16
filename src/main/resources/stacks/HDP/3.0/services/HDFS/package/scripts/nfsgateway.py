@@ -27,6 +27,7 @@ from hdfs import hdfs
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions import StackFeature
 from resource_management.libraries.functions.stack_features import check_stack_feature
+from resource_management.core.exceptions import ComponentIsNotRunning
 
 
 class NFSGateway(Script):
