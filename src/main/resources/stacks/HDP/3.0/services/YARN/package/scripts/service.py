@@ -68,9 +68,10 @@ def service(componentName, action='start', serviceName='yarn'):
 
     cmd = format("export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {daemon} --config {hadoop_conf_dir} --daemon")
 
+  check_process = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
+
   if action == 'start':
     daemon_cmd = format("{ulimit_cmd} {cmd} start {componentName}")
-    check_process = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
 
     if componentName == 'registrydns':
       checkAndStopRegistyDNS(cmd)
@@ -106,7 +107,7 @@ def service(componentName, action='start', serviceName='yarn'):
       checkAndStopRegistyDNS(cmd)
     else:
       try:
-        Execute(daemon_cmd, user=usr)
+        Execute(daemon_cmd, user=usr, only_if=check_process)
       except:
         show_logs(log_dir, usr)
         raise
