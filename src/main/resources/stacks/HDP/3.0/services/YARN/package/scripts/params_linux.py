@@ -549,9 +549,17 @@ cluster_name = config['clusterName']
 min_user_id = config['configurations']['container-executor']['min_user_id']
 docker_module_enabled = str(config['configurations']['container-executor']['docker_module_enabled']).lower()
 docker_binary = config['configurations']['container-executor']['docker_binary']
-docker_allowed_capabilities = config['configurations']['container-executor']['docker_allowed_capabilities']
+docker_allowed_capabilities = config['configurations']['yarn-site']['yarn.nodemanager.runtime.linux.docker.capabilities']
+if docker_allowed_capabilities:
+  docker_allowed_capabilities = ','.join(x.strip() for x in docker_allowed_capabilities.split(','))
+else:
+  docker_allowed_capabilities = ""
 docker_allowed_devices = config['configurations']['container-executor']['docker_allowed_devices']
-docker_allowed_networks = config['configurations']['container-executor']['docker_allowed_networks']
+docker_allowed_networks = config['configurations']['yarn-site']['yarn.nodemanager.runtime.linux.docker.allowed-container-networks']
+if docker_allowed_networks:
+  docker_allowed_networks = ','.join(x.strip() for x in docker_allowed_networks.split(','))
+else:
+  docker_allowed_networks = ""
 docker_allowed_ro_mounts = config['configurations']['container-executor']['docker_allowed_ro-mounts']
 docker_allowed_rw_mounts = config['configurations']['container-executor']['docker_allowed_rw-mounts']
 docker_privileged_containers_enabled = str(config['configurations']['container-executor']['docker_privileged-containers_enabled']).lower()
