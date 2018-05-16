@@ -25,6 +25,7 @@ import re
 import subprocess
 import time
 import traceback
+import urllib2
 
 # Local Imports
 from hive_service_interactive import hive_service_interactive
@@ -113,10 +114,40 @@ class HiveServerInteractive(Script):
       # Stop Hive Interactive Server first
       hive_service_interactive('hiveserver2', action='stop')
 
-      if not params.is_restart_command:
-        self._llap_stop(env)
-      else:
+      if params.is_restart_command:
         Logger.info("LLAP stop is skipped as its a restart command")
+      elif self.__other_instance_running(env):
+        Logger.info("LLAP stop is skipped as orher HSI instance is running")
+      else:
+        self._llap_stop(env)
+
+
+    def __other_instance_running(self, env):
+      import params
+      env.set_params(params)
+
+      for hive_server_interactive_host in params.hive_server_interactive_hosts:
+        running = False
+        if hive_server_interactive_host != params.hostname:
+          url = format("{hive_server_interactive_webui_protocol}://{hive_server_interactive_host}:{hive_server_interactive_webui_port}/leader")
+          Logger.info(format("Checking if there is another HSI instance running by trying to open {url}"))
+          req = urllib2.Request(url)
+          try:
+            resp = urllib2.urlopen(req)
+            running = True
+          except urllib2.URLError, e:
+              pass
+          except urllib2.HTTPError, e:
+            if e.code < 400:
+              running = True
+          
+          if running:
+            Logger.info(format("Runnning HSI found on {hive_server_interactive_host}"))
+            return True
+          else:
+            Logger.info(format("No running HSI found on {hive_server_interactive_host}"))
+
+      return False
 
     def status(self, env):
       import status_params
