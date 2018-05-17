@@ -84,6 +84,42 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hbase.client.retries.number</name>
+    <value>7</value>
+    <description>Maximum retries.  Used as maximum for all retryable
+    operations such as the getting of a cell's value, starting a row update,
+    etc.  Retry interval is a rough function based on hbase.client.pause.  At
+    first we retry at this interval but then with backoff, we pretty quickly reach
+    retrying every ten seconds.  See HConstants#RETRY_BACKOFF for how the backup
+    ramps up.  Change this setting and hbase.client.pause to suit your workload.</description>
+    <display-name>Maximum Client Retries</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>5</minimum>
+      <maximum>50</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hbase.rpc.timeout</name>
+    <value>90000</value>
+    <description>
+      This is for the RPC layer to define how long HBase client applications
+      take for a remote call to time out. It uses pings to check connections
+      but will eventually throw a TimeoutException.
+    </description>
+    <display-name>HBase RPC Timeout</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>10000</minimum>
+      <maximum>180000</maximum>
+      <unit>milliseconds</unit>
+      <increment-step>10000</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hbase.zookeeper.quorum</name>
     <value>{{zookeeper_quorum_hosts}}</value>
     <on-ambari-upgrade add="false"/>
