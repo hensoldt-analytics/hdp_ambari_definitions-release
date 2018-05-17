@@ -22,7 +22,6 @@ import urllib2
 import ambari_simplejson as json # simplejson is much faster comparing to Python 2.6 json module and has the same functions set.
 
 from resource_management.core.resources.system import Directory, File, Execute
-from resource_management.libraries.functions.check_process_status import wait_process_stopped
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions import check_process_status
 from resource_management.libraries.functions import StackFeature
@@ -189,12 +188,14 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
     }
     hadoop_env_exports.update(custom_export)
   elif name == "datanode":
-    pid_file = params.datanode_pid_file
+    pid_file = datanode_pid_file(params)
 
   process_id_exists_command = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
 
   if name == "nfs3":
     process_id_exists_command += " || " + as_sudo(["test", "-f", status_params.unprivileged_nfsgateway_pid_file]) + " && " + as_sudo(["pgrep", "-F", status_params.unprivileged_nfsgateway_pid_file])
+  elif name =="datanode":
+    process_id_exists_command = PidFiles(params.possible_datanode_pid_files).test_command()
 
   # on STOP directories shouldn't be created
   # since during stop still old dirs are used (which were created during previous start)
@@ -228,18 +229,14 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
                   group=params.user_group,
                   create_parents = True)
 
-  if params.secure_dn_ports_are_in_use and name == "datanode":
+  if name == "datanode" and (params.secure_dn_ports_are_in_use or PidFiles([params.datanode_secure_pid_file]).is_process_running()):
     user = "root"
-    if action == 'stop' and os.path.isfile(pid_file):
+    if action == 'stop' and PidFiles([params.datanode_secure_pid_file]).is_process_running():
         # We need special handling for this case to handle the situation
         # when we configure non-root secure DN and then restart it
         # to handle new configs. Otherwise we will not be able to stop
         # a running instance 
-        try:
-          check_process_status(pid_file)
-          hadoop_env_exports.update({'HADOOP_SECURE_DN_USER': params.hdfs_user})
-        except ComponentIsNotRunning:
-          pass
+        hadoop_env_exports.update({'HADOOP_SECURE_DN_USER': params.hdfs_user})
 
   hdfs_bin = format("{hadoop_bin}/hdfs")
 
@@ -416,3 +413,34 @@ def set_up_zkfc_security(params):
        content=Template("hdfs_jaas.conf.j2")
        )
 
+class PidFiles:
+  def __init__(self, paths):
+    self.paths = paths
+
+  def test_command(self):
+    def test_pid_command(pid_file):
+      return '(' + as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file]) + ')'
+    return ' || '.join(map(test_pid_command, self.paths))
+
+  def check_status(self):
+    if self.is_process_stopped():
+      raise ComponentIsNotRunning()
+
+  def is_process_running(self):
+    return not self.is_process_stopped()
+
+  def is_process_stopped(self):
+    def stopped(pid_file):
+      try:
+        check_process_status(pid_file)
+        return False
+      except ComponentIsNotRunning:
+        return True
+    return all(map(stopped, self.paths))
+
+def datanode_pid_file(params):
+  if PidFiles([params.datanode_unsecure_pid_file]).is_process_running():
+    return params.datanode_unsecure_pid_file
+  if PidFiles([params.datanode_secure_pid_file]).is_process_running():
+    return params.datanode_secure_pid_file
+  return params.datanode_pid_file

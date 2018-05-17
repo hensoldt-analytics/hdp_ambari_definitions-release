@@ -16,11 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
-import os
 from resource_management.core.resources.system import Directory, Execute, File
-from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.functions.mounted_dirs_helper import handle_mounted_dirs
-from utils import service
+from utils import service, PidFiles
 from ambari_commons.os_family_impl import OsFamilyImpl, OsFamilyFuncImpl
 from ambari_commons import OSConst
 
@@ -70,8 +68,7 @@ def datanode(action=None):
     )
   elif action == "status":
     import params
-    check_process_status(params.datanode_pid_file)
-
+    PidFiles(params.possible_datanode_pid_files).check_status()
 
 @OsFamilyFuncImpl(os_family=OSConst.WINSRV_FAMILY)
 def datanode(action=None):

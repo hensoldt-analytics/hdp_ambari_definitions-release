@@ -128,10 +128,13 @@ if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE,
       hadoop_secure_dn_user = '""'
 
 hadoop_pid_dir = format("{hadoop_pid_dir_prefix}/{hdfs_user}")
+datanode_secure_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-{root_user}-datanode.pid")
+datanode_unsecure_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-datanode.pid")
+possible_datanode_pid_files = [datanode_secure_pid_file, datanode_unsecure_pid_file]
 if secure_dn_ports_are_in_use:
-  datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-{root_user}-datanode.pid")
+  datanode_pid_file = datanode_secure_pid_file
 else:
-  datanode_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-datanode.pid")
+  datanode_pid_file = datanode_unsecure_pid_file
 
 ambari_libs_dir = "/var/lib/ambari-agent/lib"
 limits_conf_dir = "/etc/security/limits.d"
