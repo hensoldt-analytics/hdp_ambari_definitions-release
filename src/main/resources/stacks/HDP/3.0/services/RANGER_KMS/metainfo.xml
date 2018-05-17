@@ -101,7 +101,15 @@
 
       <themes>
         <theme>
+          <fileName>credentials.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
           <fileName>database.json</fileName>
+          <default>true</default>
+        </theme>
+        <theme>
+          <fileName>directories.json</fileName>
           <default>true</default>
         </theme>
         <theme>

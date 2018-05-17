@@ -55,6 +55,7 @@
   </property>
   <property>
     <name>ranger_admin_log_dir</name>
+    <display-name>Ranger Admin Log Dir</display-name>
     <value>/var/log/ranger/admin</value>
     <description/>
     <value-attributes>
@@ -65,6 +66,7 @@
   </property>
   <property>
     <name>ranger_usersync_log_dir</name>
+    <display-name>Ranger Usersync Log Dir</display-name>
     <value>/var/log/ranger/usersync</value>
     <description/>
     <value-attributes>
@@ -113,6 +115,7 @@
   </property>
   <property>
     <name>ranger_pid_dir</name>
+    <display-name>Ranger PID Dir</display-name>
     <value>/var/run/ranger</value>
     <description/>
     <value-attributes>

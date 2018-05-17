@@ -54,6 +54,7 @@
   </property>
   <property>
     <name>kms_log_dir</name>
+    <display-name>Ranger KMS Log Dir</display-name>
     <value>/var/log/ranger/kms</value>
     <description/>
     <value-attributes>
@@ -113,6 +114,7 @@
   </property>
   <property>
     <name>ranger_kms_pid_dir</name>
+    <display-name>Ranger KMS PID Dir</display-name>
     <value>/var/run/ranger_kms</value>
     <description/>
     <value-attributes>

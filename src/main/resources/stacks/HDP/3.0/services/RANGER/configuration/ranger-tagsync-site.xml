@@ -21,8 +21,9 @@
 <configuration supports_final="true">
   <property>
     <name>ranger.tagsync.logdir</name>
+    <display-name>Ranger Tagsync Log Dir</display-name>
     <value>/var/log/ranger/tagsync</value>
-    <description>Ranger Log dir</description>
+    <description>Ranger Tagsync Log Dir</description>
     <value-attributes>
       <type>directory</type>
       <overridable>false</overridable>
