@@ -202,18 +202,7 @@
     <display-name>Use ATS Logging</display-name>
     <value>false</value>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -318,19 +307,7 @@
     <description>Enable or disable taking Heap Dump. (true/false)</description>
     <display-name>Enable heap dump</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <overridable>false</overridable>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>Enabled</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>Disabled</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>

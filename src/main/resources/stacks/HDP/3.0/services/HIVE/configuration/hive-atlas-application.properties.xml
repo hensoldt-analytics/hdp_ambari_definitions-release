@@ -26,6 +26,9 @@
     <name>atlas.hook.hive.synchronous</name>
     <value>false</value>
     <description/>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>

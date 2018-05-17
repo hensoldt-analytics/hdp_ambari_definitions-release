@@ -23,6 +23,9 @@
     <name>xasecure.audit.is.enabled</name>
     <value>true</value>
     <description>Is Audit enabled?</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>

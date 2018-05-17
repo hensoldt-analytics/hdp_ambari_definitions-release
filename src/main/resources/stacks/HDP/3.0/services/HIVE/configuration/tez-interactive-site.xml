@@ -45,26 +45,41 @@
   <property>
     <name>tez.runtime.report.partition.stats</name>
     <value>true</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>tez.runtime.pipelined-shuffle.enabled</name>
     <value>false</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>tez.runtime.pipelined.sorter.lazy-allocate.memory</name>
     <value>true</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>tez.grouping.node.local.only</name>
     <value>true</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>tez.runtime.shuffle.fetch.verify-disk-checksum</name>
     <value>false</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -80,6 +95,9 @@
   <property>
     <name>tez.dag.recovery.enabled</name>
     <value>false</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -212,6 +230,9 @@
     <value>false</value>
     <description>Whether to enable blacklisting in Tez AMs. Disable for LLAP
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -276,6 +297,9 @@
     <name>tez.runtime.shuffle.keep-alive.enabled</name>
     <value>true</value>
     <description>Connection keep-alive for shuffle</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -288,12 +312,18 @@
     <name>tez.runtime.enable.final-merge.in.output</name>
     <value>false</value>
     <description>Whether to enable a map side merge of outputs</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>tez.am.task.reschedule.higher.priority</name>
     <value>false</value>
     <description>Whether rescheduled tasks should be treated at higher priority</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>

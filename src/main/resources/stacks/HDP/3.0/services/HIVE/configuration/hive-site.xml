@@ -57,12 +57,18 @@ limitations under the License.
     <value>false</value>
     <description>If true, the metastore thrift interface will be secured with SASL.
      Clients must authenticate with Kerberos.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.metastore.execute.setugi</name>
     <value>true</value>
     <description>In unsecure mode, setting this property to true will cause the metastore to execute DFS operations using the client's reported user and group permissions. Note that this property must be set on both the client and     server sides. Further note that its best effort. If client sets its to true and server sets it to false, client setting will be ignored.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -71,6 +77,9 @@ limitations under the License.
     <description> If the tables being joined are sorted and bucketized on the join columns, and they have the same number
     of buckets, a sort-merge join can be performed by setting this parameter as true.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -121,18 +130,7 @@ limitations under the License.
     <description>Whether to run the compactor's initiator thread in this metastore instance or not. If there is more than one instance of the thrift metastore this should be set to true on only one instance. Setting true on only one host can be achieved by creating a config-group containing the metastore host, and overriding the default value to true in it.</description>
     <display-name>Run Compactor</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false" update="true"/>
   </property>
@@ -155,18 +153,7 @@ limitations under the License.
     <description>Whether the eligible tables should be created as ACID insert-only by default. Does not apply to external tables, the ones using storage handlers, etc.</description>
     <display-name>Create Tables as ACID Insert Only</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false" update="true"/>
   </property>
@@ -176,18 +163,7 @@ limitations under the License.
     <description>Whether the eligible tables should be created as full ACID by default. Does not apply to external tables, the ones using storage handlers, etc.</description>
     <display-name>Create Tables as Full ACID</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false" update="true"/>
   </property>
@@ -310,6 +286,9 @@ limitations under the License.
     <name>hive.exec.submitviachild</name>
     <value>false</value>
     <description/>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -320,6 +299,9 @@ limitations under the License.
       separate JVM (true recommended) or not.
       Avoids the overhead of spawning new JVM, but can lead to out-of-memory issues.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -329,6 +311,9 @@ limitations under the License.
       This controls whether the final outputs of a query (to a local/HDFS file or a Hive table) is compressed.
       The compression codec and other options are determined from Hadoop config variables mapred.output.compress*
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -338,6 +323,9 @@ limitations under the License.
       This controls whether intermediate files produced by Hive between multiple map-reduce jobs are compressed.
       The compression codec and other options are determined from Hadoop config variables mapred.output.compress*
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -436,6 +424,9 @@ limitations under the License.
     <name>hive.exec.parallel</name>
     <value>false</value>
     <description>Whether to execute jobs in parallel</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -448,12 +439,18 @@ limitations under the License.
     <name>hive.mapred.reduce.tasks.speculative.execution</name>
     <value>false</value>
     <description>Whether speculative execution for reducers should be turned on. </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.exec.dynamic.partition</name>
     <value>true</value>
     <description>Whether or not to allow dynamic partitions in DML/DDL.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -613,6 +610,9 @@ limitations under the License.
       question doesn't have permissions to delete the corresponding directory
       on the storage).
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -646,6 +646,9 @@ limitations under the License.
     <name>hive.map.aggr</name>
     <value>true</value>
     <description>Whether to use map-side aggregation in Hive Group By queries</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -654,18 +657,7 @@ limitations under the License.
     <description>Flag to control enabling Cost Based Optimizations using Calcite framework.</description>
     <display-name>Enable Cost Based Optimizer</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>On</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>Off</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -676,6 +668,9 @@ limitations under the License.
       Whether Hive should use memory-optimized hash table for MapJoin. Only works on Tez,
       because memory-optimized hashtable cannot be serialized.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -712,18 +707,27 @@ limitations under the License.
     <name>hive.merge.mapfiles</name>
     <value>true</value>
     <description>Merge small files at the end of a map-only job</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.merge.mapredfiles</name>
     <value>false</value>
     <description>Merge small files at the end of a map-reduce job</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.merge.tezfiles</name>
     <value>false</value>
     <description>Merge small files at the end of a Tez DAG</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -746,6 +750,9 @@ limitations under the License.
     <name>hive.merge.rcfile.block.level</name>
     <value>true</value>
     <description/>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -757,6 +764,9 @@ limitations under the License.
       for small ORC files. Note that enabling this config will not honor padding tolerance
       config (hive.exec.orc.block.padding.tolerance).
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -774,6 +784,9 @@ limitations under the License.
       If turned on splits generated by orc will include metadata about the stripes in the file. This
       data is read remotely (from the client or HS2 machine) and sent to all the tasks.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -786,6 +799,9 @@ limitations under the License.
     <name>hive.auto.convert.join</name>
     <value>true</value>
     <description>Whether Hive enables the optimization about converting common join into mapjoin based on the input file size</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -796,12 +812,18 @@ limitations under the License.
       If this parameter is on, and the sum of size for n-1 of the tables/partitions for a n-way join is smaller than the
       specified size, the join is directly converted to a mapjoin (there is no conditional task).
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.limit.optimize.enable</name>
     <value>true</value>
     <description>Whether to enable to optimization to trying a smaller subset of data for simple LIMIT first.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -823,12 +845,18 @@ limitations under the License.
     <name>hive.enforce.sortmergebucketmapjoin</name>
     <value>true</value>
     <description>If the user asked for sort-merge bucketed map-side join, and it cannot be performed, should the query fail or not ?</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.auto.convert.sortmerge.join</name>
     <value>true</value>
     <description>Will the join be automatically converted to a sort-merge join, if the joined tables pass the criteria for sort-merge join.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -844,30 +872,45 @@ limitations under the License.
       with few files (10 files), the sort-merge join will only use 10 mappers, and a simple map-only join might be faster
       if the complete small table can fit in memory, and a map-join can be performed.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.optimize.constant.propagation</name>
     <value>true</value>
     <description>Whether to enable constant propagation optimizer</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.optimize.metadataonly</name>
     <value>true</value>
     <description/>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.optimize.null.scan</name>
     <value>true</value>
     <description>Dont scan relations which are guaranteed to not generate any rows</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.optimize.bucketmapjoin</name>
     <value>true</value>
     <description>Whether to try bucket mapjoin</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -877,6 +920,9 @@ limitations under the License.
       Remove extra map-reduce jobs if the data is already clustered by the same key which needs to be used again.
       This should always be set to true. Since it is a new feature, it has been made configurable.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -899,18 +945,7 @@ limitations under the License.
     </description>
     <display-name>Sort Partitions Dynamically</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -918,6 +953,9 @@ limitations under the License.
     <name>hive.stats.autogather</name>
     <value>true</value>
     <description>A flag to gather statistics automatically during the INSERT OVERWRITE command.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -942,18 +980,7 @@ limitations under the License.
     </description>
     <display-name>Fetch partition stats at compiler</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>On</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>Off</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <depends-on>
       <property>
@@ -974,18 +1001,7 @@ limitations under the License.
     </description>
     <display-name>Fetch column stats at compiler</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>On</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>Off</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <depends-on>
       <property>
@@ -1047,18 +1063,7 @@ limitations under the License.
     </description>
     <display-name>Use Locking</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false" update="true"/>
   </property>
@@ -1068,6 +1073,9 @@ limitations under the License.
     <description>
       Whether to print the names of the columns in query output.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1128,6 +1136,9 @@ limitations under the License.
       final aggregations in single reduce task. If this is set true, Hive delegates final aggregation
       stage to fetch task, possibly decreasing the query time.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1136,18 +1147,7 @@ limitations under the License.
     <description>enable or disable the Hive client authorization</description>
     <display-name>Enable Authorization</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <depends-on>
       <property>
@@ -1193,6 +1193,9 @@ limitations under the License.
     <name>hive.security.metastore.authorization.auth.reads</name>
     <value>true</value>
     <description>If this is true, metastore authorizer authorizes read actions on database, table</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1208,6 +1211,9 @@ limitations under the License.
     <name>hive.server2.logging.operation.enabled</name>
     <value>true</value>
     <description>When true, HS2 will save operation logs</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1272,6 +1278,9 @@ limitations under the License.
     <name>hive.server2.allow.user.substitution</name>
     <value>true</value>
     <description>Allow alternate user to be specified as part of HiveServer2 open connection request.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1468,6 +1477,9 @@ limitations under the License.
       Whether joins can be automatically converted to bucket map joins in hive
       when tez is used as the execution engine.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1480,18 +1492,7 @@ limitations under the License.
     </description>
     <display-name>Allow dynamic numbers of reducers</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -1516,18 +1517,7 @@ limitations under the License.
     <description>When dynamic pruning is enabled, joins on partition keys will be processed by sending events from the processing vertices to the tez application master. These events will be used to prune unnecessary partitions.</description>
     <display-name>Allow dynamic partition pruning</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -1583,18 +1573,7 @@ limitations under the License.
     </description>
     <display-name>Enable Vectorization and Map Vectorization</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -1627,18 +1606,7 @@ limitations under the License.
     <description>Whether to enable automatic use of indexes</description>
     <display-name>Push Filters to Storage</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -1688,18 +1656,7 @@ limitations under the License.
     </description>
     <display-name>Compute simple queries using stats only</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <depends-on>
       <property>
@@ -1740,18 +1697,7 @@ limitations under the License.
     </description>
     <display-name>Compile queries in parallel</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -1765,18 +1711,7 @@ limitations under the License.
     </description>
     <display-name>Start Tez session at Initialization</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -1817,6 +1752,9 @@ limitations under the License.
     <name>hive.server2.webui.use.ssl</name>
     <value>false</value>
     <description>Enable SSL for HiveServer2 Interactive</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1848,18 +1786,7 @@ limitations under the License.
     </description>
     <display-name>Enable Reduce Vectorization</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -1929,11 +1856,17 @@ limitations under the License.
   <property>
     <name>datanucleus.autoCreateSchema</name>
     <value>false</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>datanucleus.fixedDatastore</name>
     <value>true</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1999,12 +1932,18 @@ limitations under the License.
     <name>hive.tez.input.generate.consistent.splits</name>
     <value>true</value>
     <description>Whether to generate consistent split locations when generating splits in the AM</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.tez.exec.print.summary</name>
     <value>true</value>
     <description>Display breakdown of execution steps, for every query executed by the shell.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -2014,6 +1953,9 @@ limitations under the License.
       This flag should be set to true to enable native (i.e. non-pass through) vectorization
       of queries using MapJoin.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -2023,6 +1965,9 @@ limitations under the License.
       This flag should be set to true to enable vector map join hash tables to
       use max / max filtering for integer join queries using MapJoin.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -2032,6 +1977,9 @@ limitations under the License.
       This flag should be set to true to enable use of native fast vector map join hash tables in
       queries using MapJoin.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -2041,6 +1989,9 @@ limitations under the License.
       Whether to enable dynamically partitioned hash join optimization.
       This setting is also dependent on enabling hive.auto.convert.join
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -2061,12 +2012,18 @@ limitations under the License.
       Applies to dynamically partitioned joins when running in LLAP, but not to regular
       broadcast(map) joins. hive.llap.enable.grace.join.in.llap is used for this.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.tez.cartesian-product.enabled</name>
     <value>true</value>
     <description>Use Tez cartesian product edge for Hive cartesian product</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -2077,6 +2034,9 @@ limitations under the License.
       filtering the splits against a bitset of included buckets. This needs predicates
       produced by hive.optimize.ppd and hive.optimize.index.filters.
     </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
 
