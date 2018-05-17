@@ -210,10 +210,10 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
     :param services:
     """
     if self.isSecurityEnabled(services):
-      zeppelin_env = self.getServicesSiteProperties(services, "zeppelin-env")
+      zeppelin_site = self.getServicesSiteProperties(services, "zeppelin-site")
 
-      if zeppelin_env and 'zeppelin.server.kerberos.principal' in zeppelin_env:
-        zeppelin_principal = zeppelin_env['zeppelin.server.kerberos.principal']
+      if zeppelin_site and 'zeppelin.server.kerberos.principal' in zeppelin_site:
+        zeppelin_principal = zeppelin_site['zeppelin.server.kerberos.principal']
         zeppelin_user = zeppelin_principal.split('@')[0] if zeppelin_principal else None
 
         if zeppelin_user:
