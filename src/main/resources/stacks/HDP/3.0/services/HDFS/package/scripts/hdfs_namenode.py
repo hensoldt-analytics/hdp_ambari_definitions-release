@@ -31,7 +31,7 @@ from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.resources.execute_hadoop import ExecuteHadoop
-from resource_management.libraries.functions import Direction
+from resource_management.libraries.functions import Direction, upgrade_summary
 from resource_management.libraries.functions.namenode_ha_utils import get_name_service_by_hostname
 from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from ambari_commons import OSCheck, OSConst
@@ -131,6 +131,9 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
       # to kill ZKFC manually, so we need to start it if not already running.
       safe_zkfc_op(action, env)
 
+    summary = upgrade_summary.get_upgrade_summary()
+    is_downgrade_allowed = summary is not None and summary.is_downgrade_allowed
+
     options = ""
     if upgrade_type == constants.UPGRADE_TYPE_ROLLING:
       if params.upgrade_direction == Direction.UPGRADE:
@@ -142,7 +145,25 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
       Logger.info("Previous file system image dir present is {0}".format(str(is_previous_image_dir)))
 
       if params.upgrade_direction == Direction.UPGRADE:
-        options = "-rollingUpgrade started"
+        if is_downgrade_allowed:
+          options = "-rollingUpgrade started"
+        else:
+
+          # if we are HA, then -upgrade needs to be called for the active NN,
+          #   then -bootstrapStandby on the other, followed by normal daemon
+          # if we are NOT HA, then -upgrade needs to be called on the lone NN
+
+          if params.dfs_ha_enabled:
+            name_service = get_name_service_by_hostname(params.hdfs_site, params.hostname)
+            any_active = is_there_any_active_nn(name_service)
+            if any_active:
+              if not bootstrap_standby_namenode(params, use_path=True):
+                raise Fail("Could not bootstrap this namenode of an Express upgrade")
+              options = "" # we're bootstrapped, no other work needs to happen for the daemon
+            else:
+              options = "-upgrade"  # no other are active, so this host's NN is the first
+          else:
+            options = "-upgrade"  # non-HA
       elif params.upgrade_direction == Direction.DOWNGRADE:
         options = "-rollingUpgrade downgrade"
     elif upgrade_type == constants.UPGRADE_TYPE_HOST_ORDERED:
@@ -151,7 +172,10 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
     elif upgrade_type is None and upgrade_suspended is True:
       # the rollingUpgrade flag must be passed in during a suspended upgrade when starting NN
       if os.path.exists(namenode_upgrade.get_upgrade_in_progress_marker()):
-        options = "-rollingUpgrade started"
+        if is_downgrade_allowed:
+          options = "-rollingUpgrade started"
+        else:
+          options = "-upgrade"
       else:
         Logger.info("The NameNode upgrade marker file {0} does not exist, yet an upgrade is currently suspended. "
                     "Assuming that the upgrade of NameNode has not occurred yet.".format(namenode_upgrade.get_upgrade_in_progress_marker()))
@@ -626,3 +650,17 @@ def is_this_namenode_active(name_service):
   # enters at least one of these roles before returning a verdict - the annotation will catch
   # this failure and retry the fuction automatically
   raise Fail(format("The NameNode {namenode_id} is not listed as Active or Standby, waiting..."))
+
+
+def is_there_any_active_nn(name_service):
+  import params
+
+  namenode_states = namenode_ha_utils.get_namenode_states(params.hdfs_site, params.security_enabled,
+    params.hdfs_user, times=3, sleep_time=3, backoff_factor=2, name_service=name_service)
+
+  # unwraps [('nn1', 'c6401.ambari.apache.org:50070')]
+  active_namenodes = [] if len(namenode_states[0]) < 1 else namenode_states[0]
+
+  # namenode_states[1] contains standby NN
+
+  return len(active_namenodes) > 0

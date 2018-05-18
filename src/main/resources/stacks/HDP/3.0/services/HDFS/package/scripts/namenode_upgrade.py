@@ -27,7 +27,7 @@ from resource_management.core.shell import as_user
 from resource_management.core.exceptions import Fail
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions import get_unique_id_and_date
-from resource_management.libraries.functions import Direction, SafeMode
+from resource_management.libraries.functions import Direction, SafeMode, upgrade_summary
 from utils import get_dfsadmin_base_command
 
 from namenode_ha_state import NamenodeHAState
@@ -262,6 +262,10 @@ def finalize_upgrade(upgrade_type, hdfs_binary):
   dfsadmin_base_command = get_dfsadmin_base_command(hdfs_binary)
   finalize_cmd = dfsadmin_base_command + " -rollingUpgrade finalize"
   query_cmd = dfsadmin_base_command + " -rollingUpgrade query"
+
+  summary = upgrade_summary.get_upgrade_summary()
+  if summary is not None and not summary.is_downgrade_allowed:
+    query_cmd = dfsadmin_base_command + " -upgrade query"
 
   Execute(query_cmd,
         user=params.hdfs_user,
