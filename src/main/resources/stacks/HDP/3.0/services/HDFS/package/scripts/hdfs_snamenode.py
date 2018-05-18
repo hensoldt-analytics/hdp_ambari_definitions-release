@@ -21,6 +21,8 @@ from utils import service
 from resource_management.core.resources.system import Directory, File
 from resource_management.core.source import Template
 from resource_management.libraries.functions.check_process_status import check_process_status
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from ambari_commons.os_family_impl import OsFamilyImpl, OsFamilyFuncImpl
 from ambari_commons import OSConst
 
@@ -45,6 +47,7 @@ def snamenode(action=None, format=False):
          owner=params.hdfs_user,
          group=params.user_group)
       pass
+    generate_logfeeder_input_config('hdfs', Template("input.config-hdfs.json.j2", extra_imports=[default]))
   elif action == "start" or action == "stop":
     import params
     service(

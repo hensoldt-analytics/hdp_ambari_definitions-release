@@ -26,8 +26,10 @@ from resource_management.core.resources.system import Directory, File, Execute
 from resource_management.core.source import StaticFile, InlineTemplate, Template
 from resource_management.core.exceptions import Fail
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.decorator import retry
 from resource_management.libraries.functions import solr_cloud_util
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.stack_features import check_stack_feature, get_stack_feature_version
 from resource_management.libraries.resources.properties_file import PropertiesFile
 from resource_management.libraries.resources.template_config import TemplateConfig
@@ -125,6 +127,8 @@ def metadata(type='server'):
              group=params.user_group,
              content=InlineTemplate(params.metadata_solrconfig_content)
         )
+
+      generate_logfeeder_input_config('atlas', Template("input.config-atlas.json.j2", extra_imports=[default]))
 
     # Needed by both Server and Client
     PropertiesFile(format('{conf_dir}/{conf_file}'),

@@ -27,12 +27,14 @@ import socket
 from resource_management.core.exceptions import ComponentIsNotRunning
 from resource_management.core.logger import Logger
 from resource_management.core import shell
-from resource_management.core.source import InlineTemplate
+from resource_management.core.source import Template, InlineTemplate
 from resource_management.core.resources.system import Directory, File
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.resources.properties_file import PropertiesFile
 from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.constants import StackFeature
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.resources.xml_config import XmlConfig
 
@@ -53,6 +55,8 @@ def setup_spark(env, type, upgrade_type = None, action = None):
                        mode=0775
     )
     params.HdfsResource(None, action="execute")
+
+    generate_logfeeder_input_config('spark2', Template("input.config-spark2.json.j2", extra_imports=[default]))
 
   spark2_defaults = dict(params.config['configurations']['spark2-defaults'])
 

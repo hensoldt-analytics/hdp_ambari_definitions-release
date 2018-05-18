@@ -23,6 +23,8 @@ from resource_management.libraries.script.script import Script
 from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.libraries.resources.template_config import TemplateConfig
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.core.source import Template, InlineTemplate
 from resource_management.core.resources import Package
 from resource_management.core.resources.service import ServiceConfig
@@ -195,6 +197,8 @@ def hbase(name=None):
       cd_access = "a",
       mode = 0755,
     )
+
+    generate_logfeeder_input_config('hbase', Template("input.config-hbase.json.j2", extra_imports=[default]))
 
   if (params.log4j_props != None):
     File(format("{params.hbase_conf_dir}/log4j.properties"),

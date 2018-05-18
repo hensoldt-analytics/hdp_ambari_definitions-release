@@ -17,7 +17,10 @@ limitations under the License.
 
 """
 from resource_management.core.resources.system import Directory, Execute, File
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.mounted_dirs_helper import handle_mounted_dirs
+from resource_management.libraries.functions.default import default
+from resource_management.core.source import Template
 from utils import service, PidFiles
 from ambari_commons.os_family_impl import OsFamilyImpl, OsFamilyFuncImpl
 from ambari_commons import OSConst
@@ -57,6 +60,7 @@ def datanode(action=None):
          mode=0644,
          content=data_dir_to_mount_file_content
     )
+    generate_logfeeder_input_config('hdfs', Template("input.config-hdfs.json.j2", extra_imports=[default]))
 
   elif action == "start" or action == "stop":
     import params

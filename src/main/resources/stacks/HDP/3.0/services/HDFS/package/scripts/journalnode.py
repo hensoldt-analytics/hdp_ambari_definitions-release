@@ -21,13 +21,16 @@ from ambari_commons.constants import UPGRADE_TYPE_NON_ROLLING
 from resource_management.libraries.script.script import Script
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.constants import StackFeature
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.check_process_status import check_process_status
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.security_commons import build_expectations, \
   cached_kinit_executor, get_params_from_filesystem, validate_security_config_properties, \
   FILE_TYPE_XML
 from resource_management.core.logger import Logger
 from resource_management.core.resources.system import Directory
+from resource_management.core.source import Template
 from utils import service
 from hdfs import hdfs
 import journalnode_upgrade
@@ -92,6 +95,7 @@ class JournalNodeDefault(JournalNode):
               group=params.user_group
     )
     env.set_params(params)
+    generate_logfeeder_input_config('hdfs', Template("input.config-hdfs.json.j2", extra_imports=[default]))
     hdfs()
     pass
 

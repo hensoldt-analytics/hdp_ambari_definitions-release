@@ -25,7 +25,9 @@ import os
 # Ambari Common and Resource Management Imports
 from resource_management.libraries.script.script import Script
 from resource_management.core.resources.service import ServiceConfig
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.is_empty import is_empty
 from resource_management.libraries.functions.lzo_utils import install_lzo_if_needed
 from resource_management.core.resources.system import Directory, Execute
@@ -93,6 +95,8 @@ def yarn(name=None, config_dir=None):
     if not params.is_hbase_system_service_launch:
        setup_atsv2_hbase_directories()
        setup_atsv2_hbase_files()
+
+  generate_logfeeder_input_config('yarn', Template("input.config-yarn.json.j2", extra_imports=[default]))
 
    # if there is the viewFS mount table content, create separate xml config and include in in the core-site
    # else just create core-site
@@ -403,6 +407,8 @@ def setup_historyserver():
             cd_access="a",
             recursive_ownership = True,
             )
+
+  generate_logfeeder_input_config('mapreduce2', Template("input.config-mapreduce2.json.j2", extra_imports=[default]))
 
 def setup_nodemanager():
   import params

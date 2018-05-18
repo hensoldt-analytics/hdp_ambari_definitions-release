@@ -29,6 +29,7 @@ from resource_management.core.source import InlineTemplate
 from resource_management.core.source import Template
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions import StackFeature
 from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.stack_features import check_stack_feature
@@ -111,6 +112,8 @@ def oozie(is_server=False, upgrade_type=None):
                          mode=params.oozie_hdfs_user_mode
     )
     params.HdfsResource(None, action="execute")
+
+    generate_logfeeder_input_config('oozie', Template("input.config-oozie.json.j2", extra_imports=[default]))
   Directory(params.conf_dir,
              create_parents = True,
              owner = params.oozie_user,

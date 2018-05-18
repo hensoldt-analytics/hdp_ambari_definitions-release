@@ -24,6 +24,8 @@ from resource_management.libraries.resources.template_config import TemplateConf
 from resource_management.core.resources.service import ServiceConfig
 from resource_management.core.source import InlineTemplate, Template
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons.str_utils import compress_backslashes
@@ -571,6 +573,7 @@ def ams(name=None, action=None):
       export_ca_certs(params.ams_grafana_conf_dir)
 
     pass
+  generate_logfeeder_input_config('ambari-metrics', Template("input.config-ambari-metrics.json.j2", extra_imports=[default]))
 
 def is_spnego_enabled(params):
   if 'core-site' in params.config['configurations'] \

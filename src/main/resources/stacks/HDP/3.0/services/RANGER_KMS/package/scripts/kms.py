@@ -28,11 +28,13 @@ from datetime import datetime
 from resource_management.core.resources.system import File, Directory, Execute
 from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.libraries.resources.modify_properties_file import ModifyPropertiesFile
-from resource_management.core.source import DownloadSource, InlineTemplate
+from resource_management.core.source import DownloadSource, Template, InlineTemplate
 from resource_management.core.exceptions import Fail
 from resource_management.core.logger import Logger
 from resource_management.libraries.functions.is_empty import is_empty
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.ranger_functions import Rangeradmin
 from resource_management.libraries.functions.ranger_functions_v2 import RangeradminV2
 from resource_management.libraries.functions.decorator import safe_retry
@@ -231,6 +233,8 @@ def kms(upgrade_type=None):
       create_parents = True,
       mode = 0755
     )
+
+    generate_logfeeder_input_config('ranger-kms', Template("input.config-ranger-kms.json.j2", extra_imports=[default]))
 
     File(format('{kms_conf_dir}/ranger-kms-env.sh'),
       content = InlineTemplate(params.kms_env_content),

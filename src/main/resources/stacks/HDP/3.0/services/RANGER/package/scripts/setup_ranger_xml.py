@@ -29,6 +29,7 @@ from resource_management.libraries.resources.modify_properties_file import Modif
 from resource_management.libraries.resources.properties_file import PropertiesFile
 from resource_management.core.exceptions import Fail
 from resource_management.libraries.functions.decorator import retry
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.is_empty import is_empty
 from resource_management.core.utils import PasswordString
@@ -74,6 +75,8 @@ def setup_ranger_admin(upgrade_type=None):
     content = DownloadSource(format("{jdk_location}/{check_db_connection_jar_name}")),
     mode = 0644,
   )
+
+  generate_logfeeder_input_config('ranger', Template("input.config-ranger.json.j2", extra_imports=[default]))
 
   cp = format("{check_db_connection_jar}")
   if params.db_flavor.lower() == 'sqla':
@@ -437,6 +440,8 @@ def setup_usersync(upgrade_type=None):
   Directory(format("{ranger_ugsync_conf}/"),
     owner = params.unix_user
   )
+
+  generate_logfeeder_input_config('ranger', Template("input.config-ranger.json.j2", extra_imports=[default]))
 
   if upgrade_type is not None:
     src_file = format('{usersync_home}/conf.dist/ranger-ugsync-default.xml')

@@ -29,11 +29,14 @@ from resource_management.core.resources.service import Service
 from resource_management.core import shell
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.constants import StackFeature
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.check_process_status import check_process_status
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.script import Script
 from resource_management.core.resources.zkmigrator import ZkMigrator
 from resource_management.core.resources.system import Execute
+from resource_management.core.source import Template
 
 class ZkfcSlave(Script):
   def install(self, env):
@@ -48,6 +51,7 @@ class ZkfcSlave(Script):
   def configure_static(env):
     import params
     env.set_params(params)
+    generate_logfeeder_input_config('hdfs', Template("input.config-hdfs.json.j2", extra_imports=[default]))
     hdfs("zkfc_slave")
     utils.set_up_zkfc_security(params)
     pass

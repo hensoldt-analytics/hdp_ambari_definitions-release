@@ -19,7 +19,9 @@ limitations under the License.
 """
 
 import os
-from resource_management import Directory, File, PropertiesFile, InlineTemplate, format
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
+from resource_management import Directory, File, PropertiesFile, Template, InlineTemplate, format
 
 
 def setup_livy(env, type, upgrade_type = None, action = None):
@@ -47,6 +49,8 @@ def setup_livy(env, type, upgrade_type = None, action = None):
                         mode=0700
        )
     params.HdfsResource(None, action="execute")
+
+    generate_logfeeder_input_config('spark2', Template("input.config-spark2.json.j2", extra_imports=[default]))
 
   # create livy-env.sh in etc/conf dir
   File(os.path.join(params.livy2_conf, 'livy-env.sh'),

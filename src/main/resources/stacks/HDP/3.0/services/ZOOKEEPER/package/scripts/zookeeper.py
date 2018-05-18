@@ -24,6 +24,8 @@ import sys
 from resource_management.libraries.script.script import Script
 from resource_management.libraries.functions import conf_select,stack_select
 from resource_management.libraries.functions.constants import StackFeature
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.version import compare_versions, format_stack_version
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.core.resources.system import Directory, File
@@ -81,6 +83,8 @@ def zookeeper(type = None, upgrade_type=None):
          mode = 0644,
          content = myid
     )
+
+    generate_logfeeder_input_config('zookeeper', Template("input.config-zookeeper.json.j2", extra_imports=[default]))
 
   if (params.log4j_props != None):
     File(os.path.join(params.config_dir, "log4j.properties"),

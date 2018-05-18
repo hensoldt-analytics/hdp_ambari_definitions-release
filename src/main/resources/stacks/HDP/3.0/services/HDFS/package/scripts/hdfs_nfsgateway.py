@@ -20,7 +20,10 @@ limitations under the License.
 from resource_management.core.exceptions import Fail
 from resource_management.core.logger import Logger
 from resource_management.core.resources import Directory
+from resource_management.core.source import Template
 from resource_management.core import shell
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from utils import service
 import subprocess,os
 
@@ -65,6 +68,8 @@ def nfsgateway(action=None, format=False):
               owner = params.hdfs_user,
               group = params.user_group,
     )
+    generate_logfeeder_input_config('hdfs', Template("input.config-hdfs.json.j2", extra_imports=[default]))
+
   elif action == "start" or action == "stop":
     service(
       action=action,

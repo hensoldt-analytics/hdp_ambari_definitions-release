@@ -21,12 +21,14 @@ import os
 from resource_management.libraries.script.script import Script
 from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.core.resources.service import ServiceConfig
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.get_config import get_config
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.resources.template_config import TemplateConfig
 from resource_management.core.resources.system import File, Execute, Directory
 from resource_management.core.shell import as_user
-from resource_management.core.source import InlineTemplate
+from resource_management.core.source import Template, InlineTemplate
 
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
@@ -144,6 +146,8 @@ def knox():
                       owner = params.knox_user,
                       template_tag = None
       )
+
+    generate_logfeeder_input_config('knox', Template("input.config-knox.json.j2", extra_imports=[default]))
 
     cmd = format('{knox_client_bin} create-master --master {knox_master_secret!p}')
     master_secret_exist = as_user(format('test -f {knox_master_secret_path}'), params.knox_user)

@@ -18,12 +18,12 @@
 {
   "input":[
     {
-      "type":"hive_hiveserver2",
+      "type":"hive_server",
       "rowtype":"service",
       "path":"{{default('/configurations/hive-env/hive_log_dir', '/var/log/hive')}}/hiveserver2.log"
     },
     {
-      "type":"hive_hiveserver2interactive",
+      "type":"hive_server_interactive",
       "rowtype":"service",
       "path":"{{default('/configurations/hive-env/hive_log_dir', '/var/log/hive')}}/hiveserver2Interactive.log"
     },
@@ -39,8 +39,8 @@
       "conditions":{
         "fields":{
           "type":[
-            "hive_hiveserver2",
-            "hive_hiveserver2interactive",
+            "hive_server",
+            "hive_server_interactive",
             "hive_metastore"
           ]
         }

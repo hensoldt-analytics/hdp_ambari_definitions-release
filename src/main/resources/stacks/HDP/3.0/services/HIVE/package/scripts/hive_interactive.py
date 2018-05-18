@@ -31,7 +31,9 @@ from ambari_commons.constants import SERVICE
 from resource_management.core.logger import Logger
 from resource_management.core.source import Template, DownloadSource, InlineTemplate
 from resource_management.core.resources.system import File, Directory
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.security_commons import update_credential_provider_path
 from resource_management.libraries.functions.setup_atlas_hook import setup_atlas_hook
 from resource_management.libraries.resources.hdfs_resource import HdfsResource
@@ -314,6 +316,7 @@ def hive_interactive(name = None):
             group = params.user_group,
             mode = 0755
   )
+  generate_logfeeder_input_config('hive', Template("input.config-hive.json.j2", extra_imports=[default]))
 
 """
 Remove 'org.apache.atlas.hive.hook.HiveHook' value from Hive2/hive-site.xml config 'hive.exec.post.hooks', if exists.

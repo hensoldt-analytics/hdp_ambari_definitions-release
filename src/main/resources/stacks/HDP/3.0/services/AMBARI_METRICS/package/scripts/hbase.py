@@ -22,8 +22,10 @@ from ambari_commons import OSConst
 from resource_management.core.resources.system import Directory, Execute, File
 from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.libraries.resources.template_config import TemplateConfig
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.core.source import Template, InlineTemplate
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 
 @OsFamilyFuncImpl(os_family=OSConst.WINSRV_FAMILY)
@@ -272,6 +274,8 @@ def hbase(name=None # 'master' or 'regionserver' or 'client'
       group=params.user_group,
       owner=params.hbase_user
     )
+
+  generate_logfeeder_input_config('ambari-metrics', Template("input.config-ambari-metrics.json.j2", extra_imports=[default]))
 
 def hbase_TemplateConfig(name, tag=None, user=None):
   import params

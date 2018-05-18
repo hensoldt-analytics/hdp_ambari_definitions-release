@@ -32,7 +32,9 @@ from resource_management.core.shell import as_user, quote_bash_args
 from resource_management.core.source import StaticFile, Template, DownloadSource, InlineTemplate
 from resource_management.libraries.functions import StackFeature
 from resource_management.libraries.functions.copy_tarball import copy_to_hdfs
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.get_config import get_config
 from resource_management.libraries.functions.is_empty import is_empty
 from resource_management.libraries.functions.security_commons import update_credential_provider_path
@@ -223,6 +225,8 @@ def setup_hiveserver2():
 
   params.HdfsResource(None, action="execute")
 
+  generate_logfeeder_input_config('hive', Template("input.config-hive.json.j2", extra_imports=[default]))
+
 def setup_non_client():
   import params
 
@@ -289,6 +293,8 @@ def setup_metastore():
                         group=params.user_group,
                         mode = 0700)
   params.HdfsResource(None, action="execute")
+
+  generate_logfeeder_input_config('hive', Template("input.config-hive.json.j2", extra_imports=[default]))
 
 def create_metastore_schema():
   import params

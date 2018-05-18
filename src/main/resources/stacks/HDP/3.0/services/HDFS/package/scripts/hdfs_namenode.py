@@ -27,11 +27,13 @@ from resource_management.core.resources.system import File, Execute, Directory
 from resource_management.core.resources.service import Service
 from resource_management.libraries.functions import namenode_ha_utils
 from resource_management.libraries.functions.decorator import retry
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.resources.execute_hadoop import ExecuteHadoop
 from resource_management.libraries.functions import Direction
 from resource_management.libraries.functions.namenode_ha_utils import get_name_service_by_hostname
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from ambari_commons import OSCheck, OSConst
 from ambari_commons.os_family_impl import OsFamilyImpl, OsFamilyFuncImpl
 from utils import get_dfsadmin_base_command
@@ -95,7 +97,7 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
     #we need this directory to be present before any action(HA manual steps for
     #additional namenode)
     create_name_dirs(params.dfs_name_dir)
-
+    generate_logfeeder_input_config('hdfs', Template("input.config-hdfs.json.j2", extra_imports=[default]))
     # set up failover /  secure zookeper ACLs, this feature is supported from HDP 2.6 ownwards
     set_up_zkfc_security(params)
   elif action == "start":

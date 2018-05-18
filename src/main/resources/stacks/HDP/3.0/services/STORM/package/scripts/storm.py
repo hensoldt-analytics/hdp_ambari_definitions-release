@@ -21,8 +21,9 @@ limitations under the License.
 from resource_management.core.exceptions import Fail
 from resource_management.core.resources.service import ServiceConfig
 from resource_management.core.resources.system import Directory, Execute, File, Link
-from resource_management.core.source import InlineTemplate
+from resource_management.core.source import Template, InlineTemplate
 from resource_management.libraries.resources.template_config import TemplateConfig
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.script.script import Script
 from resource_management.core.source import Template
@@ -31,6 +32,7 @@ from resource_management.libraries.functions import StackFeature
 from storm_yaml_utils import yaml_config_template, yaml_config
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.setup_atlas_hook import has_atlas_in_cluster, setup_atlas_hook, setup_atlas_jar_symlinks
 from ambari_commons.constants import SERVICE
 
@@ -104,6 +106,8 @@ def storm(name=None):
        owner=params.storm_user,
        content=InlineTemplate(params.storm_env_sh_template)
   )
+
+  generate_logfeeder_input_config('storm', Template("input.config-storm.json.j2", extra_imports=[default]))
 
   # Generate atlas-application.properties.xml file and symlink the hook jars
   if params.enable_atlas_hook:

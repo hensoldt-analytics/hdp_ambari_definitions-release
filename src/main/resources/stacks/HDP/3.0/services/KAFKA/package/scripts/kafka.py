@@ -25,7 +25,9 @@ from resource_management.libraries.resources.properties_file import PropertiesFi
 from resource_management.libraries.resources.template_config import TemplateConfig
 from resource_management.core.resources.system import Directory, Execute, File, Link
 from resource_management.core.source import StaticFile, Template, InlineTemplate
+from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions import format
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions import StackFeature
 from resource_management.libraries.functions import Direction
@@ -158,6 +160,8 @@ def kafka(upgrade_type=None):
          mode=0644,
          content=Template("tools-log4j.properties.j2")
          )
+
+    generate_logfeeder_input_config('kafka', Template("input.config-kafka.json.j2", extra_imports=[default]))
 
     setup_symlink(params.kafka_managed_pid_dir, params.kafka_pid_dir)
     setup_symlink(params.kafka_managed_log_dir, params.kafka_log_dir)
