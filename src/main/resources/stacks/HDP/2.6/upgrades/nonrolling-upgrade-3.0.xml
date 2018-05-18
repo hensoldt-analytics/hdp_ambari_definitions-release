@@ -359,6 +359,26 @@
         <task xsi:type="configure" id="hdp_30_convert_yarn_opts_to_hadoop_opts"/>
       </execute-stage>
 
+      <!-- CGroups settings -->
+      <execute-stage service="YARN" component="NODEMANAGER" title="Enabling CPU isolation">
+        <task xsi:type="configure" id="nodemanager_enable_cpu_isolation">
+            <summary>Enabling CPU isolation</summary>
+        </task>
+      </execute-stage>
+
+      <execute-stage service="YARN" component="NODEMANAGER" title="Setting CGroup related properties in yarn-site">
+        <task xsi:type="configure" id="nodemanager_cgroup_changes_in_yarn_site">
+            <summary>Setting CGroup related properties in yarn-site</summary>
+        </task>
+      </execute-stage>
+
+      <execute-stage service="YARN" component="NODEMANAGER" title="Setting CGroup related properties in container-executor">
+        <task xsi:type="configure" id="nodemanager_cgroup_changes_in_container_executor">
+            <summary>Setting CGroup related properties in container-executor</summary>
+        </task>
+      </execute-stage>
+
+      <!-- MAPRED -->
       <execute-stage service="MAPREDUCE2" component="MAPREDUCE2_CLIENT" title="Apply config changes for Mapreduce2 client">
         <task xsi:type="server_action"
               class="org.apache.ambari.server.serveraction.upgrades.FixLzoCodecPath">
