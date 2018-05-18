@@ -42,7 +42,7 @@
     <name>storm_log_dir</name>
     <display-name>Storm Log directory</display-name>
     <value>/var/log/storm</value>
-    <description/>
+    <description>Storm log directory where the daemon (supervisor/nimbus/ui/worker) logs are written. This is deprecated and may be removed in future. storm-site/storm.log.dir is the recommended config.</description>
     <value-attributes>
       <type>directory</type>
     </value-attributes>

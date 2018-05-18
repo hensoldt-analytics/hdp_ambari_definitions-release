@@ -881,7 +881,7 @@
     <name>storm.log.dir</name>
     <display-name>Storm Log directory</display-name>
     <value>{{log_dir}}</value>
-    <description>Log directory for Storm.</description>
+    <description>Storm log directory where the daemon (supervisor/nimbus/ui/worker) logs are written.</description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
