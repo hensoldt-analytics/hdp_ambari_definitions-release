@@ -11,8 +11,8 @@
         "source": {
           "type": "WEB",
           "uri": {
-              "http": "{{druid-coordinator/druid.port}}",
-              "https": "{{druid-coordinator/druid.port}}",
+              "http": "{{druid-coordinator/druid.port}}/status/health",
+              "https": "{{druid-coordinator/druid.port}}/status/health",
               "https_property": "http",
               "https_property_value": "https",
               "connection_timeout": 5.0,
@@ -42,8 +42,8 @@
         "source": {
           "type": "WEB",
           "uri": {
-              "http": "{{druid-overlord/druid.port}}",
-              "https": "{{druid-overlord/druid.port}}",
+              "http": "{{druid-overlord/druid.port}}/status/health",
+              "https": "{{druid-overlord/druid.port}}/status/health",
               "https_property": "http",
               "https_property_value": "https",
               "connection_timeout": 5.0,
@@ -73,7 +73,7 @@
         "enabled": true,
         "source": {
           "type": "PORT",
-          "uri": "{{druid-historical/druid.port}}",
+          "uri": "{{druid-historical/druid.port}}/status/health",
           "default_port": 8083,
           "reporting": {
             "ok": {
@@ -101,7 +101,7 @@
         "enabled": true,
         "source": {
           "type": "PORT",
-          "uri": "{{druid-broker/druid.port}}",
+          "uri": "{{druid-broker/druid.port}}/status/health",
           "default_port": 8082,
           "reporting": {
             "ok": {
@@ -129,7 +129,7 @@
         "enabled": true,
         "source": {
           "type": "PORT",
-          "uri": "{{druid-middlemanager/druid.port}}",
+          "uri": "{{druid-middlemanager/druid.port}}/status/health",
           "default_port": 8091,
           "reporting": {
             "ok": {
@@ -157,7 +157,7 @@
         "enabled": true,
         "source": {
           "type": "PORT",
-          "uri": "{{druid-router/druid.port}}",
+          "uri": "{{druid-router/druid.port}}/status/health",
           "default_port": 8888,
           "reporting": {
             "ok": {
