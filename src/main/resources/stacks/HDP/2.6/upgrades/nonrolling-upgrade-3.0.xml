@@ -310,8 +310,6 @@
       <direction>UPGRADE</direction>   <!--  prevent config changes on downgrade -->
       <skippable>true</skippable>  <!-- May fix configuration problems manually -->
 
-      <!-- ZEPPELIN -->
-
       <!--HDFS-->
       <execute-stage service="HDFS" component="NAMENODE" title="Remove temporary HDFS HA properties">
         <task xsi:type="configure" id="hdfs_remove_initial_ha_properties"/>
@@ -388,7 +386,6 @@
         </task>
       </execute-stage>
 
-
       <!--OOZIE-->
       <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Apply config changes for Oozie Server">
         <task xsi:type="server_action"
@@ -397,23 +394,15 @@
         </task>
       </execute-stage>
 
-      <!--HDFS-->
-
       <!--HBASE-->
       <execute-stage service="HBASE" component="HBASE_REGIONSERVER" title="Apply config changes for HBase Region Servers">
         <task xsi:type="configure" id="hbase_regionserver_cmsinitiatingoccupancyfraction_replace"/>
       </execute-stage>
 
-      <!--ZOOKEEPER-->
-
-      <!--FALCON-->
-
       <!--RANGER-->
       <execute-stage service="RANGER" component="RANGER_TAGSYNC" title="Adding Ranger Tagsync Config">
         <task xsi:type="configure" id="hdp_3_0_add_ranger_tagsync_cookie_enabled_config"/>
       </execute-stage>
-
-      <!--RANGER-KMS-->
 
       <!--ATLAS-->
       <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Updating Atlas configurations.">
@@ -445,7 +434,6 @@
         </task>
       </execute-stage>
 
-      <!--KNOX-->
       <!--STORM-->
       <execute-stage service="STORM" component="NIMBUS" title="Apply config changes for Storm AutoCreds">
         <task xsi:type="configure" id="storm_nimbus_autocred_config"/>
@@ -477,10 +465,22 @@
       <execute-stage service="STORM" component="NIMBUS" title="Updating storm logsearch config">
         <task xsi:type="configure" id="hdp_3_0_0_0_storm_logsearch_conf"/>
       </execute-stage>
+    </group>
 
-      <!-- PIG -->
+    <group xsi:type="cluster" name="ADD_YARN_COMPONENTS" title="Add New YARN Components">
+      <direction>UPGRADE</direction>
+      <skippable>true</skippable>
+      <execute-stage title="Timeline Reader">
+        <task xsi:type="add_component" service="YARN" component="TIMELINE_READER" host-service="YARN" host-component="APP_TIMELINE_SERVER" hosts="any">
+          <summary>Add Timeline Reader to the cluster</summary>
+        </task>
+      </execute-stage>
 
-      <!--HIVE-->
+      <execute-stage title="Registry DNS">
+        <task xsi:type="add_component" service="YARN" component="YARN_REGISTRY_DNS" host-service="YARN" host-component="APP_TIMELINE_SERVER" hosts="any">
+          <summary>Add Registry DNS to the cluster</summary>
+        </task>
+      </execute-stage>
     </group>
 
     <!--
@@ -619,7 +619,9 @@
 
       <service name="YARN">
         <component>APP_TIMELINE_SERVER</component>
+        <component>TIMELINE_READER</component>
         <component>RESOURCEMANAGER</component>
+        <component>YARN_REGISTRY_DNS</component>
         <component>YARN_CLIENT</component>
       </service>
     </group>
@@ -1085,6 +1087,18 @@
       </component>
 
       <component name="YARN_CLIENT">
+        <upgrade>
+          <task xsi:type="restart-task"/>
+        </upgrade>
+      </component>
+
+      <component name="TIMELINE_READER">
+        <upgrade>
+          <task xsi:type="restart-task"/>
+        </upgrade>
+      </component>
+
+      <component name="YARN_REGISTRY_DNS">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>

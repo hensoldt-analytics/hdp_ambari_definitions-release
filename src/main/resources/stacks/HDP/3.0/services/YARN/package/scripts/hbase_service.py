@@ -92,7 +92,7 @@ def createTables():
     try:
         Execute(format("sleep 10;{yarn_hbase_table_create_cmd}"),
                 user=params.yarn_hbase_user,
-                timeout = 60,
+                timeout = 300,
                 logoutput=True)
     except:
         show_logs(params.yarn_hbase_log_dir, params.yarn_hbase_user)

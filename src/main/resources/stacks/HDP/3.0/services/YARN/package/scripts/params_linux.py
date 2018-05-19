@@ -277,8 +277,8 @@ has_ats = not len(ats_host) == 0
 atsv2_host = default("/clusterHostInfo/timeline_reader_hosts", [])
 has_atsv2 = not len(atsv2_host) == 0
 
-timeline_address_http = format("{atsv2_host[0]}:8198") if has_atsv2 else "" # after stack_upgrade, timeline_reader can be absent
-timeline_address_https = format("{atsv2_host[0]}:8199") if has_atsv2 else "" # after stack_upgrade, timeline_reader can be absent
+timeline_reader_address_http = format("{atsv2_host[0]}:8198") if has_atsv2 else "" # after stack_upgrade, timeline_reader can be absent
+timeline_reader_address_https = format("{atsv2_host[0]}:8199") if has_atsv2 else "" # after stack_upgrade, timeline_reader can be absent
 
 registry_dns_host = default("/clusterHostInfo/yarn_registry_dns_hosts", [])
 has_registry_dns = not len(registry_dns_host) == 0
@@ -615,7 +615,7 @@ if yarn_timeline_service_enabled:
         break
 
 coprocessor_jar_name = "hadoop-yarn-server-timelineservice-hbase-coprocessor.jar"
-yarn_timeline_jar_location = format("file://{stack_root}/current/hadoop-yarn-nodemanager/timelineservice/{coprocessor_jar_name}")
+yarn_timeline_jar_location = format("file://{stack_root}/{version}/hadoop-yarn/timelineservice/{coprocessor_jar_name}")
 yarn_user_hbase_permissions = "RWXCA"
 
 yarn_hbase_kinit_cmd = ""
@@ -645,7 +645,7 @@ if is_hbase_system_service_launch:
 else:
   hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
 class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create -s")
-yarn_hbase_table_create_cmd = format("export HBASE_CLASSPATH_PREFIX={stack_root}/current/hadoop-yarn-nodemanager/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")
+yarn_hbase_table_create_cmd = format("export HBASE_CLASSPATH_PREFIX={stack_root}/{version}/hadoop-yarn/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")
 yarn_hbase_table_grant_premission_cmd = format("{yarn_hbase_kinit_cmd} {hbase_cmd} shell {yarn_hbase_grant_premissions_file}")
 
 # System service configuration as part of ATSv2.

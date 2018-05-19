@@ -1506,7 +1506,7 @@ yarn.node-labels.manager-class
   </property>
   <property>
     <name>yarn.timeline-service.reader.webapp.address</name>
-    <value>{{timeline_address_http}}</value>
+    <value>{{timeline_reader_address_http}}</value>
     <description>
       The http address of the timeline reader web application.
     </description>
@@ -1514,7 +1514,7 @@ yarn.node-labels.manager-class
   </property>
   <property>
     <name>yarn.timeline-service.reader.webapp.https.address</name>
-    <value>{{timeline_address_https}}</value>
+    <value>{{timeline_reader_address_https}}</value>
     <description>
       The http address of the timeline reader web application.
     </description>
