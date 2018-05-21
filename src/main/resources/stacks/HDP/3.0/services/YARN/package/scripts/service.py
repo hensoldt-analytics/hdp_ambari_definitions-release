@@ -141,11 +141,8 @@ def checkAndStopRegistyDNS(cmd):
   # When registry dns is switched from non-privileged to privileged mode or the other way,
   # then the previous instance of registry dns has a different pid/user.
   # Checking if either of the processes are running and shutting them down if they are.
-  privileged_rdns_pid_file = status_params.yarn_registry_dns_priv_pid_file
-  rdns_pid_file = status_params.yarn_registry_dns_pid_file
-
-  for dns_pid_file, dns_user in [(privileged_rdns_pid_file, status_params.root_user),
-                         (rdns_pid_file, params.yarn_user)]:
+  for dns_pid_file, dns_user in [(status_params.yarn_registry_dns_priv_pid_file, status_params.root_user),
+                         (status_params.yarn_registry_dns_pid_file, params.yarn_user)]:
       process_id_exists_command = as_sudo(["test", "-f", dns_pid_file]) + " && " + as_sudo(["pgrep", "-F", dns_pid_file])
       try:
           Execute(daemon_cmd, only_if = process_id_exists_command, user = dns_user)

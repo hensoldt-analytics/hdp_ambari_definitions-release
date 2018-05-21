@@ -50,12 +50,13 @@ yarn_historyserver_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-timeline
 registry_dns_bind_port = int(config['configurations']['yarn-env']['registry.dns.bind-port'])
 registry_dns_needs_privileged_access = True if registry_dns_bind_port < 1024 else False
 
-yarn_registry_dns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{root_user}-registrydns.pid")
-if registry_dns_needs_privileged_access:
-  yarn_registry_dns_priv_pid_file = format("{yarn_pid_dir}/privileged-{root_user}-registrydns.pid")
-else:
-  yarn_registry_dns_priv_pid_file = yarn_registry_dns_pid_file
+yarn_registry_dns_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-registrydns.pid")
+yarn_registry_dns_priv_pid_file = format("{yarn_pid_dir}/hadoop-{yarn_user}-{root_user}-registrydns.pid")
 
+if registry_dns_needs_privileged_access:
+  yarn_registry_dns_in_use_pid_file = yarn_registry_dns_priv_pid_file
+else:
+  yarn_registry_dns_in_use_pid_file = yarn_registry_dns_pid_file
 
 mapred_historyserver_pid_file = format("{mapred_pid_dir}/hadoop-{mapred_user}-historyserver.pid")
 

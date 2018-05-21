@@ -77,7 +77,7 @@ class RegistryDNSDefault(RegistryDNS):
   def status(self, env):
     import status_params
     env.set_params(status_params)
-    check_process_status(status_params.yarn_registry_dns_pid_file)
+    check_process_status(status_params.yarn_registry_dns_in_use_pid_file)
 
   def get_log_folder(self):
     import params
@@ -89,7 +89,7 @@ class RegistryDNSDefault(RegistryDNS):
 
   def get_pid_files(self):
     import status_params
-    return [status_params.yarn_registry_dns_pid_file, status_params.yarn_registry_dns_priv_pid_file]
+    return [status_params.yarn_registry_dns_in_use_pid_file]
 
 if __name__ == "__main__":
   RegistryDNS().execute()
