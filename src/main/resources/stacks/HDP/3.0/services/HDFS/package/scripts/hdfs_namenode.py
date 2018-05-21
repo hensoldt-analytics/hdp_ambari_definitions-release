@@ -148,11 +148,9 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
         if is_downgrade_allowed:
           options = "-rollingUpgrade started"
         else:
-
           # if we are HA, then -upgrade needs to be called for the active NN,
           #   then -bootstrapStandby on the other, followed by normal daemon
           # if we are NOT HA, then -upgrade needs to be called on the lone NN
-
           if params.dfs_ha_enabled:
             name_service = get_name_service_by_hostname(params.hdfs_site, params.hostname)
             any_active = is_there_any_active_nn(name_service)
@@ -164,6 +162,12 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
               options = "-upgrade"  # no other are active, so this host's NN is the first
           else:
             options = "-upgrade"  # non-HA
+
+          marker = os.path.exists(namenode_upgrade.get_upgrade_in_progress_marker())
+          if options == "-upgrade" and upgrade_suspended is True and marker is True:
+            Logger.info("The NameNode is currently upgrading.  No options will be passed to startup")
+            options = ""
+
       elif params.upgrade_direction == Direction.DOWNGRADE:
         options = "-rollingUpgrade downgrade"
     elif upgrade_type == constants.UPGRADE_TYPE_HOST_ORDERED:
