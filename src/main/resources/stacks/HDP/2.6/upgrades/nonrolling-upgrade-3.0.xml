@@ -476,11 +476,13 @@
         </task>
       </execute-stage>
 
+      <!--
       <execute-stage title="Registry DNS">
         <task xsi:type="add_component" service="YARN" component="YARN_REGISTRY_DNS" host-service="YARN" host-component="APP_TIMELINE_SERVER" hosts="any">
           <summary>Add Registry DNS to the cluster</summary>
         </task>
       </execute-stage>
+      -->
     </group>
 
     <!--
