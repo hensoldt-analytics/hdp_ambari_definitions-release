@@ -22,6 +22,9 @@
   <target-stack>HDP-3.0</target-stack>
   <downgrade-allowed>false</downgrade-allowed>
   <type>NON_ROLLING</type>
+  <prerequisite-checks>
+    <check>org.apache.ambari.server.checks.AtlasMigrationPropertyCheck</check>
+  </prerequisite-checks>
   <order>
     <group xsi:type="cluster" name="PRE_CLUSTER" title="Prepare Upgrade">
       <direction>UPGRADE</direction>
