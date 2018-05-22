@@ -88,7 +88,7 @@ class Superset(Script):
 
     # Configure Druid Cluster in superset DB
     if len(params.druid_coordinator_hosts) > 0 :
-      Execute(format("source {params.superset_config_dir}/superset-env.sh ; {params.superset_bin_dir}/superset configure_druid_cluster --name druid-ambari --coordinator-host {params.druid_coordinator_host} --coordinator-port {params.druid_coordinator_port} --broker-host {params.druid_router_host} --broker-port {params.druid_router_port} --coordinator-endpoint druid/coordinator/v1/metadata --broker-endpoint druid/v2"),
+      Execute(format("source {params.superset_config_dir}/superset-env.sh ; {params.superset_bin_dir}/superset configure_druid_cluster --name druid-ambari --coordinator-host {params.druid_coordinator_host} --coordinator-port {params.druid_coordinator_port} --broker-host {params.druid_router_host} --broker-port {params.druid_router_port} --coordinator-endpoint druid/coordinator/v1 --broker-endpoint druid/v2"),
             user=params.superset_user)
 
   def pre_upgrade_restart(self, env, upgrade_type=None):
