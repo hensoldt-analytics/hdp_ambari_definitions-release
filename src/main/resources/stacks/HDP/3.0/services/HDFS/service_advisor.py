@@ -2,7 +2,7 @@
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
+disass HDFSRecommender(service_advisor.ServiceAdvisributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
 to you under the Apache License, Version 2.0 (the
 "License"); you may not use this file except in compliance
@@ -38,7 +38,7 @@ try:
     service_advisor = imp.load_module('service_advisor', fp, PARENT_FILE, ('.py', 'rb', imp.PY_SOURCE))
 except Exception as e:
   traceback.print_exc()
-  print "Failed to load parent"
+  print "Failed to load parent."
 
 
 class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
@@ -266,7 +266,123 @@ class HDFSRecommender(service_advisor.ServiceAdvisor):
     """
     putHdfsSiteProperty = self.putProperty(configurations, "hdfs-site", services)
     putCoreSiteProperty = self.putProperty(configurations, "core-site", services)
+    putHdfsSitePropertyAttribute = self.putPropertyAttribute(configurations, "hdfs-site")
+    putHdfsSiteProperty("dfs.datanode.max.transfer.threads", 16384 if clusterData["hBaseInstalled"] else 4096)
+
+    dataDirsCount = 1
+    # Use users 'dfs.datanode.data.dir' first
+    if "hdfs-site" in services["configurations"] and "dfs.datanode.data.dir" in services["configurations"]["hdfs-site"][
+      "properties"]:
+      dataDirsCount = len(
+        str(services["configurations"]["hdfs-site"]["properties"]["dfs.datanode.data.dir"]).split(","))
+    elif "dfs.datanode.data.dir" in configurations["hdfs-site"]["properties"]:
+      dataDirsCount = len(str(configurations["hdfs-site"]["properties"]["dfs.datanode.data.dir"]).split(","))
+    if dataDirsCount <= 2:
+      failedVolumesTolerated = 0
+    elif dataDirsCount <= 4:
+      failedVolumesTolerated = 1
+    else:
+      failedVolumesTolerated = 2
+    putHdfsSiteProperty("dfs.datanode.failed.volumes.tolerated", failedVolumesTolerated)
+
+    namenodeHosts = self.getHostsWithComponent("HDFS", "NAMENODE", services, hosts)
+
+    # 25 * # of cores on NameNode
+    nameNodeCores = 4
+    if namenodeHosts is not None and len(namenodeHosts):
+      nameNodeCores = int(namenodeHosts[0]['Hosts']['cpu_count'])
+    putHdfsSiteProperty("dfs.namenode.handler.count", 25 * nameNodeCores)
+    if 25 * nameNodeCores > 200:
+      putHdfsSitePropertyAttribute("dfs.namenode.handler.count", "maximum", 25 * nameNodeCores)
+
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
+    if ('ranger-hdfs-plugin-properties' in services['configurations']) and (
+      'ranger-hdfs-plugin-enabled' in services['configurations']['ranger-hdfs-plugin-properties']['properties']):
+      rangerPluginEnabled = services['configurations']['ranger-hdfs-plugin-properties']['properties'][
+        'ranger-hdfs-plugin-enabled']
+      if ("RANGER" in servicesList) and (rangerPluginEnabled.lower() == 'Yes'.lower()):
+        putHdfsSiteProperty("dfs.permissions.enabled", 'true')
+
+    putHdfsSiteProperty("dfs.namenode.safemode.threshold-pct", "0.999" if len(namenodeHosts) > 1 else "1.000")
+
+    putHdfsEnvProperty = self.putProperty(configurations, "hadoop-env", services)
+    putHdfsEnvPropertyAttribute = self.putPropertyAttribute(configurations, "hadoop-env")
+
+    putHdfsEnvProperty('namenode_heapsize', max(int(clusterData['totalAvailableRam'] / 2), 1024))
+
+    nn_heapsize_limit = None
+    if (namenodeHosts is not None and len(namenodeHosts) > 0):
+      if len(namenodeHosts) > 1:
+        nn_max_heapsize = min(int(namenodeHosts[0]["Hosts"]["total_mem"]),
+                              int(namenodeHosts[1]["Hosts"]["total_mem"])) / 1024
+        masters_at_host = max(
+          self.getHostComponentsByCategories(namenodeHosts[0]["Hosts"]["host_name"], ["MASTER"], services, hosts),
+          self.getHostComponentsByCategories(namenodeHosts[1]["Hosts"]["host_name"], ["MASTER"], services, hosts))
+      else:
+        nn_max_heapsize = int(namenodeHosts[0]["Hosts"]["total_mem"] / 1024)  # total_mem in kb
+        masters_at_host = self.getHostComponentsByCategories(namenodeHosts[0]["Hosts"]["host_name"], ["MASTER"],
+                                                             services, hosts)
+
+      putHdfsEnvPropertyAttribute('namenode_heapsize', 'maximum', max(nn_max_heapsize, 1024))
+
+      nn_heapsize_limit = nn_max_heapsize
+      nn_heapsize_limit -= clusterData["reservedRam"]
+      if len(masters_at_host) > 1:
+        nn_heapsize_limit = int(nn_heapsize_limit / 2)
+
+      putHdfsEnvProperty('namenode_heapsize', max(nn_heapsize_limit, 1024))
+
+    datanodeHosts = self.getHostsWithComponent("HDFS", "DATANODE", services, hosts)
+    if datanodeHosts is not None and len(datanodeHosts) > 0:
+      min_datanode_ram_kb = 1073741824  # 1 TB
+      for datanode in datanodeHosts:
+        ram_kb = datanode['Hosts']['total_mem']
+        min_datanode_ram_kb = min(min_datanode_ram_kb, ram_kb)
+
+      datanodeFilesM = len(datanodeHosts) * dataDirsCount / 10  # in millions, # of files = # of disks * 100'000
+      nn_memory_configs = [
+        {'nn_heap': 1024, 'nn_opt': 128},
+        {'nn_heap': 3072, 'nn_opt': 512},
+        {'nn_heap': 5376, 'nn_opt': 768},
+        {'nn_heap': 9984, 'nn_opt': 1280},
+        {'nn_heap': 14848, 'nn_opt': 2048},
+        {'nn_heap': 19456, 'nn_opt': 2560},
+        {'nn_heap': 24320, 'nn_opt': 3072},
+        {'nn_heap': 33536, 'nn_opt': 4352},
+        {'nn_heap': 47872, 'nn_opt': 6144},
+        {'nn_heap': 59648, 'nn_opt': 7680},
+        {'nn_heap': 71424, 'nn_opt': 8960},
+        {'nn_heap': 94976, 'nn_opt': 8960}
+      ]
+      index = {
+        datanodeFilesM < 1: 0,
+        1 <= datanodeFilesM < 5: 1,
+        5 <= datanodeFilesM < 10: 2,
+        10 <= datanodeFilesM < 20: 3,
+        20 <= datanodeFilesM < 30: 4,
+        30 <= datanodeFilesM < 40: 5,
+        40 <= datanodeFilesM < 50: 6,
+        50 <= datanodeFilesM < 70: 7,
+        70 <= datanodeFilesM < 100: 8,
+        100 <= datanodeFilesM < 125: 9,
+        125 <= datanodeFilesM < 150: 10,
+        150 <= datanodeFilesM: 11
+      }[1]
+
+      nn_memory_config = nn_memory_configs[index]
+
+      # override with new values if applicable
+      if nn_heapsize_limit is not None and nn_memory_config['nn_heap'] <= nn_heapsize_limit:
+        putHdfsEnvProperty('namenode_heapsize', nn_memory_config['nn_heap'])
+
+      putHdfsEnvPropertyAttribute('dtnode_heapsize', 'maximum', int(min_datanode_ram_kb / 1024))
+
+    nn_heapsize = int(configurations["hadoop-env"]["properties"]["namenode_heapsize"])
+    putHdfsEnvProperty('namenode_opt_newsize', max(int(nn_heapsize / 8), 128))
+    putHdfsEnvProperty('namenode_opt_maxnewsize', max(int(nn_heapsize / 8), 128))
+
+    putHdfsSitePropertyAttribute = self.putPropertyAttribute(configurations, "hdfs-site")
+    putHdfsSitePropertyAttribute('dfs.datanode.failed.volumes.tolerated', 'maximum', dataDirsCount)
 
     keyserverHostsString = None
     keyserverPortString = None
