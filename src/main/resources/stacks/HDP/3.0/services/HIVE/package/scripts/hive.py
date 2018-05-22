@@ -104,6 +104,9 @@ def hive(name=None):
        mode = 0644,
   )
 
+  if params.hive_jdbc_target is not None and not os.path.exists(params.hive_jdbc_target):
+    jdbc_connector(params.hive_jdbc_target, params.hive_previous_jdbc_jar)
+
   if name != "client":
     setup_non_client()
   if name == 'hiveserver2':
@@ -249,8 +252,6 @@ def setup_non_client():
             group=params.user_group,
             mode=0755)
 
-  if params.hive_jdbc_target is not None and not os.path.exists(params.hive_jdbc_target):
-    jdbc_connector(params.hive_jdbc_target, params.hive_previous_jdbc_jar)
 
 def setup_metastore():
   import params

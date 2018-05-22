@@ -274,4 +274,23 @@
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>spark.sql.warehouse.dir</name>
+    <value>/apps/spark/warehouse</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>spark.sql.hive.metastore.version</name>
+    <value>3.0</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.sql.hive.metastore.jars</name>
+    <value>/usr/hdp/{{version}}/spark2/standalone-metastore/standalone-metastore-1.21.2.{{version}}-hive3.jar</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>

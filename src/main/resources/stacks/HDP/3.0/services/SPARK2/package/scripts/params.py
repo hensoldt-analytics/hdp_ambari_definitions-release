@@ -19,8 +19,9 @@ limitations under the License.
 """
 
 import socket
-
 import status_params
+
+from urlparse import urlparse
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.constants import StackFeature
 from resource_management.libraries.functions import conf_select, stack_select
@@ -44,7 +45,15 @@ SERVER_ROLE_DIRECTORY_MAP = {
 
 }
 
+HIVE_SERVER_ROLE_DIRECTORY_MAP = {
+  'HIVE_METASTORE' : 'hive-metastore',
+  'HIVE_SERVER' : 'hive-server2',
+  'HIVE_CLIENT' : 'hive-client',
+  'HIVE_SERVER_INTERACTIVE' : 'hive-server2'
+}
+
 component_directory = Script.get_component_from_role(SERVER_ROLE_DIRECTORY_MAP, "SPARK2_CLIENT")
+hive_component_directory = Script.get_component_from_role(HIVE_SERVER_ROLE_DIRECTORY_MAP, "HIVE_CLIENT")
 
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
@@ -86,6 +95,10 @@ spark_group = status_params.spark_group
 user_group = status_params.user_group
 spark_hdfs_user_dir = format("/user/{spark_user}")
 spark_history_dir = default('/configurations/spark2-defaults/spark.history.fs.logDirectory', "hdfs:///spark2-history")
+
+spark_warehouse_dir = config['configurations']['spark2-defaults']["spark.sql.warehouse.dir"]
+whs_dir_protocol = urlparse(spark_warehouse_dir).scheme
+default_metastore_catalog = config['configurations']['spark2-hive-site-override']["metastore.catalog.default"]
 
 spark_history_server_pid_file = status_params.spark_history_server_pid_file
 spark_thrift_server_pid_file = status_params.spark_thrift_server_pid_file
@@ -193,6 +206,13 @@ if has_spark_thriftserver and 'spark2-thrift-sparkconf' in config['configuration
 default_fs = config['configurations']['core-site']['fs.defaultFS']
 hdfs_site = config['configurations']['hdfs-site']
 hdfs_resource_ignore_file = "/var/lib/ambari-agent/data/.hdfs_resource_ignore"
+
+hive_schematool_bin = format('{stack_root}/current/{hive_component_directory}/bin')
+hive_metastore_db_type = config['configurations']['hive-env']['hive_database_type']
+
+#HACK Temporarily use dbType=azuredb while invoking schematool
+if hive_metastore_db_type == "mssql":
+  hive_metastore_db_type = "azuredb"
 
 ats_host = set(default("/clusterHostInfo/app_timeline_server_hosts", []))
 has_ats = len(ats_host) > 0

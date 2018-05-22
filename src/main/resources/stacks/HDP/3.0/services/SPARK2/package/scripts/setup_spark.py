@@ -24,6 +24,7 @@ import shutil
 import os
 import socket
 
+from urlparse import urlparse
 from resource_management.core.exceptions import ComponentIsNotRunning
 from resource_management.core.logger import Logger
 from resource_management.core import shell
@@ -54,9 +55,23 @@ def setup_spark(env, type, upgrade_type = None, action = None):
                        owner=params.spark_user,
                        mode=0775
     )
+
+    if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
+    # Create Spark Warehouse Dir
+      params.HdfsResource(params.spark_warehouse_dir,
+                          type="directory",
+                          action="create_on_execute",
+                          owner=params.spark_user,
+                          mode=0777
+      )
+
     params.HdfsResource(None, action="execute")
 
+
+
     generate_logfeeder_input_config('spark2', Template("input.config-spark2.json.j2", extra_imports=[default]))
+
+
 
   spark2_defaults = dict(params.config['configurations']['spark2-defaults'])
 

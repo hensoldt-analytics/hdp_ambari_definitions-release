@@ -104,6 +104,14 @@ def spark_service(name, upgrade_type=None, action=None):
         hive_kinit_cmd = format("{kinit_path_local} -kt {hive_kerberos_keytab} {hive_principal}; ")
         Execute(hive_kinit_cmd, user=params.hive_user)
 
+      create_catalog_cmd = format("{hive_schematool_bin}/schematool -dbType {hive_metastore_db_type} "
+                                  "-createCatalog {default_metastore_catalog} "
+                                  "-catalogDescription 'Default catalog, for Spark' -ifNotExists "
+                                  "-catalogLocation {default_fs}{spark_warehouse_dir}")
+
+      Execute(create_catalog_cmd,
+              user = params.hive_user)
+
       thriftserver_no_op_test = format(
       'ls {spark_thrift_server_pid_file} >/dev/null 2>&1 && ps -p `cat {spark_thrift_server_pid_file}` >/dev/null 2>&1')
       try:
