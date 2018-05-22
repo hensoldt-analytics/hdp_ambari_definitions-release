@@ -265,6 +265,7 @@ def finalize_upgrade(upgrade_type, hdfs_binary):
 
   summary = upgrade_summary.get_upgrade_summary()
   if summary is not None and not summary.is_downgrade_allowed:
+    finalize_cmd = dfsadmin_base_command + " -finalizeUpgrade"
     query_cmd = dfsadmin_base_command + " -upgrade query"
 
   Execute(query_cmd,
