@@ -634,6 +634,7 @@ if security_enabled and has_atsv2:
 
   # User master principal name as AM principal in system service. Don't replace _HOST.
   yarn_ats_hbase_principal_name = config['configurations']['yarn-hbase-site']['hbase.master.kerberos.principal']
+  yarn_ats_hbase_keytab = config['configurations']['yarn-hbase-site']['hbase.master.keytab.file']
   yarn_ats_principal_name = config['configurations']['yarn-env']['yarn_ats_principal_name']
   yarn_ats_user_keytab = config['configurations']['yarn-env']['yarn_ats_user_keytab']
   yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_ats_user_keytab} {yarn_ats_principal_name};")
