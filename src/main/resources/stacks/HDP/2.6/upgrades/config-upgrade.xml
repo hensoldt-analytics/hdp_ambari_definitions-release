@@ -344,6 +344,19 @@
                   &#10; export YARN_REGISTRYDNS_SECURE_USER={{yarn_user}}
                   &#10; export YARN_REGISTRYDNS_SECURE_EXTRA_OPTS=&quot;-jvm server&quot;
                   &#10;{% endif %}"/>
+
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true"
+                value="{% if security_enabled %}
+                  &#10; export YARN_REGISTRYDNS_OPTS=&quot;-Djava.security.auth.login.config={{yarn_registry_dns_jaas_file}}&quot;
+                  &#10;{% endif %}"/>
+          </definition>
+
+          <definition xsi:type="configure" id="hdp_30_add_timeline_reader_opts" summary="Add Timeline Reader Security OPTS">
+            <type>yarn-env</type>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true"
+                value="{% if security_enabled %}
+                  &#10; export YARN_TIMELINEREADER_OPTS=&quot;-Djava.security.auth.login.config={{yarn_ats_jaas_file}}&quot;
+                  &#10;{% endif %}"/>
           </definition>
         </changes>
       </component>

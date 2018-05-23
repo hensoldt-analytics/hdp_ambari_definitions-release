@@ -320,5 +320,6 @@ DEFAULT
       Indicates if administrator ACLs are required to access
       instrumentation servlets (JMX, METRICS, CONF, STACKS).
     </description>
+    <on-ambari-upgrade add="false"/>
   </property>
 </configuration>
