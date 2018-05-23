@@ -280,9 +280,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
         # Put updated hooks property
         putHiveSiteProperty(hooks_property, hooks_value)
 
-    # Tez Engine
-    putHiveSiteProperty("hive.execution.engine", "tez" if "TEZ" in servicesList else "mr")
-
     if not "yarn-site" in configurations:
       self.calculateYarnAllocationSizes(configurations, services, hosts)
     yarnMaxAllocationSize = min(30 * int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]), int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))

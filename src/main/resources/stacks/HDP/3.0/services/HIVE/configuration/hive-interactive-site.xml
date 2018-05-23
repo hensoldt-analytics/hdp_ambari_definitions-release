@@ -267,8 +267,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.execution.engine</name>
-    <value>tez</value>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade delete="true"/>
   </property>
   <property>
     <name>hive.execution.mode</name>
@@ -370,6 +369,9 @@ limitations under the License.
     <value-attributes>
       <type>int</type>
       <unit>MB</unit>
+      <minimum>0</minimum>
+      <maximum>1000</maximum>
+      <increment-step>1</increment-step>
       <overridable>false</overridable>
     </value-attributes>
     <depends-on>
@@ -407,6 +409,9 @@ limitations under the License.
     <value>1</value>
     <value-attributes>
       <type>int</type>
+      <minimum>1</minimum>
+      <maximum>1</maximum>
+      <increment-step>1</increment-step>
     </value-attributes>
     <depends-on>
       <property>
@@ -498,9 +503,10 @@ limitations under the License.
     </description>
     <value>0</value>
     <value-attributes>
-      <type>int</type>
+      <minimum>0</minimum>
+      <maximum>10000</maximum>
+      <increment-step>1</increment-step>
       <unit>MB</unit>
-      <overridable>false</overridable>
     </value-attributes>
     <depends-on>
       <property>

@@ -1255,6 +1255,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
 
     putHiveInteractiveSiteProperty('hive.llap.io.threadpool.size', num_executors_per_node)
     putHiveInteractiveSiteProperty('hive.llap.io.memory.size', cache_mem_per_node)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'minimum', 0)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'maximum', self.__get_min_hsi_mem(services, hosts) * 0.8)
 
     if hive_server_interactive_heapsize is not None:
       putHiveInteractiveEnvProperty("hive_heapsize", int(hive_server_interactive_heapsize))
@@ -1281,22 +1283,38 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     putHiveInteractiveSiteProperty('hive.server2.tez.sessions.per.default.queue', 1)
     putHiveInteractiveSitePropertyAttribute('hive.server2.tez.sessions.per.default.queue', "minimum", 1)
     putHiveInteractiveSitePropertyAttribute('hive.server2.tez.sessions.per.default.queue', "maximum", 1)
-    putHiveInteractiveEnvProperty('num_llap_nodes', 0)
 
     # Safeguard for not adding "num_llap_nodes_for_llap_daemons" if it doesnt exist in hive-interactive-site.
     # This can happen if we upgrade from Ambari 2.4 (with HDP 2.5) to Ambari 2.5, as this config is from 2.6 stack onwards only.
     if "hive-interactive-env" in services["configurations"] and \
         "num_llap_nodes_for_llap_daemons" in services["configurations"]["hive-interactive-env"]["properties"]:
       putHiveInteractiveEnvProperty('num_llap_nodes_for_llap_daemons', 0)
-    putHiveInteractiveEnvPropertyAttribute('num_llap_nodes', "minimum", 1)
+    putHiveInteractiveEnvProperty('num_llap_nodes', 0)
+    putHiveInteractiveEnvPropertyAttribute('num_llap_nodes', "minimum", 0)
     putHiveInteractiveEnvPropertyAttribute('num_llap_nodes', "maximum", node_manager_cnt)
     putHiveInteractiveSiteProperty('hive.llap.daemon.yarn.container.mb', yarn_min_container_size)
     putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.yarn.container.mb', "minimum", yarn_min_container_size)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.yarn.container.mb', "maximum", self.__get_min_hsi_mem(services, hosts) * 0.8)
     putHiveInteractiveSiteProperty('hive.llap.daemon.num.executors', 0)
-    putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.num.executors', "minimum", 1)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.num.executors', "minimum", 0)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.num.executors', "maximum", 1)
     putHiveInteractiveSiteProperty('hive.llap.io.threadpool.size', 0)
     putHiveInteractiveSiteProperty('hive.llap.io.memory.size', 0)
     putHiveInteractiveEnvProperty('llap_heap_size', 0)
+    putHiveInteractiveSiteProperty('hive.llap.io.memory.size', 0)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'minimum', 0)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'maximum', self.__get_min_hsi_mem(services, hosts) * 0.5)
+
+  def __get_min_hsi_mem(self, services, hosts):
+    hsiHosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
+    if not hsiHosts:
+      return 0
+    min_mem = hsiHosts[0]["Hosts"]["total_mem"] / 1024
+    for hsiHost in hsiHosts:
+      host_mem = hsiHost["Hosts"]["total_mem"] / 1024
+      min_mem = min(min_mem, host_mem)
+    
+    return min_mem
 
   def get_num_llap_nodes(self, services, configurations):
     """

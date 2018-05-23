@@ -1442,18 +1442,7 @@ limitations under the License.
     <description>Enables container prewarm for Tez (Hadoop 2 only)</description>
     <display-name>Hold Containers to Reduce Latency</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -1612,27 +1601,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.execution.engine</name>
-    <value>tez</value>
-    <description>
-      Expects one of [mr, tez].
-      Chooses execution engine. Options are: mr (Map reduce, default) or tez (hadoop 2 only)
-    </description>
-    <display-name>Execution Engine</display-name>
-    <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>mr</value>
-          <label>MapReduce</label>
-        </entry>
-        <entry>
-          <value>tez</value>
-          <label>TEZ</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
-    </value-attributes>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade delete="true"/>
   </property>
   <property>
     <name>hive.vectorized.groupby.checkinterval</name>
