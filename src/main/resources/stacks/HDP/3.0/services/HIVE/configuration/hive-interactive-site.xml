@@ -205,6 +205,21 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.server2.webui.enable.cors</name>
+    <value>true</value>
+    <description>Enable cross origin requests (CORS)</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>hive.server2.webui.cors.allowed.headers</name>
+    <value>X-Requested-With,Content-Type,Accept,Origin,X-Requested-By,x-requested-by</value>
+    <description>Comma separated list of http headers that are allowed when CORS is enabled.</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>hive.server2.zookeeper.namespace</name>
     <value>hiveserver2-interactive</value>
     <description>The parent node in ZooKeeper used by HiveServer2 when supporting dynamic service discovery.</description>
