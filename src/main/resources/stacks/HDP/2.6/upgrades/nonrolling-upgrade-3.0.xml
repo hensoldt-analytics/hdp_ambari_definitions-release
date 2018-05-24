@@ -41,15 +41,6 @@
         </task>
       </execute-stage>
 
-      <execute-stage service="SLIDER" component="SLIDER" title="Stop Long Running Applications on Slider">
-        <task xsi:type="manual">
-          <message>Before continuing, please stop all long-running applications deployed using
-            Slider. E.g.,
-            su - yarn "/usr/hdp/current/slider-client/bin/slider stop &lt;app_name&gt;"
-          </message>
-        </task>
-      </execute-stage>
-
       <execute-stage service="STORM" component="NIMBUS" title="Stop Storm Topologies">
         <task xsi:type="manual">
           <message>Before continuing, please deactivate and kill any currently running topologies.
@@ -292,6 +283,16 @@
       </execute-stage>
     </group>
 
+    <!-- Since the add component task might need components which are to be removed, this should always be done after adding new components -->
+    <group xsi:type="cluster" name="REMOVE_UNSUPPORTED_SERVICES"  title="Remove unsupported services and components">
+      <execute-stage title="Remove unsupported services and components">
+        <task xsi:type="server_action"
+              class="org.apache.ambari.server.serveraction.upgrades.DeleteUnsupportedServicesAndComponents">
+          <summary>Delete services and components which are removed from the new release</summary>
+        </task>
+      </execute-stage>
+    </group>
+
     <!-- After processing this group, will change the effective Stack of the UpgradeContext object. -->
     <group xsi:type="update-stack" name="UPDATE_DESIRED_REPOSITORY_ID" title="Update Target Repositories">
       <execute-stage title="Update Target Repositories">
@@ -313,16 +314,6 @@
       <execute-stage title="Registry DNS">
         <task xsi:type="add_component" service="YARN" component="YARN_REGISTRY_DNS" host-service="YARN" host-component="APP_TIMELINE_SERVER" hosts="any">
           <summary>Add Registry DNS to the cluster</summary>
-        </task>
-      </execute-stage>
-    </group>
-
-    <!-- Since the add component task might need components which are to be removed, this should always be done after adding new components -->
-    <group xsi:type="cluster" name="REMOVE_UNSUPPORTED_SERVICES"  title="Remove unsupported services and components">
-      <execute-stage title="Remove unsupported services and components">
-        <task xsi:type="server_action"
-              class="org.apache.ambari.server.serveraction.upgrades.DeleteUnsupportedServicesAndComponents">
-          <summary>Delete services and components which are removed from the new release</summary>
         </task>
       </execute-stage>
     </group>
@@ -726,7 +717,6 @@
         <component>HIVE_METASTORE</component>
         <component>HIVE_SERVER</component>
         <component>HIVE_SERVER_INTERACTIVE</component>
-        <component>WEBHCAT_SERVER</component>
       </service>
     </group>
 
@@ -737,19 +727,6 @@
       <parallel-scheduler/>
       <service name="HIVE">
         <component>HIVE_CLIENT</component>
-        <component>HCAT</component>
-      </service>
-    </group>
-
-    <group xsi:type="restart" name="SPARK" title="Spark">
-      <service-check>false</service-check>
-      <skippable>true</skippable>
-      <supports-auto-skip-failure>false</supports-auto-skip-failure>
-      <parallel-scheduler/>
-      <service name="SPARK">
-        <component>SPARK_JOBHISTORYSERVER</component>
-        <component>SPARK_THRIFTSERVER</component>
-        <component>LIVY_SERVER</component>
       </service>
     </group>
 
@@ -761,15 +738,6 @@
       <service name="SPARK2">
         <component>SPARK2_JOBHISTORYSERVER</component>
         <component>SPARK2_THRIFTSERVER</component>
-      </service>
-    </group>
-
-    <group xsi:type="restart" name="SPARK_CLIENTS" title="Spark Clients">
-      <service-check>false</service-check>
-      <skippable>true</skippable>
-      <parallel-scheduler/>
-      <service name="SPARK">
-        <component>SPARK_CLIENT</component>
       </service>
     </group>
 
@@ -1200,42 +1168,7 @@
         </upgrade>
       </component>
 
-      <component name="WEBHCAT_SERVER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-
       <component name="HIVE_CLIENT">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-
-      <component name="HCAT">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-    </service>
-
-    <service name="SPARK">
-      <component name="SPARK_JOBHISTORYSERVER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="SPARK_THRIFTSERVER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="LIVY_SERVER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="SPARK_CLIENT">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
