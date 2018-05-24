@@ -177,7 +177,7 @@ $HADOOP_CONF_DIR,
 /usr/hdp/current/hadoop-hdfs-client/[^.].*.jar,
 /usr/hdp/current/hadoop-mapreduce-client/[^.].*.jar,
 /usr/hdp/current/hadoop-yarn-client/[^.].*.jar,
-/usr/hdp/current/hadoop-yarn-client/lib/jersey.*.jar,
+/usr/hdp/current/hadoop-yarn-client/lib/[^.].*.jar,
 /usr/hdp/current/hive-client/lib/hive-accumulo-handler.jar
     </value>
     <description>List of jars and directories that will be added to
