@@ -15,7 +15,7 @@
           "name": "yarn_ats",
           "principal": {
             "value": "${yarn-env/yarn_ats_user}${principal_suffix}@${realm}",
-            "type" : "service",
+            "type" : "user",
             "configuration": "yarn-env/yarn_ats_principal_name",
             "local_username": "${yarn-env/yarn_ats_user}"
           },
