@@ -36,12 +36,8 @@
 yarn.nodemanager.local-dirs={{nm_local_dirs}}
 yarn.nodemanager.log-dirs={{nm_log_dirs}}
 yarn.nodemanager.linux-container-executor.group={{yarn_executor_container_group}}
-min.user.id={{min_user_id}}
-{% if security_enabled %}
 banned.users=hdfs,yarn,mapred,bin
-{% else %}
-banned.users=hdfs,mapred,bin
-{% endif %}
+min.user.id={{min_user_id}}
 
 {{ '[docker]' }}
   module.enabled={{docker_module_enabled}}

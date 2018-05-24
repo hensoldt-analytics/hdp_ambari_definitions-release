@@ -82,30 +82,6 @@ def yarn(name=None, config_dir=None):
             cd_access='a',
             )
 
-  Directory(params.cgroup_root + '/memory' + params.yarn_hierarchy, ##this works even on RO file systems (ie. cgroup_root is mounted is mounted as RO on NFS)
-            owner = params.yarn_user,
-            group = params.user_group,
-            create_parents = True,
-            ignore_failures=True,
-            cd_access='a',
-           )
-
-  Directory(params.cgroup_root + '/cpu' + params.yarn_hierarchy, ##this works even on RO file systems (ie. cgroup_root is mounted is mounted as RO on NFS)
-            owner = params.yarn_user,
-            group = params.user_group,
-            create_parents = True,
-            ignore_failures=True,
-            cd_access='a',
-           )
-
-  Directory(params.cgroup_root + '/devices' + params.yarn_hierarchy, ##this works even on RO file systems (ie. cgroup_root is mounted is mounted as RO on NFS)
-            owner = params.yarn_user,
-            group = params.user_group,
-            create_parents = True,
-            ignore_failures=True,
-            cd_access='a',
-           )
-
   # Some of these function calls depend on the directories above being created first.
   if name == 'resourcemanager':
     setup_resourcemanager()
