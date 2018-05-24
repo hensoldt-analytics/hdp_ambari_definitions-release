@@ -533,6 +533,18 @@
       </execute-stage>
     </group>
 
+    <group xsi:type="restart" name="KERBEROS" title="Kerberos">
+      <condition xsi:type="security" type="kerberos"/>
+      <direction>UPGRADE</direction>
+      <service-check>false</service-check>
+      <skippable>true</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+      <parallel-scheduler/>
+      <service name="KERBEROS">
+        <component>KERBEROS_CLIENT</component>
+      </service>
+    </group>
+
     <!-- Now, restart all of the services. -->
     <group xsi:type="restart" name="ZOOKEEPER" title="ZooKeeper">
       <service-check>false</service-check>
@@ -918,6 +930,14 @@
   </order>
 
   <processing>
+    <service name="KERBEROS">
+      <component name="KERBEROS_CLIENT">
+        <upgrade>
+          <task xsi:type="restart-task"/>
+        </upgrade>
+      </component>
+    </service>
+
     <service name="ZOOKEEPER">
       <component name="ZOOKEEPER_SERVER">
         <upgrade>
