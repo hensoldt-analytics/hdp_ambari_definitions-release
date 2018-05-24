@@ -36,6 +36,7 @@ from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.libraries.functions.get_config import get_config
+from resource_management.libraries.functions.get_user_call_output import get_user_call_output
 from resource_management.libraries.functions.is_empty import is_empty
 from resource_management.libraries.functions.security_commons import update_credential_provider_path
 from resource_management.libraries.functions.setup_atlas_hook import setup_atlas_hook
@@ -186,12 +187,32 @@ def setup_hiveserver2():
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
     # Create Hive Metastore Warehouse Dir
-    params.HdfsResource(params.hive_metastore_warehouse_dir,
-                         type="directory",
-                          action="create_on_execute",
-                          owner=params.hive_user,
-                          mode=0777
+    external_dir = "/warehouse/tablespace/external/hive"
+    managed_dir = params.hive_metastore_warehouse_dir
+    params.HdfsResource(external_dir,
+                        type = "directory",
+                        action = "create_on_execute",
+                        owner = params.hive_user,
+                        group = params.user_group,
+                        mode = 0777
     )
+    params.HdfsResource(managed_dir,
+                        type = "directory",
+                        action = "create_on_execute",
+                        owner = params.hive_user,
+                        group = params.user_group,
+                        mode = 0700
+    )
+    
+    if __isHdfsAclsEnabled():
+      Execute(format("hdfs dfs -setfacl -m default:group:hive:rwx {external_dir}"),
+              user = params.hive_user)
+      Execute(format("hdfs dfs -setfacl -m default:group:hive:rwx {managed_dir}"),
+              user = params.hive_user)
+      Execute(format("hdfs dfs -setfacl -m default:user:{hive_user}:rwx {managed_dir}"),
+              user = params.hive_user)
+    else:
+      Logger.info(format("Could not set default ACLs for HDFS directories {external_dir} and {managed_dir} as ACLs are not enabled!"))
   else:
     Logger.info(format("Not creating warehouse directory '{hive_metastore_warehouse_dir}', as the location is not in DFS."))
 
@@ -229,6 +250,18 @@ def setup_hiveserver2():
   params.HdfsResource(None, action="execute")
 
   generate_logfeeder_input_config('hive', Template("input.config-hive.json.j2", extra_imports=[default]))
+
+def __isHdfsAclsEnabled():
+  import params
+  
+  return_code, stdout, _ = get_user_call_output("hdfs getconf -confKey dfs.namenode.acls.enabled",
+                                                user = params.hdfs_user)
+  acls_enabled = stdout == "true"
+  return_code, stdout, _ = get_user_call_output("hdfs getconf -confKey dfs.namenode.posix.acl.inheritance.enabled",
+                                                user = params.hdfs_user)
+  acls_inheritance_enabled = stdout == "true"
+  
+  return acls_enabled and acls_inheritance_enabled
 
 def setup_non_client():
   import params
