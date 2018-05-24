@@ -368,42 +368,6 @@
             <set key="yarn.nodemanager.kill-escape.launch-command-line" value="slider-agent,LLAP"/>
             <set key="yarn.nodemanager.kill-escape.user" value="hive"/>
           </definition>
-
-          <definition xsi:type="configure" id="nodemanager_enable_cpu_isolation">
-            <type>yarn-env</type>
-            <set key="yarn_cgroups_enabled" value="true" />
-          </definition>
-
-          <definition xsi:type="configure" id="nodemanager_cgroup_changes_in_yarn_site">
-            <type>yarn-site</type>
-            <set key="yarn.nodemanager.container-executor.class" value="org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor" />
-            <set key="yarn.nodemanager.resource.cpu.enabled" value="true" />
-            <set key="yarn.nodemanager.linux-container-executor.cgroups.mount" value="false" />
-            <set key="yarn.nodemanager.linux-container-executor.cgroups.mount-path" value="/sys/fs/cgroup"
-              if-type="yarn-site" if-key="yarn.nodemanager.linux-container-executor.cgroups.mount-path" if-key-state="absent" />
-            <set key="yarn.nodemanager.linux-container-executor.cgroups.hierarchy" value="/yarn"
-              if-type="yarn-site" if-key="yarn.nodemanager.linux-container-executor.cgroups.hierarchy" if-key-state="absent" />
-            <set key="yarn.nodemanager.resource.percentage-physical-cpu-limit" value="100" />
-            <set key="yarn.nodemanager.resource.memory.enabled" value="true" />
-            <set key="yarn.nodemanager.resource.memory.cgroups.soft-limit-percentage" value="90" />
-            <set key="yarn.nodemanager.resource.memory.cgroups.swappiness" value="0" />
-            <set key="yarn.nodemanager.pmem-check-enabled" value="false" />
-            <set key="yarn.nodemanager.vmem-check-enabled" value="false" />
-            <!-- Security is enabled -->
-            <set key="yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user"  value="nobody" if-type="cluster-env" if-key="security_enabled" if-value="true" />
-            <set key="yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users" value="false" if-type="cluster-env" if-key="security_enabled" if-value="true" />
-            <!-- Security is disabled -->
-            <set key="yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user"  value="yarn" if-type="cluster-env" if-key="security_enabled" if-value="false" />
-            <set key="yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users" value="true" if-type="cluster-env" if-key="security_enabled" if-value="false" />
-          </definition>
-
-          <definition xsi:type="configure" id="nodemanager_cgroup_changes_in_container_executor">
-            <type>container-executor</type>
-            <!-- Security is enabled -->
-            <set key="min_user_id"  value="1000" if-type="cluster-env" if-key="security_enabled" if-value="true" />
-            <!-- Security is disabled -->
-            <set key="min_user_id"  value="50" if-type="cluster-env" if-key="security_enabled" if-value="false" />
-          </definition>
         </changes>
       </component>
 
