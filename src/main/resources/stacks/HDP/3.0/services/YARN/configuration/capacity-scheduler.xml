@@ -175,7 +175,7 @@
       Memory while DominantResourceCalculator uses Dominant-resource to compare multi-dimensional
       resources such as Memory, CPU etc. A Java ResourceCalculator class name is expected.
     </description>
-    <value>org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator</value>
+    <value>org.apache.hadoop.yarn.util.resource.DominantResourceCalculator</value>
     <display-name>CPU Scheduling</display-name>
     <value-attributes>
       <type>value-list</type>
