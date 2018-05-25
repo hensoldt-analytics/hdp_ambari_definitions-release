@@ -155,7 +155,7 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
             name_service = get_name_service_by_hostname(params.hdfs_site, params.hostname)
             any_active = is_there_any_active_nn(name_service)
             if any_active:
-              if not bootstrap_standby_namenode(params, use_path=True):
+              if not bootstrap_standby_namenode(params, use_path=True, run_if_present=True):
                 raise Fail("Could not bootstrap this namenode of an Express upgrade")
               options = "" # we're bootstrapped, no other work needs to happen for the daemon
             else:
@@ -550,7 +550,7 @@ def decommission():
   Execute(nn_refresh_cmd, user=hdfs_user)
 
 
-def bootstrap_standby_namenode(params, use_path=False):
+def bootstrap_standby_namenode(params, use_path=False, run_if_present=False):
   mark_dirs = params.namenode_bootstrapped_mark_dirs
   bin_path = os.path.join(params.hadoop_bin_dir, '') if use_path else ""
   try:
@@ -565,10 +565,13 @@ def bootstrap_standby_namenode(params, use_path=False):
     if params.command_phase == "INITIAL_START":
       # force bootstrap in INITIAL_START phase
       bootstrap_cmd = format("{bin_path}hdfs namenode -bootstrapStandby -nonInteractive -force")
-    elif is_namenode_bootstrapped(params):
-      # Once out of INITIAL_START phase bootstrap only if we couldnt bootstrap during cluster deployment
+    elif is_namenode_bootstrapped(params) and run_if_present is False:
+      # Once out of INITIAL_START phase bootstrap only if we couldnt bootstrap during cluster deployment.
+      # If run_if_present=True, then we need to run the command even if the marker exists.
+      # When run_if_present=False, we can short-circuit the result here
       return True
-    Logger.info("Boostrapping standby namenode: %s" % (bootstrap_cmd))
+
+    Logger.info("Boostrapping standby namenode: %s (run_if_present=%s)" % (bootstrap_cmd, str(run_if_present)))
     for i in range(iterations):
       Logger.info('Try %d out of %d' % (i+1, iterations))
       code, out = shell.call(bootstrap_cmd, logoutput=False, user=params.hdfs_user)
@@ -584,6 +587,7 @@ def bootstrap_standby_namenode(params, use_path=False):
         Logger.warning('Bootstrap standby namenode failed with %d error code. Will retry' % (code))
   except Exception as ex:
     Logger.error('Bootstrap standby namenode threw an exception. Reason %s' %(str(ex)))
+
   if bootstrapped:
     for mark_dir in mark_dirs:
       Directory(mark_dir,
