@@ -89,7 +89,7 @@ def hive_interactive(name = None):
   we need to merge hive/hive-site.xml and hive2/hive-site.xml and store it in hive2/hive-site.xml.
   '''
   merged_hive_interactive_site = {}
-  merged_hive_interactive_site.update(params.config['configurations']['hive-site'])
+  merged_hive_interactive_site.update(params.hive_site_config)
   merged_hive_interactive_site.update(params.config['configurations']['hive-interactive-site'])
   for item in exclude_list:
     if item in merged_hive_interactive_site.keys():
