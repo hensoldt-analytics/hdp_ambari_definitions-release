@@ -145,8 +145,8 @@
           "subsection-name": "subsection-yarn-platform-features-col1"
         },
         {
-          "config": "capacity-scheduler/yarn.scheduler.capacity.resource-calculator",
-          "subsection-name": "subsection-container-sizing-col1"
+          "config": "container-executor/docker_module_enabled",
+          "subsection-name": "subsection-yarn-platform-features-col1"
         },
         {
           "config": "yarn-env/yarn_cgroups_enabled",
@@ -170,10 +170,6 @@
         },
         {
           "config": "container-executor/gpu_module_enabled",
-          "subsection-name": "subsection-gpu-sizing-col1"
-        },
-        {
-          "config": "container-executor/docker_module_enabled",
           "subsection-name": "subsection-gpu-sizing-col1"
         },
         {

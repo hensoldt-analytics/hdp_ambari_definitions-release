@@ -22,9 +22,8 @@
   <property>
     <name>docker_module_enabled</name>
     <value>false</value>
-    <display-name>Enable GPU isolation for launched Docker Container
-      (Need enable docker on YARN feature first)</display-name>
-    <description>Whether to enable launching docker containers.
+    <display-name>Docker Runtime</display-name>
+    <description>Need user to pre-install docker environment first.
     </description>
     <value-attributes>
       <type>value-list</type>
@@ -67,6 +66,10 @@
         <type>container-executor</type>
         <name>gpu_module_enabled</name>
       </property>
+      <property>
+        <type>container-executor</type>
+        <name>docker_module_enabled</name>
+      </property>
     </depends-on>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
@@ -85,6 +88,10 @@
       <property>
         <type>container-executor</type>
         <name>gpu_module_enabled</name>
+      </property>
+      <property>
+        <type>container-executor</type>
+        <name>docker_module_enabled</name>
       </property>
     </depends-on>
     <value-attributes>
@@ -119,6 +126,10 @@
       <property>
         <type>container-executor</type>
         <name>gpu_module_enabled</name>
+      </property>
+      <property>
+        <type>container-executor</type>
+        <name>docker_module_enabled</name>
       </property>
     </depends-on>
     <value-attributes>
@@ -168,8 +179,8 @@
   <property>
     <name>gpu_module_enabled</name>
     <value>false</value>
-    <display-name>Enable GPU</display-name>
-    <description>Whether to enable gpu.
+    <display-name>GPU Scheduling and Isolation</display-name>
+    <description>Whether to enable gpu scheduling and isolation.
     </description>
     <value-attributes>
       <type>value-list</type>
@@ -219,6 +230,10 @@
       <property>
         <type>container-executor</type>
         <name>gpu_module_enabled</name>
+      </property>
+      <property>
+        <type>container-executor</type>
+        <name>docker_module_enabled</name>
       </property>
     </depends-on>
     <value-attributes>

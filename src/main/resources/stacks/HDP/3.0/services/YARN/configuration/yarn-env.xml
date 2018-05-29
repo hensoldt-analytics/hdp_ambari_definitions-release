@@ -151,7 +151,7 @@
     <name>yarn_cgroups_enabled</name>
     <value>false</value>
     <description>You can use CGroups to isolate CPU-heavy processes in a Hadoop cluster.</description>
-    <display-name>CPU Isolation</display-name>
+    <display-name>CPU Scheduling and Isolation</display-name>
     <value-attributes>
       <type>value-list</type>
       <entries>
@@ -166,6 +166,12 @@
       </entries>
       <selection-cardinality>1</selection-cardinality>
     </value-attributes>
+    <depends-on>
+      <property>
+        <type>container-executor</type>
+        <name>gpu_module_enabled</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
 
