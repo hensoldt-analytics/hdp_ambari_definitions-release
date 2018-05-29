@@ -106,6 +106,7 @@
       <service name="SPARK2">
         <component>SPARK2_JOBHISTORYSERVER</component>
         <component>SPARK2_THRIFTSERVER</component>
+        <component>LIVY2_SERVER</component>
       </service>
 
       <service name="ZEPPELIN">
@@ -191,6 +192,23 @@
           <message>Before continuing, please backup Zeppelin notebooks directory on the following
             host(s):
             {{hosts.all}}.
+          </message>
+        </task>
+      </execute-stage>
+
+      <execute-stage service="SPARK2" component="SPARK2_JOBHISTORYSERVER"
+                     title="Pre Upgrade SPARK2 notes">
+        <task xsi:type="manual">
+          <message>
+              During SPARK2 upgrade, we are going to add new filters into SPARK_HISTORY_OPTS which is located in spark2-env config. But if you already have
+              "export SPARK_HISTORY_OPTS" in spark2-env, this part of code will not be added automatically, to prevent incorrect changes. In that case
+              you should add this part by your own. Pay attention that under "if" we have export for kerberized mode and under "else" you can add
+              export for non kerberzed mode.
+              {% if security_enabled %}
+              export SPARK_HISTORY_OPTS='-Dspark.ui.filters=org.apache.hadoop.security.authentication.server.AuthenticationFilter -Dspark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.params="type=kerberos,kerberos.principal={{spnego_principal}},kerberos.keytab={{spnego_keytab}}"'
+              {% else %}
+              Here should be your current export SPARK_HISTORY_OPTS for non kerberized mode
+              {% endif %}
           </message>
         </task>
       </execute-stage>
@@ -481,6 +499,25 @@
       <execute-stage service="STORM" component="NIMBUS" title="Updating storm logsearch config">
         <task xsi:type="configure" id="hdp_3_0_0_0_storm_logsearch_conf"/>
       </execute-stage>
+
+      <!--ZEPPELIN-->
+      <execute-stage service="ZEPPELIN" component="ZEPPELIN_MASTER" title="Apply zeppelin.notebook.storage config">
+        <task xsi:type="configure" id="hdp_3_0_0_0_zeppelin_notebook_storage"/>
+      </execute-stage>
+
+      <execute-stage service="ZEPPELIN" component="ZEPPELIN_MASTER" title="Crate zeppelin-site config based on zeppelin-conf">
+        <task xsi:type="configure" id="hdp_3_0_0_0_zeppelin_site"/>
+      </execute-stage>
+
+      <execute-stage service="ZEPPELIN" component="ZEPPELIN_MASTER" title="Update content property and remove unnecessary properties">
+        <task xsi:type="configure" id="hdp_3_0_0_0_zeppelin_env"/>
+      </execute-stage>
+
+      <!--SPARK2-->
+      <execute-stage service="SPARK2" component="SPARK2_THRIFTSERVER" title="Update content property in env config">
+        <task xsi:type="configure" id="hdp_3_0_0_0_spark2_env"/>
+      </execute-stage>
+
     </group>
 
     <!--
@@ -750,6 +787,7 @@
       <service name="SPARK2">
         <component>SPARK2_JOBHISTORYSERVER</component>
         <component>SPARK2_THRIFTSERVER</component>
+        <component>LIVY2_SERVER</component>
       </service>
     </group>
 
@@ -1211,10 +1249,21 @@
           <task xsi:type="restart-task"/>
         </upgrade>
       </component>
+      <component name="LIVY2_SERVER">
+        <upgrade>
+          <task xsi:type="restart-task"/>
+        </upgrade>
+      </component>
     </service>
 
     <service name="ZEPPELIN">
       <component name="ZEPPELIN_MASTER">
+        <pre-upgrade>
+          <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.CreateZeppelinSiteConfig">
+            <summary>Creating zeppelin-site and removing zeppelin-config config</summary>
+          </task>
+        </pre-upgrade>
+        <pre-downgrade/>
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>

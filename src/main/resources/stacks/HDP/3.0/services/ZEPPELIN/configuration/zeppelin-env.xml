@@ -151,8 +151,30 @@
     </value>
     <on-ambari-upgrade add="false"/>
   </property>
-
-
-
+  <property>
+    <name>zeppelin.executor.mem</name>
+    <deleted>true</deleted>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>zeppelin.executor.instances</name>
+    <deleted>true</deleted>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>zeppelin.spark.jar.dir</name>
+    <deleted>true</deleted>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>zeppelin.server.kerberos.principal</name>
+    <deleted>true</deleted>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>zeppelin.server.kerberos.keytab</name>
+    <deleted>true</deleted>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
 

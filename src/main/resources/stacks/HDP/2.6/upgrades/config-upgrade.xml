@@ -31,6 +31,35 @@
             <type>zeppelin-config</type>
             <set key="zeppelin.server.ssl.port" value="9995"/>
           </definition>
+
+          <definition xsi:type="configure" id="hdp_3_0_0_0_zeppelin_notebook_storage">
+            <type>zeppelin-conf</type>
+            <set key="zeppelin.notebook.storage"
+                 value="org.apache.zeppelin.notebook.repo.FileSystemNotebookRepo"
+                 if-type="zeppelin-conf"
+                 if-key="zeppelin.notebook.storage"
+                 if-value="org.apache.zeppelin.notebook.repo.VFSNotebookRepo"/>
+          </definition>
+
+          <definition xsi:type="configure" id="hdp_3_0_0_0_zeppelin_site">
+            <type>zeppelin-site</type>
+            <transfer operation="copy" from-type="zeppelin-env" from-key="zeppelin.server.kerberos.keytab" to-key="zeppelin.server.kerberos.keytab" default-value=""  if-type="zeppelin-site" if-key="zeppelin.server.kerberos.keytab" if-key-state="absent"/>
+            <transfer operation="copy" from-type="zeppelin-env" from-key="zeppelin.server.kerberos.principal" to-key="zeppelin.server.kerberos.principal" default-value=""  if-type="zeppelin-site" if-key="zeppelin.server.kerberos.principal" if-key-state="absent"/>
+          </definition>
+
+          <definition xsi:type="configure" id="hdp_3_0_0_0_zeppelin_env">
+            <type>zeppelin-env</type>
+            <insert key="zeppelin_env_content" insert-type="append" newline-before="true" newline-after="true"
+                value="## Kerberos ticket refresh setting
+                  &#10; export KINIT_FAIL_THRESHOLD=5
+                  &#10; export KERBEROS_REFRESH_INTERVAL=1d"/>
+
+            <transfer operation="delete" delete-key="zeppelin.executor.mem" />
+            <transfer operation="delete" delete-key="zeppelin.executor.instances" />
+            <transfer operation="delete" delete-key="zeppelin.spark.jar.dir" />
+            <transfer operation="delete" delete-key="zeppelin.server.kerberos.principal" />
+            <transfer operation="delete" delete-key="zeppelin.server.kerberos.keytab" />
+          </definition>
         </changes>
       </component>
     </service>
@@ -483,6 +512,15 @@
             <type>spark2-thrift-sparkconf</type>
             <set key="spark.yarn.executor.failuresValidityInterval" value="2h"/>
             <set key="spark.yarn.maxAppAttempts" value="1"/>
+          </definition>
+
+          <definition xsi:type="configure" id="hdp_3_0_0_0_spark2_env">
+            <type>spark2-env</type>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true"
+                value="{% if security_enabled %}
+                  &#10; export SPARK_HISTORY_OPTS='-Dspark.ui.filters=org.apache.hadoop.security.authentication.server.AuthenticationFilter
+                  &#10; -Dspark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.params=&quot;type=kerberos,kerberos.principal={{spnego_principal}},kerberos.keytab={{spnego_keytab}}&quot;
+                  &#10; {% endif %}"/>
           </definition>
         </changes>
       </component>
