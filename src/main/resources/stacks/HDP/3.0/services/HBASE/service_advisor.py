@@ -244,6 +244,8 @@ class HBASERecommender(service_advisor.ServiceAdvisor):
 
     if rangerPluginEnabled and rangerPluginEnabled.lower() == 'Yes'.lower():
       putHbaseSiteProperty('hbase.security.authorization','true')
+    elif rangerPluginEnabled and rangerPluginEnabled.lower() == 'No'.lower() and not self.isSecurityEnabled(services):
+      putHbaseSiteProperty('hbase.security.authorization','false')
 
     # Recommend configs for bucket cache
     threshold = 23 # 2 Gb is reserved for other offheap memory
@@ -385,7 +387,7 @@ class HBASERecommender(service_advisor.ServiceAdvisor):
           elif rangerPluginEnabled and rangerPluginEnabled.lower() == 'No'.lower():
             if rangerClass in coprocessorClasses:
               coprocessorClasses.remove(rangerClass)
-              if not nonRangerClass in coprocessorClasses:
+              if not nonRangerClass in coprocessorClasses and self.isSecurityEnabled(services):
                 coprocessorClasses.append(nonRangerClass)
               putHbaseSiteProperty(hbaseClassConfigs[item], ','.join(coprocessorClasses))
         elif rangerPluginEnabled and rangerPluginEnabled.lower() == 'Yes'.lower():
