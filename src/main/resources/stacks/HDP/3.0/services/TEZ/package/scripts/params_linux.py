@@ -23,6 +23,7 @@ from resource_management.libraries.resources import HdfsResource
 from resource_management.libraries.functions import conf_select
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions import StackFeature
+from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.default import default
@@ -116,6 +117,9 @@ hive_metastore_warehouse_dir = ""
 if 'hive-site' in config['configurations'] \
   and 'hive.metastore.warehouse.dir' in config['configurations']['hive-site']:
   hive_metastore_warehouse_dir = config['configurations']['hive-site']['hive.metastore.warehouse.dir']
+
+tez_site_config = dict(config['configurations']['tez-site'])
+tez_site_config["tez.history.logging.proto-base-dir"] = format(tez_site_config["tez.history.logging.proto-base-dir"])
 
 
 

@@ -102,7 +102,7 @@ class TezClientWindows(TezClient):
     self.configure(env, config_dir=params.tez_conf_dir)
 
   def _install_lzo_support_if_needed(self, params):
-    hadoop_classpath_prefix = self._expand_hadoop_classpath_prefix(params.hadoop_classpath_prefix_template, params.config['configurations']['tez-site'])
+    hadoop_classpath_prefix = self._expand_hadoop_classpath_prefix(params.hadoop_classpath_prefix_template, params.tez_site_config)
 
     hadoop_lzo_dest_path = extract_path_component(hadoop_classpath_prefix, "hadoop-lzo-")
     if hadoop_lzo_dest_path:

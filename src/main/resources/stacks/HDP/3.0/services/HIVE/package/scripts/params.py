@@ -456,6 +456,12 @@ hive_hdfs_user_mode = 0755
 hive_metastore_warehouse_dir = config['configurations']['hive-site']["hive.metastore.warehouse.dir"]
 whs_dir_protocol = urlparse(hive_metastore_warehouse_dir).scheme
 hive_exec_scratchdir = config['configurations']['hive-site']["hive.exec.scratchdir"]
+
+# Hive and Tez hook directories
+hive_hook_proto_base_directory = format(config['configurations']['hive-site']["hive.hook.proto.base-directory"])
+tez_hook_proto_base_directory = format(config['configurations']['tez-site']["tez.history.logging.proto-base-dir"])
+
+
 #for create_hdfs_directory
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
 hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name', 'missing_principal').replace("_HOST", hostname)
@@ -485,6 +491,9 @@ mysql_jdbc_driver_jar = "/usr/share/java/mysql-connector-java.jar"
 hive_site_config = dict(config['configurations']['hive-site'])
 hive_site_config["hive.execution.engine"] = "tez"
 hive_site_config["hive.metastore.db.type"] = hive_metastore_db_type.upper()
+hive_site_config["hive.hook.proto.base-directory"] = hive_hook_proto_base_directory
+
+
 
 ########################################################
 ############# AMS related params #####################

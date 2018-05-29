@@ -1892,7 +1892,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.hook.proto.base-directory</name>
-    <value>{{hive_metastore_warehouse_dir}}/sys.db/query_data/</value>
+    <value>{hive_metastore_warehouse_dir}/sys.db/query_data/</value>
     <description>
       Base directory for hive proto hook.
     </description>

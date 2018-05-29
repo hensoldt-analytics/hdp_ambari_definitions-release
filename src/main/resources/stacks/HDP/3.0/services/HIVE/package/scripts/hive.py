@@ -59,6 +59,7 @@ def hive(name=None):
                                                      params.hive_user,
                                                      params.user_group
                                                      )
+
   XmlConfig("hive-site.xml",
             conf_dir = params.hive_config_dir,
             configurations = params.hive_site_config,
@@ -192,8 +193,25 @@ def setup_hiveserver2():
                           owner=params.hive_user,
                           mode=0777
     )
+
+    if not is_empty(params.hive_hook_proto_base_directory):
+        params.HdfsResource(params.hive_hook_proto_base_directory,
+                            type="directory",
+                            action="create_on_execute",
+                            owner=params.hive_user,
+                            mode=0777
+                            )
+
+    if not is_empty(params.tez_hook_proto_base_directory):
+      params.HdfsResource(params.tez_hook_proto_base_directory,
+                          type="directory",
+                          action="create_on_execute",
+                          owner=params.hive_user,
+                          mode=0777
+                          )
   else:
     Logger.info(format("Not creating warehouse directory '{hive_metastore_warehouse_dir}', as the location is not in DFS."))
+
 
   # Create Hive User Dir
   params.HdfsResource(params.hive_hdfs_user_dir,
