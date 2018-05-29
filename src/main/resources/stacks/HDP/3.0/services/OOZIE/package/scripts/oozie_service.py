@@ -72,7 +72,7 @@ def oozie_service(action = 'start', upgrade_type=None):
     kinit_if_needed = ""
 
   no_op_test = as_user(format("ls {pid_file} >/dev/null 2>&1 && ps -p `cat {pid_file}` >/dev/null 2>&1"), user=params.oozie_user)
-  
+
   if action == 'start':
     start_cmd = format("cd {oozie_tmp_dir} && {oozie_home}/bin/oozie-start.sh")
     path_to_jdbc = params.target
@@ -106,17 +106,17 @@ def oozie_service(action = 'start', upgrade_type=None):
 
       if db_connection_check_command:
         sudo.chmod(params.check_db_connection_jar, 0755)
-        Execute( db_connection_check_command, 
-                 tries=5, 
+        Execute( db_connection_check_command,
+                 tries=5,
                  try_sleep=10,
                  user=params.oozie_user,
         )
 
-      Execute( format("cd {oozie_tmp_dir} && {oozie_home}/bin/ooziedb.sh create -sqlfile oozie.sql -run"), 
+      Execute( format("cd {oozie_tmp_dir} && {oozie_home}/bin/ooziedb.sh create -sqlfile oozie.sql -run"),
                user = params.oozie_user, not_if = no_op_test,
-               ignore_failures = True 
+               ignore_failures = True
       )
-      
+
       if params.security_enabled:
         Execute(kinit_if_needed,
                 user = params.oozie_user,
@@ -140,19 +140,19 @@ def oozie_service(action = 'start', upgrade_type=None):
 
         hdfs_share_dir_exists = True # skip time-expensive hadoop fs -ls check
       elif WebHDFSUtil.is_webhdfs_available(params.is_webhdfs_enabled, params.dfs_type):
-        # check with webhdfs is much faster than executing hadoop fs -ls. 
+        # check with webhdfs is much faster than executing hadoop fs -ls.
         util = WebHDFSUtil(params.hdfs_site, nameservice, params.hdfs_user, params.security_enabled)
         list_status = util.run_command(params.hdfs_share_dir, 'GETFILESTATUS', method='GET', ignore_status_codes=['404'], assertable_result=False)
         hdfs_share_dir_exists = ('FileStatus' in list_status)
       else:
         # have to do time expensive hadoop fs -ls check.
-        hdfs_share_dir_exists = shell.call(format("{kinit_if_needed} hadoop --config {hadoop_conf_dir} dfs -ls {hdfs_share_dir} | awk 'BEGIN {{count=0;}} /share/ {{count++}} END {{if (count > 0) {{exit 0}} else {{exit 1}}}}'"),
+        hdfs_share_dir_exists = not shell.call(format("{kinit_if_needed} hadoop --config {hadoop_conf_dir} dfs -ls {hdfs_share_dir} | awk 'BEGIN {{count=0;}} /share/ {{count++}} END {{if (count > 0) {{exit 0}} else {{exit 1}}}}'"),
                                  user=params.oozie_user)[0]
-                                 
-      if not hdfs_share_dir_exists:                      
-        Execute( params.put_shared_lib_to_hdfs_cmd, 
+
+      if not hdfs_share_dir_exists:
+        Execute( params.put_shared_lib_to_hdfs_cmd,
                  user = params.oozie_user,
-                 path = params.execute_path 
+                 path = params.execute_path
         )
         params.HdfsResource(format("{oozie_hdfs_user_dir}/share"),
                              type="directory",
@@ -161,7 +161,7 @@ def oozie_service(action = 'start', upgrade_type=None):
                              recursive_chmod=True,
         )
         params.HdfsResource(None, action="execute")
-        
+
 
     try:
       # start oozie
