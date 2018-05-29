@@ -396,15 +396,15 @@
           ]
         },
         "HIVE_SERVER_INTERACTIVE": {
-          "STACK-SELECT-PACKAGE": "hive-server2-hive2",
+          "STACK-SELECT-PACKAGE": "hive-server2-hive",
           "INSTALL": [
-            "hive-server2-hive2"
+            "hive-server2-hive"
           ],
           "PATCH": [
-            "hive-server2-hive2"
+            "hive-server2-hive"
           ],
           "STANDARD": [
-            "hive-server2-hive2"
+            "hive-server2-hive"
           ]
         },
         "HIVE_CLIENT": {
@@ -945,7 +945,7 @@
       "hive2": [
         {
           "conf_dir": "/etc/hive2/conf",
-          "current_dir": "{0}/current/hive-server2-hive2/conf"
+          "current_dir": "{0}/current/hive-server2-hive/conf"
         }
       ],
       "hive-hcatalog": [

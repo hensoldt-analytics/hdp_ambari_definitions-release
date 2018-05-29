@@ -107,7 +107,7 @@ stack_supports_ranger_hive_jdbc_url_change = check_stack_feature(StackFeature.RA
 stack_supports_atlas_hook_for_hive_interactive = check_stack_feature(StackFeature.HIVE_INTERACTIVE_ATLAS_HOOK_REQUIRED, version_for_stack_feature_checks)
 stack_supports_hive_interactive_ga = check_stack_feature(StackFeature.HIVE_INTERACTIVE_GA_SUPPORT, version_for_stack_feature_checks)
 
-# component ROLE directory (like hive-metastore or hive-server2-hive2)
+# component ROLE directory (like hive-metastore or hive-server2-hive)
 component_directory = status_params.component_directory
 
 hadoop_home = format('{stack_root}/current/hadoop-client')
@@ -121,38 +121,38 @@ hive_user_home_dir = "/home/hive"
 zk_bin = format('{stack_root}/current/zookeeper-client/bin')
 
 # starting on stacks where HSI is supported, we need to begin using the 'hive2' schematool
-hive_server2_hive2_dir = None
-hive_server2_hive2_lib = None
+hive_server2_hive_dir = None
+hive_server2_hive_lib = None
 
 if check_stack_feature(StackFeature.HIVE_SERVER_INTERACTIVE, version_for_stack_feature_checks):
   # the name of the hiveserver2-hive2 component
-  hive_server2_hive2_component = status_params.SERVER_ROLE_DIRECTORY_MAP["HIVE_SERVER"]
+  hive_server2_hive_component = status_params.SERVER_ROLE_DIRECTORY_MAP["HIVE_SERVER"]
 
   # when using the version, we can just specify the component as "hive2"
   hive_schematool_ver_bin = format('{stack_root}/{version}/hive/bin')
 
   # use the schematool which ships with hive2
-  hive_schematool_bin = format('{stack_root}/current/{hive_server2_hive2_component}/bin')
+  hive_schematool_bin = format('{stack_root}/current/{hive_server2_hive_component}/bin')
 
   # <stack-root>/<version>/hive2 (as opposed to <stack-root>/<version>/hive)
-  hive_server2_hive2_dir = format('{stack_root}/current/{hive_server2_hive2_component}')
+  hive_server2_hive_dir = format('{stack_root}/current/{hive_server2_hive_component}')
 
   # <stack-root>/<version>/hive2 (as opposed to <stack-root>/<version>/hive)
-  hive_server2_hive2_version_dir = format('{stack_root}/{version}/hive')
+  hive_server2_hive_version_dir = format('{stack_root}/{version}/hive')
 
-  # <stack-root>/current/hive-server2-hive2/lib -> <stack-root>/<version>/hive2/lib
-  hive_server2_hive2_lib = format('{hive_server2_hive2_dir}/lib')
+  # <stack-root>/current/hive-server2-hive/lib -> <stack-root>/<version>/hive2/lib
+  hive_server2_hive_lib = format('{hive_server2_hive_dir}/lib')
 
   # <stack-root>/<version>/hive2/lib
-  hive_server2_hive2_version_lib = format('{hive_server2_hive2_version_dir}/lib')
+  hive_server2_hive_version_lib = format('{hive_server2_hive_version_dir}/lib')
 
 
-hive_interactive_bin = format('{stack_root}/current/{hive_server2_hive2_component}/bin')
-hive_interactive_lib = format('{stack_root}/current/{hive_server2_hive2_component}/lib')
+hive_interactive_bin = format('{stack_root}/current/{hive_server2_hive_component}/bin')
+hive_interactive_lib = format('{stack_root}/current/{hive_server2_hive_component}/lib')
 
 # Heap dump related
 heap_dump_enabled = default('/configurations/hive-env/enable_heap_dump', None)
-heap_dump_opts = "" # Empty if 'heap_dump_enabled' is False.
+heap_dump_opts = ""  # Empty if 'heap_dump_enabled' is False.
 if heap_dump_enabled:
   heap_dump_path = default('/configurations/hive-env/heap_dump_location', "/tmp")
   heap_dump_opts = " -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath="+heap_dump_path
