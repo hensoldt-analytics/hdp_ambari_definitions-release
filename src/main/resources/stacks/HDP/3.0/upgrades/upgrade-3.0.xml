@@ -528,7 +528,6 @@
     <service name="RANGER_KMS">
       <component name="RANGER_KMS_SERVER">
         <pre-upgrade>
-          <task xsi:type="configure" id="hdp_2_6_maint_ranger_kms_plugin_cluster_name"/>
           <task xsi:type="execute" hosts="any" sequential="true">
             <summary>Upgrading Ranger KMS database schema</summary>
             <script>scripts/kms_server.py</script>
