@@ -329,13 +329,13 @@
     <group xsi:type="cluster" name="ADD_YARN_COMPONENTS" title="Add New YARN Components">
       <direction>UPGRADE</direction>
       <skippable>true</skippable>
-      <execute-stage title="Timeline Reader">
+      <execute-stage service="YARN" title="Timeline Reader">
         <task xsi:type="add_component" service="YARN" component="TIMELINE_READER" host-service="YARN" host-component="APP_TIMELINE_SERVER" hosts="any">
           <summary>Add Timeline Reader to the cluster</summary>
         </task>
       </execute-stage>
 
-      <execute-stage title="Registry DNS">
+      <execute-stage service="YARN" title="Registry DNS">
         <task xsi:type="add_component" service="YARN" component="YARN_REGISTRY_DNS" host-service="YARN" host-component="APP_TIMELINE_SERVER" hosts="any">
           <summary>Add Registry DNS to the cluster</summary>
         </task>
