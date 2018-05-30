@@ -230,6 +230,12 @@
         <component>KAFKA_BROKER</component>
       </service>
 
+      <service name="AMBARI_METRICS">
+        <component>METRICS_COLLECTOR</component>
+        <component>METRICS_MONITOR</component>
+        <component>METRICS_GRAFANA</component>
+      </service>
+
       <service name="HDFS">
         <component>DATANODE</component>
         <component>NAMENODE</component>
@@ -651,6 +657,18 @@
       <parallel-scheduler/>
       <service name="RANGER_KMS">
         <component>RANGER_KMS_SERVER</component>
+      </service>
+    </group>
+
+    <group xsi:type="restart" name="AMBARI_METRICS" title="Ambari Metrics">
+      <service-check>false</service-check>
+      <skippable>true</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+      <parallel-scheduler/>
+      <service name="AMBARI_METRICS">
+        <component>METRICS_COLLECTOR</component>
+        <component>METRICS_MONITOR</component>
+        <component>METRICS_GRAFANA</component>
       </service>
     </group>
 
