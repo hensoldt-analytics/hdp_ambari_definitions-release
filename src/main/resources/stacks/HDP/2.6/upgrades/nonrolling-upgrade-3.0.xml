@@ -565,12 +565,13 @@
     -->
     <group xsi:type="cluster" name="ALL_HOST_OPS" title="Set Version On All Hosts">
       <scope>COMPLETE</scope>
+      <direction>UPGRADE</direction>
       <skippable>true</skippable>
       <supports-auto-skip-failure>false</supports-auto-skip-failure>
 
       <execute-stage title="Update stack to {{version}}">
         <task xsi:type="execute">
-          <script>scripts/ru_set_all.py</script>
+          <script>scripts/stack_select_set_all.py</script>
           <function>actionexecute</function>
         </task>
       </execute-stage>
