@@ -441,6 +441,12 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>dfs.namenode.acls.enabled</name>
+    <value>true</value>
+    <description>Set to true to enable support for HDFS ACLs (Access Control Lists).</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>dfs.journalnode.http-address</name>
     <value>0.0.0.0:8480</value>
     <description>The address and port the JournalNode web UI listens on.
