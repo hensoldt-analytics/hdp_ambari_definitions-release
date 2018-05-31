@@ -133,56 +133,60 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
 
     summary = upgrade_summary.get_upgrade_summary()
     is_downgrade_allowed = summary is not None and summary.is_downgrade_allowed
+    is_switch_bits = summary is not None and summary.is_switch_bits
 
     options = ""
-    if upgrade_type == constants.UPGRADE_TYPE_ROLLING:
-      if params.upgrade_direction == Direction.UPGRADE:
-        options = "-rollingUpgrade started"
-      elif params.upgrade_direction == Direction.DOWNGRADE:
-        options = "-rollingUpgrade downgrade"
-    elif upgrade_type == constants.UPGRADE_TYPE_NON_ROLLING:
-      is_previous_image_dir = is_previous_fs_image()
-      Logger.info("Previous file system image dir present is {0}".format(str(is_previous_image_dir)))
-
-      if params.upgrade_direction == Direction.UPGRADE:
-        if is_downgrade_allowed:
+    if is_switch_bits:
+      Logger.info("The {0} switches the binaries only.  No options are used to restart NameNode.".format(summary.direction))
+    else:
+      if upgrade_type == constants.UPGRADE_TYPE_ROLLING:
+        if params.upgrade_direction == Direction.UPGRADE:
           options = "-rollingUpgrade started"
-        else:
-          # if we are HA, then -upgrade needs to be called for the active NN,
-          #   then -bootstrapStandby on the other, followed by normal daemon
-          # if we are NOT HA, then -upgrade needs to be called on the lone NN
-          if params.dfs_ha_enabled:
-            name_service = get_name_service_by_hostname(params.hdfs_site, params.hostname)
-            any_active = is_there_any_active_nn(name_service)
-            if any_active:
-              if not bootstrap_standby_namenode(params, use_path=True, run_if_present=True):
-                raise Fail("Could not bootstrap this namenode of an Express upgrade")
-              options = "" # we're bootstrapped, no other work needs to happen for the daemon
-            else:
-              options = "-upgrade"  # no other are active, so this host's NN is the first
+        elif params.upgrade_direction == Direction.DOWNGRADE:
+          options = "-rollingUpgrade downgrade"
+      elif upgrade_type == constants.UPGRADE_TYPE_NON_ROLLING:
+        is_previous_image_dir = is_previous_fs_image()
+        Logger.info("Previous file system image dir present is {0}".format(str(is_previous_image_dir)))
+
+        if params.upgrade_direction == Direction.UPGRADE:
+          if is_downgrade_allowed:
+            options = "-rollingUpgrade started"
           else:
-            options = "-upgrade"  # non-HA
+            # if we are HA, then -upgrade needs to be called for the active NN,
+            #   then -bootstrapStandby on the other, followed by normal daemon
+            # if we are NOT HA, then -upgrade needs to be called on the lone NN
+            if params.dfs_ha_enabled:
+              name_service = get_name_service_by_hostname(params.hdfs_site, params.hostname)
+              any_active = is_there_any_active_nn(name_service)
+              if any_active:
+                if not bootstrap_standby_namenode(params, use_path=True, run_if_present=True):
+                  raise Fail("Could not bootstrap this namenode of an Express upgrade")
+                options = "" # we're bootstrapped, no other work needs to happen for the daemon
+              else:
+                options = "-upgrade"  # no other are active, so this host's NN is the first
+            else:
+              options = "-upgrade"  # non-HA
 
-          marker = os.path.exists(namenode_upgrade.get_upgrade_in_progress_marker())
-          if options == "-upgrade" and upgrade_suspended is True and marker is True:
-            Logger.info("The NameNode is currently upgrading.  No options will be passed to startup")
-            options = ""
+            marker = os.path.exists(namenode_upgrade.get_upgrade_in_progress_marker())
+            if options == "-upgrade" and upgrade_suspended is True and marker is True:
+              Logger.info("The NameNode is currently upgrading.  No options will be passed to startup")
+              options = ""
 
-      elif params.upgrade_direction == Direction.DOWNGRADE:
-        options = "-rollingUpgrade downgrade"
-    elif upgrade_type == constants.UPGRADE_TYPE_HOST_ORDERED:
-      # nothing special to do for HOU - should be very close to a normal restart
-      pass
-    elif upgrade_type is None and upgrade_suspended is True:
-      # the rollingUpgrade flag must be passed in during a suspended upgrade when starting NN
-      if os.path.exists(namenode_upgrade.get_upgrade_in_progress_marker()):
-        if is_downgrade_allowed:
-          options = "-rollingUpgrade started"
+        elif params.upgrade_direction == Direction.DOWNGRADE:
+          options = "-rollingUpgrade downgrade"
+      elif upgrade_type == constants.UPGRADE_TYPE_HOST_ORDERED:
+        # nothing special to do for HOU - should be very close to a normal restart
+        pass
+      elif upgrade_type is None and upgrade_suspended is True:
+        # the rollingUpgrade flag must be passed in during a suspended upgrade when starting NN
+        if os.path.exists(namenode_upgrade.get_upgrade_in_progress_marker()):
+          if is_downgrade_allowed:
+            options = "-rollingUpgrade started"
+          else:
+            options = "-upgrade"
         else:
-          options = "-upgrade"
-      else:
-        Logger.info("The NameNode upgrade marker file {0} does not exist, yet an upgrade is currently suspended. "
-                    "Assuming that the upgrade of NameNode has not occurred yet.".format(namenode_upgrade.get_upgrade_in_progress_marker()))
+          Logger.info("The NameNode upgrade marker file {0} does not exist, yet an upgrade is currently suspended. "
+                      "Assuming that the upgrade of NameNode has not occurred yet.".format(namenode_upgrade.get_upgrade_in_progress_marker()))
 
     Logger.info("Options for start command are: {0}".format(options))
 

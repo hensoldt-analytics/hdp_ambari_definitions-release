@@ -243,9 +243,12 @@ class NameNodeDefault(NameNode):
     import params
     env.set_params(params)
 
+    summary = upgrade_summary.get_upgrade_summary()
+    is_switch_bits = summary is not None and summary.is_switch_bits is True
+
     # When downgrading an Express Upgrade, the first thing we do is to revert the symlinks.
     # Therefore, we cannot call this code in that scenario.
-    if upgrade_type != constants.UPGRADE_TYPE_NON_ROLLING or params.upgrade_direction != Direction.DOWNGRADE:
+    if is_switch_bits or upgrade_type != constants.UPGRADE_TYPE_NON_ROLLING or params.upgrade_direction != Direction.DOWNGRADE:
       stack_select.select_packages(params.version)
 
   def post_upgrade_restart(self, env, upgrade_type=None):

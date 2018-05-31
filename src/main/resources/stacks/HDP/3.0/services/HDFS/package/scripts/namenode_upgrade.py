@@ -268,15 +268,18 @@ def finalize_upgrade(upgrade_type, hdfs_binary):
     finalize_cmd = dfsadmin_base_command + " -finalizeUpgrade"
     query_cmd = dfsadmin_base_command + " -upgrade query"
 
-  Execute(query_cmd,
-        user=params.hdfs_user,
-        logoutput=True)
-  Execute(finalize_cmd,
+  if summary is not None and summary.is_switch_bits:
+    Logger.info("The {0} switches the binaries only.  No need to call finalization.".format(summary.direction))
+  else:
+    Execute(query_cmd,
           user=params.hdfs_user,
           logoutput=True)
-  Execute(query_cmd,
-          user=params.hdfs_user,
-          logoutput=True)
+    Execute(finalize_cmd,
+            user=params.hdfs_user,
+            logoutput=True)
+    Execute(query_cmd,
+            user=params.hdfs_user,
+            logoutput=True)
 
   # upgrade is finalized; remove the upgrade marker
   delete_upgrade_marker()
