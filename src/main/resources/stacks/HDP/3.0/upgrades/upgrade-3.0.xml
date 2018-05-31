@@ -505,14 +505,6 @@
       </component>
 
       <component name="RANGER_USERSYNC">
-        <pre-upgrade>
-          <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.RangerUsersyncConfigCalculation">
-            <summary>Enabling Nested Group Sync for Ranger</summary>
-          </task>
-        </pre-upgrade>
-
-        <pre-downgrade /> <!--  no-op to prevent config changes on downgrade -->
-
         <upgrade>
           <task xsi:type="restart-task" />
         </upgrade>
@@ -551,10 +543,6 @@
 
     <service name="KAFKA">
       <component name="KAFKA_BROKER">
-        <pre-upgrade>
-          <task xsi:type="configure" id="hdp_2_6_maint_ranger_kafka_plugin_cluster_name"/>
-        </pre-upgrade>
-        <pre-downgrade/> <!--  no-op to prevent config changes on downgrade -->
         <upgrade>
           <task xsi:type="restart-task" />
         </upgrade>

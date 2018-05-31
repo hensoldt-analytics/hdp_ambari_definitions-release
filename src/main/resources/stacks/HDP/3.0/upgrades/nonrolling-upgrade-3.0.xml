@@ -275,17 +275,6 @@
         </task>
       </execute-stage>
 
-      <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Applying Atlas proxy-user configurations.">
-        <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.AtlasProxyUserConfigCalculation"/>
-      </execute-stage>
-
-      <!-- RANGER -->
-      <execute-stage service="RANGER" component="RANGER_USERSYNC" title="Enabling Nested Group Sync for Ranger">
-        <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.RangerUsersyncConfigCalculation">
-          <summary>Enabling Nested Group Sync for Ranger</summary>
-        </task>
-      </execute-stage>
-
     </group>
 
 
