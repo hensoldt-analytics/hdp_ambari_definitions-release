@@ -77,9 +77,13 @@ jdk_location = config['ambariLevelParams']['jdk_location']
 kms_log4j = config['configurations']['kms-log4j']['content']
 
 # ranger host
-ranger_admin_hosts = config['clusterHostInfo']['ranger_admin_hosts'][0]
+ranger_admin_hosts = config['clusterHostInfo']['ranger_admin_hosts']
 has_ranger_admin = len(ranger_admin_hosts) > 0
-kms_host = config['clusterHostInfo']['ranger_kms_server_hosts'][0]
+ranger_kms_hosts = config['clusterHostInfo']['ranger_kms_server_hosts']
+if len(ranger_kms_hosts) > 1:
+  kms_hosts = ";".join(ranger_kms_hosts)
+else:
+  kms_hosts = ranger_kms_hosts[0]
 kms_port = config['configurations']['kms-env']['kms_port']
 
 create_db_user = config['configurations']['kms-env']['create_db_user']
@@ -101,6 +105,12 @@ if not is_empty(repo_name_value) and repo_name_value != "{{repo_name}}":
 cred_lib_path = os.path.join(kms_home,"cred","lib","*")
 cred_setup_prefix = (format('{kms_home}/ranger_credential_helper.py'), '-l', cred_lib_path)
 credential_file = format('/etc/ranger/{repo_name}/cred.jceks')
+
+# ranger kms ssl enabled config
+ranger_kms_ssl_enabled = config['configurations']['ranger-kms-site']['ranger.service.https.attrib.ssl.enabled']
+url_scheme = "http"
+if ranger_kms_ssl_enabled:
+  url_scheme = "https"
 
 if has_ranger_admin:
   policymgr_mgr_url = config['configurations']['admin-properties']['policymgr_external_url']
@@ -225,7 +235,7 @@ repo_config_password = unicode(config['configurations']['kms-properties']['REPOS
 kms_plugin_config = {
   'username' : repo_config_username,
   'password' : repo_config_password,
-  'provider' : format('kms://http@{kms_host}:{kms_port}/kms')
+  'provider' : format('kms://{url_scheme}@{kms_hosts}:{kms_port}/kms')
 }
 
 xa_audit_db_is_enabled = False
@@ -239,7 +249,6 @@ if xa_audit_db_flavor == 'sqla':
   xa_audit_db_is_enabled = False
 
 current_host = config['agentLevelParams']['hostname']
-ranger_kms_hosts = config['clusterHostInfo']['ranger_kms_server_hosts']
 if current_host in ranger_kms_hosts:
   kms_host = current_host
 
@@ -297,7 +306,6 @@ ranger_kms_site_password_properties = ['ranger.service.https.attrib.keystore.pas
 ranger_kms_cred_ssl_path = config['configurations']['ranger-kms-site']['ranger.credential.provider.path']
 ranger_kms_ssl_keystore_alias = config['configurations']['ranger-kms-site']['ranger.service.https.attrib.keystore.credential.alias']
 ranger_kms_ssl_passwd = config['configurations']['ranger-kms-site']['ranger.service.https.attrib.keystore.pass']
-ranger_kms_ssl_enabled = config['configurations']['ranger-kms-site']['ranger.service.https.attrib.ssl.enabled']
 
 xa_audit_hdfs_is_enabled = default("/configurations/ranger-kms-audit/xasecure.audit.destination.hdfs", False)
 namenode_host = default("/clusterHostInfo/namenode_hosts", [])
