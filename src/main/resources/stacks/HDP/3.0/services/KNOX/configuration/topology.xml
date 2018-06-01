@@ -75,7 +75,7 @@
 
             &lt;service&gt;
                 &lt;role&gt;NAMENODE&lt;/role&gt;
-                &lt;url&gt;hdfs://{{namenode_host}}:{{namenode_rpc_port}}&lt;/url&gt;
+                &lt;url&gt;{{namenode_address}}&lt;/url&gt;
             &lt;/service&gt;
 
             &lt;service&gt;

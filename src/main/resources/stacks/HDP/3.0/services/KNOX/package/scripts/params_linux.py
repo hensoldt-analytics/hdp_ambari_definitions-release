@@ -112,46 +112,27 @@ mode = 0644
 stack_version_unformatted = config['clusterLevelParams']['stack_version']
 stack_version_formatted = format_stack_version(stack_version_unformatted)
 
+namenode_hosts = default("/clusterHostInfo/namenode_hosts", None)
+has_namenode = bool(namenode_hosts)
+
 dfs_ha_enabled = False
 dfs_ha_nameservices = default('/configurations/hdfs-site/dfs.internal.nameservices', None)
 if dfs_ha_nameservices is None:
   dfs_ha_nameservices = default('/configurations/hdfs-site/dfs.nameservices', None)
+
+if dfs_ha_nameservices is not None:
+  dfs_ha_nameservices = dfs_ha_nameservices.split(',')[0] # for now knox topology.xml supports working with only one nameservice
+
 dfs_ha_namenode_ids = default(format("/configurations/hdfs-site/dfs.ha.namenodes.{dfs_ha_nameservices}"), None)
 
 namenode_rpc = None
 
-if dfs_ha_namenode_ids:
-  dfs_ha_namemodes_ids_list = dfs_ha_namenode_ids.split(",")
-  dfs_ha_namenode_ids_array_len = len(dfs_ha_namemodes_ids_list)
-  if dfs_ha_namenode_ids_array_len > 1:
-    dfs_ha_enabled = True
-if dfs_ha_enabled:
-  for nn_id in dfs_ha_namemodes_ids_list:
-    nn_host = config['configurations']['hdfs-site'][format('dfs.namenode.rpc-address.{dfs_ha_nameservices}.{nn_id}')]
-    if hostname.lower() in nn_host.lower():
-      namenode_id = nn_id
-      namenode_rpc = nn_host
-    # With HA enabled namenode_address is recomputed
-  namenode_address = format('hdfs://{dfs_ha_nameservices}')
+dfs_type = default("/commandParams/dfs_type", "").lower()
 
-namenode_port_map = {}
-if dfs_ha_enabled:
-    for nn_id in dfs_ha_namemodes_ids_list:
-        nn_host = config['configurations']['hdfs-site'][format('dfs.namenode.http-address.{dfs_ha_nameservices}.{nn_id}')]
-        nn_host_parts = nn_host.split(':')
-        namenode_port_map[nn_host_parts[0]] = nn_host_parts[1]
-
-
-namenode_hosts = default("/clusterHostInfo/namenode_hosts", None)
-if type(namenode_hosts) is list:
-  namenode_host = namenode_hosts[0]
-else:
-  namenode_host = namenode_hosts
-
-has_namenode = not namenode_host == None
 namenode_http_port = "50070"
 namenode_https_port = "50470"
 namenode_rpc_port = "8020"
+namenode_address = ""
 
 if has_namenode:
   if 'dfs.namenode.http-address' in config['configurations']['hdfs-site']:
@@ -163,6 +144,31 @@ if has_namenode:
   else:
     if 'dfs.namenode.rpc-address' in config['configurations']['hdfs-site']:
       namenode_rpc_port = get_port_from_url(config['configurations']['hdfs-site']['dfs.namenode.rpc-address'])
+
+  namenode_address = format("{dfs_type}://{namenode_hosts[0]}:{namenode_rpc_port}")
+
+if dfs_ha_namenode_ids:
+  dfs_ha_namemodes_ids_list = dfs_ha_namenode_ids.split(",")
+  dfs_ha_namenode_ids_array_len = len(dfs_ha_namemodes_ids_list)
+  if dfs_ha_namenode_ids_array_len > 1:
+    dfs_ha_enabled = True
+
+
+if dfs_ha_enabled:
+  for nn_id in dfs_ha_namemodes_ids_list:
+    nn_host = config['configurations']['hdfs-site'][format('dfs.namenode.rpc-address.{dfs_ha_nameservices}.{nn_id}')]
+    if hostname.lower() in nn_host.lower():
+      namenode_id = nn_id
+      namenode_rpc = nn_host
+    # With HA enabled namenode_address is recomputed
+  namenode_address = format('{dfs_type}://{dfs_ha_nameservices}')
+
+namenode_port_map = {}
+if dfs_ha_enabled:
+    for nn_id in dfs_ha_namemodes_ids_list:
+        nn_host = config['configurations']['hdfs-site'][format('dfs.namenode.http-address.{dfs_ha_nameservices}.{nn_id}')]
+        nn_host_parts = nn_host.split(':')
+        namenode_port_map[nn_host_parts[0]] = nn_host_parts[1]
 
 dfs_http_policy = default('/configurations/hdfs-site/dfs.http.policy', None)
 
@@ -509,7 +515,6 @@ hdfs_site = config['configurations']['hdfs-site'] if has_namenode else None
 default_fs = config['configurations']['core-site']['fs.defaultFS'] if has_namenode else None
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin") if has_namenode else None
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir() if has_namenode else None
-dfs_type = default("/commandParams/dfs_type", "")
 
 import functools
 #create partial functions with common arguments for every HdfsResource call
