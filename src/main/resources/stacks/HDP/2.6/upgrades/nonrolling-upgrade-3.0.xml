@@ -24,6 +24,15 @@
   <type>NON_ROLLING</type>
   <prerequisite-checks>
     <check>org.apache.ambari.server.checks.AtlasMigrationPropertyCheck</check>
+    <check>org.apache.ambari.server.checks.AmbariMetricsHadoopSinkVersionCompatibilityCheck</check>
+    <configuration>
+      <!-- Configuration properties for all pre-reqs including required pre-reqs -->
+      <check-properties name="org.apache.ambari.server.checks.AmbariMetricsHadoopSinkVersionCompatibilityCheck">
+        <property name="min-hadoop-sink-version">2.7.0.0</property>
+        <property name="request-status-check-retry-interval">6000</property>
+        <property name="request-status-check-num-retries">20</property>
+      </check-properties>
+    </configuration>
   </prerequisite-checks>
   <order>
     <group xsi:type="cluster" name="PRE_CLUSTER" title="Prepare Upgrade">
