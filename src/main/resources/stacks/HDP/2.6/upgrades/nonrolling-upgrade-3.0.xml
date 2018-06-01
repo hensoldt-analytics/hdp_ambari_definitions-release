@@ -972,10 +972,13 @@
         </task>
       </execute-stage>
 
-      <execute-stage service="RANGER" component="RANGER_ADMIN" title="Update password properties">
+      <execute-stage service="RANGER" component="RANGER_ADMIN" title="Ranger update password config Check">
         <direction>UPGRADE</direction>
         <task xsi:type="manual">
-          <message>Post upgrade, please update passwords for Ranger Usersync, Tagsync and Keyadmin under Ranger Service Config Tab from Ambari.</message>
+          <message>Please follow below steps after successful upgrade</message>
+          <message>-- Please update passwords for Ranger Usersync, Tagsync and Keyadmin under Ranger Service Config Tab from Ambari. Otherwise Ranger Admin restart will fail after upgrade.</message>
+          <message>Password guidelines</message>
+          <message>-- Password should be minimum 8 characters with minimum one alphabet and one numeric. Unsupported special characters are  " ' \ `.</message>
         </task>
       </execute-stage>
 
