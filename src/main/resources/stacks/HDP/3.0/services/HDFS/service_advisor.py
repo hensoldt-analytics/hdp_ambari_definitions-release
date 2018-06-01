@@ -692,29 +692,23 @@ class HDFSValidator(service_advisor.ServiceAdvisor):
       # determine whether we use secure ports
       address_properties_with_warnings = []
       if dfs_http_policy_value == HTTPS_ONLY:
-        if not privileged_dfs_dn_port and (privileged_dfs_https_port or datanode_https_address not in hdfs_site):
+        if not privileged_dfs_dn_port and data_transfer_protection_value is None:
           important_properties = [dfs_datanode_address, datanode_https_address]
-          message = "You set up datanode to use some non-secure ports. " \
+          message = "You have set up datanode to use non-secure rpc port. " \
                     "If you want to run Datanode under non-root user in a secure cluster, " \
-                    "you should set all these properties {2} " \
-                    "to use non-secure ports (if property {3} does not exist, " \
-                    "just add it). You may also set up property {4} ('{5}' is a good default value). " \
-                    "Also, set up WebHDFS with SSL as " \
-                    "described in manual in order to be able to " \
-                    "use HTTPS.".format(dfs_http_policy, dfs_http_policy_value, important_properties,
-                                        datanode_https_address, data_transfer_protection,
-                                        VALID_TRANSFER_PROTECTION_VALUES[0])
+                    "you should set {0} ('{1}' is a good default value).".format(
+            data_transfer_protection, VALID_TRANSFER_PROTECTION_VALUES[0])
           address_properties_with_warnings.extend(important_properties)
       else:  # dfs_http_policy_value == HTTP_AND_HTTPS or HTTP_ONLY
         # We don't enforce datanode_https_address to use privileged ports here
         any_nonprivileged_ports_are_in_use = not privileged_dfs_dn_port or not privileged_dfs_http_port
         if any_nonprivileged_ports_are_in_use:
           important_properties = [dfs_datanode_address, datanode_http_address]
-          message = "You have set up datanode to use some non-secure ports, but {0} is set to {1}. " \
-                    "In a secure cluster, Datanode forbids using non-secure ports " \
-                    "if {0} is not set to {3}. " \
-                    "Please make sure that properties {2} use secure ports.".format(
-            dfs_http_policy, dfs_http_policy_value, important_properties, HTTPS_ONLY)
+          message = "You have set up datanode to use some non-secure ports. " \
+                    "In a secure cluster:" \
+                    "1. non-secure rpc port is allowed only if sasl is enabled by setting {0}." \
+                    "2. non-secure http port is allowed only if {2} is set to {3}".format(
+              data_transfer_protection, dfs_http_policy, HTTPS_ONLY)
           address_properties_with_warnings.extend(important_properties)
 
       # Generate port-related warnings if any
@@ -727,11 +721,6 @@ class HDFSValidator(service_advisor.ServiceAdvisor):
         if data_transfer_protection_value not in VALID_TRANSFER_PROTECTION_VALUES:
           validationItems.append({"config-name": data_transfer_protection, "item": self.getWarnItem(
                                       "Invalid property value: {0}. Valid values are {1}.".format(data_transfer_protection_value, VALID_TRANSFER_PROTECTION_VALUES)
-                                  )})
-        elif (data_transfer_protection_value == TRANSFER_PROTECTION_PRIVACY or data_transfer_protection_value == TRANSFER_PROTECTION_AUTHENTICATION_AND_PRIVACY) and dfs_http_policy_value in [HTTP_ONLY, HTTP_AND_HTTPS]:
-          validationItems.append({"config-name": data_transfer_protection, "item": self.getWarnItem(
-                                      "{0} property can not be used when {1} is set to any value other then {2}. Tip: When {1} property is not defined, it defaults to {3}".format(
-                                      data_transfer_protection, dfs_http_policy, HTTPS_ONLY, HTTP_ONLY)
                                   )})
     return self.toConfigurationValidationProblems(validationItems, "hdfs-site")
 
