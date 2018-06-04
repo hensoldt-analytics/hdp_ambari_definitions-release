@@ -64,6 +64,14 @@ def spark_service(name, upgrade_type=None, action=None):
           tmp_archive_file=get_tarball_paths("spark2")[1]
           make_tarfile(tmp_archive_file, source_dir)
           copy_to_hdfs("spark2", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
+
+      # create & copy spark2-hdp-hive-archive.tar.gz to hdfs
+      if not params.sysprep_skip_copy_tarballs_hdfs:
+        source_dir=params.spark_home+"/standalone-metastore"
+        tmp_archive_file=get_tarball_paths("spark2hive")[1]
+        make_tarfile(tmp_archive_file, source_dir)
+        copy_to_hdfs("spark2hive", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
+
       # create spark history directory
       params.HdfsResource(params.spark_history_dir,
                           type="directory",
