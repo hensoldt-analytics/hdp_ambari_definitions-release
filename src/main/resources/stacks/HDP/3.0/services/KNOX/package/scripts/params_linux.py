@@ -197,7 +197,7 @@ if len(namenode_host_keys) > 0:
     for host in namenode_host_keys:
       webhdfs_service_urls += buildUrlElement("http", host, namenode_port_map[host], "/webhdfs")
 else:
-  webhdfs_service_urls = buildUrlElement("http", namenode_host, namenode_http_port, "/webhdfs")
+  webhdfs_service_urls = buildUrlElement("http", namenode_hosts[0], namenode_http_port, "/webhdfs")
 
 yarn_http_policy = default('/configurations/yarn-site/yarn.http.policy', None )
 yarn_https_on = False
