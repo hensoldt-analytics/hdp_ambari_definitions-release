@@ -707,7 +707,7 @@ class HDFSValidator(service_advisor.ServiceAdvisor):
           message = "You have set up datanode to use some non-secure ports. " \
                     "In a secure cluster:" \
                     "1. non-secure rpc port is allowed only if sasl is enabled by setting {0}." \
-                    "2. non-secure http port is allowed only if {2} is set to {3}".format(
+                    "2. non-secure http port is allowed only if {1} is set to {2}".format(
               data_transfer_protection, dfs_http_policy, HTTPS_ONLY)
           address_properties_with_warnings.extend(important_properties)
 
