@@ -23,6 +23,7 @@
       <displayName>Superset</displayName>
       <comment>Superset is a data exploration platform designed to be visual, intuitive and interactive.</comment>
       <version>0.15.0</version>
+      <selection>TECH_PREVIEW</selection>
       <components>
         <component>
           <name>SUPERSET</name>
