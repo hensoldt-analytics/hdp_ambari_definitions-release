@@ -385,7 +385,7 @@ default_fs = config['configurations']['core-site']['fs.defaultFS'] if has_nameno
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin") if has_namenode else None
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir() if has_namenode else None
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
-dfs_type = default("/commandParams/dfs_type", "")
+dfs_type = default("/clusterLevelParams/dfs_type", "")
 
 mount_table_xml_inclusion_file_full_path = None
 mount_table_content = None

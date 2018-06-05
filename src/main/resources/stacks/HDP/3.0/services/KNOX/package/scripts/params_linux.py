@@ -127,7 +127,7 @@ dfs_ha_namenode_ids = default(format("/configurations/hdfs-site/dfs.ha.namenodes
 
 namenode_rpc = None
 
-dfs_type = default("/commandParams/dfs_type", "").lower()
+dfs_type = default("/clusterLevelParams/dfs_type", "").lower()
 
 namenode_http_port = "50070"
 namenode_https_port = "50470"
