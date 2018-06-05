@@ -1124,24 +1124,6 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
                 ": {2}, MIN_EXECUTOR_TO_AM_RATIO : {3}, MAX_CONCURRENT_QUERIES : {4}".format(max_llap_concurreny_limit, max_executors_per_node,
                                                                                              num_llap_nodes_requested, MIN_EXECUTOR_TO_AM_RATIO,
                                                                                              MAX_CONCURRENT_QUERIES))
-    max_llap_concurreny = long(min(max_llap_concurreny_limit, floor(llap_mem_for_tezAm_and_daemons / (MIN_EXECUTOR_TO_AM_RATIO *
-                                                                                                      mem_per_thread_for_llap + normalized_tez_am_container_size))))
-    self.logger.info("DBG: Calculated 'max_llap_concurreny' : {0}, using following : max_llap_concurreny_limit : {1}, llap_mem_for_tezAm_and_daemons : "
-                "{2}, MIN_EXECUTOR_TO_AM_RATIO : {3}, mem_per_thread_for_llap : {4}, normalized_tez_am_container_size : "
-                "{5}".format(max_llap_concurreny, max_llap_concurreny_limit, llap_mem_for_tezAm_and_daemons, MIN_EXECUTOR_TO_AM_RATIO,
-                             mem_per_thread_for_llap, normalized_tez_am_container_size))
-    if int(max_llap_concurreny) < MAX_CONCURRENT_QUERIES_SMALL_CLUSTERS:
-      self.logger.info("DBG: Adjusting 'max_llap_concurreny' from {0} to {1}".format(max_llap_concurreny, MAX_CONCURRENT_QUERIES_SMALL_CLUSTERS))
-      max_llap_concurreny = MAX_CONCURRENT_QUERIES_SMALL_CLUSTERS
-
-    if (max_llap_concurreny * normalized_tez_am_container_size) > hive_tez_am_cap_available:
-      max_llap_concurreny = floor(hive_tez_am_cap_available / normalized_tez_am_container_size)
-      if max_llap_concurreny <= 0:
-        self.logger.warning("Calculated 'Max. LLAP Concurrent Queries' = {0}. Expected value > 1".format(max_llap_concurreny))
-        self.recommendDefaultLlapConfiguration(configurations, services, hosts)
-        return
-      self.logger.info("DBG: Adjusted 'max_llap_concurreny' : {0}, using following: hive_tez_am_cap_available : {1}, normalized_tez_am_container_size: "
-                  "{2}".format(max_llap_concurreny, hive_tez_am_cap_available, normalized_tez_am_container_size))
 
     # Calculate value for 'num_llap_nodes', an across cluster config.
     tez_am_memory_required = llap_concurrency * normalized_tez_am_container_size
@@ -1261,16 +1243,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       self.logger.info("DBG: Setting 'tez.am.resource.memory.mb' config value as : {0}".format(normalized_tez_am_container_size))
 
     if not llap_concurrency_in_changed_configs:
-      min_llap_concurrency = 1
-      putHiveInteractiveSiteProperty('hive.server2.tez.sessions.per.default.queue', long(llap_concurrency))
-      putHiveInteractiveSitePropertyAttribute('hive.server2.tez.sessions.per.default.queue', "minimum", min_llap_concurrency)
-
-    # Check if 'max_llap_concurreny' < 'llap_concurrency'.
-    if max_llap_concurreny < llap_concurrency:
-      self.logger.info("DBG: Adjusting 'max_llap_concurreny' to : {0}, based on 'llap_concurrency' : {1} and "
-                       "earlier 'max_llap_concurreny' : {2}. ".format(llap_concurrency, llap_concurrency, max_llap_concurreny))
-      max_llap_concurreny = llap_concurrency
-    putHiveInteractiveSitePropertyAttribute('hive.server2.tez.sessions.per.default.queue', "maximum", long(max_llap_concurreny))
+      putHiveInteractiveSiteProperty('hive.server2.tez.sessions.per.default.queue', max(long(num_executors_per_node/16), 1))
+    putHiveInteractiveSitePropertyAttribute('hive.server2.tez.sessions.per.default.queue', "maximum", max(long(num_executors_per_node/4), 1))
 
     num_llap_nodes = long(num_llap_nodes)
     putHiveInteractiveEnvPropertyAttribute('num_llap_nodes', "minimum", min_nodes_required)
@@ -1344,7 +1318,6 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     node_manager_cnt = len(node_manager_host_list)
 
     putHiveInteractiveSiteProperty('hive.server2.tez.sessions.per.default.queue', 1)
-    putHiveInteractiveSitePropertyAttribute('hive.server2.tez.sessions.per.default.queue', "minimum", 1)
     putHiveInteractiveSitePropertyAttribute('hive.server2.tez.sessions.per.default.queue', "maximum", 1)
 
     # Safeguard for not adding "num_llap_nodes_for_llap_daemons" if it doesnt exist in hive-interactive-site.
