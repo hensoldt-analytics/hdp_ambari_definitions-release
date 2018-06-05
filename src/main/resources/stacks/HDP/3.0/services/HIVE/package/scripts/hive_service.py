@@ -197,17 +197,17 @@ def create_hive_metastore_schema():
                                   "{hive_schematool_bin}/schematool -initSchema "
                                   "-dbType hive "
                                   "-metaDbType {hive_metastore_db_type} "
-                                  "-url '{hive_jdbc_url}' "
                                   "-userName {hive_metastore_user_name} "
-                                  "-passWord {hive_metastore_user_passwd!p} -verbose")
+                                  "-passWord {hive_metastore_user_passwd!p} "
+                                  "-verbose")
 
   check_hive_schema_created_cmd = as_user(format("export HIVE_CONF_DIR={hive_server_conf_dir} ; "
                                           "{hive_schematool_bin}/schematool -info "
                                           "-dbType hive "
                                           "-metaDbType {hive_metastore_db_type} "
-                                          "-url '{hive_jdbc_url}' "
                                           "-userName {hive_metastore_user_name} "
-                                          "-passWord {hive_metastore_user_passwd!p} -verbose"), params.hive_user)
+                                          "-passWord {hive_metastore_user_passwd!p} "
+                                          "-verbose"), params.hive_user)
 
 
   # HACK: in cases with quoted passwords and as_user (which does the quoting as well) !p won't work for hiding passwords.
