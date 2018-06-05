@@ -185,7 +185,7 @@ def wait_for_znode():
   except ComponentIsNotRunning:
     raise Exception(format("HiveServer2 is no longer running, check the logs at {hive_log_dir}"))
   
-  cmd = format("{zk_bin}/zkCli.sh -server {zk_quorum} ls /{hive_server2_zookeeper_namespace} | grep '\[serverUri='")
+  cmd = format("{zk_bin}/zkCli.sh -server {zk_quorum} ls /{hive_server2_zookeeper_namespace} | grep 'serverUri='")
   code, out = shell.call(cmd)
   if code == 1:
     raise Fail(format("ZooKeeper node /{hive_server2_zookeeper_namespace} is not ready yet"))
