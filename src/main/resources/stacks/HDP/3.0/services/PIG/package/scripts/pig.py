@@ -22,12 +22,16 @@ import os
 from resource_management.core.resources.system import Directory, File
 from resource_management.core.source import InlineTemplate
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions import lzo_utils
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def pig():
   import params
+
+  # ensure that matching LZO libraries are installed for Pig
+  lzo_utils.install_lzo_if_needed()
 
   Directory( params.pig_conf_dir,
     create_parents = True,

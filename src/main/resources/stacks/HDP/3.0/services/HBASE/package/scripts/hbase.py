@@ -23,6 +23,7 @@ from resource_management.libraries.script.script import Script
 from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.libraries.resources.template_config import TemplateConfig
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions import lzo_utils
 from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
 from resource_management.core.source import Template, InlineTemplate
@@ -55,6 +56,9 @@ def hbase(name=None):
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def hbase(name=None):
   import params
+
+  # ensure that matching LZO libraries are installed for HBase
+  lzo_utils.install_lzo_if_needed()
 
   Directory( params.etc_prefix_dir,
       mode=0755

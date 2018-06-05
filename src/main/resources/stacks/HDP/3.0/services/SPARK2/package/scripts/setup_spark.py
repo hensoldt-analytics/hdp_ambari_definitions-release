@@ -37,10 +37,14 @@ from resource_management.libraries.functions.stack_features import check_stack_f
 from resource_management.libraries.functions.constants import StackFeature
 from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions import lzo_utils
 from resource_management.libraries.resources.xml_config import XmlConfig
 
 def setup_spark(env, type, upgrade_type = None, action = None):
   import params
+
+  # ensure that matching LZO libraries are installed for Spark
+  lzo_utils.install_lzo_if_needed()
 
   Directory([params.spark_pid_dir, params.spark_log_dir],
             owner=params.spark_user,

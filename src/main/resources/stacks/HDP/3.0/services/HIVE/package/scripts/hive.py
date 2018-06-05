@@ -42,10 +42,13 @@ from resource_management.libraries.functions.setup_atlas_hook import setup_atlas
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.resources.hdfs_resource import HdfsResource
 from resource_management.libraries.resources.xml_config import XmlConfig
+from resource_management.libraries.functions.lzo_utils import install_lzo_if_needed
 
 
 def hive(name=None):
   import params
+
+  install_lzo_if_needed()
 
   # We should change configurations for client as well as for server.
   # The reason is that stale-configs are service-level, not component.
