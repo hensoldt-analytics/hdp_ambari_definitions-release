@@ -883,7 +883,6 @@
       <skippable>true</skippable>
       <priority>
         <service>HIVE</service>
-        <service>SPARK</service>
         <service>SPARK2</service>
         <service>ATLAS</service>
         <service>ZEPPELIN</service>
