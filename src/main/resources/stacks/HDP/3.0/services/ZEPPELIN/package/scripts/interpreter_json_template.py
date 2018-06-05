@@ -776,56 +776,6 @@ template = '''
         "users": [],
         "isUserImpersonate": false
       }
-    },
-    "sh": {
-      "id": "sh",
-      "name": "sh",
-      "group": "sh",
-      "properties": {
-	    "zeppelin.shell.keytab.location": {
-          "type": "string", 
-          "name": "zeppelin.shell.keytab.location", 
-          "value": ""
-        },
-        "shell.command.timeout.millisecs": {
-          "type": "string", 
-          "name": "shell.command.timeout.millisecs", 
-          "value": "60000"
-        },
-        "zeppelin.shell.principal": {
-          "type": "string", 
-          "name": "zeppelin.shell.principal", 
-          "value": ""
-        },
-        "zeppelin.shell.auth.type": {
-          "type": "string", 
-          "name": "zeppelin.shell.auth.type", 
-          "value": ""
-        }
-      },
-      "status": "READY",
-      "interpreterGroup": [
-        {
-          "name": "sh",
-          "class": "org.apache.zeppelin.shell.ShellInterpreter",
-          "defaultInterpreter": false,
-          "editor": {
-            "language": "sh",
-            "editOnDblClick": false
-          }
-        }
-      ],
-      "dependencies": [],
-      "option": {
-        "remote": true,
-        "port": -1,
-        "perNote": "shared",
-        "perUser": "shared",
-        "isExistingProcess": false,
-        "setPermission": false,
-        "users": [],
-        "isUserImpersonate": false
-      }
     }
   },
   "interpreterBindings": {},

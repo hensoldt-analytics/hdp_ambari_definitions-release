@@ -495,15 +495,6 @@ class Master(Script):
           self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.auth.type', 'string', "SIMPLE")
           self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.principal', 'string', "")
           self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.keytab.location', 'string', "")
-      elif interpreter['group'] == 'sh':
-        if params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab and params.security_enabled:
-          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.auth.type', 'string', "KERBEROS")
-          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.principal', 'string', params.zeppelin_kerberos_principal)
-          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.keytab.location', 'string', params.zeppelin_kerberos_keytab)
-        else:
-          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.auth.type', 'string', "")
-          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.principal', 'string', "")
-          self.storePropertyToInterpreter(interpreter, 'zeppelin.shell.keytab.location', 'string', "")
 
     self.set_interpreter_settings(config_data)
 
