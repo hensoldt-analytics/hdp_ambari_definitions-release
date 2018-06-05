@@ -64,6 +64,18 @@
       </component>
     </service>
 
+    <service name="ACCUMULO">
+      <component name="ACCUMULO_MASTER">
+        <changes>
+          <definition xsi:type="configure" id="hdp_30_accumulo_stack_variables_update" summary="Convert HDP 2.6 variable naming to HDP 3.0">
+            <type>accumulo-env</type>
+            <replace key="content" find="HADOOP_PREFIX" replace-with="HADOOP_HOME"/>
+            <replace key="server_content" find="HADOOP_PREFIX" replace-with="HADOOP_HOME"/>
+          </definition>
+        </changes>
+      </component>
+    </service>
+
     <service name="HDFS">
       <component name="NAMENODE">
         <changes>
@@ -71,6 +83,28 @@
             <type>ranger-hdfs-audit</type>
             <set key="ranger.plugin.hdfs.ambari.cluster.name" value="{{cluster_name}}"
               if-type="ranger-hdfs-plugin-properties" if-key="ranger-hdfs-plugin-enabled" if-key-state="present"/>
+          </definition>
+
+          <definition xsi:type="configure" id="hdp_30_hdfs_stack_variables_update" summary="Convert HDP 2.6 variable naming to HDP 3.0">
+            <type>hadoop-env</type>
+            <replace key="content" find="HADOOP_NAMENODE_OPTS" replace-with="HDFS_NAMENODE_OPTS"/>
+            <replace key="content" find="SHARED_HADOOP_NAMENODE_OPTS" replace-with="SHARED_HDFS_NAMENODE_OPTS"/>
+            <replace key="content" find="HADOOP_SECONDARYNAMENODE_OPTS" replace-with="HDFS_SECONDARYNAMENODE_OPTS"/>
+            <replace key="content" find="HADOOP_DATANODE_OPTS" replace-with="HDFS_DATANODE_OPTS"/>
+            <replace key="content" find="HADOOP_SECURE_DN_USER" replace-with="HDFS_DATANODE_SECURE_USER"/>
+            <replace key="content" find="HADOOP_SECURE_DN_LOG_DIR" replace-with="HADOOP_SECURE_LOG_DIR"/>
+            <replace key="content" find="HADOOP_SLAVES" replace-with="HADOOP_WORKERS"/>
+            <replace key="content" find="HADOOP_SLAVE_SLEEP" replace-with="HADOOP_WORKER_SLEEP"/>
+            <replace key="content" find="HADOOP_SECURE_DN_PID_DIR" replace-with="HADOOP_SECURE_PID_DIR"/>
+            <replace key="content" find="HADOOP_ZKFC_OPTS" replace-with="HDFS_ZKFC_OPTS"/>
+            <replace key="content" find="HADOOP_NFS3_OPTS" replace-with="HDFS_NFS3_OPTS"/>
+          </definition>
+
+          <!-- should be executed in separate action after hdp_30_hdfs_stack_variables_update -->
+          <definition xsi:type="configure" id="hdp_30_hdfs_secure_variables_update" summary="Update HADOOP_SECURE_PID_DIR and HADOOP_SECURE_LOG_DIR">
+            <type>hadoop-env</type>
+            <replace key="content" find="export HADOOP_SECURE_LOG_DIR={{hdfs_log_dir_prefix}}/$HDFS_DATANODE_SECURE_USER" replace-with="export HADOOP_SECURE_LOG_DIR=${HADOOP_SECURE_LOG_DIR:-{{hdfs_log_dir_prefix}}/$HDFS_DATANODE_SECURE_USER}" />
+            <replace key="content" find="export HADOOP_SECURE_PID_DIR={{hadoop_pid_dir_prefix}}/$HDFS_DATANODE_SECURE_USER" replace-with="export HADOOP_SECURE_PID_DIR=${HADOOP_SECURE_PID_DIR:-{{hadoop_pid_dir_prefix}}/$HDFS_DATANODE_SECURE_USER}" />
           </definition>
 
           <definition xsi:type="configure" id="hdfs_namenode_prevent_gc_heuristics" summary="Prevent Garbage Collection Heuristics">
@@ -355,9 +389,12 @@
             <insert key="content" insert-type="append" newline-before="true" newline-after="true" value="export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}"/>
           </definition>
 
-          <definition xsi:type="configure" id="hdp_30_convert_yarn_opts_to_hadoop_opts" summary="Convert YARN_OPTS to HADOOP_OPTS">
+          <definition xsi:type="configure" id="hdp_30_yarn_stack_variables_update" summary="Convert HDP 2.6 variable naming to HDP 3.0">
             <type>yarn-env</type>
             <replace key="content" find="YARN_OPTS" replace-with="HADOOP_OPTS"/>
+            <replace key="content" find="YARN_ROOT_LOGGER " replace-with="HADOOP_ROOT_LOGGER "/>
+            <replace key="content" find="YARN_LOGFILE" replace-with="HADOOP_LOGFILE"/>
+            <replace key="content" find="YARN_IDENT_STRING" replace-with="HADOOP_IDENT_STRING"/>
           </definition>
 
           <definition xsi:type="configure" id="hdp_30_add_secure_pid_and_log_dirs" summary="Add Secure PID and Log Directory Exports">
@@ -544,6 +581,19 @@
           <definition xsi:type="configure" id="hdp_2_6_mapreduce_tarball_ld_library">
             <type>mapred-site</type>
             <set key="mapreduce.admin.user.env" value="LD_LIBRARY_PATH={{hadoop_lib_home}}/native:{{hadoop_lib_home}}/native/Linux-{{architecture}}-64:./mr-framework/hadoop/lib/native:./mr-framework/hadoop/lib/native/Linux-{{architecture}}-64" />
+          </definition>
+        </changes>
+      </component>
+      <component name="HISTORYSERVER">
+        <changes>
+          <definition xsi:type="configure" id="hdp_30_mapred_stack_variables_update" summary="Convert HDP 2.6 variable naming to HDP 3.0">
+            <type>mapred-env</type>
+            <replace key="content" find="HADOOP_MAPRED_ROOT_LOGGER" replace-with="HADOOP_ROOT_LOGGER"/>
+            <replace key="content" find="HADOOP_JOB_HISTORYSERVER_OPTS" replace-with="MAPRED_HISTORYSERVER_OPTS"/>
+            <replace key="content" find="HADOOP_MAPRED_LOG_DIR" replace-with="HADOOP_LOG_DIR"/>
+            <replace key="content" find="HADOOP_MAPRED_PID_DIR" replace-with="HADOOP_PID_DIR"/>
+            <replace key="content" find="HADOOP_MAPRED_IDENT_STRING" replace-with="HADOOP_IDENT_STRING"/>
+            <replace key="content" find="HADOOP_MAPRED_NICENESS" replace-with="HADOOP_NICENESS"/>
           </definition>
         </changes>
       </component>

@@ -200,7 +200,7 @@
     <description>The template for a client accumulo-env.sh file.</description>
     <value>
 #! /usr/bin/env bash
-export HADOOP_PREFIX={{hadoop_prefix}}
+export HADOOP_HOME={{hadoop_prefix}}
 export HADOOP_CONF_DIR={{hadoop_conf_dir}}
 export JAVA_HOME={{java64_home}}
 export ZOOKEEPER_HOME={{zookeeper_home}}
@@ -226,7 +226,7 @@ export ACCUMULO_KILL_CMD='kill -9 %p'
     <display-name>Server accumulo-env template</display-name>
     <value>
 #! /usr/bin/env bash
-export HADOOP_PREFIX={{hadoop_prefix}}
+export HADOOP_HOME={{hadoop_prefix}}
 export HADOOP_CONF_DIR={{hadoop_conf_dir}}
 export JAVA_HOME={{java64_home}}
 export ZOOKEEPER_HOME={{zookeeper_home}}

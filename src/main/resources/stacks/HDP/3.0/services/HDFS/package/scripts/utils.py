@@ -182,9 +182,9 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
   if name == "nfs3" :
     pid_file = format("{hadoop_pid_dir_prefix}/{params.root_user}/privileged-root-nfs3.pid")
     custom_export = {
-      'HADOOP_PRIVILEGED_NFS_USER': params.hdfs_user,
-      'HADOOP_PRIVILEGED_NFS_PID_DIR': pid_dir,
-      'HADOOP_PRIVILEGED_NFS_LOG_DIR': log_dir
+      'HDFS_NFS3_SECURE_USER': params.hdfs_user,
+      'HADOOP_SECURE_PID_DIR': pid_dir,
+      'HADOOP_SECURE_LOG_DIR': log_dir
     }
     hadoop_env_exports.update(custom_export)
   elif name == "datanode":
@@ -236,7 +236,7 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
         # when we configure non-root secure DN and then restart it
         # to handle new configs. Otherwise we will not be able to stop
         # a running instance 
-        hadoop_env_exports.update({'HADOOP_SECURE_DN_USER': params.hdfs_user})
+        hadoop_env_exports.update({'HDFS_DATANODE_SECURE_USER': params.hdfs_user})
 
   hdfs_bin = format("{hadoop_bin}/hdfs")
 

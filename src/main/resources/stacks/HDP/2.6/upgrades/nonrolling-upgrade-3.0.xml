@@ -374,6 +374,14 @@
         <task xsi:type="configure" id="hdfs_fix_user_variable"/>
       </execute-stage>
 
+      <execute-stage service="HDFS" component="NAMENODE" title="Convert HDP 2.6 variable naming to HDP 3.0">
+        <task xsi:type="configure" id="hdp_30_hdfs_stack_variables_update"/>
+      </execute-stage>
+
+      <execute-stage service="HDFS" component="NAMENODE" title="Update HADOOP_SECURE_PID_DIR and HADOOP_SECURE_LOG_DIR">
+        <task xsi:type="configure" id="hdp_30_hdfs_secure_variables_update"/>
+      </execute-stage>
+
       <execute-stage service="HDFS" component="DATANODE" title="Enables SASL for authentication of data transfer protocol">
         <condition xsi:type="security" type="kerberos"/>
         <task xsi:type="configure" id="hdfs_set_data_transfer_protection"/>
@@ -410,9 +418,13 @@
         <task xsi:type="configure" id="hdp_30_add_timeline_reader_opts"/>
       </execute-stage>
 
-      <!-- Do this last to convert any YARN_OPTS which remained -->
-      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Convert YARN_OPTS to HADOOP_OPTS">
-        <task xsi:type="configure" id="hdp_30_convert_yarn_opts_to_hadoop_opts"/>
+      <!-- Do this last to convert any variable which remained -->
+      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Convert HDP 2.6 variable naming to HDP 3.0">
+        <task xsi:type="configure" id="hdp_30_yarn_stack_variables_update"/>
+      </execute-stage>
+
+      <execute-stage service="MAPREDUCE2" component="HISTORYSERVER" title="Convert HDP 2.6 variable naming to HDP 3.0">
+        <task xsi:type="configure" id="hdp_30_mapred_stack_variables_update"/>
       </execute-stage>
 
       <execute-stage service="MAPREDUCE2" component="MAPREDUCE2_CLIENT" title="Apply config changes for Mapreduce2 client">
@@ -554,6 +566,11 @@
       <execute-stage title="Update the user-specified Kerberos descriptor">
         <task xsi:type="server_action"
               class="org.apache.ambari.server.serveraction.upgrades.UpgradeUserKerberosDescriptor"/>
+      </execute-stage>
+
+      <!--ACCUMULO-->
+      <execute-stage service="ACCUMULO" component="ACCUMULO_MASTER" title="Convert HDP 2.6 variable naming to HDP 3.0">
+        <task xsi:type="configure" id="hdp_30_accumulo_stack_variables_update"/>
       </execute-stage>
     </group>
 
