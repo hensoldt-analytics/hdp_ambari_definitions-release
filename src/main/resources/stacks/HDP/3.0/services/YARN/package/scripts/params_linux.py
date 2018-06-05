@@ -487,8 +487,23 @@ if enable_ranger_yarn and is_supported_yarn_ranger:
     'username' : config['configurations']['ranger-yarn-plugin-properties']['REPOSITORY_CONFIG_USERNAME'],
     'password' : unicode(config['configurations']['ranger-yarn-plugin-properties']['REPOSITORY_CONFIG_PASSWORD']),
     'yarn.url' : format('{scheme}://{yarn_rest_url}'),
-    'commonNameForCertificate' : config['configurations']['ranger-yarn-plugin-properties']['common.name.for.certificate']
+    'commonNameForCertificate' : config['configurations']['ranger-yarn-plugin-properties']['common.name.for.certificate'],
+    'hadoop.security.authentication': 'kerberos' if security_enabled else 'simple'
   }
+
+  if security_enabled:
+    ranger_plugin_config['policy.download.auth.users'] = yarn_user
+    ranger_plugin_config['tag.download.auth.users'] = yarn_user
+
+  ranger_plugin_config['setup.additional.default.policies'] = "true"
+  ranger_plugin_config['default-policy.1.name'] = "Service Check User Policy for Yarn"
+  ranger_plugin_config['default-policy.1.resource.queue'] = service_check_queue_name
+  ranger_plugin_config['default-policy.1.policyItem.1.users'] = policy_user
+  ranger_plugin_config['default-policy.1.policyItem.1.accessTypes'] = "submit-app"
+
+  custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
+  if len(custom_ranger_service_config) > 0:
+    ranger_plugin_config.update(custom_ranger_service_config)
 
   yarn_ranger_plugin_repo = {
     'isEnabled': 'true',
@@ -499,18 +514,6 @@ if enable_ranger_yarn and is_supported_yarn_ranger:
     'type': 'yarn',
     'assetType': '1'
   }
-
-  custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
-  if len(custom_ranger_service_config) > 0:
-    ranger_plugin_config.update(custom_ranger_service_config)
-
-  if stack_supports_ranger_kerberos:
-    ranger_plugin_config['ambari.service.check.user'] = policy_user
-    ranger_plugin_config['hadoop.security.authentication'] = 'kerberos' if security_enabled else 'simple'
-
-  if stack_supports_ranger_kerberos and security_enabled:
-    ranger_plugin_config['policy.download.auth.users'] = yarn_user
-    ranger_plugin_config['tag.download.auth.users'] = yarn_user
 
   downloaded_custom_connector = None
   previous_jdbc_jar_name = None

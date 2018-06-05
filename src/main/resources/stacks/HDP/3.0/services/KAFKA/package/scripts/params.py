@@ -269,16 +269,6 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
     'commonNameForCertificate' : config['configurations']['ranger-kafka-plugin-properties']['common.name.for.certificate']
   }
 
-  kafka_ranger_plugin_repo = {
-    'isEnabled': 'true',
-    'configs': ranger_plugin_config,
-    'description': 'kafka repo',
-    'name': repo_name,
-    'repositoryType': 'kafka',
-    'type': 'kafka',
-    'assetType': '1'
-  }
-
   atlas_server_hosts = default('/clusterHostInfo/atlas_server_hosts', [])
   has_atlas_server = not len(atlas_server_hosts) == 0
   hive_server_hosts = default('/clusterHostInfo/hive_server_hosts', [])
@@ -325,14 +315,23 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
         ranger_plugin_config['default-policy.2.policyItem.2.users'] = rangertagsync_user
         ranger_plugin_config['default-policy.2.policyItem.2.accessTypes'] = "consume"
 
+  if kerberos_security_enabled:
+    ranger_plugin_config['policy.download.auth.users'] = kafka_user
+    ranger_plugin_config['tag.download.auth.users'] = kafka_user
+
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
   if len(custom_ranger_service_config) > 0:
     ranger_plugin_config.update(custom_ranger_service_config)
 
-  if stack_supports_ranger_kerberos and kerberos_security_enabled:
-    ranger_plugin_config['policy.download.auth.users'] = kafka_user
-    ranger_plugin_config['tag.download.auth.users'] = kafka_user
-    ranger_plugin_config['ambari.service.check.user'] = policy_user
+  kafka_ranger_plugin_repo = {
+    'isEnabled': 'true',
+    'configs': ranger_plugin_config,
+    'description': 'kafka repo',
+    'name': repo_name,
+    'repositoryType': 'kafka',
+    'type': 'kafka',
+    'assetType': '1'
+  }
 
   downloaded_custom_connector = None
   previous_jdbc_jar_name = None

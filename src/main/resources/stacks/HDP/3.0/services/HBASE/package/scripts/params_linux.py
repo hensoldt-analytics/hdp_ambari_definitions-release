@@ -366,34 +366,28 @@ if enable_ranger_hbase:
     'hbase.master.kerberos.principal': master_principal if security_enabled else ''
   }
 
-  hbase_ranger_plugin_repo = {
-    'isActive': 'true',
-    'config': json.dumps(hbase_ranger_plugin_config),
-    'description': 'hbase repo',
-    'name': repo_name,
-    'repositoryType': 'hbase',
-    'assetType': '2'
-  }
+  if security_enabled:
+    hbase_ranger_plugin_config['policy.download.auth.users'] = hbase_user
+    hbase_ranger_plugin_config['tag.download.auth.users'] = hbase_user
+    hbase_ranger_plugin_config['policy.grantrevoke.auth.users'] = hbase_user
+
+  hbase_ranger_plugin_config['setup.additional.default.policies'] = "true"
+  hbase_ranger_plugin_config['default-policy.1.name'] = "Service Check User Policy for Hbase"
+  hbase_ranger_plugin_config['default-policy.1.resource.table'] = "ambarismoketest"
+  hbase_ranger_plugin_config['default-policy.1.policyItem.1.users'] = policy_user
+  hbase_ranger_plugin_config['default-policy.1.policyItem.1.accessTypes'] = "read,write,create"
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
   if len(custom_ranger_service_config) > 0:
     hbase_ranger_plugin_config.update(custom_ranger_service_config)
 
-  if stack_supports_ranger_kerberos and security_enabled:
-    hbase_ranger_plugin_config['policy.download.auth.users'] = hbase_user
-    hbase_ranger_plugin_config['tag.download.auth.users'] = hbase_user
-    hbase_ranger_plugin_config['policy.grantrevoke.auth.users'] = hbase_user
-
-  if stack_supports_ranger_kerberos:
-    hbase_ranger_plugin_config['ambari.service.check.user'] = policy_user
-
-    hbase_ranger_plugin_repo = {
-      'isEnabled': 'true',
-      'configs': hbase_ranger_plugin_config,
-      'description': 'hbase repo',
-      'name': repo_name,
-      'type': 'hbase'
-    }
+  hbase_ranger_plugin_repo = {
+    'isEnabled': 'true',
+    'configs': hbase_ranger_plugin_config,
+    'description': 'hbase repo',
+    'name': repo_name,
+    'type': 'hbase'
+  }
 
   ranger_hbase_principal = None
   ranger_hbase_keytab = None

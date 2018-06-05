@@ -734,34 +734,22 @@ if enable_ranger_hive:
     'commonNameForCertificate': common_name_for_certificate
   }
 
-  hive_ranger_plugin_repo = {
-    'isActive': 'true',
-    'config': json.dumps(hive_ranger_plugin_config),
-    'description': 'hive repo',
-    'name': repo_name,
-    'repositoryType': 'hive',
-    'assetType': '3'
-  }
+  if security_enabled:
+    hive_ranger_plugin_config['policy.download.auth.users'] = hive_user
+    hive_ranger_plugin_config['tag.download.auth.users'] = hive_user
+    hive_ranger_plugin_config['policy.grantrevoke.auth.users'] = hive_user
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
   if len(custom_ranger_service_config) > 0:
     hive_ranger_plugin_config.update(custom_ranger_service_config)
 
-  if stack_supports_ranger_kerberos and security_enabled:
-    hive_ranger_plugin_config['policy.download.auth.users'] = hive_user
-    hive_ranger_plugin_config['tag.download.auth.users'] = hive_user
-    hive_ranger_plugin_config['policy.grantrevoke.auth.users'] = hive_user
-
-  if stack_supports_ranger_kerberos:
-    hive_ranger_plugin_config['ambari.service.check.user'] = policy_user
-
-    hive_ranger_plugin_repo = {
-      'isEnabled': 'true',
-      'configs': hive_ranger_plugin_config,
-      'description': 'hive repo',
-      'name': repo_name,
-      'type': 'hive'
-    }
+  hive_ranger_plugin_repo = {
+    'isEnabled': 'true',
+    'configs': hive_ranger_plugin_config,
+    'description': 'hive repo',
+    'name': repo_name,
+    'type': 'hive'
+  }
 
   xa_audit_db_password = ''
   if not is_empty(config['configurations']['admin-properties']['audit_db_password']) and stack_supports_ranger_audit_db and has_ranger_admin:

@@ -349,32 +349,23 @@ if enable_ranger_storm:
     'commonNameForCertificate': common_name_for_certificate
   }
 
-  storm_ranger_plugin_repo = {
-    'isActive': 'true',
-    'config': json.dumps(storm_ranger_plugin_config),
-    'description': 'storm repo',
-    'name': repo_name,
-    'repositoryType': 'storm',
-    'assetType': '6'
-  }
-
-  custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
-  if len(custom_ranger_service_config) > 0:
-    storm_ranger_plugin_config.update(custom_ranger_service_config)
-
-  if stack_supports_ranger_kerberos and security_enabled:
+  if security_enabled:
     policy_user = format('{storm_user},{storm_bare_jaas_principal}')
     storm_ranger_plugin_config['policy.download.auth.users'] = policy_user
     storm_ranger_plugin_config['tag.download.auth.users'] = policy_user
     storm_ranger_plugin_config['ambari.service.check.user'] = policy_user
 
-    storm_ranger_plugin_repo = {
-      'isEnabled': 'true',
-      'configs': storm_ranger_plugin_config,
-      'description': 'storm repo',
-      'name': repo_name,
-      'type': 'storm'
-    }
+  custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
+  if len(custom_ranger_service_config) > 0:
+    storm_ranger_plugin_config.update(custom_ranger_service_config)
+
+  storm_ranger_plugin_repo = {
+    'isEnabled': 'true',
+    'configs': storm_ranger_plugin_config,
+    'description': 'storm repo',
+    'name': repo_name,
+    'type': 'storm'
+  }
 
   ranger_storm_principal = None
   ranger_storm_keytab = None

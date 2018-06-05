@@ -545,36 +545,24 @@ if enable_ranger_hdfs:
     'dfs.secondary.namenode.kerberos.principal': sn_principal_name if security_enabled else ''
   }
 
-  hdfs_ranger_plugin_repo = {
-    'isActive': 'true',
-    'config': json.dumps(hdfs_ranger_plugin_config),
-    'description': 'hdfs repo',
-    'name': repo_name,
-    'repositoryType': 'hdfs',
-    'assetType': '1'
-  }
+  if security_enabled:
+    hdfs_ranger_plugin_config['policy.download.auth.users'] = hdfs_user
+    hdfs_ranger_plugin_config['tag.download.auth.users'] = hdfs_user
+
+  if is_https_enabled:
+    hdfs_ranger_plugin_config['hadoop.rpc.protection'] = 'privacy'
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
   if len(custom_ranger_service_config) > 0:
     hdfs_ranger_plugin_config.update(custom_ranger_service_config)
 
-  if stack_supports_ranger_kerberos and security_enabled:
-    hdfs_ranger_plugin_config['policy.download.auth.users'] = hdfs_user
-    hdfs_ranger_plugin_config['tag.download.auth.users'] = hdfs_user
-
-  if stack_supports_ranger_kerberos:
-    hdfs_ranger_plugin_config['ambari.service.check.user'] = policy_user
-
-    hdfs_ranger_plugin_repo = {
-      'isEnabled': 'true',
-      'configs': hdfs_ranger_plugin_config,
-      'description': 'hdfs repo',
-      'name': repo_name,
-      'type': 'hdfs'
-    }
-
-  if is_https_enabled:
-    hdfs_ranger_plugin_config['hadoop.rpc.protection'] = 'privacy'
+  hdfs_ranger_plugin_repo = {
+    'isEnabled': 'true',
+    'configs': hdfs_ranger_plugin_config,
+    'description': 'hdfs repo',
+    'name': repo_name,
+    'type': 'hdfs'
+  }
 
   xa_audit_db_is_enabled = False
   if xml_configurations_supported and stack_supports_ranger_audit_db:
