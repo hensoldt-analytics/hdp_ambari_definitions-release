@@ -445,7 +445,7 @@ limitations under the License.
     <name>hive.llap.io.allocator.mmap</name>
     <display-name>Turn SSD Cache On?</display-name>
     <description>Turn SSD Cache On?</description>
-    <value>true</value>
+    <value>false</value>
     <depends-on>
       <property>
         <type>hive-interactive-env</type>
