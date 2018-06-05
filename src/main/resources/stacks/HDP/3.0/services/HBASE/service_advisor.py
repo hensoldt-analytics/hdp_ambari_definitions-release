@@ -193,6 +193,10 @@ class HBASERecommender(service_advisor.ServiceAdvisor):
       and services['configurations']['hbase-env']['properties']['hbase_user'] != services['configurations']['hbase-site']['properties']['hbase.superuser']:
       putHbaseSiteProperty("hbase.superuser", services['configurations']['hbase-env']['properties']['hbase_user'])
 
+  def isHbaseSecurityEnabled(self, services):
+    return services and "hbase-site" in services["configurations"] and \
+           "hbase.security.authentication" in services["configurations"]["hbase-site"]["properties"] and \
+           services["configurations"]["hbase-site"]["properties"]["hbase.security.authentication"].lower() == "kerberos"
 
   def recommendHBASEConfigurationsFromHDP22(self, configurations, clusterData, services, hosts):
     putHbaseEnvPropertyAttributes = self.putPropertyAttribute(configurations, "hbase-env")
@@ -244,7 +248,7 @@ class HBASERecommender(service_advisor.ServiceAdvisor):
 
     if rangerPluginEnabled and rangerPluginEnabled.lower() == 'Yes'.lower():
       putHbaseSiteProperty('hbase.security.authorization','true')
-    elif rangerPluginEnabled and rangerPluginEnabled.lower() == 'No'.lower() and not self.isSecurityEnabled(services):
+    elif rangerPluginEnabled and rangerPluginEnabled.lower() == 'No'.lower() and not self.isHbaseSecurityEnabled(services):
       putHbaseSiteProperty('hbase.security.authorization','false')
 
     # Recommend configs for bucket cache
@@ -387,7 +391,7 @@ class HBASERecommender(service_advisor.ServiceAdvisor):
           elif rangerPluginEnabled and rangerPluginEnabled.lower() == 'No'.lower():
             if rangerClass in coprocessorClasses:
               coprocessorClasses.remove(rangerClass)
-              if not nonRangerClass in coprocessorClasses and self.isSecurityEnabled(services):
+              if not nonRangerClass in coprocessorClasses and self.isHbaseSecurityEnabled(services):
                 coprocessorClasses.append(nonRangerClass)
               putHbaseSiteProperty(hbaseClassConfigs[item], ','.join(coprocessorClasses))
         elif rangerPluginEnabled and rangerPluginEnabled.lower() == 'Yes'.lower():
