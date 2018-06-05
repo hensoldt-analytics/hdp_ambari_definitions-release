@@ -266,5 +266,10 @@
     <description>List of Druid monitors used by a node.</description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>druid.indexer.task.restoreTasksOnRestart</name>
+    <value>true</value>
+    <on-ambari-upgrade add="false"/>
+  </property>
 
 </configuration>
