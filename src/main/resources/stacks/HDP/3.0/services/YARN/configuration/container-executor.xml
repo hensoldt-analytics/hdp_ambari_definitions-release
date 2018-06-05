@@ -152,9 +152,9 @@
   </property>
 
   <property>
-    <name>docker_privileged-containers_registries</name>
+    <name>docker_trusted_registries</name>
     <value></value>
-    <display-name>Docker Privileged Registries</display-name>
+    <display-name>Docker Trusted Registries</display-name>
     <description>
       List of registries whose docker images are allowed to mount volumes and launch privileged docker containers.
     </description>
