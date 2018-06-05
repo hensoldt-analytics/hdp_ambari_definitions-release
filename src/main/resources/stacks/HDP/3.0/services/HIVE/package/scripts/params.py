@@ -435,15 +435,7 @@ mysql_deluser_path = format("{tmp_dir}/removeMysqlUser.sh")
 init_metastore_schema = upgrade_direction is None
 
 #Hive log4j properties
-hive_log_maxfilesize = default("/configurations/hive-log4j/hive_log_maxfilesize", 256)
-hive_log_maxbackupindex = default("/configurations/hive-log4j/hive_log_maxbackupindex", 30)
 hive_log_level = default("/configurations/hive-env/hive.log.level", "INFO")
-
-#hive-log4j.properties.template
-if (('hive-log4j' in config['configurations']) and ('content' in config['configurations']['hive-log4j'])):
-  log4j_props = config['configurations']['hive-log4j']['content']
-else:
-  log4j_props = None
 
 #hive-exec-log4j.properties.template
 if (('hive-exec-log4j' in config['configurations']) and ('content' in config['configurations']['hive-exec-log4j'])):
