@@ -188,39 +188,10 @@ def setup_hiveserver2():
   # ******* End Copy Tarballs *******
   # *********************************
 
+  create_warehouse_dirs()
+
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
-    external_dir = "/warehouse/tablespace/external/hive"
-    managed_dir = params.hive_metastore_warehouse_dir
-    params.HdfsResource(external_dir,
-                        type = "directory",
-                        action = "create_on_execute",
-                        owner = params.hive_user,
-                        group = params.user_group,
-                        mode = 0777
-    )
-    params.HdfsResource(managed_dir,
-                        type = "directory",
-                        action = "create_on_execute",
-                        owner = params.hive_user,
-                        group = params.user_group,
-                        mode = 0700
-    )
-    
-    if __is_hdfs_acls_enabled():
-      if params.security_enabled:
-        kinit_cmd = format("{kinit_path_local} -kt {hdfs_user_keytab} {hdfs_principal_name}; ")
-        Execute(kinit_cmd, user=params.hdfs_user)
-
-      Execute(format("hdfs dfs -setfacl -m default:group:hive:rwx {external_dir}"),
-              user = params.hdfs_user)
-      Execute(format("hdfs dfs -setfacl -m default:group:hive:rwx {managed_dir}"),
-              user = params.hdfs_user)
-      Execute(format("hdfs dfs -setfacl -m default:user:{hive_user}:rwx {managed_dir}"),
-              user = params.hdfs_user)
-    else:
-      Logger.info(format("Could not set default ACLs for HDFS directories {external_dir} and {managed_dir} as ACLs are not enabled!"))
-
     if not is_empty(params.hive_hook_proto_base_directory):
         params.HdfsResource(params.hive_hook_proto_base_directory,
                             type="directory",
@@ -236,8 +207,6 @@ def setup_hiveserver2():
                           owner=params.hive_user,
                           mode=0777
                           )
-  else:
-    Logger.info(format("Not creating warehouse directory '{hive_metastore_warehouse_dir}', as the location is not in DFS."))
 
 
   # Create Hive User Dir
@@ -274,6 +243,44 @@ def setup_hiveserver2():
   params.HdfsResource(None, action="execute")
 
   generate_logfeeder_input_config('hive', Template("input.config-hive.json.j2", extra_imports=[default]))
+
+def create_warehouse_dirs():
+  import params
+  # if warehouse directory is in DFS
+  if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
+    # Create Hive Metastore Warehouse Dir
+    external_dir = "/warehouse/tablespace/external/hive"
+    managed_dir = params.hive_metastore_warehouse_dir
+    params.HdfsResource(external_dir,
+                        type = "directory",
+                        action = "create_on_execute",
+                        owner = params.hive_user,
+                        group = params.user_group,
+                        mode = 0777
+    )
+    params.HdfsResource(managed_dir,
+                        type = "directory",
+                        action = "create_on_execute",
+                        owner = params.hive_user,
+                        group = params.user_group,
+                        mode = 0700
+    )
+    
+    if __is_hdfs_acls_enabled():
+      if params.security_enabled:
+        kinit_cmd = format("{kinit_path_local} -kt {hdfs_user_keytab} {hdfs_principal_name}; ")
+        Execute(kinit_cmd, user=params.hdfs_user)
+
+      Execute(format("hdfs dfs -setfacl -m default:group:hive:rwx {external_dir}"),
+              user = params.hdfs_user)
+      Execute(format("hdfs dfs -setfacl -m default:group:hive:rwx {managed_dir}"),
+              user = params.hdfs_user)
+      Execute(format("hdfs dfs -setfacl -m default:user:{hive_user}:rwx {managed_dir}"),
+              user = params.hdfs_user)
+    else:
+      Logger.info(format("Could not set default ACLs for HDFS directories {external_dir} and {managed_dir} as ACLs are not enabled!"))
+  else:
+    Logger.info(format("Not creating warehouse directory '{hive_metastore_warehouse_dir}', as the location is not in DFS."))
 
 def __is_hdfs_acls_enabled():
   import params

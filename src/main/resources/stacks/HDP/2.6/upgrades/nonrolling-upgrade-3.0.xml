@@ -63,6 +63,73 @@
           <function>prepare</function>
         </task>
       </execute-stage>
+
+      <execute-stage service="HIVE" component="MYSQL_SERVER" title="Backup Local Hive Metastore Database">
+        <task xsi:type="execute" hosts="master">
+          <script>scripts/pre_upgrade.py</script>
+          <function>backup_hive_metastore_database_local</function>
+        </task>
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Backup External Metastore Database">
+        <condition xsi:type="config" type="hive-env" property="hive_database" value="New MySQL Database" comparison="not-equals"/>
+        <task xsi:type="execute" hosts="any">
+          <script>scripts/pre_upgrade.py</script>
+          <function>backup_hive_metastore_database_external</function>
+        </task>
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Register MySQL driver for Hive">
+        <condition xsi:type="config" type="hive-env" property="hive_database_type" value="mysql" comparison="equals"/>
+        <task xsi:type="manual">
+          <message>Please download the java driver for MySQL from https://dev.mysql.com/downloads/connector/j/ on the ambari host.</message>
+          <message>Once downloaded to the Ambari Server host, run:</message>
+          <message>ambari-server setup --jdbc-db=mysql --jdbc-driver=/path/to/mysql/com.mysql.jdbc.Driver</message>
+        </task>
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Register PostgreSQL driver for Hive">
+        <condition xsi:type="config" type="hive-env" property="hive_database_type" value="postgres" comparison="equals"/>
+        <task xsi:type="manual">
+          <message>Please download the java driver for PostgreSQL from https://jdbc.postgresql.org/ on the ambari host.</message>
+          <message>Once downloaded to the Ambari Server host, run:</message>
+          <message>ambari-server setup --jdbc-db=postgres --jdbc-driver=/path/to/postgres/org.postgresql.Driver</message>
+        </task>
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Register Oracle driver for Hive">
+        <condition xsi:type="config" type="hive-env" property="hive_database_type" value="oracle" comparison="equals"/>
+        <task xsi:type="manual">
+          <message>Please download the java driver for Oracle from http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html on the ambari host.</message>
+          <message>Once downloaded to the Ambari Server host, run:</message>
+          <message>ambari-server setup --jdbc-db=oracle --jdbc-driver=/path/to/oracle/oracle.jdbc.driver.OracleDriver</message>
+        </task>
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Pre Upgrade Hive Table conversion notification">
+        <task xsi:type="manual">
+          <message>Please note that all managed tables must become Acid or MM tables in Hive 3.0.</message>
+          <message>All tables will be compacted. No more Update/Delete/Merge (with update/delete) can be run after the upgrade.</message>
+          <message>This may be time consuming, you may do it manually on host {{hosts.all}}</message>
+          <message>Please note that after this step Hive Servers will be stopped, and the same command will be executed converting the tables left still unconverted.</message>
+        </task>
+      </execute-stage>
+    </group>
+
+    <group xsi:type="stop" name="STOP_HIVE_SERVERS" title="Stop Hive Servers">
+      <service name="HIVE">
+        <component>HIVE_SERVER</component>
+        <component>HIVE_SERVER_INTERACTIVE</component>
+      </service>
+    </group>
+
+    <group xsi:type="cluster" name="CONVERT_HIVE_TABLES" title="Convert Hive Tables">
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Convert Hive Tables">
+        <task xsi:type="execute" hosts="any">
+          <script>scripts/pre_upgrade.py</script>
+          <function>convert_tables</function>
+        </task>
+      </execute-stage>
     </group>
 
     <group xsi:type="stop" name="STOP_HIGH_LEVEL_SERVICE_COMPONENTS"  title="Stop Components for High-Level Services">
@@ -124,8 +191,6 @@
 
       <service name="HIVE">
         <component>WEBHCAT_SERVER</component>
-        <component>HIVE_SERVER</component>
-        <component>HIVE_SERVER_INTERACTIVE</component>
         <component>HIVE_METASTORE</component>
       </service>
 
@@ -160,15 +225,6 @@
           <message>Before continuing, please backup the Oozie Server database referenced by the
             Oozie server
             located on {{hosts.all}}.
-          </message>
-        </task>
-      </execute-stage>
-
-      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Backup Hive Metastore">
-        <task xsi:type="manual">
-          <message>Before continuing, please backup the Hive Metastore database referenced by the
-            Hive
-            Metastore service(s) located on the following host(s): {{hosts.all}}.
           </message>
         </task>
       </execute-stage>
@@ -820,16 +876,35 @@
       </priority>
     </group>
 
-    <group xsi:type="restart" name="HIVE_MASTERS" title="Hive Masters">
+    <group xsi:type="restart" name="HIVE_METASTORE" title="Hive Metastore">
       <service-check>false</service-check>
       <skippable>true</skippable>
       <supports-auto-skip-failure>false</supports-auto-skip-failure>
-      <!-- Must be ran sequentially because Hive Metastore upgrades the schema and Hive Server copies tarballs. -->
       <parallel-scheduler>
         <max-degree-of-parallelism>1</max-degree-of-parallelism>
       </parallel-scheduler>
       <service name="HIVE">
         <component>HIVE_METASTORE</component>
+      </service>
+    </group>
+
+    <group xsi:type="cluster" name="MOVE_HIVE_TABLES" title="Move Hive Tables">
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Move Hive Tables">
+        <task xsi:type="execute" hosts="any">
+          <script>scripts/post_upgrade.py</script>
+          <function>move_tables</function>
+        </task>
+      </execute-stage>
+    </group>
+
+    <group xsi:type="restart" name="HIVE_SERVERS" title="Hive Servers">
+      <service-check>false</service-check>
+      <skippable>true</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+      <parallel-scheduler>
+        <max-degree-of-parallelism>1</max-degree-of-parallelism>
+      </parallel-scheduler>
+      <service name="HIVE">
         <component>HIVE_SERVER</component>
         <component>HIVE_SERVER_INTERACTIVE</component>
       </service>
