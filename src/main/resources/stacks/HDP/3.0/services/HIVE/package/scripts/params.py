@@ -105,7 +105,6 @@ stack_supports_ranger_kerberos = check_stack_feature(StackFeature.RANGER_KERBERO
 stack_supports_ranger_audit_db = check_stack_feature(StackFeature.RANGER_AUDIT_DB_SUPPORT, version_for_stack_feature_checks)
 stack_supports_ranger_hive_jdbc_url_change = check_stack_feature(StackFeature.RANGER_HIVE_PLUGIN_JDBC_URL, version_for_stack_feature_checks)
 stack_supports_atlas_hook_for_hive_interactive = check_stack_feature(StackFeature.HIVE_INTERACTIVE_ATLAS_HOOK_REQUIRED, version_for_stack_feature_checks)
-stack_supports_hive_interactive_ga = check_stack_feature(StackFeature.HIVE_INTERACTIVE_GA_SUPPORT, version_for_stack_feature_checks)
 
 # component ROLE directory (like hive-metastore or hive-server2-hive)
 component_directory = status_params.component_directory
@@ -634,8 +633,7 @@ if has_hive_interactive:
   num_retries_for_checking_llap_status = config['configurations']['hive-interactive-env']['num_retries_for_checking_llap_status']
   # Used in LLAP YARN Service package creation
   yarn_nm_mem = config['configurations']['yarn-site']['yarn.nodemanager.resource.memory-mb']
-  if stack_supports_hive_interactive_ga:
-    num_llap_daemon_running_nodes = config['configurations']['hive-interactive-env']['num_llap_nodes_for_llap_daemons']
+  num_llap_daemon_running_nodes = config['configurations']['hive-interactive-env']['num_llap_nodes_for_llap_daemons']
   num_llap_nodes = config['configurations']['hive-interactive-env']['num_llap_nodes']
   llap_daemon_container_size = config['configurations']['hive-interactive-site']['hive.llap.daemon.yarn.container.mb']
   llap_log_level = config['configurations']['hive-interactive-env']['llap_log_level']

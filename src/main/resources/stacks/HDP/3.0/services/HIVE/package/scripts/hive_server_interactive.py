@@ -208,11 +208,7 @@ class HiveServerInteractive(Script):
         Check llap app state
         """
         Logger.info("HSI HA is enabled. Checking if LLAP is already running ...")
-        if params.stack_supports_hive_interactive_ga:
-          status = self.check_llap_app_status_in_llap_ga(params.llap_app_name, 2, params.hive_server_interactive_ha)
-        else:
-          status = self.check_llap_app_status_in_llap_tp(params.llap_app_name, 2, params.hive_server_interactive_ha)
-
+        status = self.check_llap_app_status(params.llap_app_name, 2, params.hive_server_interactive_ha)
         if status:
           Logger.info("LLAP app '{0}' is already running.".format(params.llap_app_name))
           return True
@@ -233,28 +229,26 @@ class HiveServerInteractive(Script):
                    "--output {LLAP_PACKAGE_CREATION_PATH}/{unique_name}")
 
       # Append params that are supported from Hive llap GA version.
-      if params.stack_supports_hive_interactive_ga:
-        # TODO: All the code related to Slider Anti-affinity will be removed and
-        # replaced with YARN rich placement once YARN-6599 (umbrella YARN-6592)
-        # is committed.
-        # Figure out the Slider Anti-affinity to be used.
-        # YARN does not support anti-affinity, and therefore Slider implements AA by the means of exclusion lists, i.e, it
-        # starts containers one by one and excludes the nodes it gets (adding a delay of ~2sec./machine). When the LLAP
-        # container memory size configuration is more than half of YARN node memory, AA is implicit and should be avoided.
-        slider_placement = 4
-        if long(params.llap_daemon_container_size) > (0.5 * long(params.yarn_nm_mem)):
-          slider_placement = 0
-          Logger.info("Setting slider_placement : 0, as llap_daemon_container_size : {0} > 0.5 * "
-                      "YARN NodeManager Memory({1})".format(params.llap_daemon_container_size, params.yarn_nm_mem))
-        else:
-          Logger.info("Setting slider_placement: 4, as llap_daemon_container_size : {0} <= 0.5 * "
-                     "YARN NodeManager Memory({1})".format(params.llap_daemon_container_size, params.yarn_nm_mem))
-        cmd += format(" --service-placement {slider_placement} --skiphadoopversion --skiphbasecp --instances {params.num_llap_daemon_running_nodes}")
-
-        # Setup the logger for the ga version only
-        cmd += format(" --logger {params.llap_logger}")
+      # TODO: All the code related to Slider Anti-affinity will be removed and
+      # replaced with YARN rich placement once YARN-6599 (umbrella YARN-6592)
+      # is committed.
+      # Figure out the Slider Anti-affinity to be used.
+      # YARN does not support anti-affinity, and therefore Slider implements AA by the means of exclusion lists, i.e, it
+      # starts containers one by one and excludes the nodes it gets (adding a delay of ~2sec./machine). When the LLAP
+      # container memory size configuration is more than half of YARN node memory, AA is implicit and should be avoided.
+      slider_placement = 4
+      if long(params.llap_daemon_container_size) > (0.5 * long(params.yarn_nm_mem)):
+        slider_placement = 0
+        Logger.info("Setting slider_placement : 0, as llap_daemon_container_size : {0} > 0.5 * "
+                    "YARN NodeManager Memory({1})".format(params.llap_daemon_container_size, params.yarn_nm_mem))
       else:
-        cmd += format(" --instances {params.num_llap_nodes}")
+        Logger.info("Setting slider_placement: 4, as llap_daemon_container_size : {0} <= 0.5 * "
+                    "YARN NodeManager Memory({1})".format(params.llap_daemon_container_size, params.yarn_nm_mem))
+      cmd += format(" --service-placement {slider_placement} --skiphadoopversion --skiphbasecp --instances {params.num_llap_daemon_running_nodes}")
+
+      # Setup the logger for the ga version only
+      cmd += format(" --logger {params.llap_logger}")
+        
       if params.security_enabled:
         llap_keytab_splits = params.hive_llap_keytab_file.split("/")
         Logger.debug("llap_keytab_splits : {0}".format(llap_keytab_splits))
@@ -310,10 +304,7 @@ class HiveServerInteractive(Script):
 
         # We need to check the status of LLAP app to figure out it got
         # launched properly and is in running state. Then go ahead with Hive Interactive Server start.
-        if params.stack_supports_hive_interactive_ga:
-          status = self.check_llap_app_status_in_llap_ga(params.llap_app_name, params.num_retries_for_checking_llap_status)
-        else:
-          status = self.check_llap_app_status_in_llap_tp(params.llap_app_name, params.num_retries_for_checking_llap_status)
+        status = self.check_llap_app_status(params.llap_app_name, params.num_retries_for_checking_llap_status)
         if status:
           Logger.info("LLAP app '{0}' deployed successfully.".format(params.llap_app_name))
           return True
@@ -385,40 +376,17 @@ class HiveServerInteractive(Script):
       Execute(hive_interactive_kinit_cmd, user=params.hive_user)
 
     """
-    Get llap app status data for LLAP Tech Preview code base.
-    """
-    def _get_llap_app_status_info_in_llap_tp(self, app_name):
-      import status_params
-      import params
-      LLAP_APP_STATUS_CMD_TIMEOUT = 0
-
-      llap_status_cmd = format("{stack_root}/current/hive-server2/bin/hive --service llapstatus --name {app_name} --findAppTimeout {LLAP_APP_STATUS_CMD_TIMEOUT}")
-      code, output, error = shell.checked_call(llap_status_cmd,
-                                              user = status_params.hive_user,
-                                              stderr = subprocess.PIPE,
-                                              logoutput = False,
-                                              env = { 'HIVE_CONF_DIR': params.hive_server_interactive_conf_dir } )
-      Logger.info("Received 'llapstatus' command 'output' : {0}".format(output))
-      if code == 0:
-        return self._make_valid_json(output)
-      else:
-        Logger.info("'LLAP status command' output : ", output)
-        Logger.info("'LLAP status command' error : ", error)
-        Logger.info("'LLAP status command' exit code : ", code)
-        raise Fail("Error getting LLAP app status. ")
-
-    """
-    Get llap app status data for LLAP GA code base.
+    Get llap app status data.
 
     Parameters: 'percent_desired_instances_to_be_up' : A value b/w 0.0 and 1.0.
                 'total_timeout' : Total wait time while checking the status via llapstatus command
                 'refresh_rate' : Frequency of polling for llapstatus.
     """
-    def _get_llap_app_status_info_in_llap_ga(self, percent_desired_instances_to_be_up, total_timeout, refresh_rate):
+    def _get_llap_app_status_info(self, percent_desired_instances_to_be_up, total_timeout, refresh_rate):
       import status_params
       import params
 
-      # llapstatus comamnd : llapstatus -w -r <percent containers to wait for to be Up> -i <refresh_rate> -t <total timeout for this comand>
+      # llapstatus command : llapstatus -w -r <percent containers to wait for to be Up> -i <refresh_rate> -t <total timeout for this command>
       # -w : Watch mode waits until all LLAP daemons are running or subset of the nodes are running (threshold can be specified via -r option) (Default wait until all nodes are running)
       # -r : When watch mode is enabled (-w), wait until the specified threshold of nodes are running (Default 1.0 which means 100% nodes are running)
       # -i : Amount of time in seconds to wait until subsequent status checks in watch mode (Default: 1sec)
@@ -479,6 +447,7 @@ class HiveServerInteractive(Script):
       Case 'B':
       {
         "state" : "APP_NOT_FOUND"
+        ...
       }
 
       '''
@@ -492,18 +461,12 @@ class HiveServerInteractive(Script):
       for idx, split in enumerate(splits):
         curr_elem = split.strip()
         if idx+2 > len_splits:
-          raise Fail("Iterated over the received 'llapstatus' comamnd. Couldn't validate the received output for JSON parsing.")
+          raise Fail("Iterated over the received 'llapstatus' command. Couldn't validate the received output for JSON parsing.")
         next_elem = (splits[(idx + 1)]).strip()
-        if curr_elem == "{":
-          if next_elem == "\"amInfo\" : {" and (splits[len_splits-1]).strip() == '}':
-            # For Case 'A'
+        if curr_elem == "{" and (splits[len_splits-1]).strip() == '}':
+          if next_elem == "\"amInfo\" : {" or next_elem.startswith('"state" : '):
             marker_idx = idx
             break;
-          elif idx+3 == len_splits and next_elem.startswith('"state" : ') and (splits[idx + 2]).strip() == '}':
-              # For Case 'B'
-              marker_idx = idx
-              break;
-
 
       # Remove extra logging from possible JSON output
       if marker_idx is None:
@@ -516,50 +479,13 @@ class HiveServerInteractive(Script):
       llap_app_info = json.loads(scanned_output)
       return llap_app_info
 
-
-    """
-    Checks llap app status. The states can be : 'COMPLETE', 'APP_NOT_FOUND', 'RUNNING_PARTIAL', 'RUNNING_ALL' & 'LAUNCHING'.
-
-    if app is in 'APP_NOT_FOUND', 'RUNNING_PARTIAL' and 'LAUNCHING' state:
-       we wait for 'num_times_to_wait' to have app in (1). 'RUNNING_ALL' or (2). 'RUNNING_PARTIAL'
-       state with 80% or more 'desiredInstances' running and Return True
-    else :
-       Return False
-
-    Parameters: llap_app_name : deployed llap app name.
-                num_retries :   Number of retries to check the LLAP app status.
-    """
-    def check_llap_app_status_in_llap_tp(self, llap_app_name, num_retries, return_immediately_if_stopped=False):
-      curr_time = time.time()
-      num_retries = int(num_retries)
-      if num_retries <= 0:
-        Logger.info("Read 'num_retries' as : {0}. Setting it to : {1}".format(num_retries, 2))
-        num_retries = 2
-      if num_retries > 20:
-        Logger.info("Read 'num_retries' as : {0}. Setting it to : {1}".format(num_retries, 20))
-        num_retries = 20
-
-      @retry(times=num_retries, sleep_time=2, err_class=Fail)
-      def do_retries():
-        llap_app_info = self._get_llap_app_status_info_in_llap_tp(llap_app_name)
-        return self._verify_llap_app_status(llap_app_info, llap_app_name, return_immediately_if_stopped, curr_time)
-
-      try:
-        status = do_retries()
-        return status
-      except Exception, e:
-        Logger.info("LLAP app '{0}' did not come up after a wait of {1} seconds.".format(llap_app_name,
-                                                                                          time.time() - curr_time))
-        traceback.print_exc()
-        return False
-
-    def check_llap_app_status_in_llap_ga(self, llap_app_name, num_retries, return_immediately_if_stopped=False):
+    def check_llap_app_status(self, llap_app_name, num_retries, return_immediately_if_stopped=False):
       curr_time = time.time()
       total_timeout = int(num_retries) * 20; # Total wait time while checking the status via llapstatus command
       Logger.debug("Calculated 'total_timeout' : {0} using config 'num_retries_for_checking_llap_status' : {1}".format(total_timeout, num_retries))
       refresh_rate = 2 # Frequency of checking the llapstatus
       percent_desired_instances_to_be_up = 80 # Out of 100.
-      llap_app_info = self._get_llap_app_status_info_in_llap_ga(percent_desired_instances_to_be_up/100.0, total_timeout, refresh_rate)
+      llap_app_info = self._get_llap_app_status_info(percent_desired_instances_to_be_up/100.0, total_timeout, refresh_rate)
 
       try:
         return self._verify_llap_app_status(llap_app_info, llap_app_name, return_immediately_if_stopped, curr_time)
