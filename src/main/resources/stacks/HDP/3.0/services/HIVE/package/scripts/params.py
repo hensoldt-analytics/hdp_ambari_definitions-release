@@ -436,12 +436,6 @@ init_metastore_schema = upgrade_direction is None
 #Hive log4j properties
 hive_log_level = default("/configurations/hive-env/hive.log.level", "INFO")
 
-#hive-exec-log4j.properties.template
-if (('hive-exec-log4j' in config['configurations']) and ('content' in config['configurations']['hive-exec-log4j'])):
-  log4j_exec_props = config['configurations']['hive-exec-log4j']['content']
-else:
-  log4j_exec_props = None
-
 # parquet-logging.properties
 parquet_logging_properties = None
 if 'parquet-logging' in config['configurations']:

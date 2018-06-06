@@ -259,8 +259,8 @@
             </configFile>
             <configFile>
               <type>env</type>
-              <fileName>hive-exec-log4j.properties</fileName>
-              <dictionaryName>hive-exec-log4j</dictionaryName>
+              <fileName>hive-exec-log4j2.properties</fileName>
+              <dictionaryName>hive-exec-log4j2</dictionaryName>
             </configFile>
             <configFile>
               <type>env</type>
