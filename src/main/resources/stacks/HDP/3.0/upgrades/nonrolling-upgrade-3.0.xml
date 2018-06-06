@@ -108,6 +108,7 @@
         <component>RESOURCEMANAGER</component>
         <component>APP_TIMELINE_SERVER</component>
         <component>TIMELINE_READER</component>
+        <component>YARN_REGISTRY_DNS</component>
       </service>
 
       <service name="MAPREDUCE2">
@@ -386,6 +387,7 @@
         <component>TIMELINE_READER</component>
         <component>RESOURCEMANAGER</component>
         <component>YARN_CLIENT</component>
+        <component>YARN_REGISTRY_DNS</component>
       </service>
     </group>
 
@@ -823,6 +825,12 @@
       <component name="YARN_CLIENT">
         <upgrade>
           <task xsi:type="restart-task"/>
+        </upgrade>
+      </component>
+
+      <component name="YARN_REGISTRY_DNS">
+        <upgrade>
+          <task xsi:type="restart-task" />
         </upgrade>
       </component>
     </service>

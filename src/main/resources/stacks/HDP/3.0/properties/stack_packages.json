@@ -850,6 +850,18 @@
           "STANDARD": [
             "hadoop-client"
           ]
+        },
+        "YARN_REGISTRY_DNS": {
+          "STACK-SELECT-PACKAGE": "hadoop-yarn-registrydns",
+          "INSTALL": [
+            "hadoop-yarn-registrydns"
+          ],
+          "PATCH": [
+            "hadoop-yarn-registrydns"
+          ],
+          "STANDARD": [
+            "hadoop-yarn-registrydns"
+          ]
         }
       },
       "ZEPPELIN": {

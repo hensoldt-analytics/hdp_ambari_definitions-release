@@ -166,6 +166,7 @@
         <component>APP_TIMELINE_SERVER</component>
         <component>TIMELINE_READER</component>
         <component>RESOURCEMANAGER</component>
+        <component>YARN_REGISTRY_DNS</component>
       </service>
 
       <service name="HBASE">
@@ -617,6 +618,12 @@
       </component>
 
       <component name="YARN_CLIENT">
+        <upgrade>
+          <task xsi:type="restart-task" />
+        </upgrade>
+      </component>
+
+      <component name="YARN_REGISTRY_DNS">
         <upgrade>
           <task xsi:type="restart-task" />
         </upgrade>

@@ -70,9 +70,7 @@ class RegistryDNSDefault(RegistryDNS):
     Logger.info("Executing RegistryDNS Stack Upgrade pre-restart")
     import params
     env.set_params(params)
-
-    if params.version and check_stack_feature(StackFeature.ROLLING_UPGRADE, params.version):
-      stack_select.select_packages(params.version)
+    stack_select.select_packages(params.version)
 
   def status(self, env):
     import status_params

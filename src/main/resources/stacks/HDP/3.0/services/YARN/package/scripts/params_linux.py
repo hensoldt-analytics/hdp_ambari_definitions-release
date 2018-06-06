@@ -54,7 +54,8 @@ YARN_SERVER_ROLE_DIRECTORY_MAP = {
   'NODEMANAGER' : 'hadoop-yarn-nodemanager',
   'RESOURCEMANAGER' : 'hadoop-yarn-resourcemanager',
   'YARN_CLIENT' : 'hadoop-yarn-client',
-  'TIMELINE_READER' : 'hadoop-yarn-timelinereader'
+  'TIMELINE_READER' : 'hadoop-yarn-timelinereader',
+  'YARN_REGISTRY_DNS' : 'hadoop-yarn-registrydns'
 }
 
 # server configurations
