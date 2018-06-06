@@ -266,15 +266,18 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     yarnMaxAllocationSize = min(30 * int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]), int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
     #duplicate tez task resource calc logic, direct dependency doesn't look good here (in case of Hive without Tez)
     tez_container_size = min(containerSize, yarnMaxAllocationSize)
-    tez_container_size_bytes = int(int(tez_container_size)*0.8*1024*1024) # Xmx == 80% of container
-    putHiveSiteProperty("hive.tez.container.size", tez_container_size)
     putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
     putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
     if "yarn-site" in services["configurations"]:
       if "yarn.scheduler.minimum-allocation-mb" in services["configurations"]["yarn-site"]["properties"]:
         putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(services["configurations"]["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
+        tez_container_size = max(tez_container_size, int(services["configurations"]["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
       if "yarn.scheduler.maximum-allocation-mb" in services["configurations"]["yarn-site"]["properties"]:
         putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(services["configurations"]["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
+        tez_container_size = min(tez_container_size, int(services["configurations"]["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
+
+    putHiveSiteProperty("hive.tez.container.size", tez_container_size)
+    tez_container_size_bytes = int(int(tez_container_size)*0.8*1024*1024) # Xmx == 80% of container
 
     # Memory
     putHiveSiteProperty("hive.auto.convert.join.noconditionaltask.size", int(round(tez_container_size_bytes/3)))
