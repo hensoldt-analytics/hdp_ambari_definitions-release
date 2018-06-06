@@ -652,4 +652,10 @@
       <refresh-command componentName="NAMENODE" command="reload_configs" />
     </supported-refresh-commands>
   </property>
+  <property>
+    <name>manage.include.files</name>
+    <value>false</value>
+    <description>If true Ambari will manage include file if dfs.hosts is configured.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
