@@ -39,6 +39,7 @@ from resource_management.core.resources.system import Directory
 from resource_management.core.logger import Logger
 from setup_ranger_atlas import setup_ranger_atlas
 from resource_management.core.resources.zkmigrator import ZkMigrator
+from resource_management.libraries.functions import upgrade_summary
 
 class MetadataServer(Script):
 
@@ -180,15 +181,30 @@ class MetadataServer(Script):
     import status_params
     return [status_params.pid_file]
 
-  def rename_ranger_atlas_policycache_file(self, env):
+  def configure_atlas_for_upgrade(self, env):
     import params
     env.set_params(params)
+    if params.upgrade_direction == Direction.UPGRADE:
+      if params.stack_supports_atlas_ranger_plugin and params.enable_ranger_atlas:
+        atlas_policycache_file_v1 = os.path.join('/etc', 'ranger', params.repo_name, 'policycache', format('atlas_{repo_name}.json'))
+        atlas_policycache_file_v1_rename = os.path.join('/etc', 'ranger', params.repo_name, 'policycache', format('atlas_{repo_name}_v1.json'))
+        if os.path.isfile(atlas_policycache_file_v1):
+          Execute(format('mv {atlas_policycache_file_v1} {atlas_policycache_file_v1_rename}'), user = params.metadata_user, logoutput = True)
 
-    if params.upgrade_direction == Direction.UPGRADE and params.stack_supports_atlas_ranger_plugin and params.enable_ranger_atlas:
-      atlas_policycache_file_v1 = os.path.join('/etc', 'ranger', params.repo_name, 'policycache', format('atlas_{repo_name}.json'))
-      atlas_policycache_file_v1_rename = os.path.join('/etc', 'ranger', params.repo_name, 'policycache', format('atlas_{repo_name}_v1.json'))
-      if os.path.isfile(atlas_policycache_file_v1):
-        Execute(format('mv {atlas_policycache_file_v1} {atlas_policycache_file_v1_rename}'), user = params.metadata_user, logoutput = True)
+      target_version = upgrade_summary.get_target_version('ATLAS')
+      atlas_simple_auth_policy_file_source = os.path.join(format('{stack_root}'),target_version,'etc','atlas','conf.dist','atlas-simple-authz-policy.json')
+      atlas_simple_auth_policy_file_target = os.path.join(format('{conf_dir}'),'atlas-simple-authz-policy.json')
+      Execute(('cp', '-f', atlas_simple_auth_policy_file_source, atlas_simple_auth_policy_file_target),
+        not_if=format('test -e {atlas_simple_auth_policy_file_target}'),
+        only_if=format('test -e {atlas_simple_auth_policy_file_source}'),
+        sudo=True
+      )
+      File(atlas_simple_auth_policy_file_target,
+        group=params.user_group,
+        owner=params.metadata_user,
+        only_if=format("test -e {atlas_simple_auth_policy_file_target}"),
+        mode=0644
+      )
 
 if __name__ == "__main__":
   MetadataServer().execute()

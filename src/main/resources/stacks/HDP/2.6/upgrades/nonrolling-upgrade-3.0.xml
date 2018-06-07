@@ -1458,8 +1458,9 @@
       <component name="ATLAS_SERVER">
         <pre-upgrade>
           <task xsi:type="execute" hosts="all">
+            <summary>Configuring Atlas for HDP 3.0</summary>
             <script>scripts/metadata_server.py</script>
-            <function>rename_ranger_atlas_policycache_file</function>
+            <function>configure_atlas_for_upgrade</function>
           </task>
         </pre-upgrade>
         <pre-downgrade/> <!--  no-op to prevent config changes on downgrade -->
