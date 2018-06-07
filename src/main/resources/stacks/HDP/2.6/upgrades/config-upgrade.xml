@@ -454,6 +454,26 @@
                            find=",?(org\.apache\.spark\.deploy\.history\.yarn\.plugin\.SparkATSPlugin,?)"
                            replace-with=""/>
           </definition>
+          <definition xsi:type="configure" id="hdp_30_add_distributed_shell_class_to_ats" summary="Add DistributedShellTimelinePlugin to ATS">
+            <type>yarn-site</type>
+            <!--
+             here is a trick:
+             if key not exist, we adding it with required value;
+             if property is empty or with spaces, we add just one value without comas;
+             if property does not contain the required class already, and if not - append it at the end with leading coma
+
+             action sequence here is important
+             -->
+            <set key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classes" value="org.apache.hadoop.yarn.applications.distributedshell.DistributedShellTimelinePlugin"
+                 if-key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classes" if-key-state="absent"/>
+            <regex-replace key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classes"
+                           find="^([\s]*)$"
+                           replace-with="org.apache.hadoop.yarn.applications.distributedshell.DistributedShellTimelinePlugin" />
+            <insert key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classes" value=",org.apache.hadoop.yarn.applications.distributedshell.DistributedShellTimelinePlugin"
+                    insert-type="append"  if-type="yarn-site" if-key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classes"
+                    if-value="org.apache.hadoop.yarn.applications.distributedshell.DistributedShellTimelinePlugin"
+                    if-value-not-matched="true" if-value-match-type="partial"/>
+          </definition>
         </changes>
       </component>
     </service>

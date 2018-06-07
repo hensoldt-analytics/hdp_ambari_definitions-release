@@ -427,6 +427,10 @@
         <task xsi:type="configure" id="hdp_30_mapred_stack_variables_update"/>
       </execute-stage>
 
+      <execute-stage service="YARN" component="APP_TIMELINE_SERVER" title="Add DistributedShellTimelinePlugin to ATS">
+        <task xsi:type="configure" id="hdp_30_add_distributed_shell_class_to_ats" />
+      </execute-stage>
+
       <execute-stage service="MAPREDUCE2" component="MAPREDUCE2_CLIENT" title="Apply config changes for Mapreduce2 client">
         <task xsi:type="server_action"
               class="org.apache.ambari.server.serveraction.upgrades.FixLzoCodecPath">
