@@ -389,12 +389,11 @@
             <insert key="content" insert-type="append" newline-before="true" newline-after="true" value="export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}"/>
           </definition>
 
-          <definition xsi:type="configure" id="hdp_30_yarn_stack_variables_update" summary="Convert HDP 2.6 variable naming to HDP 3.0">
+          <definition xsi:type="configure" id="hdp_30_yarn_stack_variables_update" summary="Convert YARN HDP 2.6 variable naming to HDP 3.0">
             <type>yarn-env</type>
             <replace key="content" find="YARN_OPTS" replace-with="HADOOP_OPTS"/>
             <replace key="content" find="YARN_ROOT_LOGGER " replace-with="HADOOP_ROOT_LOGGER "/>
             <replace key="content" find="YARN_LOGFILE" replace-with="HADOOP_LOGFILE"/>
-            <replace key="content" find="YARN_IDENT_STRING" replace-with="HADOOP_IDENT_STRING"/>
           </definition>
 
           <definition xsi:type="configure" id="hdp_30_add_secure_pid_and_log_dirs" summary="Add Secure PID and Log Directory Exports">
@@ -442,6 +441,18 @@
           <definition xsi:type="configure" id="hdp_2_6_yarn_spark_versioned_classpaths">
             <type>yarn-site</type>
             <replace key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classpath" find="${hdp.version}/spark/" replace-with="{{spark_version}}/spark/"/>
+          </definition>
+          <definition xsi:type="configure" id="hdp_30_remove_spark_classpaths_injections" summary="Removing Spark classpath entries from ATS">
+            <type>yarn-site</type>
+            <regex-replace key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classpath"
+                           find=",?(\/usr\/hdp\/\$\{hdp\.version\}\/spark\/hdpLib\/\*,?)"
+                           replace-with=""/>
+            <regex-replace key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classpath"
+                           find=",?(\/usr\/hdp\/\{\{spark_version\}\}\/spark\/hdpLib\/\*,?)"
+                           replace-with=""/>
+            <regex-replace key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classes"
+                           find=",?(org\.apache\.spark\.deploy\.history\.yarn\.plugin\.SparkATSPlugin,?)"
+                           replace-with=""/>
           </definition>
         </changes>
       </component>
@@ -586,7 +597,7 @@
       </component>
       <component name="HISTORYSERVER">
         <changes>
-          <definition xsi:type="configure" id="hdp_30_mapred_stack_variables_update" summary="Convert HDP 2.6 variable naming to HDP 3.0">
+          <definition xsi:type="configure" id="hdp_30_mapred_stack_variables_update" summary="Convert Mapreduce HDP 2.6 variable naming to HDP 3.0">
             <type>mapred-env</type>
             <replace key="content" find="HADOOP_MAPRED_ROOT_LOGGER" replace-with="HADOOP_ROOT_LOGGER"/>
             <replace key="content" find="HADOOP_JOB_HISTORYSERVER_OPTS" replace-with="MAPRED_HISTORYSERVER_OPTS"/>

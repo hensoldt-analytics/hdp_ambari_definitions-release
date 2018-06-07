@@ -419,11 +419,11 @@
       </execute-stage>
 
       <!-- Do this last to convert any variable which remained -->
-      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Convert HDP 2.6 variable naming to HDP 3.0">
+      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Convert YARN HDP 2.6 variable naming to HDP 3.0">
         <task xsi:type="configure" id="hdp_30_yarn_stack_variables_update"/>
       </execute-stage>
 
-      <execute-stage service="MAPREDUCE2" component="HISTORYSERVER" title="Convert HDP 2.6 variable naming to HDP 3.0">
+      <execute-stage service="MAPREDUCE2" component="HISTORYSERVER" title="Convert Mapreduce HDP 2.6 variable naming to HDP 3.0">
         <task xsi:type="configure" id="hdp_30_mapred_stack_variables_update"/>
       </execute-stage>
 
@@ -440,6 +440,10 @@
               class="org.apache.ambari.server.serveraction.upgrades.FixYarnWebServiceUrl">
           <summary>Fixing YARN Webservice Url</summary>
         </task>
+      </execute-stage>
+
+      <execute-stage service="YARN" component="APP_TIMELINE_SERVER" title="Removing Spark classpath entries from ATS">
+        <task xsi:type="configure" id="hdp_30_remove_spark_classpaths_injections" />
       </execute-stage>
 
       <execute-stage>
