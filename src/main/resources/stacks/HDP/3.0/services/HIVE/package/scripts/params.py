@@ -177,6 +177,8 @@ hive_home_dir = status_params.hive_home_dir
 hive_config_dir = status_params.hive_config_dir
 hive_client_conf_dir = status_params.hive_client_conf_dir
 hive_server_conf_dir = status_params.hive_server_conf_dir
+tez_conf_dir = status_params.tez_conf_dir
+
 
 # --- Tarballs ---
 # DON'T CHANGE THESE VARIABLE NAMES
@@ -622,7 +624,7 @@ if has_hive_interactive:
   else:
     hive_server_interactive_port = default('/configurations/hive-interactive-site/hive.server2.thrift.port',"10500")
   # Tez for Hive interactive related
-  tez_interactive_config_dir = "/etc/tez_llap/conf"
+  tez_interactive_conf_dir = status_params.tez_interactive_conf_dir
   tez_interactive_user = config['configurations']['tez-env']['tez_user']
   num_retries_for_checking_llap_status = config['configurations']['hive-interactive-env']['num_retries_for_checking_llap_status']
   # Used in LLAP YARN Service package creation
