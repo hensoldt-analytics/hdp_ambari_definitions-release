@@ -180,8 +180,6 @@ if dfs_http_policy  !=  None :
    hdfs_port = str(namenode_http_port)  if not hdfs_https_on else str(namenode_https_port)
    namenode_http_port = hdfs_port
 
-webhdfs_service_urls = ""
-
 def buildUrlElement(protocol, hdfs_host, port, servicePath) :
   openTag = "<url>"
   closeTag = "</url>"
@@ -193,10 +191,11 @@ def buildUrlElement(protocol, hdfs_host, port, servicePath) :
     return openTag + proto + hdfs_host + ":" + port + servicePath + closeTag + newLine
 
 namenode_host_keys = namenode_port_map.keys();
+webhdfs_service_urls = ""
 if len(namenode_host_keys) > 0:
     for host in namenode_host_keys:
       webhdfs_service_urls += buildUrlElement("http", host, namenode_port_map[host], "/webhdfs")
-else:
+elif has_namenode:
   webhdfs_service_urls = buildUrlElement("http", namenode_hosts[0], namenode_http_port, "/webhdfs")
 
 yarn_http_policy = default('/configurations/yarn-site/yarn.http.policy', None )
