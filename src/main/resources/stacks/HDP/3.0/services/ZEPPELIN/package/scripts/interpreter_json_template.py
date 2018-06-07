@@ -21,8 +21,8 @@ limitations under the License.
 template = '''
 {
   "interpreterSettings": {
-    "2CKEKWY8Z": {
-      "id": "2CKEKWY8Z",
+    "angular": {
+      "id": "angular",
       "name": "angular",
       "group": "angular",
       "properties": {},
@@ -49,8 +49,8 @@ template = '''
         "isUserImpersonate": false
       }
     },
-    "2CKX8WPU1": {
-      "id": "2CKX8WPU1",
+    "spark": {
+      "id": "spark",
       "name": "spark",
       "group": "spark",
       "properties": {
@@ -414,8 +414,8 @@ template = '''
         "isUserImpersonate": false
       }
     },
-    "2CKX6DGQZ": {
-      "id": "2CKX6DGQZ",
+    "livy": {
+      "id": "livy",
       "name": "livy",
       "group": "livy",
       "properties": {
@@ -585,8 +585,8 @@ template = '''
         "isUserImpersonate": false
       }
     },
-    "2C8A4SZ9T_livy2": {
-      "id": "2C8A4SZ9T_livy2",
+    "livy2": {
+      "id": "livy2",
       "status": "READY",
       "group": "livy",
       "name": "livy2",
