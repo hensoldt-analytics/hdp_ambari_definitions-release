@@ -1603,4 +1603,13 @@ yarn.node-labels.manager-class
     <description>FS directory path to load and deploy admin configured services</description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>yarn.timeline-service.generic-application-history.save-non-am-container-meta-info</name>
+    <value>false</value>
+    <description>Defines if RM will save non am container meta-info in history store.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
