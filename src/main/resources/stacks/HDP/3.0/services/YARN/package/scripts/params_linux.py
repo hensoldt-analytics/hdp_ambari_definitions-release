@@ -596,6 +596,7 @@ yarn_hbase_java_io_tmpdir = default("/configurations/yarn-hbase-env/hbase_java_i
 yarn_hbase_tmp_dir = config['configurations']['yarn-hbase-site']['hbase.tmp.dir']
 yarn_hbase_local_dir = config['configurations']['yarn-hbase-site']['hbase.local.dir']
 yarn_hbase_master_info_port = config['configurations']['yarn-hbase-site']['hbase.master.info.port']
+yarn_hbase_regionserver_info_port = config['configurations']['yarn-hbase-site']['hbase.regionserver.info.port']
 
 if (('yarn-hbase-log4j' in config['configurations']) and ('content' in config['configurations']['yarn-hbase-log4j'])):
   yarn_hbase_log4j_props = config['configurations']['yarn-hbase-log4j']['content']

@@ -92,7 +92,12 @@
       "name": "regionserver",
       "number_of_containers": {{yarn_hbase_regionserver_containers}},
       "launch_command": "{{stack_root}}/current/hbase-regionserver/bin/hbase regionserver start",
-      "dependencies": [ "master" ],
+      "readiness_check": {
+        "type": "HTTP",
+        "properties": {
+          "url": "http://${THIS_HOST}:{{yarn_hbase_regionserver_info_port}}/rs-status"
+        }
+      },
       "resource": {
         "cpus": {{yarn_hbase_regionserver_cpu}},
         "memory": "{{yarn_hbase_regionserver_memory}}"
@@ -120,7 +125,7 @@
       "name": "hbaseclient",
       "number_of_containers": {{yarn_hbase_client_containers}},
       "launch_command": "sleep 10;{{yarn_hbase_table_create_cmd}};{{yarn_hbase_table_grant_premission_cmd}};sleep infinity",
-      "dependencies": [ "regionserver" ],
+      "dependencies": [ "master", "regionserver" ],
       "resource": {
         "cpus": {{yarn_hbase_client_cpu}},
         "memory": "{{yarn_hbase_client_memory}}"
@@ -144,9 +149,6 @@
       }
     }
   ],
-  "quicklinks": {
-    "HBase Master Status UI": "http://${MASTER-0_IP}:{{yarn_hbase_master_info_port}}/master-status"
-  },
   "kerberos_principal" : {
     "principal_name" : "{{yarn_ats_hbase_principal_name}}",
     "keytab" : "file://{{yarn_ats_hbase_keytab}}"
