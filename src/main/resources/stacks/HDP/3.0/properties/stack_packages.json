@@ -178,18 +178,6 @@
           "STANDARD": [
             "druid-router"
           ]
-        },
-        "DRUID_SUPERSET": {
-          "STACK-SELECT-PACKAGE": "druid-superset",
-          "INSTALL": [
-            "druid-superset"
-          ],
-          "PATCH": [
-            "druid-superset"
-          ],
-          "STANDARD": [
-            "druid-superset"
-          ]
         }
       },
       "FALCON": {
@@ -776,6 +764,20 @@
           ]
         }
       },
+      "SUPERSET": {
+        "SUPERSET": {
+          "STACK-SELECT-PACKAGE": "superset",
+          "INSTALL": [
+            "superset"
+          ],
+          "PATCH": [
+            "superset"
+          ],
+          "STANDARD": [
+            "superset"
+          ]
+        }
+      },
       "TEZ": {
         "TEZ_CLIENT": {
           "STACK-SELECT-PACKAGE": "tez-client",
@@ -1064,8 +1066,8 @@
       ],
       "superset": [
         {
-          "conf_dir": "/etc/druid-superset/conf",
-          "current_dir": "{0}/current/druid-superset/conf"
+          "conf_dir": "/etc/superset/conf",
+          "current_dir": "{0}/current/superset/conf"
         }
       ],
       "tez": [
