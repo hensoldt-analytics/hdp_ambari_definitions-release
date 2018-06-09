@@ -158,7 +158,7 @@ def hive_interactive(name = None):
   merged_tez_interactive_site.update(params.config['configurations']['tez-interactive-site'])
   
   XmlConfig("tez-site.xml",
-            conf_dir = params.tez_interactive_config_dir,
+            conf_dir = params.tez_interactive_conf_dir,
             configurations = merged_tez_interactive_site,
             configuration_attributes=params.config['configurationAttributes']['tez-interactive-site'],
             owner = params.tez_interactive_user,
