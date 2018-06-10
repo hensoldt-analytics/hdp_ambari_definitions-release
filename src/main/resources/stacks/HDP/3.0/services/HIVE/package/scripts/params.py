@@ -454,7 +454,7 @@ hive_exec_scratchdir = config['configurations']['hive-site']["hive.exec.scratchd
 
 # Hive and Tez hook directories
 hive_hook_proto_base_directory = format(config['configurations']['hive-site']["hive.hook.proto.base-directory"])
-tez_hook_proto_base_directory = format(config['configurations']['tez-site']["tez.history.logging.proto-base-dir"])
+tez_hook_proto_base_directory = format("{hive_metastore_warehouse_dir}/sys.db")
 
 
 #for create_hdfs_directory

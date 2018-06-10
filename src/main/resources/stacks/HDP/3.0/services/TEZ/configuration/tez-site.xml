@@ -473,16 +473,6 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>tez.history.logging.service.class</name>
-    <value>org.apache.tez.dag.history.logging.proto.ProtoHistoryLoggingService</value>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>tez.history.logging.proto-base-dir</name>
-    <value>/apps/hive/warehouse/sys.db/query_data/</value>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
     <name>tez.counters.max</name>
     <value>10000</value>
     <description>The number of allowed counters for the executing DAG</description>
