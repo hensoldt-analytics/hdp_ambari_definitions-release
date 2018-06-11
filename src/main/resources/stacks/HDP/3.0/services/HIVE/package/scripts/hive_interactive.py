@@ -59,6 +59,16 @@ def hive_interactive(name = None):
                         group = params.user_group,
                         mode = 0777
     )
+    # create directories for llap package
+    for dir in ['/user/hive/.yarn','/user/hive/.yarn/package/','/user/hive/.yarn/package/LLAP']:
+      # hdfsresouces handles parent creation badly
+      params.HdfsResource(dir,
+                          type = "directory",
+                          action = "create_on_execute",
+                          owner = params.hive_user,
+                          group = params.user_group,
+                          mode = 0755
+      )
     if not is_empty(params.hive_hook_proto_base_directory):
         params.HdfsResource(params.hive_hook_proto_base_directory,
                             type="directory",
