@@ -104,6 +104,7 @@
             <configuration-dependencies>
                 <config-type>tez-site</config-type>
                 <config-type>tez-env</config-type>
+                <config-type>hive-site</config-type>
             </configuration-dependencies>
 
             <themes>
