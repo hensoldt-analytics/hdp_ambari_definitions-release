@@ -582,13 +582,16 @@
             <set key="spark.yarn.maxAppAttempts" value="1"/>
           </definition>
 
+        </changes>
+      </component>
+      <component name="SPARK2_JOBHISTORYSERVER">
+        <changes>
           <definition xsi:type="configure" id="hdp_3_0_0_0_spark2_env">
             <type>spark2-env</type>
             <insert key="content" insert-type="append" newline-before="true" newline-after="true"
                 value="{% if security_enabled %}
-                  &#10; export SPARK_HISTORY_OPTS='-Dspark.ui.filters=org.apache.hadoop.security.authentication.server.AuthenticationFilter
-                  &#10; -Dspark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.params=&quot;type=kerberos,kerberos.principal={{spnego_principal}},kerberos.keytab={{spnego_keytab}}&quot;
-                  &#10; {% endif %}"/>
+                  &#10;export SPARK_HISTORY_OPTS=&apos;-Dspark.ui.filters=org.apache.hadoop.security.authentication.server.AuthenticationFilter -Dspark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.params=&quot;type=kerberos,kerberos.principal={{spnego_principal}},kerberos.keytab={{spnego_keytab}}&quot; &apos;${SPARK_HISTORY_OPTS}
+                  &#10;{% endif %}"/>
           </definition>
         </changes>
       </component>
