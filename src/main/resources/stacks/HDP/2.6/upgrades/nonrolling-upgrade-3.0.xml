@@ -215,22 +215,6 @@
         </task>
       </execute-stage>
 
-      <execute-stage service="SPARK2" component="SPARK2_JOBHISTORYSERVER"
-                     title="Pre Upgrade SPARK2 notes">
-        <task xsi:type="manual">
-          <message>
-              During SPARK2 upgrade, we are going to add new filters into SPARK_HISTORY_OPTS which is located in spark2-env config. But if you already have
-              "export SPARK_HISTORY_OPTS" in spark2-env, this part of code will not be added automatically, to prevent incorrect changes. In that case
-              you should add this part by your own. Pay attention that under "if" we have export for kerberized mode and under "else" you can add
-              export for non kerberzed mode.
-              {% if security_enabled %}
-              export SPARK_HISTORY_OPTS='-Dspark.ui.filters=org.apache.hadoop.security.authentication.server.AuthenticationFilter -Dspark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.params="type=kerberos,kerberos.principal={{spnego_principal}},kerberos.keytab={{spnego_keytab}}"'
-              {% else %}
-              Here should be your current export SPARK_HISTORY_OPTS for non kerberized mode
-              {% endif %}
-          </message>
-        </task>
-      </execute-stage>
     </group>
 
     <group xsi:type="stop" name="STOP_LOW_LEVEL_SERVICE_COMPONENTS" title="Stop Components for Core Services">
@@ -341,6 +325,17 @@
       <execute-stage title="Update Target Repositories">
         <task xsi:type="server_action"
               class="org.apache.ambari.server.serveraction.upgrades.UpdateDesiredRepositoryAction"/>
+      </execute-stage>
+    </group>
+
+    <!-- Add new components only after the desired stack has been moved -->
+    <group xsi:type="cluster" name="ADD_HIVE_CLIENT_TO_SHS" title="Add Hive Client to Spark History Server">
+      <direction>UPGRADE</direction>
+      <skippable>true</skippable>
+      <execute-stage service="SPARK2" title="History Server">
+        <task xsi:type="add_component" service="HIVE" component="HIVE_CLIENT" host-service="SPARK2" host-component="SPARK2_JOBHISTORYSERVER" hosts="any">
+          <summary>Add Hive Client to all History Servers</summary>
+        </task>
       </execute-stage>
     </group>
 
