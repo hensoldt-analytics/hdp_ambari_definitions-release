@@ -19,8 +19,6 @@
 #
 #
 
-HIVE_SERVER2_INTERACTIVE_OPTS=" -hiveconf hive.log.file=hiveserver2Interactive.log -hiveconf hive.log.dir=$5"
-HIVE_CONF_DIR=$4
-TEZ_CONF_DIR=$5
-{{hive_interactive_bin}}/hiveserver2 ${HIVE_SERVER2_INTERACTIVE_OPTS} > $1 2> $2 &
+HIVE_SERVER2_INTERACTIVE_OPTS=" -hiveconf hive.log.file=hiveserver2Interactive.log -hiveconf hive.log.dir=$6"
+HIVE_CONF_DIR=$4 TEZ_CONF_DIR=$5 {{hive_interactive_bin}}/hiveserver2 ${HIVE_SERVER2_INTERACTIVE_OPTS} > $1 2> $2 &
 echo $!|cat>$3
