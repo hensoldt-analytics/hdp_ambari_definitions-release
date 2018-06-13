@@ -98,6 +98,8 @@
             <replace key="content" find="HADOOP_SECURE_DN_PID_DIR" replace-with="HADOOP_SECURE_PID_DIR"/>
             <replace key="content" find="HADOOP_ZKFC_OPTS" replace-with="HDFS_ZKFC_OPTS"/>
             <replace key="content" find="HADOOP_NFS3_OPTS" replace-with="HDFS_NFS3_OPTS"/>
+            <regex-replace key="content" find="^\s*# History server logs$[\r\n]+^\s*export HADOOP_MAPRED_LOG_DIR=\{\{mapred_log_dir_prefix\}\}/\$USER$" replace-with="" match-all="true"/>
+            <regex-replace key="content" find="^\s*# History server pid$[\r\n]+^\s*export HADOOP_MAPRED_PID_DIR=\{\{mapred_pid_dir_prefix\}\}/\$USER$" replace-with="" match-all="true"/>
           </definition>
 
           <!-- should be executed in separate action after hdp_30_hdfs_stack_variables_update -->
@@ -386,7 +388,6 @@
             <replace key="content" find="YARN_PID_DIR" replace-with="HADOOP_PID_DIR"/>
             <replace key="content" find="YARN_ROOT_LOGGER" replace-with="HADOOP_ROOT_LOGGER"/>
             <replace key="content" find="YARN_CONF_DIR" replace-with="HADOOP_CONF_DIR"/>
-            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value="export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}"/>
           </definition>
 
           <definition xsi:type="configure" id="hdp_30_yarn_stack_variables_update" summary="Convert YARN HDP 2.6 variable naming to HDP 3.0">
@@ -422,6 +423,25 @@
                 value="{% if security_enabled %}
                   &#10; export YARN_TIMELINEREADER_OPTS=&quot;-Djava.security.auth.login.config={{yarn_ats_jaas_file}}&quot;
                   &#10;{% endif %}"/>
+          </definition>
+
+          <!--
+            This action looking for code-block below:
+
+            INVOKER="${0##*/}"
+            if [ "$INVOKER" == "yarn-daemon.sh" ]; then
+              export YARN_ROOT_LOGGER=${YARN_ROOT_LOGGER:-INFO,EWMA,RFA}
+            fi
+
+          -->
+          <definition xsi:type="configure" id="hdp_30_update_yarn_root_logger" summary="Update YARN root logger">
+            <type>yarn-env</type>
+            <regex-replace key="content" find="^\s*INVOKER=\&quot;\$\{0##\*\/\}\&quot;$[\r\n]+^\s*if\s*\[ \&quot;\$INVOKER\&quot; == \&quot;yarn-daemon\.sh\&quot; \]; then$[\r\n]+^\s*^\s*export HADOOP_ROOT_LOGGER=\$\{HADOOP_ROOT_LOGGER:-INFO,EWMA,RFA\}$[\r\n]+^\s*fi$[\r\n]*"
+                           replace-with="export HADOOP_LOGLEVEL=${HADOOP_LOGLEVEL:-INFO}
+                              &#10;export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}
+                              &#10;export HADOOP_DAEMON_ROOT_LOGGER=${HADOOP_DAEMON_ROOT_LOGGER:-${HADOOP_LOGLEVEL},EWMA,RFA}"/>
+
+            <replace key="content" find="# We need to add the EWMA appender for the yarn daemons only;" replace-with="# We need to add the EWMA and RFA appender for the yarn daemons only;" />
           </definition>
         </changes>
       </component>
@@ -628,6 +648,22 @@
             <replace key="content" find="HADOOP_MAPRED_PID_DIR" replace-with="HADOOP_PID_DIR"/>
             <replace key="content" find="HADOOP_MAPRED_IDENT_STRING" replace-with="HADOOP_IDENT_STRING"/>
             <replace key="content" find="HADOOP_MAPRED_NICENESS" replace-with="HADOOP_NICENESS"/>
+          </definition>
+          <definition xsi:type="configure" id="hdp_30_update_mapreduce_loggers" summary="Update Mapreduce loggers">
+            <type>mapred-env</type>
+            <replace key="content" find="#export HADOOP_LOG_DIR=&quot;&quot; # Where log files are stored.  $HADOOP_MAPRED_HOME/logs by default." replace-with=""/>
+            <replace key="content" find="#export HADOOP_PID_DIR= # The pid files are stored. /tmp by default." replace-with="" />
+            <replace key="content" find="export HADOOP_ROOT_LOGGER=INFO,RFA" replace-with=""/>
+            <insert key="content" insert-type="append" newline-after="true" newline-before="true"
+                    value="export HADOOP_LOGLEVEL=${HADOOP_LOGLEVEL:-INFO}
+                      &#10;export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}
+                      &#10;export HADOOP_DAEMON_ROOT_LOGGER=${HADOOP_DAEMON_ROOT_LOGGER:-${HADOOP_LOGLEVEL},RFA}"/>
+            <insert key="content" insert-type="append" newline-after="true" newline-before="true"
+                    value="# History server logs
+                      &#10;export HADOOP_LOG_DIR={{mapred_log_dir_prefix}}/$USER
+                      &#10;
+                      &#10;# History server pid
+                      &#10;export HADOOP_PID_DIR={{mapred_pid_dir_prefix}}/$USER"/>
           </definition>
         </changes>
       </component>

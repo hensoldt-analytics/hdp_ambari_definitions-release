@@ -418,8 +418,16 @@
         <task xsi:type="configure" id="hdp_30_yarn_stack_variables_update"/>
       </execute-stage>
 
+      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Update YARN root logger">
+        <task xsi:type="configure" id="hdp_30_update_yarn_root_logger"/>
+      </execute-stage>
+
       <execute-stage service="MAPREDUCE2" component="HISTORYSERVER" title="Convert Mapreduce HDP 2.6 variable naming to HDP 3.0">
         <task xsi:type="configure" id="hdp_30_mapred_stack_variables_update"/>
+      </execute-stage>
+
+      <execute-stage service="MAPREDUCE2" component="HISTORYSERVER" title="Update Mapreduce loggers">
+        <task xsi:type="configure" id="hdp_30_update_mapreduce_loggers"/>
       </execute-stage>
 
       <execute-stage service="YARN" component="APP_TIMELINE_SERVER" title="Add DistributedShellTimelinePlugin to ATS">

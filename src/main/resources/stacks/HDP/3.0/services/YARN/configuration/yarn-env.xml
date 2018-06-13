@@ -200,16 +200,12 @@ export HADOOP_LIBEXEC_DIR={{hadoop_libexec_dir}}
 export JAVA_HOME={{java64_home}}
 export JAVA_LIBRARY_PATH="${JAVA_LIBRARY_PATH}:{{hadoop_java_io_tmpdir}}"
 
-# We need to add the EWMA appender for the yarn daemons only;
+# We need to add the EWMA and RFA appender for the yarn daemons only;
 # however, HADOOP_ROOT_LOGGER is shared by the yarn client and the
 # daemons. This is restrict the EWMA appender to daemons only.
-INVOKER="${0##*/}"
-if [ "$INVOKER" == "yarn-daemon.sh" ]; then
-export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,EWMA,RFA}
-fi
-
-# root hadoop logger
+export HADOOP_LOGLEVEL=${HADOOP_LOGLEVEL:-INFO}
 export HADOOP_ROOT_LOGGER=${HADOOP_ROOT_LOGGER:-INFO,console}
+export HADOOP_DAEMON_ROOT_LOGGER=${HADOOP_DAEMON_ROOT_LOGGER:-${HADOOP_LOGLEVEL},EWMA,RFA}
 
 # User for YARN daemons
 export HADOOP_YARN_USER=${HADOOP_YARN_USER:-yarn}
