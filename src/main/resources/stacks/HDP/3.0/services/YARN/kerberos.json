@@ -20,7 +20,7 @@
             "local_username": "${yarn-env/yarn_ats_user}"
           },
           "keytab": {
-            "file": "${keytab_dir}/yarn-ats.headless.keytab",
+            "file": "${keytab_dir}/yarn-ats.hbase-client.headless.keytab",
             "owner": {
               "name": "${yarn-env/yarn_ats_user}",
               "access": "r"
@@ -35,13 +35,13 @@
         {
           "name": "yarn_ats_hbase_master",
           "principal": {
-            "value": "ats-hbase/_HOST@${realm}",
+            "value": "yarn-ats-hbase/_HOST@${realm}",
             "type" : "service",
             "configuration": "yarn-hbase-site/hbase.master.kerberos.principal",
             "local_username": "${yarn-env/yarn_ats_user}"
           },
           "keytab": {
-            "file": "${keytab_dir}/yarn-hbase.master.service.keytab",
+            "file": "${keytab_dir}/yarn-ats.hbase-master.service.keytab",
             "owner": {
               "name": "${yarn-env/yarn_ats_user}",
               "access": "r"
@@ -56,13 +56,13 @@
         {
           "name": "yarn_ats_hbase_regionserver",
           "principal": {
-            "value": "ats-hbase/_HOST@${realm}",
+            "value": "yarn-ats-hbase/_HOST@${realm}",
             "type" : "service",
             "configuration": "yarn-hbase-site/hbase.regionserver.kerberos.principal",
             "local_username": "${yarn-env/yarn_ats_user}"
           },
           "keytab": {
-            "file": "${keytab_dir}/yarn-hbase.regionserver.service.keytab",
+            "file": "${keytab_dir}/yarn-ats.hbase-regionserver.service.keytab",
             "owner": {
               "name": "${yarn-env/yarn_ats_user}",
               "access": "r"

@@ -54,6 +54,15 @@ def yarn(name=None, config_dir=None):
   if config_dir is None:
     config_dir = params.hadoop_conf_dir
 
+  Directory([params.yarn_log_dir_prefix],
+            owner=params.yarn_user,
+            group=params.user_group,
+            create_parents=True,
+            ignore_failures=True,
+            cd_access='a',
+            mode=0775,
+            )
+
   Directory([params.yarn_pid_dir_prefix, params.yarn_pid_dir, params.yarn_log_dir],
             owner=params.yarn_user,
             group=params.user_group,
@@ -65,13 +74,6 @@ def yarn(name=None, config_dir=None):
             owner=params.mapred_user,
             group=params.user_group,
             create_parents=True,
-            cd_access='a',
-  )
-  Directory([params.yarn_log_dir_prefix],
-            owner=params.yarn_user,
-            group=params.user_group,
-            create_parents=True,
-            ignore_failures=True,
             cd_access='a',
   )
 
@@ -677,7 +679,7 @@ def setup_atsv2_hbase_files():
 
 def setup_atsv2_hbase_directories():
     import  params
-    Directory([params.yarn_hbase_pid_dir_prefix, params.yarn_hbase_pid_dir, params.yarn_hbase_log_dir_prefix, params.yarn_hbase_log_dir],
+    Directory([params.yarn_hbase_pid_dir_prefix, params.yarn_hbase_pid_dir, params.yarn_hbase_log_dir],
               owner=params.yarn_hbase_user,
               group=params.user_group,
               create_parents=True,

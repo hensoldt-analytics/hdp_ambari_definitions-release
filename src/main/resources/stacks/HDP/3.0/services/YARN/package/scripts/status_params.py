@@ -75,4 +75,3 @@ stack_name = default("/clusterLevelParams/stack_name", None)
 yarn_hbase_user = format("{yarn_ats_user}") #Use yarn_ats_user.
 yarn_hbase_pid_dir_prefix = config['configurations']['yarn-hbase-env']['yarn_hbase_pid_dir_prefix']
 yarn_hbase_pid_dir = format("{yarn_hbase_pid_dir_prefix}/{yarn_hbase_user}")
-yarn_hbase_conf_dir = "/etc/yarn-hbase/conf"
