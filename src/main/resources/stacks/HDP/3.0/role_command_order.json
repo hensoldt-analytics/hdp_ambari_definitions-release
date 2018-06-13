@@ -3,8 +3,6 @@
   "_comment" : "blockedRole-blockedCommand: [blockerRole1-blockerCommand1, blockerRole2-blockerCommand2, ...]",
   "general_deps" : {
     "_comment" : "dependencies for all cases",
-    "APP_TIMELINE_SERVER-RESTART": ["NAMENODE-RESTART"],
-
     "ACCUMULO_MASTER-START": ["ZOOKEEPER_SERVER-START", "NAMENODE-START", "DATANODE-START"],
     "ACCUMULO_TSERVER-START": ["ACCUMULO_MASTER-START"],
     "ACCUMULO_MONITOR-START": ["ACCUMULO_MASTER-START"],
