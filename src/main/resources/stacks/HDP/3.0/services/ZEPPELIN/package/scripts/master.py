@@ -580,7 +580,7 @@ class Master(Script):
           if params.hive_principal:
             self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';principal=' + params.hive_principal, 'add')
           if params.hive_transport_mode:
-            self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';transportMode=' + params.hive_transport_mode, 'add')
+            self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';transportMode=' + params.spark_transport_mode, 'add')
           if 'spark2.splitQueries' not in interpreter['properties']:
             self.storePropertyToInterpreter(interpreter, 'spark2.splitQueries', 'string', "true")
 
