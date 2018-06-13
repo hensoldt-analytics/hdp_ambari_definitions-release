@@ -60,7 +60,8 @@ def hive_interactive(name = None):
                         mode = 0777
     )
     # create directories for llap package
-    for dir in ['/user/hive/.yarn','/user/hive/.yarn/package/','/user/hive/.yarn/package/LLAP']:
+    pkg_dir = '/user/' + params.hive_user + '/.yarn'
+    for dir in [pkg_dir, pkg_dir + '/package', pkg_dir + '/package/LLAP']:
       # hdfsresouces handles parent creation badly
       params.HdfsResource(dir,
                           type = "directory",
