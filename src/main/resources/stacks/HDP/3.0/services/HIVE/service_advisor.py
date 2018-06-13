@@ -191,6 +191,7 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
       putHiveInteractiveSiteProperty = self.putProperty(configurations, "hive-interactive-site", services)
 
       druid_coordinator_host_port = self.druid_host('DRUID_COORDINATOR', 'druid-coordinator', services, hosts, default_host='localhost:8081')
+      druid_overlord_host_port = self.druid_host('DRUID_OVERLORD', 'druid-overlord', services, hosts, default_host='localhost:8090')
       druid_broker_host_port = self.druid_host('DRUID_ROUTER', 'druid-router', services, hosts)
       if druid_broker_host_port is None:
         druid_broker_host_port = self.druid_host('DRUID_BROKER', 'druid-broker', services, hosts, default_host='localhost:8083')
@@ -208,6 +209,7 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
       putHiveInteractiveSiteProperty('hive.druid.broker.address.default', druid_broker_host_port)
       putHiveInteractiveSiteProperty('hive.druid.coordinator.address.default', druid_coordinator_host_port)
+      putHiveInteractiveSiteProperty('hive.druid.overlord.address.default', druid_overlord_host_port)
       putHiveInteractiveSiteProperty('hive.druid.metadata.uri', druid_metadata_uri)
       putHiveInteractiveSiteProperty('hive.druid.metadata.username', druid_metadata_user)
       putHiveInteractiveSiteProperty('hive.druid.metadata.db.type', druid_metadata_type)

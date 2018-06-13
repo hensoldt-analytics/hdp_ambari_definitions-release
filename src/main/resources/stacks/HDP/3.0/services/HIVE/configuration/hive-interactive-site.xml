@@ -908,11 +908,24 @@ limitations under the License.
   <property>
     <name>hive.druid.coordinator.address.default</name>
     <value>localhost:8082</value>
-    <description>Host name of druid router if any or broker</description>
+    <description>Host name of druid coordinator</description>
     <on-ambari-upgrade add="false"/>
     <depends-on>
       <property>
         <type>druid-coordinator</type>
+        <name>druid.port</name>
+      </property>
+    </depends-on>
+  </property>
+
+  <property>
+    <name>hive.druid.overlord.address.default</name>
+    <value>localhost:8090</value>
+    <description>Host name of druid overlord</description>
+    <on-ambari-upgrade add="false"/>
+    <depends-on>
+      <property>
+        <type>druid-overlord</type>
         <name>druid.port</name>
       </property>
     </depends-on>

@@ -20,6 +20,7 @@ limitations under the License.
 from ambari_commons import OSCheck
 from resource_management.libraries.functions import conf_select
 from resource_management.libraries.functions import stack_select
+from resource_management.libraries.functions.get_bare_principal import get_bare_principal
 from resource_management.libraries.resources.hdfs_resource import HdfsResource
 from resource_management.libraries.functions import get_kinit_path
 from resource_management.libraries.script.script import Script
@@ -197,3 +198,15 @@ stack_version_unformatted = str(config['clusterLevelParams']['stack_version'])
 io_compression_codecs = default("/configurations/core-site/io.compression.codecs", None)
 lzo_enabled = should_install_lzo()
 hadoop_lib_home = stack_root + '/' + stack_version + '/hadoop/lib'
+
+# Kafka Jaas configs
+kafka_bare_jaas_principal = None
+druid_jaas_file = format('{druid_conf_dir}/druid_jaas.conf')
+if security_enabled and 'kafka_principal_name' in config['configurations']['kafka-env'] :
+    # generate KafkaClient jaas config if kafka is kerberoized
+    _kafka_principal_name = default("/configurations/kafka-env/kafka_principal_name", None)
+    kafka_bare_jaas_principal = get_bare_principal(_kafka_principal_name)
+    _hostname_lowercase = config['agentLevelParams']['hostname'].lower()
+    _druid_principal_name = config['configurations']['druid-common']['druid.escalator.internalClientPrincipal']
+    druid_jaas_principal = _druid_principal_name.replace('_HOST',_hostname_lowercase)
+    druid_keytab_path = config['configurations']['druid-common']['druid.escalator.internalClientKeytab']

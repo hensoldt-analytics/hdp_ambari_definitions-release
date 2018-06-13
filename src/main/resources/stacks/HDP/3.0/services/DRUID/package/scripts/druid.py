@@ -25,6 +25,7 @@ from resource_management.core.source import DownloadSource
 from resource_management.core.source import InlineTemplate
 from resource_management.libraries.functions import format
 from resource_management.libraries.functions.show_logs import show_logs
+from resource_management.libraries.resources.template_config import TemplateConfig
 from resource_management.core.logger import Logger
 
 
@@ -84,6 +85,13 @@ def druid(upgrade_type=None, nodeType=None):
        )
 
   Logger.info("Created log rotate file")
+
+  if params.security_enabled:
+      TemplateConfig(params.druid_jaas_file,
+                     owner=params.druid_user,
+                     group=params.user_group,
+                     mode=0644
+                     )
 
   # node specific configs
   for node_type in ['coordinator', 'overlord', 'historical', 'broker', 'middleManager', 'router']:
