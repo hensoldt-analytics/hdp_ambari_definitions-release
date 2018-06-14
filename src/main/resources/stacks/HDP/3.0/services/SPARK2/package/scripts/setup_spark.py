@@ -80,7 +80,8 @@ def setup_spark(env, type, upgrade_type = None, action = None):
   spark2_defaults = dict(params.config['configurations']['spark2-defaults'])
 
   if params.security_enabled:
-    spark2_defaults['history.server.spnego.kerberos.principal'] = spark2_defaults['history.server.spnego.kerberos.principal'].replace('_HOST', socket.getfqdn().lower())
+    spark2_defaults.pop("history.server.spnego.kerberos.principal")
+    spark2_defaults.pop("history.server.spnego.keytab.file")
 
   PropertiesFile(format("{spark_conf}/spark-defaults.conf"),
     properties = spark2_defaults,
