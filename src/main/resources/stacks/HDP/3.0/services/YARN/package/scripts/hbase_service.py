@@ -108,7 +108,7 @@ def createTables():
                   )
             Execute( format("{yarn_hbase_table_grant_premission_cmd}"),
                      user = params.yarn_hbase_user,
-                     timeout = 60,
+                     timeout = 300,
                      logoutput = True
                      )
         except:
