@@ -314,8 +314,10 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         putYarnPropertyAttribute("yarn.timeline-service.http-authentication.proxyuser.{0}.groups".format(old_ambari_user), 'delete', 'true')
 
   def recommendYARNConfigurationsFromHDP22(self, configurations, clusterData, services, hosts):
+    capacity_scheduler_properties, received_as_key_value_pair = self.getCapacitySchedulerProperties(services)
     putYarnProperty = self.putProperty(configurations, "yarn-site", services)
     putYarnEnvProperty = self.putProperty(configurations, "yarn-env", services)
+    putCapScheProperty = self.putProperty(configurations, "capacity-scheduler", services)
     putYarnProperty('yarn.nodemanager.resource.cpu-vcores', clusterData['cpu'])
     putYarnProperty('yarn.scheduler.minimum-allocation-vcores', 1)
     putYarnProperty('yarn.scheduler.maximum-allocation-vcores', configurations["yarn-site"]["properties"]["yarn.nodemanager.resource.cpu-vcores"])
@@ -348,8 +350,58 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
 
       if gpu_module_enabled:
         putYarnEnvProperty("yarn_cgroups_enabled", "true")
+        yarn_cgroups_enabled = "true"
 
-      if gpu_module_enabled or yarn_cgroups_enabled:
+      if yarn_cgroups_enabled or len(services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]) > 0:
+        # ResourceCalculator must switch to DominantResourceCalculator when more than resource types are involved
+        # If capacity-scheduler configs are received as one concatenated string, we deposit the changed configs back as
+        # one concatenated string.
+        updated_cap_sched_configs_str = ''
+        if not received_as_key_value_pair:
+          for prop, val in capacity_scheduler_properties.items():
+            if prop == 'yarn.scheduler.capacity.resource-calculator':
+              updated_cap_sched_configs_str = updated_cap_sched_configs_str \
+                                              + prop + "=org.apache.hadoop.yarn.util.resource.DominantResourceCalculator\n"
+            elif prop.startswith('yarn.') and '.resource-calculator' not in prop:
+              updated_cap_sched_configs_str = updated_cap_sched_configs_str + prop + "=" + val + "\n"
+          putCapScheProperty("capacity-scheduler", updated_cap_sched_configs_str)
+          self.logger.info("Updated 'capacity-scheduler' configs as one concatenated string.")
+        else:
+          # If capacity-scheduler configs are received as a  dictionary (generally 1st time), we deposit the changed
+          # values back as dictionary itself.
+          # Update existing configs in 'capacity-scheduler'.
+          for prop, val in capacity_scheduler_properties.items():
+            if prop == 'yarn.scheduler.capacity.resource-calculator':
+              putCapScheProperty(prop, 'org.apache.hadoop.yarn.util.resource.DominantResourceCalculator')
+            elif prop.startswith('yarn.') and '.resource-calculator' not in prop:
+              putCapScheProperty(prop, val)
+          self.logger.info("Updated 'capacity-scheduler' configs as a dictionary.")
+      else:
+        # only one resource involved in resource-type, reset resource-calculator to default
+        # If capacity-scheduler configs are received as one concatenated string, we deposit the changed configs back as
+        # one concatenated string.
+        updated_cap_sched_configs_str = ''
+        if not received_as_key_value_pair:
+          for prop, val in capacity_scheduler_properties.items():
+            if prop == 'yarn.scheduler.capacity.resource-calculator':
+              updated_cap_sched_configs_str = updated_cap_sched_configs_str \
+                                              + prop + "=org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator\n"
+            elif prop.startswith('yarn.') and '.resource-calculator' not in prop:
+              updated_cap_sched_configs_str = updated_cap_sched_configs_str + prop + "=" + val + "\n"
+          putCapScheProperty("capacity-scheduler", updated_cap_sched_configs_str)
+          self.logger.info("Updated 'capacity-scheduler' configs as one concatenated string.")
+        else:
+          # If capacity-scheduler configs are received as a  dictionary (generally 1st time), we deposit the changed
+          # values back as dictionary itself.
+          # Update existing configs in 'capacity-scheduler'.
+          for prop, val in capacity_scheduler_properties.items():
+            if prop == 'yarn.scheduler.capacity.resource-calculator':
+              putCapScheProperty(prop, 'org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator')
+            elif prop.startswith('yarn.') and '.resource-calculator' not in prop:
+              putCapScheProperty(prop, val)
+          self.logger.info("Updated 'capacity-scheduler' configs as a dictionary.")
+
+      if yarn_cgroups_enabled:
         putYarnProperty('yarn.nodemanager.container-executor.class', 'org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor')
         putYarnProperty('yarn.nodemanager.linux-container-executor.group', 'hadoop')
         putYarnProperty('yarn.nodemanager.linux-container-executor.resources-handler.class', 'org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler')
@@ -579,10 +631,6 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
           restyps_list.append("yarn.io/gpu")
           yarn_restyps = ','.join(str(x) for x in restyps_list)
           putResTypsProperty('yarn.resource-types', yarn_restyps)
-      # ResourceCalculator must switch to DominantResourceCalculator when GPU enabled and additional resource types are added other than memory and vcore
-      if len(services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]) > 0:
-        self.logger.info("auto switch ResourceCalculator to DominantResourceCalculator when GPU enabled and resource types are added other than memory and vcore")
-        putCapScheProperty('yarn.scheduler.capacity.resource-calculator', "org.apache.hadoop.yarn.util.resource.DominantResourceCalculator")
       # auto fill gpu related property values in yarn-site
       yarn_restyps = ','.join(str(x) for x in restyps_list)
       putYarnSiteProperty('yarn.nodemanager.resource-plugins', yarn_restyps)
@@ -672,6 +720,12 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     # docker_module_enabled is true or false.
     else:
       # auto revert gpu related property values when gpu is disabled
+      # revert gpu types from resource-types.xml
+      if 'yarn.io/gpu' in restyps_list:
+        restyps_list.remove("yarn.io/gpu")
+        yarn_restyps = ','.join(str(x) for x in restyps_list)
+        putResTypsProperty('yarn.resource-types', yarn_restyps)
+
       if "auto" in rp_gpu_agd_list:
         rp_gpu_agd_list.remove("auto")
         rp_gpu_agd = ','.join(str(x) for x in rp_gpu_agd_list)

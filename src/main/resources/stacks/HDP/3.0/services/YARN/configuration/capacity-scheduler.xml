@@ -221,6 +221,10 @@
         <type>hive-interactive-env</type>
         <name>llap_queue_capacity</name>
       </property>
+      <property>
+        <type>yarn-env</type>
+        <name>yarn_cgroups_enabled</name>
+      </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
