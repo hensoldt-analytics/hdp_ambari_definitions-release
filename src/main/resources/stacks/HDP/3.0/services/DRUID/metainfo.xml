@@ -217,7 +217,6 @@
         <config-type>druid-env</config-type>
         <config-type>druid-log4j</config-type>
         <config-type>druid-logrotate</config-type>
-        <config-type>zoo.cfg</config-type>
       </configuration-dependencies>
 
       <quickLinksConfigurations>
