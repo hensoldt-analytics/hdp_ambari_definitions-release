@@ -388,4 +388,31 @@
     </value-attributes>
     <on-ambari-upgrade add="true"/>
   </property>
+  <property>
+    <name>service_check_retry_count</name>
+    <display-name>Service Check Retry Count</display-name>
+    <description>
+      How many times - in total - the service check should try to login to KDC in case the first attempt was not successful (so that we can mitigate a well a known issue related to replicated KDCs).
+      To disable this feature this value should be set to a number smaller than 1.
+    </description>
+    <value>9</value>
+    <value-attributes>
+      <type>int</type>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>service_check_retry_period_sec</name>
+    <display-name>Service Check Retry Period</display-name>
+    <description>
+      Indicates the time - in seconds - the service check should wait between two login attempts (relevant only if service_check_retry_count is set to a value greater than 0).
+    </description>
+    <value>15</value>
+    <value-attributes>
+      <type>int</type>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
 </configuration>

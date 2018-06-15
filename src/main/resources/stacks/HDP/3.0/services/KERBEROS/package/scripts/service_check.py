@@ -71,7 +71,10 @@ class KerberosServiceCheck(Script):
       try:
         # kinit
         Execute(kinit_command,
-                user=params.smoke_user
+                user=params.smoke_user,
+                wait_for_finish=True,
+                tries=params.service_check_retry_count,
+                try_sleep=params.service_check_retry_period_sec
                 )
       finally:
         File(ccache_file_path,

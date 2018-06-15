@@ -116,6 +116,8 @@ if config is not None:
     manage_krb5_conf = "true"
     force_tcp = "false"
     krb5_conf_template = None
+    service_check_retry_count = 9
+    service_check_retry_period_sec = 15
 
     krb5_conf_data = get_property_value(configurations, 'krb5-conf')
 
@@ -128,6 +130,8 @@ if config is not None:
       kdc_hosts = get_property_value(kerberos_env, 'kdc_hosts', kdc_hosts)
       master_kdc = get_property_value(kerberos_env, 'master_kdc')
       admin_server_host = get_property_value(kerberos_env, 'admin_server_host', admin_server_host)
+      service_check_retry_count = int(get_property_value(kerberos_env, 'service_check_retry_count', service_check_retry_count))
+      service_check_retry_period_sec = int(get_property_value(kerberos_env, 'service_check_retry_period_sec', service_check_retry_period_sec))
 
     if krb5_conf_data is not None:
       realm = get_property_value(krb5_conf_data, 'realm', realm)
