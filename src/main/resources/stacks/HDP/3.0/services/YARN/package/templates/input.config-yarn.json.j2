@@ -20,22 +20,22 @@
     {
       "type":"yarn_nodemanager",
       "rowtype":"service",
-      "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/yarn-{{default('configurations/yarn-env/yarn_user', 'yarn')}}-nodemanager-*.log"
+      "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/hadoop-{{default('configurations/yarn-env/yarn_user', 'yarn')}}-nodemanager-*.log"
     },
     {
       "type":"yarn_resourcemanager",
       "rowtype":"service",
-      "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/yarn-{{default('configurations/yarn-env/yarn_user', 'yarn')}}-resourcemanager-*.log"
+      "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/hadoop-{{default('configurations/yarn-env/yarn_user', 'yarn')}}-resourcemanager-*.log"
     },
     {
       "type":"yarn_timelineserver",
       "rowtype":"service",
-      "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/yarn-{{default('configurations/yarn-env/yarn_user', 'yarn')}}-timelineserver-*.log"
+      "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/hadoop-{{default('configurations/yarn-env/yarn_user', 'yarn')}}-timelineserver-*.log"
     },
     {
       "type":"yarn_historyserver",
       "rowtype":"service",
-      "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/yarn-{{default('configurations/yarn-env/yarn_user', 'yarn')}}-historyserver-*.log"
+      "path":"{{default('/configurations/mapred-env/mapred_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/mapred-env/mapred_user', 'mapred')}}/hadoop-{{default('configurations/mapred-env/mapred_user', 'mapred')}}-historyserver-*.log"
     },
     {
       "type":"yarn_jobsummary",

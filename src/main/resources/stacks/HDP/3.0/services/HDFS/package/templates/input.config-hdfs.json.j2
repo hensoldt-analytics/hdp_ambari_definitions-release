@@ -45,7 +45,7 @@
     {
       "type":"hdfs_nfs3",
       "rowtype":"service",
-      "path":"{{default('/configurations/hadoop-env/hdfs_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/hadoop-env/hdfs_user', 'hdfs')}}/hadoop-{{default('configurations/hadoop-env/hdfs_user', 'hdfs')}}-nfs3-*.log"
+      "path":"{{default('/configurations/hadoop-env/hdfs_log_dir_prefix', '/var/log/hadoop')}}/root/hadoop-{{default('configurations/hadoop-env/hdfs_user', 'hdfs')}}-root-nfs3-*.log"
     },
     {
       "type":"hdfs_audit",

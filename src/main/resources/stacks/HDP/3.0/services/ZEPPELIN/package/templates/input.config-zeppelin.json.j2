@@ -20,7 +20,7 @@
     {
       "type":"zeppelin",
       "rowtype":"service",
-      "path":"{{default('/configurations/zeppelin-env/zeppelin_log_dir', '/var/log/zeppelin')}}/zeppelin-zeppelin-*.log"
+      "path":"{{default('/configurations/zeppelin-env/zeppelin_log_dir', '/var/log/zeppelin')}}/zeppelin-{{default('/configurations/zeppelin-env/zeppelin_user', 'zeppelin')}}-*.log"
     }
   ],
   "filter":[

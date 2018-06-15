@@ -30,7 +30,7 @@
     {
       "type":"livy2_server",
       "rowtype":"service",
-      "path":"{{default('/configurations/livy2-env/livy2_log_dir', '/var/log/livy2')}}/livy-livy-server.out"
+      "path":"{{default('/configurations/livy2-env/livy2_log_dir', '/var/log/livy2')}}/livy-{{default('/configurations/livy2-env/livy2_user', 'livy')}}-server.out"
     }
   ],
   "filter":[

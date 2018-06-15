@@ -20,12 +20,12 @@
     {
       "type":"ams_hbase_master",
       "rowtype":"service",
-      "path":"{{default('/configurations/ams-env/metrics_collector_log_dir', '/var/log/ambari-metrics-collector')}}/hbase-ams-master-*.log"
+      "path":"{{default('/configurations/ams-env/metrics_collector_log_dir', '/var/log/ambari-metrics-collector')}}/hbase-{{default('/configurations/ams-env/ambari_metrics_user', 'ams')}}-master-*.log"
     },
     {
       "type":"ams_hbase_regionserver",
       "rowtype":"service",
-      "path":"{{default('/configurations/ams-env/metrics_collector_log_dir', '/var/log/ambari-metrics-collector')}}/hbase-ams-regionserver-*.log"
+      "path":"{{default('/configurations/ams-env/metrics_collector_log_dir', '/var/log/ambari-metrics-collector')}}/hbase-{{default('/configurations/ams-env/ambari_metrics_user', 'ams')}}-regionserver-*.log"
     },
     {
       "type":"ams_collector",
@@ -35,7 +35,7 @@
     {
       "type":"ams_monitor",
       "rowtype":"service",
-      "path":"{{default('/configurations/ams-env/metrics_monitor_log_dir', '/var/log/ambari-metrics-monitor')}}/ambari-metrics-monitor.out"
+      "path":"{{default('/configurations/ams-env/metrics_monitor_log_dir', '/var/log/ambari-metrics-monitor')}}/ambari-metrics-monitor.log"
     },
     {
       "type":"ams_grafana",
