@@ -68,7 +68,7 @@ class HiveServerInteractive(Script):
 
         # Copy hive.tar.gz and tez.tar.gz used by Hive Interactive to HDFS
         resource_created = copy_to_hdfs(
-          "hive2",
+          "hive",
           params.user_group,
           params.hdfs_user,
           skip=params.sysprep_skip_copy_tarballs_hdfs)
