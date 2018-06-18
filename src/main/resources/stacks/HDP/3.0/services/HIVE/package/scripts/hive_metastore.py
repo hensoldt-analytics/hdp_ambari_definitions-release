@@ -21,7 +21,7 @@ limitations under the License.
 import os
 
 # Local Imports
-from hive import create_metastore_schema, hive, jdbc_connector
+from hive import create_hive_metastore_schema, create_metastore_schema, hive, jdbc_connector
 from hive_service import hive_service
 from setup_ranger_hive import setup_ranger_hive_metastore_service
 
@@ -56,6 +56,7 @@ class HiveMetastore(Script):
     self.configure(env)
     if params.init_metastore_schema:
       create_metastore_schema() # execute without config lock
+      create_hive_metastore_schema() # before starting metastore create info schema
 
     hive_service('metastore', action='start', upgrade_type=upgrade_type)
 
@@ -95,6 +96,7 @@ class HiveMetastore(Script):
     if is_upgrade and params.stack_version_formatted_major and \
             check_stack_feature(StackFeature.HIVE_METASTORE_UPGRADE_SCHEMA, params.stack_version_formatted_major):
       self.upgrade_schema(env)
+      create_hive_metastore_schema() #before starting any services during upgrade create info schema
 
   def upgrade_schema(self, env):
     """

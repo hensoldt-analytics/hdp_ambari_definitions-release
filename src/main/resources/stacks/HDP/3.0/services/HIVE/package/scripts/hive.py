@@ -21,6 +21,7 @@ limitations under the License.
 # Python Imports
 import os
 import glob
+import traceback
 from urlparse import urlparse
 
 # Ambari Commons & Resource Management Imports
@@ -360,6 +361,57 @@ def setup_metastore():
   params.HdfsResource(None, action="execute")
 
   generate_logfeeder_input_config('hive', Template("input.config-hive.json.j2", extra_imports=[default]))
+
+def create_hive_metastore_schema():
+  import params
+  
+  SYS_DB_CREATED_FILE = "/etc/hive/sys.db.created"
+
+  if os.path.isfile(SYS_DB_CREATED_FILE):
+    Logger.info("Sys DB is already created")
+    return
+
+  create_hive_schema_cmd = format("export HIVE_CONF_DIR={hive_server_conf_dir} ; "
+                                  "{hive_schematool_bin}/schematool -initSchema "
+                                  "-dbType hive "
+                                  "-metaDbType {hive_metastore_db_type} "
+                                  "-userName {hive_metastore_user_name} "
+                                  "-passWord {hive_metastore_user_passwd!p} "
+                                  "-verbose")
+
+  check_hive_schema_created_cmd = as_user(format("export HIVE_CONF_DIR={hive_server_conf_dir} ; "
+                                          "{hive_schematool_bin}/schematool -info "
+                                          "-dbType hive "
+                                          "-metaDbType {hive_metastore_db_type} "
+                                          "-userName {hive_metastore_user_name} "
+                                          "-passWord {hive_metastore_user_passwd!p} "
+                                          "-verbose"), params.hive_user)
+
+  # HACK: in cases with quoted passwords and as_user (which does the quoting as well) !p won't work for hiding passwords.
+  # Fixing it with the hack below:
+  quoted_hive_metastore_user_passwd = quote_bash_args(quote_bash_args(params.hive_metastore_user_passwd))
+  if quoted_hive_metastore_user_passwd.startswith("'") and quoted_hive_metastore_user_passwd.endswith("'") \
+      or quoted_hive_metastore_user_passwd.startswith('"') and quoted_hive_metastore_user_passwd.endswith('"'):
+    quoted_hive_metastore_user_passwd = quoted_hive_metastore_user_passwd[1:-1]
+  Logger.sensitive_strings[repr(create_hive_schema_cmd)] = repr(create_hive_schema_cmd.replace(
+      format("-passWord {quoted_hive_metastore_user_passwd}"), "-passWord " + utils.PASSWORDS_HIDE_STRING))
+  Logger.sensitive_strings[repr(check_hive_schema_created_cmd)] = repr(check_hive_schema_created_cmd.replace(
+      format("-passWord {quoted_hive_metastore_user_passwd}"), "-passWord " + utils.PASSWORDS_HIDE_STRING))
+
+  try:
+    if params.security_enabled:
+      hive_kinit_cmd = format("{kinit_path_local} -kt {hive_server2_keytab} {hive_principal}; ")
+      Execute(hive_kinit_cmd, user=params.hive_user)
+
+    Execute(create_hive_schema_cmd,
+            not_if = check_hive_schema_created_cmd,
+            user = params.hive_user
+    )
+    Execute("touch " + SYS_DB_CREATED_FILE)
+    Logger.info("Sys DB is set up")
+  except:
+    Logger.error("Could not create Sys DB. Try to restart HDFS, and then restart HiveServer2")
+    Logger.error(traceback.format_exc())
 
 def create_metastore_schema():
   import params
