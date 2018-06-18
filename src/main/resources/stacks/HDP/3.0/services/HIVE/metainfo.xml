@@ -310,16 +310,12 @@
         <osSpecific>
           <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
           <packages>
-            <!--
-            TODO AMBARI-20753
-            Re-add after Hive has all of its packages using the correct RPM name.
             <package>
               <name>hive-${stack_version}</name>
             </package>
             <package>
               <name>hive-${stack_version}-hcatalog</name>
             </package>
-            -->
           </packages>
         </osSpecific>
         <osSpecific>
