@@ -450,6 +450,7 @@ hive_env_sh_template = config['configurations']['hive-env']['content']
 hive_hdfs_user_dir = format("/user/{hive_user}")
 hive_hdfs_user_mode = 0755
 hive_metastore_warehouse_dir = config['configurations']['hive-site']["hive.metastore.warehouse.dir"]
+hive_metastore_warehouse_external_dir = config['configurations']['hive-site']["hive.metastore.warehouse.external.dir"]
 whs_dir_protocol = urlparse(hive_metastore_warehouse_dir).scheme
 hive_exec_scratchdir = config['configurations']['hive-site']["hive.exec.scratchdir"]
 

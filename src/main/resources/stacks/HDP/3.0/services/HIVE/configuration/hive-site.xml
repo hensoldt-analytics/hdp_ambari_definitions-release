@@ -505,6 +505,14 @@ limitations under the License.
     <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
+    <name>hive.metastore.warehouse.external.dir</name>
+    <display-name>Hive Metastore Warehouse External directory</display-name>
+    <value>/warehouse/tablespace/external/hive</value>
+    <description>location of default database for the warehouse of external tables</description>
+    <property-type>NOT_MANAGED_HDFS_PATH</property-type>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>hive.metastore.uris</name>
     <value>thrift://localhost:9083</value>
     <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>

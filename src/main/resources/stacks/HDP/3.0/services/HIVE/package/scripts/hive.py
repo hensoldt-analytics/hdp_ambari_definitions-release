@@ -250,7 +250,7 @@ def create_warehouse_dirs():
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
     # Create Hive Metastore Warehouse Dir
-    external_dir = "/warehouse/tablespace/external/hive"
+    external_dir = params.hive_metastore_warehouse_external_dir
     managed_dir = params.hive_metastore_warehouse_dir
     params.HdfsResource(external_dir,
                         type = "directory",
