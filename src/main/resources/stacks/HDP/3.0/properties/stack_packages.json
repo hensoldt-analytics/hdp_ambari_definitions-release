@@ -180,46 +180,6 @@
           ]
         }
       },
-      "FALCON": {
-        "FALCON_CLIENT": {
-          "STACK-SELECT-PACKAGE": "falcon-client",
-          "INSTALL": [
-            "falcon-client"
-          ],
-          "PATCH": [
-            "falcon-client"
-          ],
-          "STANDARD": [
-            "falcon-client"
-          ]
-        },
-        "FALCON_SERVER": {
-          "STACK-SELECT-PACKAGE": "falcon-server",
-          "INSTALL": [
-            "falcon-server"
-          ],
-          "PATCH": [
-            "falcon-server"
-          ],
-          "STANDARD": [
-            "falcon-server"
-          ]
-        }
-      },
-      "FLUME": {
-        "FLUME_HANDLER": {
-          "STACK-SELECT-PACKAGE": "flume-server",
-          "INSTALL": [
-            "flume-server"
-          ],
-          "PATCH": [
-            "flume-server"
-          ],
-          "STANDARD": [
-            "flume-server"
-          ]
-        }
-      },
       "HBASE": {
         "HBASE_CLIENT": {
           "STACK-SELECT-PACKAGE": "hbase-client",
@@ -436,20 +396,6 @@
           ]
         }
       },
-      "MAHOUT": {
-        "MAHOUT": {
-          "STACK-SELECT-PACKAGE": "mahout-client",
-          "INSTALL": [
-            "mahout-client"
-          ],
-          "PATCH": [
-            "mahout-client"
-          ],
-          "STANDARD": [
-            "mahout-client"
-          ]
-        }
-      },
       "MAPREDUCE2": {
         "HISTORYSERVER": {
           "STACK-SELECT-PACKAGE": "hadoop-mapreduce-historyserver",
@@ -496,7 +442,8 @@
             "oozie-server"
           ],
           "PATCH": [
-            "oozie-server"
+            "oozie-server",
+            "oozie-client"
           ],
           "STANDARD": [
             "oozie-client",
@@ -567,68 +514,6 @@
           ],
           "STANDARD": [
             "ranger-kms"
-          ]
-        }
-      },
-      "SPARK": {
-        "LIVY_CLIENT": {
-          "STACK-SELECT-PACKAGE": "livy2-client",
-          "INSTALL": [
-            "livy2-client"
-          ],
-          "PATCH": [
-            "livy2-client"
-          ],
-          "STANDARD": [
-            "livy2-client"
-          ]
-        },
-        "LIVY_SERVER": {
-          "STACK-SELECT-PACKAGE": "livy2-server",
-          "INSTALL": [
-            "livy2-server"
-          ],
-          "PATCH": [
-            "livy2-server"
-          ],
-          "STANDARD": [
-            "livy2-server"
-          ]
-        },
-        "SPARK_CLIENT": {
-          "STACK-SELECT-PACKAGE": "spark2-client",
-          "INSTALL": [
-            "spark2-client"
-          ],
-          "PATCH": [
-            "spark2-client"
-          ],
-          "STANDARD": [
-            "spark2-client"
-          ]
-        },
-        "SPARK_JOBHISTORYSERVER": {
-          "STACK-SELECT-PACKAGE": "spark2-historyserver",
-          "INSTALL": [
-            "spark2-historyserver"
-          ],
-          "PATCH": [
-            "spark2-historyserver"
-          ],
-          "STANDARD": [
-            "spark2-historyserver"
-          ]
-        },
-        "SPARK_THRIFTSERVER": {
-          "STACK-SELECT-PACKAGE": "spark2-thriftserver",
-          "INSTALL": [
-            "spark2-thriftserver"
-          ],
-          "PATCH": [
-            "spark2-thriftserver"
-          ],
-          "STANDARD": [
-            "spark2-thriftserver"
           ]
         }
       },
@@ -926,18 +811,6 @@
           "current_dir": "{0}/current/druid-overlord/conf"
         }
       ],
-      "falcon": [
-        {
-          "conf_dir": "/etc/falcon/conf",
-          "current_dir": "{0}/current/falcon-client/conf"
-        }
-      ],
-      "flume": [
-        {
-          "conf_dir": "/etc/flume/conf",
-          "current_dir": "{0}/current/flume-server/conf"
-        }
-      ],
       "hadoop": [
         {
           "conf_dir": "/etc/hadoop/conf",
@@ -986,10 +859,10 @@
           "current_dir": "{0}/current/knox-server/conf"
         }
       ],
-      "mahout": [
+      "livy2": [
         {
-          "conf_dir": "/etc/mahout/conf",
-          "current_dir": "{0}/current/mahout-client/conf"
+          "conf_dir": "/etc/livy2/conf",
+          "current_dir": "{0}/current/livy2-client/conf"
         }
       ],
       "nifi": [
@@ -1040,12 +913,6 @@
           "current_dir": "{0}/current/ranger-usersync/conf"
         }
       ],
-      "spark": [
-        {
-          "conf_dir": "/etc/spark/conf",
-          "current_dir": "{0}/current/spark-client/conf"
-        }
-      ],
       "spark2": [
         {
           "conf_dir": "/etc/spark2/conf",
@@ -1088,6 +955,87 @@
           "current_dir": "{0}/current/zookeeper-client/conf"
         }
       ]
+    },
+    "conf-select-patching": {
+      "ACCUMULO": {
+        "packages": ["accumulo"]
+      },
+      "ATLAS": {
+        "packages": ["atlas"]
+      },
+      "DRUID": {
+        "packages": ["druid", "superset"]
+      },
+      "FLUME": {
+        "packages": ["flume"]
+      },
+      "HBASE": {
+        "packages": ["hbase"]
+      },
+      "HDFS": {
+        "packages": []
+      },
+      "HIVE": {
+        "packages": ["hive", "hive-hcatalog", "hive2", "tez_hive2"]
+      },
+      "KAFKA": {
+        "packages": ["kafka"]
+      },
+      "KNOX": {
+        "packages": ["knox"]
+      },
+      "MAPREDUCE2": {
+        "packages": []
+      },
+      "OOZIE": {
+        "packages": ["oozie"]
+      },
+      "PIG": {
+        "packages": ["pig"]
+      },
+      "R4ML": {
+        "packages": []
+      },
+      "RANGER": {
+        "packages": ["ranger-admin", "ranger-usersync", "ranger-tagsync"]
+      },
+      "RANGER_KMS": {
+        "packages": ["ranger-kms"]
+      },
+      "SPARK2": {
+        "packages": ["spark2", "livy2"]
+      },
+      "SQOOP": {
+        "packages": ["sqoop"]
+      },
+      "STORM": {
+        "packages": ["storm", "storm-slider-client"]
+      },
+      "SYSTEMML": {
+        "packages": []
+      },
+      "TEZ": {
+        "packages": ["tez"]
+      },
+      "TITAN": {
+        "packages": []
+      },
+      "YARN": {
+        "packages": []
+      },
+      "ZEPPELIN": {
+        "packages": ["zeppelin"]
+      },
+      "ZOOKEEPER": {
+        "packages": ["zookeeper"]
+      }
+    },
+    "upgrade-dependencies" : {
+      "ATLAS": ["STORM"],
+      "HIVE": ["TEZ", "MAPREDUCE2", "SQOOP"],
+      "TEZ": ["HIVE"],
+      "MAPREDUCE2": ["HIVE"],
+      "OOZIE": ["MAPREDUCE2"]
     }
   }
 }
