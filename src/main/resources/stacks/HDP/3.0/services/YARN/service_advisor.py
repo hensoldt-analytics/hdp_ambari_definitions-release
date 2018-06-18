@@ -352,7 +352,7 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         putYarnEnvProperty("yarn_cgroups_enabled", "true")
         yarn_cgroups_enabled = "true"
 
-      if yarn_cgroups_enabled or len(services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]) > 0:
+      if yarn_cgroups_enabled or self.has_multiple_resource_types(services):
         # ResourceCalculator must switch to DominantResourceCalculator when more than resource types are involved
         # If capacity-scheduler configs are received as one concatenated string, we deposit the changed configs back as
         # one concatenated string.
@@ -415,6 +415,11 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         putYarnPropertyAttribute('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', 'delete', 'true')
         putYarnPropertyAttribute('yarn.nodemanager.linux-container-executor.cgroups.mount', 'delete', 'true')
         putYarnPropertyAttribute('yarn.nodemanager.linux-container-executor.cgroups.mount-path', 'delete', 'true')
+
+  def has_multiple_resource_types(self, services):
+    return "resource-types" in services["configurations"] \
+        and "yarn.resource-types" in services["configurations"]["resource-types"]["properties"] \
+        and len(services["configurations"]["resource-types"]["properties"]["yarn.resource-types"]) > 0
 
   def recommendYARNConfigurationsFromHDP23(self, configurations, clusterData, services, hosts):
     putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
