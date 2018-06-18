@@ -317,6 +317,8 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
         num_kakfa_brokers = len(services['services'][each_service]['components'][0]['StackServiceComponents']['hostnames'])
         putKafkaBrokerProperty = self.putProperty(configurations, "kafka-broker", services)
         putKafkaBrokerProperty('offsets.topic.replication.factor', str(min(3, num_kakfa_brokers)))
+      if services['services'][each_service]['components'][0]['StackServiceComponents']['service_name'] == 'STREAMSMSGMGR':
+        putKafkaBrokerProperty('producer.metrics.enable', 'true')
 
 class KafkaValidator(service_advisor.ServiceAdvisor):
   """
@@ -329,7 +331,8 @@ class KafkaValidator(service_advisor.ServiceAdvisor):
     self.as_super.__init__(*args, **kwargs)
 
     self.validators = [("ranger-kafka-plugin-properties", self.validateKafkaRangerPluginConfigurationsFromHDP22),
-                       ("kafka-broker", self.validateKAFKAConfigurationsFromHDP23)]
+                       ("kafka-broker", self.validateKAFKAConfigurationsFromHDP23),
+                       ("kafka-broker", self.validateKAFKAConfigurationsFromHDP30)]
 
   def validateKafkaRangerPluginConfigurationsFromHDP22(self, properties, recommendedDefaults, configurations, services, hosts):
     validationItems = []
@@ -396,5 +399,26 @@ class KafkaValidator(service_advisor.ServiceAdvisor):
 
     return self.toConfigurationValidationProblems(validationItems, "kafka-broker")
 
+  def validateKAFKAConfigurationsFromHDP30(self, properties, recommendedDefaults, configurations, services, hosts):
+    kafka_broker = properties
+    validationItems = []
+    servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
+    kafka_broker_properties = self.getSiteProperties(configurations, "kafka-broker")
+    if ("STREAMSMSGMGR" in servicesList):
+      prop_name = 'producer.metrics.enable'
+      prop_val = 'true'
+      try:
+        kafka_broker_producer_metrics_enable = kafka_broker_properties[prop_name]
+        if kafka_broker_producer_metrics_enable.lower() == "false":
+          validationItems.append({"config-name": prop_name,
+                                  "item": self.getWarnItem(
+                                  "Setting {0} to {1} will prevent collection of metrics related to producer message " \
+                                  "count by Kafka brokers.".format(prop_name, kafka_broker_producer_metrics_enable))})
+      except KeyError as e:
+        self.logger.info("Unable to find producer.metrics.enable.")
+        validationItems.append({"config-name": prop_name,
+                                "item": self.getWarnItem(
+                                "After Installing Streams Messaging Manager, {0} with be set to {1}." \
+                                "Please restart kafka for changes to take place.".format(prop_name, prop_val))})
 
-
+    return self.toConfigurationValidationProblems(validationItems, "kafka-broker")

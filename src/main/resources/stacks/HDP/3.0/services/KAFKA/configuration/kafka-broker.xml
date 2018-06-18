@@ -642,4 +642,15 @@
     </value-attributes>
     <on-ambari-upgrade add="true"/>
   </property>
+  <property>
+    <name>producer.metrics.enable</name>
+    <value>false</value>
+    <on-ambari-upgrade add="false"/>
+    <depends-on>
+      <property>
+        <type>streams-messaging-manager-common</type>
+        <name>kafka.bootstrap.servers</name>
+      </property>
+    </depends-on>
+  </property>
 </configuration>
