@@ -33,6 +33,10 @@
           "subsection-name": "subsection-ranger-db-row1-col2"
         },
         {
+          "config": "ranger-env/create_db_dbuser",
+          "subsection-name": "subsection-ranger-db-row2"
+        },
+        {
           "config": "ranger-env/test_db_connection",
           "subsection-name": "subsection-ranger-db-row2",
           "property_value_attributes": {
@@ -56,10 +60,6 @@
               }
             }
           ]
-        },
-        {
-          "config": "ranger-env/create_db_dbuser",
-          "subsection-name": "subsection-ranger-db-row2"
         },
         {
           "config": "admin-properties/db_root_user",

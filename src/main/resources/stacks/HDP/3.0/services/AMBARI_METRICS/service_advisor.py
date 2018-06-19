@@ -758,7 +758,7 @@ class AMBARI_METRICSValidator(service_advisor.ServiceAdvisor):
     grafana_pwd = properties.get("metrics_grafana_password")
     grafana_pwd_length_item = None
     if len(grafana_pwd) < 4:
-      grafana_pwd_length_item = self.getErrorItem("Grafana password length should be at least 4.")
+      grafana_pwd_length_item = self.getNotApplicableItem("Grafana password length should be at least 4.")
       pass
     validationItems.extend([{"config-name":'metrics_grafana_password', "item": grafana_pwd_length_item }])
     return self.toConfigurationValidationProblems(validationItems, "ams-site")
