@@ -33,11 +33,6 @@
       "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/hadoop-{{default('configurations/yarn-env/yarn_user', 'yarn')}}-timelineserver-*.log"
     },
     {
-      "type":"yarn_historyserver",
-      "rowtype":"service",
-      "path":"{{default('/configurations/mapred-env/mapred_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/mapred-env/mapred_user', 'mapred')}}/hadoop-{{default('configurations/mapred-env/mapred_user', 'mapred')}}-historyserver-*.log"
-    },
-    {
       "type":"yarn_jobsummary",
       "rowtype":"service",
       "path":"{{default('/configurations/yarn-env/yarn_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/yarn-env/yarn_user', 'yarn')}}/hadoop-mapreduce.jobsummary.log"

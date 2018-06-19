@@ -20,7 +20,7 @@
     {
       "type":"mapred_historyserver",
       "rowtype":"service",
-      "path":"{{default('/configurations/mapred-env/mapred_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/mapred-env/mapred_user', 'mapred')}}/mapred-{{default('configurations/mapred-env/mapred_user', 'mapred')}}-historyserver*.log"
+      "path":"{{default('/configurations/mapred-env/mapred_log_dir_prefix', '/var/log/hadoop')}}/{{default('configurations/mapred-env/mapred_user', 'mapred')}}/hadoop-{{default('configurations/mapred-env/mapred_user', 'mapred')}}-historyserver*.log"
     }
    ],
   "filter":[
