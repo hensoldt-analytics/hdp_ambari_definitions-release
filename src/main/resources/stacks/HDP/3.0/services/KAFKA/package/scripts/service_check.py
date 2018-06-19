@@ -55,6 +55,14 @@ class ServiceCheck(Script):
       Logger.info("Running kafka create topic command: %s" % command)
       call_and_match_output(command, format("({create_topic_cmd_created_output})|({create_topic_cmd_exists_output})"), "Failed to check that topic exists", user=params.kafka_user)
 
+    under_rep_cmd = format("{kafka_home}/bin/kafka-topics.sh --describe --zookeeper {kafka_config[zookeeper.connect]} --under-replicated-partitions")
+    under_rep_cmd_code, under_rep_cmd_out = shell.call(under_rep_cmd, logoutput=True, quiet=False, user=params.kafka_user)
+
+    if under_rep_cmd_code > 0:
+      raise Fail("Error encountered when attempting find under replicated partitions: {0}".format(under_rep_cmd_out))
+    elif len(under_rep_cmd_out) > 0 and "TOPIC" in under_rep_cmd_out:
+      raise Fail("Under replicated partitions found: {0}".format(under_rep_cmd_out))
+
   def read_kafka_config(self):
     import params
 
