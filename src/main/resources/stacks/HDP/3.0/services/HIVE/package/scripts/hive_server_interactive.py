@@ -24,7 +24,6 @@ import os
 import re
 import subprocess
 import time
-import traceback
 import urllib2
 
 # Local Imports

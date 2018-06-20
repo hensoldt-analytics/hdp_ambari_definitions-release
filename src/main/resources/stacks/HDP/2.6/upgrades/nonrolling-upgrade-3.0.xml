@@ -79,6 +79,15 @@
         </task>
       </execute-stage>
 
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Check Backup External Metastore Database">
+        <condition xsi:type="config" type="hive-env" property="hive_database" value="New MySQL Database" comparison="not-equals"/>
+        <task xsi:type="manual">
+          <message>The previous step may not have been successful if the Hive Metastore database is on a different host then the Hive Metastore.</message>
+          <message>Please check the output log of the step, Look for the text "MANUAL DB DUMP REQUIRED!!".</message>
+          <message>If it is present please follow the instructions there.</message>
+        </task>
+      </execute-stage>
+
       <execute-stage service="HIVE" component="HIVE_METASTORE" title="Register MySQL driver for Hive">
         <condition xsi:type="config" type="hive-env" property="hive_database_type" value="mysql" comparison="equals"/>
         <task xsi:type="manual">

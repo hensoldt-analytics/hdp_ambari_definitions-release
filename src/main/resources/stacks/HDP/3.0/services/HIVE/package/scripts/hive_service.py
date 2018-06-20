@@ -21,7 +21,6 @@ limitations under the License.
 # Python Imports
 import os
 import time
-import traceback
 
 # Ambari Commons & Resource Management Imports
 from ambari_commons.constants import UPGRADE_TYPE_ROLLING
