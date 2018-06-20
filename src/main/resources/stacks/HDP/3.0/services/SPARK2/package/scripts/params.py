@@ -33,6 +33,9 @@ from resource_management.libraries.functions import get_kinit_path
 from resource_management.libraries.functions.get_not_managed_resources import get_not_managed_resources
 from resource_management.libraries.resources.hdfs_resource import HdfsResource
 from resource_management.libraries.script.script import Script
+from ambari_commons.constants import AMBARI_SUDO_BINARY
+
+sudo = AMBARI_SUDO_BINARY
 
 # a map of the Ambari role to the component name
 # for use with <stack-root>/current/<component>
