@@ -261,12 +261,12 @@
                           "if": "${kms-env/create_db_user}",
                           "then": {
                             "property_value_attributes": {
-                              "visible": false
+                              "visible": true
                             }
                           },
                           "else": {
                             "property_value_attributes": {
-                              "visible": true
+                              "visible": false
                             }
                           }
                         }
