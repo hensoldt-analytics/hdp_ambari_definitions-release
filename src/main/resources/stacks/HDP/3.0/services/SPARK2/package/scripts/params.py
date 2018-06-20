@@ -20,8 +20,10 @@ limitations under the License.
 
 import socket
 import status_params
-
 from urlparse import urlparse
+
+from ambari_commons.constants import AMBARI_SUDO_BINARY
+
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.constants import StackFeature
 from resource_management.libraries.functions import conf_select, stack_select
@@ -60,6 +62,7 @@ hive_component_directory = Script.get_component_from_role(HIVE_SERVER_ROLE_DIREC
 
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
+sudo = AMBARI_SUDO_BINARY
 
 stack_name = status_params.stack_name
 stack_root = Script.get_stack_root()
