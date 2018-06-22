@@ -180,6 +180,9 @@ def setup_ranger_admin(upgrade_type=None):
   for prop in params.ranger_admin_password_properties:
     if prop in ranger_admin_site_copy:
       ranger_admin_site_copy[prop] = "_"
+  if 'ranger.ha.spnego.kerberos.keytab' in ranger_admin_site_copy:
+    ranger_admin_site_copy['ranger.spnego.kerberos.keytab'] = ranger_admin_site_copy['ranger.ha.spnego.kerberos.keytab']
+
 
   XmlConfig("ranger-admin-site.xml",
     conf_dir=ranger_conf,
