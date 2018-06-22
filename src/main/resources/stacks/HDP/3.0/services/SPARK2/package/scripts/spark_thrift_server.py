@@ -75,7 +75,7 @@ class SparkThriftServer(Script):
   
   def get_user(self):
     import params
-    return params.hive_user
+    return params.spark_user
 
   def get_pid_files(self):
     import status_params

@@ -29,17 +29,15 @@ class SparkServiceCheck(Script):
     env.set_params(params)
 
     if params.security_enabled:
-      spark_kinit_cmd = format("{kinit_path_local} -kt {spark_kerberos_keytab} {spark_principal}; ")
-      Execute(spark_kinit_cmd, user=params.spark_user)
-      if params.has_livyserver:
-        smokeuser_kinit_cmd = format("{kinit_path_local} -kt {smoke_user_keytab} {smokeuser_principal}; ")
-        Execute(smokeuser_kinit_cmd, user=params.smoke_user)
+      spark_kinit_cmd = format("{kinit_path_local} -kt {smoke_user_keytab} {smokeuser_principal}; ")
+      Execute(spark_kinit_cmd, user=params.smoke_user)
+
 
     Execute(format("curl -s -o /dev/null -w'%{{http_code}}' --negotiate -u: -k {spark_history_scheme}://{spark_history_server_host}:{spark_history_ui_port} | grep 200"),
             tries=5,
             try_sleep=3,
             logoutput=True,
-            user=params.spark_user
+            user=params.smoke_user
             )
     if params.has_livyserver:
       live_livyserver_host = ""

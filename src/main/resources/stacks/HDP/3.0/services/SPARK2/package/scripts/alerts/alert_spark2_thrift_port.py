@@ -40,8 +40,8 @@ HIVE_SERVER_TRANSPORT_MODE_KEY = '{{spark2-hive-site-override/hive.server2.trans
 SECURITY_ENABLED_KEY = '{{cluster-env/security_enabled}}'
 
 HIVE_SERVER2_AUTHENTICATION_KEY = '{{hive-site/hive.server2.authentication}}'
-HIVE_SERVER2_KERBEROS_KEYTAB = '{{hive-site/hive.server2.authentication.kerberos.keytab}}'
-HIVE_SERVER2_PRINCIPAL_KEY = '{{hive-site/hive.server2.authentication.kerberos.principal}}'
+HIVE_SERVER2_KERBEROS_KEYTAB = '{{spark2-hive-site-override/hive.server2.authentication.kerberos.keytab}}'
+HIVE_SERVER2_PRINCIPAL_KEY = '{{spark2-hive-site-override/hive.server2.authentication.kerberos.principal}}'
 
 # The configured Kerberos executable search paths, if any
 KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY = '{{kerberos-env/executable_search_paths}}'
@@ -49,7 +49,7 @@ KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY = '{{kerberos-env/executable_search_paths}}
 THRIFT_PORT_DEFAULT = 10002
 HIVE_SERVER_TRANSPORT_MODE_DEFAULT = 'binary'
 
-HIVEUSER_DEFAULT = 'hive'
+SPARK_USER_KEY = '{{spark2-env/spark_user}}'
 
 CHECK_COMMAND_TIMEOUT_KEY = 'check.command.timeout'
 CHECK_COMMAND_TIMEOUT_DEFAULT = 60.0
@@ -63,7 +63,7 @@ def get_tokens():
     to build the dictionary passed into execute
     """
     return (HIVE_SERVER_THRIFT_PORT_KEY, HIVE_SERVER_THRIFT_HTTP_PORT_KEY, HIVE_SERVER_TRANSPORT_MODE_KEY, SECURITY_ENABLED_KEY,
-            KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY, HIVEUSER_DEFAULT, HIVE_SERVER2_KERBEROS_KEYTAB, HIVE_SERVER2_PRINCIPAL_KEY)
+            KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY, SPARK_USER_KEY, HIVE_SERVER2_KERBEROS_KEYTAB, HIVE_SERVER2_PRINCIPAL_KEY)
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def execute(configurations={}, parameters={}, host_name=None):
@@ -115,7 +115,7 @@ def execute(configurations={}, parameters={}, host_name=None):
 
     kinit_path_local = get_kinit_path(kerberos_executable_search_paths)
 
-    hiveruser = HIVEUSER_DEFAULT
+    sparkuser = configurations[SPARK_USER_KEY]
 
     if security_enabled:
         kinitcmd = format("{kinit_path_local} -kt {hive_kerberos_keytab} {hive_principal}; ")
@@ -123,7 +123,7 @@ def execute(configurations={}, parameters={}, host_name=None):
         kinit_lock = global_lock.get_lock(global_lock.LOCK_TYPE_KERBEROS)
         kinit_lock.acquire()
         try:
-            Execute(kinitcmd, user=hiveruser)
+            Execute(kinitcmd, user=sparkuser)
         finally:
             kinit_lock.release()
 
@@ -144,7 +144,7 @@ def execute(configurations={}, parameters={}, host_name=None):
 
         start_time = time.time()
         try:
-            Execute(cmd, user=hiveruser, path=[beeline_cmd], timeout=CHECK_COMMAND_TIMEOUT_DEFAULT)
+            Execute(cmd, user=sparkuser, path=[beeline_cmd], timeout=CHECK_COMMAND_TIMEOUT_DEFAULT)
             total_time = time.time() - start_time
             result_code = 'OK'
             label = OK_MESSAGE.format(total_time, port)

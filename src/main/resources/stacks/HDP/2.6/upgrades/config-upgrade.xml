@@ -51,8 +51,8 @@
             <type>zeppelin-env</type>
             <insert key="zeppelin_env_content" insert-type="append" newline-before="true" newline-after="true"
                 value="## Kerberos ticket refresh setting
-                  &#10; export KINIT_FAIL_THRESHOLD=5
-                  &#10; export KERBEROS_REFRESH_INTERVAL=1d"/>
+                  &#10;export KINIT_FAIL_THRESHOLD=5
+                  &#10;export KERBEROS_REFRESH_INTERVAL=1d"/>
 
             <transfer operation="delete" delete-key="zeppelin.executor.mem" />
             <transfer operation="delete" delete-key="zeppelin.executor.instances" />

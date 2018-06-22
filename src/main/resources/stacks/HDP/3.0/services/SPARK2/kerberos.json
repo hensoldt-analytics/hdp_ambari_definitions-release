@@ -12,7 +12,6 @@
           "principal": {
             "value": "${spark2-env/spark_user}${principal_suffix}@${realm}",
             "type" : "user",
-            "configuration": "spark2-defaults/spark.history.kerberos.principal",
             "local_username" : "${spark2-env/spark_user}"
           },
           "keytab": {
@@ -24,8 +23,28 @@
             "group": {
               "name": "${cluster-env/user_group}",
               "access": ""
+            }
+          }
+        },
+        {
+          "name": "spark_service_keytab",
+          "principal": {
+            "value": "spark/_HOST@${realm}",
+            "type" : "service",
+            "configuration": "spark2-hive-site-override/hive.server2.authentication.kerberos.principal",
+            "local_username" : "${spark2-env/spark_user}"
+          },
+          "keytab": {
+            "file": "${keytab_dir}/spark.service.keytab",
+            "owner": {
+              "name": "${spark2-env/spark_user}",
+              "access": "r"
             },
-            "configuration": "spark2-defaults/spark.history.kerberos.keytab"
+            "group": {
+              "name": "${cluster-env/user_group}",
+              "access": ""
+            },
+            "configuration": "spark2-hive-site-override/hive.server2.authentication.kerberos.keytab"
           }
         }
       ],
@@ -33,12 +52,6 @@
         {
           "spark2-defaults": {
             "spark.history.kerberos.enabled": "true"
-          }
-        },
-        {
-          "spark2-thrift-sparkconf": {
-            "spark.yarn.keytab": "${spark2-env/hive_kerberos_keytab}",
-            "spark.yarn.principal": "${spark2-env/hive_kerberos_principal}"
           }
         },
         {
@@ -65,6 +78,16 @@
               "keytab": {
                 "configuration": "spark2-defaults/history.server.spnego.keytab.file"
               }
+            },
+            {
+              "name": "shs_spark_service_identity",
+              "reference": "/SPARK2/spark_service_keytab",
+              "principal": {
+                "configuration": "spark2-defaults/spark.history.kerberos.principal"
+              },
+              "keytab": {
+                "configuration": "spark2-defaults/spark.history.kerberos.keytab"
+              }
             }
           ]
         },
@@ -77,10 +100,6 @@
             {
               "name": "hdfs",
               "reference": "/HDFS/NAMENODE/hdfs"
-            },
-            {
-              "name": "hive_server_hive",
-              "reference": "/HIVE/HIVE_SERVER/hive_server_hive"
             }
           ]
         },

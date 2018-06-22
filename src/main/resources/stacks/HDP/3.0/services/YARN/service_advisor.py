@@ -799,6 +799,26 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         else:
           putCapSchedProperty("yarn.scheduler.capacity.root.acl_administer_queue", acl_administer_queue + "," + hive_user)
 
+    spark2_env_properties = self.getServicesSiteProperties(services, "spark2-env")
+    if spark2_env_properties and "spark_user" in spark2_env_properties and \
+            cap_sched_properties and "yarn.scheduler.capacity.root.acl_administer_queue" in cap_sched_properties:
+      sprak_user = spark2_env_properties["spark_user"]
+      acl_administer_queue = cap_sched_properties["yarn.scheduler.capacity.root.acl_administer_queue"]
+      acl_administer_queue_items = acl_administer_queue.split(",")
+      if not("*" in acl_administer_queue_items or sprak_user in acl_administer_queue_items):
+        if not received_as_key_value_pair:
+          updated_cap_sched_configs_str = ""
+          for prop, val in cap_sched_properties.items():
+            if prop == "yarn.scheduler.capacity.root.acl_administer_queue":
+              updated_cap_sched_configs_str = updated_cap_sched_configs_str \
+                                              + prop + "=" + acl_administer_queue + "," + sprak_user + "\n"
+            elif prop:
+              updated_cap_sched_configs_str = updated_cap_sched_configs_str + prop + "=" + val + "\n"
+
+          putCapSchedProperty("capacity-scheduler", updated_cap_sched_configs_str)
+        else:
+          putCapSchedProperty("yarn.scheduler.capacity.root.acl_administer_queue", acl_administer_queue + "," + sprak_user)
+
     # auto detect whether system service launch is required or not
     # Set is_hbase_system_service_launch flag based on number of NM and cluster capacity.
     # (1). if each NM capacity is greater than 10GB and cluster capacity greater than 50GB

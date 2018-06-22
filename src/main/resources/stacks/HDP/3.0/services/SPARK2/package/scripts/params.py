@@ -169,7 +169,7 @@ if security_enabled:
   spnego_principal = spnego_principal.replace('_HOST', socket.getfqdn().lower())
   spnego_keytab = config['configurations']['spark2-defaults']['history.server.spnego.keytab.file']
 
-  spark_principal = spark_kerberos_principal.replace('_HOST',spark_history_server_host.lower())
+  spark_principal = spark_kerberos_principal.replace('_HOST', socket.getfqdn().lower())
 
   if is_hive_installed:
     spark_hive_properties.update({
@@ -183,8 +183,8 @@ if security_enabled:
       'hive.server2.authentication': config['configurations']['hive-site']['hive.server2.authentication'],
     })
 
-    hive_kerberos_keytab = config['configurations']['hive-site']['hive.server2.authentication.kerberos.keytab']
-    hive_kerberos_principal = config['configurations']['hive-site']['hive.server2.authentication.kerberos.principal'].replace('_HOST', socket.getfqdn().lower())
+    hive_kerberos_keytab = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.keytab']
+    hive_kerberos_principal = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.principal'].replace('_HOST', socket.getfqdn().lower())
 
 # thrift server support - available on HDP 2.3 or higher
 spark_thrift_sparkconf = None

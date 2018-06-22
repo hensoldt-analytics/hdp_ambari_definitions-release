@@ -117,20 +117,19 @@ def spark_service(name, upgrade_type=None, action=None):
 
     elif name == 'sparkthriftserver':
       if params.security_enabled:
-        hive_principal = params.hive_kerberos_principal
-        hive_kinit_cmd = format("{kinit_path_local} -kt {hive_kerberos_keytab} {hive_principal}; ")
-        Execute(hive_kinit_cmd, user=params.hive_user)
+        hive_kinit_cmd = format("{kinit_path_local} -kt {hive_kerberos_keytab} {hive_kerberos_principal}; ")
+        Execute(hive_kinit_cmd, user=params.spark_user)
 
       thriftserver_no_op_test = format(
       'ls {spark_thrift_server_pid_file} >/dev/null 2>&1 && ps -p `cat {spark_thrift_server_pid_file}` >/dev/null 2>&1')
       try:
         Execute(format('{spark_thrift_server_start} --properties-file {spark_thrift_server_conf_file} {spark_thrift_cmd_opts_properties}'),
-                user=params.hive_user,
+                user=params.spark_user,
                 environment={'JAVA_HOME': params.java_home},
                 not_if=thriftserver_no_op_test
         )
       except:
-        show_logs(params.spark_log_dir, user=params.hive_user)
+        show_logs(params.spark_log_dir, user=params.spark_user)
         raise
   elif action == 'stop':
     if name == 'jobhistoryserver':
@@ -149,11 +148,11 @@ def spark_service(name, upgrade_type=None, action=None):
     elif name == 'sparkthriftserver':
       try:
         Execute(format('{spark_thrift_server_stop}'),
-                user=params.hive_user,
+                user=params.spark_user,
                 environment={'JAVA_HOME': params.java_home}
         )
       except:
-        show_logs(params.spark_log_dir, user=params.hive_user)
+        show_logs(params.spark_log_dir, user=params.spark_user)
         raise
       File(params.spark_thrift_server_pid_file,
         action="delete"

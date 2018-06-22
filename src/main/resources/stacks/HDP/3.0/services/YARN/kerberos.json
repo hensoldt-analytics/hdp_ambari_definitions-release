@@ -99,7 +99,7 @@
             "yarn.resourcemanager.proxy-user-privileges.enabled": "true",
             "yarn.resourcemanager.zk-acl" : "sasl:${principals/YARN/RESOURCEMANAGER/resource_manager_rm|principalPrimary()}:rwcda",
             "hadoop.registry.secure" : "true",
-            "hadoop.registry.system.accounts" : "sasl:${principals/YARN/APP_TIMELINE_SERVER/app_timeline_server_yarn|principalPrimary()},sasl:${principals/MAPREDUCE2/HISTORYSERVER/history_server_jhs|principalPrimary()},sasl:${principals/HDFS/NAMENODE/hdfs|principalPrimary()},sasl:${principals/YARN/RESOURCEMANAGER/resource_manager_rm|principalPrimary()},sasl:${principals/HIVE/HIVE_SERVER/hive_server_hive|principalPrimary()}",
+            "hadoop.registry.system.accounts" : "sasl:${principals/YARN/APP_TIMELINE_SERVER/app_timeline_server_yarn|principalPrimary()},sasl:${principals/MAPREDUCE2/HISTORYSERVER/history_server_jhs|principalPrimary()},sasl:${principals/HDFS/NAMENODE/hdfs|principalPrimary()},sasl:${principals/YARN/RESOURCEMANAGER/resource_manager_rm|principalPrimary()},sasl:${principals/HIVE/HIVE_SERVER/hive_server_hive|principalPrimary()},sasl:${principals/SPARK2/spark_service_keytab|principalPrimary()}",
             "hadoop.registry.client.auth" : "kerberos",
             "hadoop.registry.jaas.context" : "Client"
           }
