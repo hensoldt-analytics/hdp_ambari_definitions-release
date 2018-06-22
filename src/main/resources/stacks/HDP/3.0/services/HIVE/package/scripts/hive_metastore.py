@@ -21,7 +21,7 @@ limitations under the License.
 import os
 
 # Local Imports
-from hive import create_hive_metastore_schema, create_metastore_schema, hive, jdbc_connector
+from hive import refresh_yarn, create_hive_metastore_schema, create_metastore_schema, hive, jdbc_connector
 from hive_service import hive_service
 from setup_ranger_hive import setup_ranger_hive_metastore_service
 
@@ -51,6 +51,8 @@ class HiveMetastore(Script):
   def start(self, env, upgrade_type=None):
     import params
     env.set_params(params)
+
+    refresh_yarn()
 
     # writing configurations on start required for securtity
     self.configure(env)

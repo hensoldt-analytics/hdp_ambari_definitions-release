@@ -362,6 +362,21 @@ def setup_metastore():
 
   generate_logfeeder_input_config('hive', Template("input.config-hive.json.j2", extra_imports=[default]))
 
+def refresh_yarn():
+  import params
+
+  if params.enable_ranger_hive or not params.doAs:
+    return
+
+  YARN_REFRESHED_FILE = "/etc/hive/yarn.refreshed"
+
+  if os.path.isfile(YARN_REFRESHED_FILE):
+    Logger.info("Yarn already refreshed")
+    return
+
+  Execute("yarn rmadmin -refreshSuperUserGroupsConfiguration", user = params.yarn_user)
+  Execute("touch " + YARN_REFRESHED_FILE)
+
 def create_hive_metastore_schema():
   import params
   
@@ -410,7 +425,7 @@ def create_hive_metastore_schema():
     Execute("touch " + SYS_DB_CREATED_FILE)
     Logger.info("Sys DB is set up")
   except:
-    Logger.error("Could not create Sys DB. Try to restart HDFS, and then restart HiveServer2")
+    Logger.error("Could not create Sys DB.")
     Logger.error(traceback.format_exc())
 
 def create_metastore_schema():
