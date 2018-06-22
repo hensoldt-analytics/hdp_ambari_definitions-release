@@ -31,17 +31,5 @@
       </component>
     </service>
 
-    <service name="TEZ">
-      <component name="TEZ_CLIENT">
-        <changes>
-          <definition xsi:type="configure" id="hdp_3_0_config_for_tez_das_hook" summary="Configuring Tez to use DAS hooks instead of ATS ">
-            <type>tez-site</type>
-            <set key="tez.history.logging.service.class" value="org.apache.tez.dag.history.logging.proto.ProtoHistoryLoggingService" />
-            <set key="tez.history.logging.proto-base-dir" value="{{hive_metastore_warehouse_dir}}/sys" />
-          </definition>
-        </changes>
-      </component>
-    </service>
-
   </services>
 </upgrade-config-changes>
