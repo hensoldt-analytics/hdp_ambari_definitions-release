@@ -739,8 +739,7 @@ def setup_system_services(config_dir=None):
                         action="create_on_execute",
                         source=format("{yarn_hbase_conf_dir}/hbase.yarnfile"),
                         owner=params.yarn_user,
-                        group=params.user_group,
-                        replace_existing_files=True
+                        group=params.user_group
                         )
     params.HdfsResource(format("{yarn_hbase_user_home}"),
                         type="directory",
@@ -754,32 +753,28 @@ def setup_system_services(config_dir=None):
                         action="create_on_execute",
                         source=format("{config_dir}/core-site.xml"),
                         owner=params.yarn_hbase_user,
-                        group=params.user_group,
-                        replace_existing_files=True
+                        group=params.user_group
                         )
     params.HdfsResource(format("{yarn_hbase_user_home}/hbase-site.xml"),
                         type="file",
                         action="create_on_execute",
                         source=format("{yarn_hbase_conf_dir}/hbase-site.xml"),
                         owner=params.yarn_hbase_user,
-                        group=params.user_group,
-                        replace_existing_files=True
+                        group=params.user_group
                         )
     params.HdfsResource(format("{yarn_hbase_user_home}/hbase-policy.xml"),
                         type="file",
                         action="create_on_execute",
                         source=format("{yarn_hbase_conf_dir}/hbase-policy.xml"),
                         owner=params.yarn_hbase_user,
-                        group=params.user_group,
-                        replace_existing_files=True
+                        group=params.user_group
                         )
     params.HdfsResource(format("{yarn_hbase_user_home}/log4j.properties"),
                         type="file",
                         action="create_on_execute",
                         source=format("{yarn_hbase_conf_dir}/log4j.properties"),
                         owner=params.yarn_hbase_user,
-                        group=params.user_group,
-                        replace_existing_files=True
+                        group=params.user_group
                         )
     params.HdfsResource(params.yarn_hbase_hdfs_root_dir,
                         type="directory",

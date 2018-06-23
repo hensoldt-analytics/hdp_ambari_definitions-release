@@ -58,7 +58,7 @@
     {
       "name": "master",
       "number_of_containers": {{yarn_hbase_master_containers}},
-      "launch_command": "{{stack_root}}/current/hbase-master/bin/hbase master start",
+      "launch_command": "{{hbase_cmd}} master start",
       "readiness_check": {
         "type": "HTTP",
         "properties": {
@@ -91,7 +91,7 @@
     {
       "name": "regionserver",
       "number_of_containers": {{yarn_hbase_regionserver_containers}},
-      "launch_command": "{{stack_root}}/current/hbase-regionserver/bin/hbase regionserver start",
+      "launch_command": "{{hbase_cmd}} regionserver start",
       "readiness_check": {
         "type": "HTTP",
         "properties": {

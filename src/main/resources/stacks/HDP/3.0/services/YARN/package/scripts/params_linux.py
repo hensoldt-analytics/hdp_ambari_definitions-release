@@ -646,7 +646,7 @@ if security_enabled and has_atsv2:
 yarn_hbase_grant_premissions_file = format("{yarn_hbase_conf_dir}/hbase_grant_permissions.sh")
 is_hbase_system_service_launch = config['configurations']['yarn-hbase-env']['is_hbase_system_service_launch']
 if is_hbase_system_service_launch:
-   hbase_cmd = format("{stack_root}/current/hbase-client/bin/hbase")
+   hbase_cmd = format("{yarn_hbase_bin}/hbase")
 else:
   hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
 class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -create -s")
