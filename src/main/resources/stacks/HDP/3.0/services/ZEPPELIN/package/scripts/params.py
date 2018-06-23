@@ -166,9 +166,9 @@ if 'hive-site' in config['configurations']:
   if 'hive.server2.transport.mode' in config['configurations']['hive-site']:
     hive_transport_mode = config['configurations']['hive-site']['hive.server2.transport.mode']
 
-spark_transport_mode = hive_transport_mode
+spark2_transport_mode = hive_transport_mode
 if 'spark2-hive-site-override' in config['configurations'] and 'hive.server2.transport.mode' in config['configurations']['spark2-hive-site-override']:
-  spark_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
+  spark2_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
 
 if 'spark_thriftserver_hosts' in master_configs and len(master_configs['spark_thriftserver_hosts']) != 0:
   spark_thrift_server_hosts = str(master_configs['spark_thriftserver_hosts'][0])
@@ -182,6 +182,8 @@ if 'spark2_thriftserver_hosts' in master_configs and len(master_configs['spark2_
   spark2_thrift_server_hosts = str(master_configs['spark2_thriftserver_hosts'][0])
   if config['configurations']['spark2-hive-site-override']:
     spark2_hive_thrift_port = config['configurations']['spark2-hive-site-override']['hive.server2.thrift.port']
+    if 'hive.server2.authentication.kerberos.principal' in config['configurations']['spark2-hive-site-override']:
+      spark2_hive_principal = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.principal']
 
 
 # detect hbase details if installed
