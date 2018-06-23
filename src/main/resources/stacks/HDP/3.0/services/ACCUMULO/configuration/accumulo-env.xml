@@ -201,6 +201,7 @@
     <value>
 #! /usr/bin/env bash
 export HADOOP_HOME={{hadoop_prefix}}
+export HADOOP_PREFIX={{hadoop_prefix}}
 export HADOOP_CONF_DIR={{hadoop_conf_dir}}
 export JAVA_HOME={{java64_home}}
 export ZOOKEEPER_HOME={{zookeeper_home}}
@@ -227,6 +228,7 @@ export ACCUMULO_KILL_CMD='kill -9 %p'
     <value>
 #! /usr/bin/env bash
 export HADOOP_HOME={{hadoop_prefix}}
+export HADOOP_PREFIX={{hadoop_prefix}}
 export HADOOP_CONF_DIR={{hadoop_conf_dir}}
 export JAVA_HOME={{java64_home}}
 export ZOOKEEPER_HOME={{zookeeper_home}}
