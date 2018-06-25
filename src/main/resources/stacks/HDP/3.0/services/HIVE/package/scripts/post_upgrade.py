@@ -46,7 +46,7 @@ class HivePostUpgrade(Script):
     cmd = format("{hive_script} --config /etc/hive/conf --service  strictmanagedmigration --hiveconf hive.strict.managed.tables=true  -m automatic  --modifyManagedTables --oldWarehouseRoot /apps/hive/warehouse")
     Execute(cmd,
             environment = { 'JAVA_HOME': params.java64_home },
-            user = params.hive_user)
+            user = params.hdfs_user)
 
 if __name__ == "__main__":
   HivePostUpgrade().execute()
