@@ -199,10 +199,13 @@ io_compression_codecs = default("/configurations/core-site/io.compression.codecs
 lzo_enabled = should_install_lzo()
 hadoop_lib_home = stack_root + '/' + stack_version + '/hadoop/lib'
 
+kafka_hosts = default('/clusterHostInfo/kafka_broker_hosts', [])
+has_kafka = len(kafka_hosts) > 0
+
 # Kafka Jaas configs
 kafka_bare_jaas_principal = None
 druid_jaas_file = format('{druid_conf_dir}/druid_jaas.conf')
-if security_enabled and 'kafka_principal_name' in config['configurations']['kafka-env'] :
+if security_enabled and has_kafka and 'kafka_principal_name' in config['configurations']['kafka-env'] :
     # generate KafkaClient jaas config if kafka is kerberoized
     _kafka_principal_name = default("/configurations/kafka-env/kafka_principal_name", None)
     kafka_bare_jaas_principal = get_bare_principal(_kafka_principal_name)
