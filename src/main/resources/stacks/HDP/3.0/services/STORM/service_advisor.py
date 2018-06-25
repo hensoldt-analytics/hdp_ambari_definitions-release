@@ -110,7 +110,7 @@ class StormServiceAdvisor(service_advisor.ServiceAdvisor):
         Must be overriden in child class.
         """
 
-        return []
+        return self.getServiceComponentCardinalityValidations(services, hosts, "STORM")
 
     def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
         """

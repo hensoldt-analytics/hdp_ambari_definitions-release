@@ -112,7 +112,7 @@ class Ranger_KMSServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "RANGER_KMS")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """

@@ -110,7 +110,7 @@ class PigServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "PIG")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """

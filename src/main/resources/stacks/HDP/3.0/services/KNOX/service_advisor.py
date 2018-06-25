@@ -111,7 +111,7 @@ class KnoxServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "KNOX")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """

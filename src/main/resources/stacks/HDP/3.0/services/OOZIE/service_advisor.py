@@ -115,7 +115,7 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "OOZIE")
 
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):

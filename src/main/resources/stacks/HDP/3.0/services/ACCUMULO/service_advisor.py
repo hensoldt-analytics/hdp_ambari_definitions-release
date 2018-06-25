@@ -103,7 +103,7 @@ class ACCUMULOServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "ACCUMULO")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """

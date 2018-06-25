@@ -105,7 +105,7 @@ class SupersetServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "SUPERSET")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     self.logger.info("Class: %s, Method: %s. Recommending Service Configurations." %

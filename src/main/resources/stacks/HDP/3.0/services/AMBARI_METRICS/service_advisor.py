@@ -121,7 +121,7 @@ class AMBARI_METRICSServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "AMBARI_METRICS")
 
   def getAmsMemoryRecommendation(self, services, hosts):
     # MB per sink in hbase heapsize

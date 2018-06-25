@@ -127,7 +127,7 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
                 (self.__class__.__name__, inspect.stack()[0][3]))
 
     # HDFS allows NameNode and Secondary NameNode to be on the same host.
-    return self.as_super.getServiceComponentLayoutValidations(services, hosts)
+    return self.getServiceComponentCardinalityValidations(services, hosts, "HDFS")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """

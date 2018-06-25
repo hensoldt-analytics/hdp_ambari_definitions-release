@@ -115,7 +115,7 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "SPARK2")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """

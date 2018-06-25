@@ -113,7 +113,7 @@ class AtlasServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return []
+    return self.getServiceComponentCardinalityValidations(services, hosts, "ATLAS")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """

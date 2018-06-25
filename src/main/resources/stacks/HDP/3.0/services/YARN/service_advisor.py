@@ -118,7 +118,7 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
     self.logger.info("Class: %s, Method: %s. Validating Service Component Layout." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
 
-    return self.as_super.getServiceComponentLayoutValidations(services, hosts)
+    return self.getServiceComponentCardinalityValidations(services, hosts, "YARN")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
@@ -226,7 +226,7 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
     self.logger.info("Class: %s, Method: %s. Validating Service Component Layout." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
 
-    return self.as_super.getServiceComponentLayoutValidations(services, hosts)
+    return self.getServiceComponentCardinalityValidations(services, hosts, "MAPREDUCE2")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
