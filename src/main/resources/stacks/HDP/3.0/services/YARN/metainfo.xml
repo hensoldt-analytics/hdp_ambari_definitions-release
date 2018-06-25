@@ -243,22 +243,16 @@
             <package>
               <name>hadoop_${stack_version}-hdfs</name>
             </package>
-            <package>
-              <name>hbase_${stack_version}</name>
-            </package>
           </packages>
         </osSpecific>
         <osSpecific>
-          <osFamily>ubuntu12</osFamily>
+          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
           <packages>
             <package>
               <name>hadoop-${stack_version}-yarn</name>
             </package>
             <package>
               <name>hadoop-${stack_version}-mapreduce</name>
-            </package>
-            <package>
-              <name>hbase-${stack_version}</name>
             </package>
           </packages>
         </osSpecific>
