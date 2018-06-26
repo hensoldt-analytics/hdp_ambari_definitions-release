@@ -506,7 +506,7 @@
   <property>
     <name>ranger.usersync.group.searchenabled</name>
     <display-name>Enable Group Sync</display-name>
-    <value>false</value>
+    <value>true</value>
     <description>"# do we want to do ldapsearch to find groups instead of relying on user entry attributes
     # valid values: true, false
     # any value other than true would be treated as false
