@@ -65,14 +65,18 @@
                 &lt;enabled&gt;true&lt;/enabled&gt;
                 &lt;param&gt;
                     &lt;name&gt;knox.acl&lt;/name&gt;
-                    &lt;value&gt;admin;*;*&lt;/value&gt;
+                    &lt;value&gt;KNOX_ADMIN_USERS;KNOX_ADMIN_GROUPS;*&lt;/value&gt;
                 &lt;/param&gt;
             &lt;/provider&gt;
 
             &lt;provider&gt;
                 &lt;role&gt;identity-assertion&lt;/role&gt;
-                &lt;name&gt;Default&lt;/name&gt;
+                &lt;name&gt;HadoopGroupProvider&lt;/name&gt;
                 &lt;enabled&gt;true&lt;/enabled&gt;
+                &lt;param&gt;
+                    &lt;name&gt;CENTRAL_GROUP_CONFIG_PREFIX&lt;/name&gt;
+                    &lt;value&gt;gateway.group.config.&lt;/value&gt;
+                &lt;/param&gt;
             &lt;/provider&gt;
 
         &lt;/gateway&gt;
