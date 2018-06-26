@@ -2033,11 +2033,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.service.metrics.codahale.reporter.classes</name>
-    <value>
-	    org.apache.hadoop.hive.common.metrics.metrics2.JsonFileMetricsReporter, 
-	    org.apache.hadoop.hive.common.metrics.metrics2.JmxMetricsReporter,
-	    org.apache.hadoop.hive.common.metrics.metrics2.Metrics2Reporter
-    </value>
+    <value>org.apache.hadoop.hive.common.metrics.metrics2.JsonFileMetricsReporter,org.apache.hadoop.hive.common.metrics.metrics2.JmxMetricsReporter,org.apache.hadoop.hive.common.metrics.metrics2.Metrics2Reporter</value>
     <description>Comma separated list of reporter implementation classes for metric class</description>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
