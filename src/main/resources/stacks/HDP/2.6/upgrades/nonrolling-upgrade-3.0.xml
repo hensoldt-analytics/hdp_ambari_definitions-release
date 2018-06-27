@@ -547,6 +547,10 @@
       </execute-stage>
 
       <!--RANGER-->
+      <execute-stage service="RANGER" component="RANGER_USERSYNC" title="Updating Ranger Usersync Config">
+        <task xsi:type="configure" id="hdp_3_0_ranger_usersync_maintain_groupsearch_enable_flag"/>
+      </execute-stage>
+
       <execute-stage service="RANGER" component="RANGER_TAGSYNC" title="Adding Ranger Tagsync Config">
         <task xsi:type="configure" id="hdp_3_0_add_ranger_tagsync_cookie_enabled_config"/>
       </execute-stage>

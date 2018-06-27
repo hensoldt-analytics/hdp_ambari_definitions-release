@@ -675,6 +675,15 @@
     </service>
 
     <service name="RANGER">
+      <component name="RANGER_USERSYNC">
+        <changes>
+          <definition xsi:type="configure" id="hdp_3_0_ranger_usersync_maintain_groupsearch_enable_flag">
+            <type>ranger-ugsync-site</type>
+            <set key="ranger.usersync.group.searchenabled" value="false" if-type="ranger-ugsync-site" if-key="ranger.usersync.group.searchenabled" if-value="false" />
+          </definition>
+        </changes>
+      </component>
+
       <component name="RANGER_TAGSYNC">
         <changes>
           <definition xsi:type="configure" id="hdp_3_0_add_ranger_tagsync_cookie_enabled_config">
