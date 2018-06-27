@@ -23,6 +23,7 @@ from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.core.shell import as_sudo
 from resource_management.core.resources.system import Execute, File
 from resource_management.core.source import Template
+from resource_management.core.logger import Logger
 
 def hbase_service(
   name,
@@ -69,9 +70,11 @@ def hbase_service(
 
 def hbase(action):
     if action == 'stop':
+        Logger.info("Stopping HBase daemons")
         hbase_service('regionserver', action=action)
         hbase_service('master', action=action)
     else:
+        Logger.info("Starting HBase daemons")
         hbase_service('master', action=action)
         hbase_service('regionserver', action=action)
         createTables()
@@ -87,9 +90,57 @@ def configure_hbase(env):
                             )
     params.HdfsResource(None, action="execute")
 
+def create_hbase_package():
+    import params
+    file_path = format("{yarn_hbase_package_preparation_file}")
+    Logger.info("Executing hbase package creation script file '" + file_path +"'")
+    try:
+        File( file_path,
+              mode    = 0755,
+              content = Template('yarn_hbase_package_preparation.j2')
+              )
+        Execute( file_path,
+                 timeout = 300,
+                 logoutput = True
+                 )
+    except:
+        Logger.error(
+            "Error occured while executing hbase package creation file '" + file_path + "'.")
+        raise
+
+def copy_to_hdfs():
+    import params
+
+    try:
+
+        Logger.info(
+            "Copying hbase tarball into hdfs path'" + params.yarn_hbase_app_hdfs_path + "'.")
+        params.HdfsResource(format("{yarn_hbase_app_hdfs_path}"),
+                            type="directory",
+                            action="create_on_execute",
+                            owner=params.hdfs_user,
+                            group=params.hdfs_user,
+                            mode=0555,
+                            )
+        params.HdfsResource(format("{yarn_hbase_app_hdfs_path}/hbase.tar.gz"),
+                            type="file",
+                            action="create_on_execute",
+                            source=format("{yarn_hbase_user_tmp}/hbase.tar.gz"),
+                            owner=params.hdfs_user,
+                            group=params.user_group,
+                            mode=0444,
+                            )
+        params.HdfsResource(None, action="execute")
+    except:
+        Logger.error(
+            "Error occured while copying hbase tarball into hdfs '" + params.yarn_hbase_app_hdfs_path + "'.")
+        raise
+
+
 def createTables():
     import params
     try:
+        Logger.info("Creating HBase tables")
         Execute(format("sleep 10;{yarn_hbase_table_create_cmd}"),
                 user=params.yarn_hbase_user,
                 timeout = 300,

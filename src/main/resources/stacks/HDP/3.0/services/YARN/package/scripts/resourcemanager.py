@@ -45,11 +45,13 @@ from service import service
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyImpl
 from setup_ranger_yarn import setup_ranger_yarn
+from hbase_service import create_hbase_package
 
 
 class Resourcemanager(Script):
   def install(self, env):
     self.install_packages(env)
+    create_hbase_package()
 
   def stop(self, env, upgrade_type=None):
     import params

@@ -586,6 +586,9 @@ zookeeper_quorum_hosts = cluster_zookeeper_quorum_hosts
 zookeeper_clientPort = cluster_zookeeper_clientPort
 yarn_hbase_user = status_params.yarn_hbase_user
 yarn_hbase_user_home = format("/user/{yarn_hbase_user}")
+yarn_hbase_user_version_home = format("{yarn_hbase_user_home}/{version}")
+yarn_hbase_app_hdfs_path = format("/hdp/apps/{version}/hbase")
+yarn_hbase_user_tmp = format("{tmp_dir}/{yarn_hbase_user}")
 yarn_hbase_log_dir = os.path.join(yarn_log_dir_prefix, "embedded-yarn-ats-hbase")
 yarn_hbase_pid_dir_prefix = status_params.yarn_hbase_pid_dir_prefix
 yarn_hbase_pid_dir = status_params.yarn_hbase_pid_dir
@@ -644,11 +647,9 @@ if security_enabled and has_atsv2:
   yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_ats_user_keytab} {yarn_ats_principal_name};")
 
 yarn_hbase_grant_premissions_file = format("{yarn_hbase_conf_dir}/hbase_grant_permissions.sh")
+yarn_hbase_package_preparation_file = format("{tmp_dir}/hbase_package_preparation.sh")
 is_hbase_system_service_launch = config['configurations']['yarn-hbase-env']['is_hbase_system_service_launch']
-if is_hbase_system_service_launch:
-   hbase_cmd = format("{yarn_hbase_bin}/hbase")
-else:
-  hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
+hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
 class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -Dhbase.client.retries.number=35 -create -s")
 yarn_hbase_table_create_cmd = format("export HBASE_CLASSPATH_PREFIX={stack_root}/{version}/hadoop-yarn/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")
 yarn_hbase_table_grant_premission_cmd = format("{yarn_hbase_kinit_cmd} {hbase_cmd} shell {yarn_hbase_grant_premissions_file}")

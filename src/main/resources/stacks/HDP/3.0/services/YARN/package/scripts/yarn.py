@@ -39,6 +39,7 @@ from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
 
 from resource_management.libraries.functions.mounted_dirs_helper import handle_mounted_dirs
+from hbase_service import create_hbase_package, copy_to_hdfs
 
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
@@ -714,20 +715,7 @@ def setup_system_services(config_dir=None):
              )
 
 
-    params.HdfsResource(params.yarn_system_service_dir,
-                        type="directory",
-                        action="create_on_execute",
-                        owner=params.yarn_user,
-                        group=params.user_group
-                        )
-    yarn_system_service_launch_type_dir = format("{yarn_system_service_dir}/{yarn_system_service_launch_mode}")
-    params.HdfsResource(yarn_system_service_launch_type_dir,
-                        type="directory",
-                        action="create_on_execute",
-                        owner=params.yarn_user,
-                        group=params.user_group
-                        )
-    user_dir = format("{yarn_system_service_launch_type_dir}/{yarn_hbase_user}")
+    user_dir = format("{yarn_system_service_dir}/{yarn_system_service_launch_mode}/{yarn_hbase_user}")
     params.HdfsResource(user_dir,
                         type="directory",
                         action="create_on_execute",
@@ -748,28 +736,35 @@ def setup_system_services(config_dir=None):
                         group=params.user_group,
                         mode=0770,
                         )
-    params.HdfsResource(format("{yarn_hbase_user_home}/core-site.xml"),
+    params.HdfsResource(format("{yarn_hbase_user_version_home}"),
+                        type="directory",
+                        action="create_on_execute",
+                        owner=params.yarn_hbase_user,
+                        group=params.user_group,
+                        mode=0770,
+                        )
+    params.HdfsResource(format("{yarn_hbase_user_version_home}/core-site.xml"),
                         type="file",
                         action="create_on_execute",
                         source=format("{config_dir}/core-site.xml"),
                         owner=params.yarn_hbase_user,
                         group=params.user_group
                         )
-    params.HdfsResource(format("{yarn_hbase_user_home}/hbase-site.xml"),
+    params.HdfsResource(format("{yarn_hbase_user_version_home}/hbase-site.xml"),
                         type="file",
                         action="create_on_execute",
                         source=format("{yarn_hbase_conf_dir}/hbase-site.xml"),
                         owner=params.yarn_hbase_user,
                         group=params.user_group
                         )
-    params.HdfsResource(format("{yarn_hbase_user_home}/hbase-policy.xml"),
+    params.HdfsResource(format("{yarn_hbase_user_version_home}/hbase-policy.xml"),
                         type="file",
                         action="create_on_execute",
                         source=format("{yarn_hbase_conf_dir}/hbase-policy.xml"),
                         owner=params.yarn_hbase_user,
                         group=params.user_group
                         )
-    params.HdfsResource(format("{yarn_hbase_user_home}/log4j.properties"),
+    params.HdfsResource(format("{yarn_hbase_user_version_home}/log4j.properties"),
                         type="file",
                         action="create_on_execute",
                         source=format("{yarn_hbase_conf_dir}/log4j.properties"),
@@ -782,3 +777,6 @@ def setup_system_services(config_dir=None):
                         owner=params.yarn_hbase_user
                         )
     params.HdfsResource(None, action="execute")
+
+    create_hbase_package()
+    copy_to_hdfs()
