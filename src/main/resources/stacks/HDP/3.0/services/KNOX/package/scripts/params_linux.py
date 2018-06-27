@@ -557,6 +557,10 @@ if "zeppelin-site" in config['configurations']:
   zeppelin_ws_urls += buildUrlElement("ws", host, port, "/ws")
   websocket_support = "true"
 
+if "topology" in config['configurations']:
+  if 'ws://' in config['configurations']['topology']['content'] or 'wss://' in config['configurations']['topology']['content']:
+    websocket_support = "true"
+
 # for stack 3.0 +
 knox_descriptors_dir = format('{knox_conf_dir}/descriptors')
 knox_shared_providers_dir = format('{knox_conf_dir}/shared-providers')
