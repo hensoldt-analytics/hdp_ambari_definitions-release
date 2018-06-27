@@ -128,9 +128,11 @@
         <component>DRUID_ROUTER</component>
         <component>DRUID_COORDINATOR</component>
         <component>DRUID_OVERLORD</component>
-        <component>DRUID_SUPERSET</component>
       </service>
 
+      <service name="SUPERSET">
+        <component>SUPERSET</component>
+      </service>
 
     </group>
 
@@ -623,6 +625,13 @@
         <component>DRUID_COORDINATOR</component>
         <component>DRUID_OVERLORD</component>
         <component>DRUID_SUPERSET</component>
+      </service>
+    </group>
+
+    <group xsi:type="restart" name="SUPERSET" title="Superset">
+      <skippable>true</skippable>
+      <service name="SUPERSET">
+        <component>SUPERSET</component>
       </service>
     </group>
 
@@ -1135,12 +1144,14 @@
           <task xsi:type="restart-task"/>
         </upgrade>
       </component>
-      <component name="DRUID_SUPERSET">
+    </service>
+
+    <service name="SUPERSET">
+      <component name="SUPERSET">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
       </component>
     </service>
-
   </processing>
 </upgrade>

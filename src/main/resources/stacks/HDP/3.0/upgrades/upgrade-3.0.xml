@@ -373,6 +373,15 @@
       </service>
     </group>
 
+    <group name="SUPERSET" title="Superset">
+      <skippable>true</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+      <service-check>false</service-check>
+      <service name="SUPERSET">
+        <component>SUPERSET</component>
+      </service>
+    </group>
+
     <group name="SERVICE_CHECK_3" title="All Service Checks" xsi:type="service-check">
       <direction>UPGRADE</direction>
       <skippable>true</skippable>
@@ -382,6 +391,7 @@
         <service>YARN</service>
         <service>HBASE</service>
         <service>DRUID</service>
+        <service>SUPERSET</service>
       </priority>
       <exclude>
         <service>AMBARI_METRICS</service>
@@ -958,7 +968,10 @@
           <task xsi:type="restart-task"/>
         </upgrade>
       </component>
-      <component name="DRUID_SUPERSET">
+    </service>
+
+    <service name="SUPERSET">
+      <component name="SUPERSET">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
