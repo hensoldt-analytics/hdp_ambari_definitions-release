@@ -189,8 +189,6 @@ def setup_hiveserver2():
   # ******* End Copy Tarballs *******
   # *********************************
 
-  create_warehouse_dirs()
-
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
     if not is_empty(params.hive_hook_proto_base_directory):
@@ -209,14 +207,6 @@ def setup_hiveserver2():
                           mode=0777
                           )
 
-
-  # Create Hive User Dir
-  params.HdfsResource(params.hive_hdfs_user_dir,
-                       type="directory",
-                        action="create_on_execute",
-                        owner=params.hive_user,
-                        mode=params.hive_hdfs_user_mode
-  )
 
   if not is_empty(params.hive_exec_scratchdir) and not urlparse(params.hive_exec_scratchdir).path.startswith("/tmp"):
     params.HdfsResource(params.hive_exec_scratchdir,
@@ -245,8 +235,17 @@ def setup_hiveserver2():
 
   generate_logfeeder_input_config('hive', Template("input.config-hive.json.j2", extra_imports=[default]))
 
-def create_warehouse_dirs():
+def create_hive_hdfs_dirs():
   import params
+
+  # Create Hive User Dir
+  params.HdfsResource(params.hive_hdfs_user_dir,
+                       type="directory",
+                        action="create_on_execute",
+                        owner=params.hive_user,
+                        mode=params.hive_hdfs_user_mode
+  )
+
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
     # Create Hive Metastore Warehouse Dir
@@ -282,6 +281,8 @@ def create_warehouse_dirs():
       Logger.info(format("Could not set default ACLs for HDFS directories {external_dir} and {managed_dir} as ACLs are not enabled!"))
   else:
     Logger.info(format("Not creating warehouse directory '{hive_metastore_warehouse_dir}', as the location is not in DFS."))
+
+  params.HdfsResource(None, action = "execute")
 
 def __is_hdfs_acls_enabled():
   import params
@@ -373,9 +374,11 @@ def refresh_yarn():
   if os.path.isfile(YARN_REFRESHED_FILE):
     Logger.info("Yarn already refreshed")
     return
-
+  
+  if params.security_enabled:
+    Execute(params.yarn_kinit_cmd, user = params.yarn_user)
   Execute("yarn rmadmin -refreshSuperUserGroupsConfiguration", user = params.yarn_user)
-  Execute("touch " + YARN_REFRESHED_FILE)
+  Execute("touch " + YARN_REFRESHED_FILE, user = "root")
 
 def create_hive_metastore_schema():
   import params
@@ -422,7 +425,7 @@ def create_hive_metastore_schema():
             not_if = check_hive_schema_created_cmd,
             user = params.hive_user
     )
-    Execute("touch " + SYS_DB_CREATED_FILE)
+    Execute("touch " + SYS_DB_CREATED_FILE, user = "root")
     Logger.info("Sys DB is set up")
   except:
     Logger.error("Could not create Sys DB.")

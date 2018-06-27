@@ -48,6 +48,19 @@
             }
           ]
         }
+      },
+      {
+        "name": "sys db status",
+        "label": "Sys DB status",
+        "description": "This alert is triggered if the Sys Db is not created yet.",
+        "interval": 1,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "SCRIPT",
+          "path": "HDP/3.0/services/HIVE/package/alerts/alert_hive_sys_db.py",
+          "parameters": []
+        }
       }
     ],
     "HIVE_SERVER": [
@@ -96,19 +109,6 @@
               "visibility": "HIDDEN"
             }
           ]
-        }
-      },
-      {
-        "name": "sys db created",
-        "label": "Sys Db created",
-        "description": "This alert is triggered if the Sys Db is not created.",
-        "interval": 1,
-        "scope": "ANY",
-        "enabled": true,
-        "source": {
-          "type": "SCRIPT",
-          "path": "HDP/3.0/services/HIVE/package/alerts/alert_hive_sys_db.py",
-          "parameters": []
         }
       }
     ],
