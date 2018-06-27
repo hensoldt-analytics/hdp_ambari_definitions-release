@@ -560,6 +560,7 @@
             <transfer operation="delete" delete-key="atlas.graph.index.search.backend" />
               <transfer operation="delete" delete-key="atlas.auth.policy.file" />
             <set key="atlas.graph.storage.hbase.table" value="atlas_janus" />
+            <set key="atlas.server.bind.address" value="0.0.0.0" />
           </definition>
           <definition xsi:type="configure" id="atlas_log4j_adding_janus_graph" summary="Adding Janus-graph logger configurations for Atlas.">
             <type>atlas-log4j</type>
