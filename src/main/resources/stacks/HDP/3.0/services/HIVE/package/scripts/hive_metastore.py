@@ -98,7 +98,6 @@ class HiveMetastore(Script):
     if is_upgrade and params.stack_version_formatted_major and \
             check_stack_feature(StackFeature.HIVE_METASTORE_UPGRADE_SCHEMA, params.stack_version_formatted_major):
       self.upgrade_schema(env)
-      create_hive_metastore_schema() #before starting any services during upgrade create info schema
 
   def upgrade_schema(self, env):
     """
