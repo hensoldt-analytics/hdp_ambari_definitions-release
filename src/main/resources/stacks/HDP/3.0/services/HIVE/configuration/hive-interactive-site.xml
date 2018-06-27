@@ -211,26 +211,26 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.server2.webui.cors.allowed.headers</name>
     <value>X-Requested-With,Content-Type,Accept,Origin,X-Requested-By,x-requested-by</value>
     <description>Comma separated list of http headers that are allowed when CORS is enabled.</description>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.server2.zookeeper.namespace</name>
     <value>hiveserver2-interactive</value>
     <description>The parent node in ZooKeeper used by HiveServer2 when supporting dynamic service discovery.</description>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.server2.active.passive.ha.registry.namespace</name>
     <value>hs2ActivePassiveHA</value>
     <description>The parent node in ZooKeeper used by HSI when supporting dynamic service discovery in HA mode.</description>
     <display-name>HA HSI namespace</display-name>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.llap.daemon.queue.name</name>
@@ -264,10 +264,6 @@ limitations under the License.
     <value>15551</value>
     <description>YARN shuffle port for LLAP-daemon-hosted shuffle.</description>
     <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>hive.execution.engine</name>
-    <on-ambari-upgrade delete="true"/>
   </property>
   <property>
     <name>hive.execution.mode</name>

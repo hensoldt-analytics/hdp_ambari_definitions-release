@@ -213,6 +213,10 @@
             <set key="hive.druid.working.directory" value="/tmp/druid-indexing" if-type="druid-common"/>
             <set key="hive.druid.bitmap.type" value="roaring" if-type="druid-common"/>
           </definition>
+          <definition xsi:type="configure" id="hive_hcatalog_jar_path" summary="Update hive_hcatalog jar path">
+            <type>hive-interactive-env</type>
+            <replace key="content" find="/usr/hdp/current/hive-server2-hive2/lib/hive-hcatalog-core.jar" replace-with="/usr/hdp/current/hive-server2/lib/hive-hcatalog-core.jar"/>
+          </definition>
         </changes>
       </component>
     </service>

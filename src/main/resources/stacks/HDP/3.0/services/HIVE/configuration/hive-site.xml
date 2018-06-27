@@ -132,7 +132,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.compactor.worker.threads</name>
@@ -155,7 +155,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>metastore.create.as.acid</name>
@@ -165,7 +165,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.compactor.delta.num.threshold</name>
@@ -502,7 +502,7 @@ limitations under the License.
     <value>/warehouse/tablespace/managed/hive</value>
     <description>location of default database for the warehouse</description>
     <property-type>NOT_MANAGED_HDFS_PATH</property-type>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.metastore.warehouse.external.dir</name>
@@ -510,7 +510,7 @@ limitations under the License.
     <value>/warehouse/tablespace/external/hive</value>
     <description>location of default database for the warehouse of external tables</description>
     <property-type>NOT_MANAGED_HDFS_PATH</property-type>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.metastore.uris</name>
@@ -777,14 +777,6 @@ limitations under the License.
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
-  <property>
-    <name>hive.exec.orc.default.stripe.size</name>
-    <on-ambari-upgrade delete="true"/>
-  </property>
-  <property>
-    <name>hive.exec.orc.default.compress</name>
- <on-ambari-upgrade delete="true"/>
-  </property>
    <property>
     <name>hive.orc.splits.include.file.footer</name>
     <value>false</value>
@@ -883,7 +875,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.optimize.constant.propagation</name>
@@ -1050,7 +1042,7 @@ limitations under the License.
       </entries>
       <selection-cardinality>1</selection-cardinality>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.txn.max.open.batch</name>
@@ -1073,7 +1065,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.cli.print.header</name>
@@ -1608,10 +1600,6 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>hive.execution.engine</name>
-    <on-ambari-upgrade delete="true"/>
-  </property>
-  <property>
     <name>hive.vectorized.groupby.checkinterval</name>
     <value>4096</value>
     <description>Number of entries added to the group by aggregation hash before a recomputation of average entry size is performed.</description>
@@ -1741,21 +1729,13 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.server2.webui.cors.allowed.headers</name>
     <value>X-Requested-With,Content-Type,Accept,Origin,X-Requested-By,x-requested-by</value>
     <description>Comma separated list of http headers that are allowed when CORS is enabled.</description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>hive.exec.orc.encoding.strategy</name>
-    <on-ambari-upgrade delete="true"/>
-  </property>
-  <property>
-    <name>hive.exec.orc.compression.strategy</name>
-    <on-ambari-upgrade delete="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.exec.orc.split.strategy</name>
@@ -1869,7 +1849,7 @@ limitations under the License.
       External tables will be created with default file format. Leaving this null
       will result in using the default file format for all tables.
     </description>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>datanucleus.rdbms.datastoreAdapterClassName</name>
@@ -2038,7 +2018,7 @@ limitations under the License.
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <!-- Hive replication properties -->
   <property>

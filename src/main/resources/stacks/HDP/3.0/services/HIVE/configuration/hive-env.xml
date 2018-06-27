@@ -155,14 +155,6 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>hive_exec_orc_storage_strategy</name>
-    <on-ambari-upgrade delete="true"/>
-  </property>
-  <property>
-    <name>hive_txn_acid</name>
-    <on-ambari-upgrade delete="true"/>
-  </property>
-  <property>
     <name>hive_security_authorization</name>
     <display-name>Choose Authorization</display-name>
     <description>
