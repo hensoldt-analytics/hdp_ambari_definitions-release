@@ -1903,7 +1903,7 @@ yarn.scheduler.capacity.root.{0}.maximum-am-resource-percent=1""".format(llap_qu
       if total_cluster_capacity <= 4096:
         calculated_tez_am_resource_memory_mb = 512
       elif total_cluster_capacity > 4096 and total_cluster_capacity <= 98304:
-        calculated_tez_am_resource_memory_mb = 1024
+        calculated_tez_am_resource_memory_mb = 2048
       elif total_cluster_capacity > 98304:
         calculated_tez_am_resource_memory_mb = 4096
 
