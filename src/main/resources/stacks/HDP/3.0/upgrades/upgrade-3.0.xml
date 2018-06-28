@@ -369,7 +369,6 @@
         <component>DRUID_ROUTER</component>
         <component>DRUID_COORDINATOR</component>
         <component>DRUID_OVERLORD</component>
-        <component>DRUID_SUPERSET</component>
       </service>
     </group>
 
