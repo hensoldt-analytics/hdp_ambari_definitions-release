@@ -23,7 +23,7 @@ import shutil
 
 
 # Local Imports
-from hive import create_warehouse_dirs
+from hive import create_hive_hdfs_dirs
 
 
 # Ambari Commons & Resource Management Imports
@@ -38,7 +38,7 @@ class HivePostUpgrade(Script):
     import params
     env.set_params(params)
     
-    create_warehouse_dirs()
+    create_hive_hdfs_dirs()
     
     target_version = upgrade_summary.get_target_version(service_name = "HIVE")
     
