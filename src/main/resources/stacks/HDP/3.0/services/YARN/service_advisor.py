@@ -153,6 +153,29 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  @staticmethod
+  def isKerberosEnabled(services, configurations):
+    """
+    Determines if security is enabled by testing the value of core-site/hadoop.security.authentication enabled.
+    If the property exists and is equal to "kerberos", then is it enabled; otherwise is it assumed to be
+    disabled.
+
+    :type services: dict
+    :param services: the dictionary containing the existing configuration values
+    :type configurations: dict
+    :param configurations: the dictionary containing the updated configuration values
+    :rtype: bool
+    :return: True or False
+    """
+    if configurations and "core-site" in configurations and \
+            "hadoop.security.authentication" in configurations["core-site"]["properties"]:
+      return configurations["core-site"]["properties"]["hadoop.security.authentication"].lower() == "kerberos"
+    elif services and "core-site" in services["configurations"] and \
+            "hadoop.security.authentication" in services["configurations"]["core-site"]["properties"]:
+      return services["configurations"]["core-site"]["properties"]["hadoop.security.authentication"].lower() == "kerberos"
+    else:
+      return False
+
 
 class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
 
@@ -336,7 +359,7 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       putYarnPropertyAttribute('yarn.scheduler.minimum-allocation-vcores', 'maximum', configurations["yarn-site"]["properties"]["yarn.nodemanager.resource.cpu-vcores"])
       putYarnPropertyAttribute('yarn.scheduler.maximum-allocation-vcores', 'maximum', configurations["yarn-site"]["properties"]["yarn.nodemanager.resource.cpu-vcores"])
 
-      kerberos_authentication_enabled = self.isSecurityEnabled(services)
+      kerberos_authentication_enabled = YARNServiceAdvisor.isKerberosEnabled(services, configurations)
       if kerberos_authentication_enabled:
         putYarnProperty('yarn.nodemanager.container-executor.class',
                         'org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor')

@@ -142,6 +142,30 @@ class HiveServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  @staticmethod
+  def isKerberosEnabled(services, configurations):
+    """
+    Determines if security is enabled by testing the value of hive-site/hive.server2.authentication enabled.
+    If the property exists and is equal to "kerberos", then is it enabled; otherwise is it assumed to be
+    disabled.
+
+    :type services: dict
+    :param services: the dictionary containing the existing configuration values
+    :type configurations: dict
+    :param configurations: the dictionary containing the updated configuration values
+    :rtype: bool
+    :return: True or False
+    """
+    if configurations and "hive-site" in configurations and \
+            "hive.server2.authentication" in configurations["hive-site"]["properties"]:
+      return configurations["hive-site"]["properties"]["hive.server2.authentication"].lower() == "kerberos"
+    elif services and "hive-site" in services["configurations"] and \
+            "hive.server2.authentication" in services["configurations"]["hive-site"]["properties"]:
+      return services["configurations"]["hive-site"]["properties"]["hive.server2.authentication"].lower() == "kerberos"
+    else:
+      return False
+
+
 
 
 class HiveRecommender(service_advisor.ServiceAdvisor):
@@ -584,7 +608,7 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
     # Atlas Kerberos settings
     if "hive-atlas-application.properties" in services["configurations"]:
-      security_enabled = self.isSecurityEnabled(services)
+      security_enabled = HiveServiceAdvisor.isKerberosEnabled(services, configurations)
       
       enable_atlas_hook = False
       if "hive-env" in configurations and "hive.atlas.hook" in configurations["hive-env"]["properties"]:

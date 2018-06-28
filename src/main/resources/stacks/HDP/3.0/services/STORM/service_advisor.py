@@ -142,6 +142,33 @@ class StormServiceAdvisor(service_advisor.ServiceAdvisor):
         # method(siteProperties, siteRecommendations, configurations, services, hosts)
         return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+    @staticmethod
+    def isKerberosEnabled(services, configurations):
+        """
+        Determine if Kerberos is enabled for Storm.
+
+        If storm-site/storm.thrift.transport exists and is set to kerberos sasl transport plugin, return True;
+        otherwise return false.
+
+        The value of this property is first tested in the updated configurations (configurations) then
+        tested in the current configuration set (services)
+
+        :type services: dict
+        :param services: the dictionary containing the existing configuration values
+        :type configurations: dict
+        :param configurations: the dictionary containing the updated configuration values
+        :rtype: bool
+        :return: True or False
+        """
+        if configurations and "storm-site" in configurations and \
+                "storm.thrift.transport" in configurations["storm-site"]["properties"]:
+            return configurations["storm-site"]["properties"]["storm.thrift.transport"] == "org.apache.storm.security.auth.kerberos.KerberosSaslTransportPlugin"
+        elif services and "storm-site" in services["configurations"] and \
+                "storm.thrift.transport" in services["configurations"]["storm-site"]["properties"]:
+            return services["configurations"]["storm-site"]["properties"]["storm.thrift.transport"] == "org.apache.storm.security.auth.kerberos.KerberosSaslTransportPlugin"
+        else:
+            return False
+
 
 
 class StormRecommender(service_advisor.ServiceAdvisor):
@@ -189,7 +216,7 @@ class StormRecommender(service_advisor.ServiceAdvisor):
         putStormSiteProperty = self.putProperty(configurations, "storm-site", services)
         putStormSiteAttributes = self.putPropertyAttribute(configurations, "storm-site")
         storm_site = self.getServicesSiteProperties(services, "storm-site")
-        security_enabled = self.isSecurityEnabled(services)
+        security_enabled = StormServiceAdvisor.isKerberosEnabled(services, configurations)
         if "ranger-env" in services["configurations"] and "ranger-storm-plugin-properties" in services["configurations"] and \
                         "ranger-storm-plugin-enabled" in services["configurations"]["ranger-env"]["properties"]:
             putStormRangerPluginProperty = self.putProperty(configurations, "ranger-storm-plugin-properties", services)
@@ -281,7 +308,7 @@ class StormRecommender(service_advisor.ServiceAdvisor):
         storm_env = self.getServicesSiteProperties(services, "storm-env")
         putStormSiteProperty = self.putProperty(configurations, "storm-site", services)
         putStormSiteAttributes = self.putPropertyAttribute(configurations, "storm-site")
-        security_enabled = self.isSecurityEnabled(services)
+        security_enabled = StormServiceAdvisor.isKerberosEnabled(services, configurations)
         servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
 
         if storm_env and storm_site and security_enabled and 'STREAMLINE' in servicesList:
@@ -323,7 +350,7 @@ class StormRecommender(service_advisor.ServiceAdvisor):
     def recommendStormConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
 
         storm_site = self.getServicesSiteProperties(services, "storm-site")
-        security_enabled = self.isSecurityEnabled(services)
+        security_enabled = StormServiceAdvisor.isKerberosEnabled(services, configurations)
         servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
         putStormSiteProperty = self.putProperty(configurations, "storm-site", services)
 
@@ -383,7 +410,7 @@ class StormValidator(service_advisor.ServiceAdvisor):
         ranger_plugin_properties = self.getSiteProperties(configurations, "ranger-storm-plugin-properties")
         ranger_plugin_enabled = ranger_plugin_properties['ranger-storm-plugin-enabled'] if ranger_plugin_properties else 'No'
         servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
-        security_enabled = self.isSecurityEnabled(services)
+        security_enabled = StormServiceAdvisor.isKerberosEnabled(services, configurations)
         if 'RANGER' in servicesList and ranger_plugin_enabled.lower() == 'yes':
             # ranger-hdfs-plugin must be enabled in ranger-env
             ranger_env = self.getServicesSiteProperties(services, 'ranger-env')

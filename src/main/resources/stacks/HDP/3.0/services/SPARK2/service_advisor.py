@@ -148,6 +148,29 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
   def isComponentUsingCardinalityForLayout(self, componentName):
     return componentName in ('SPARK2_THRIFTSERVER', 'LIVY2_SERVER')
 
+  @staticmethod
+  def isKerberosEnabled(services, configurations):
+    """
+    Determines if security is enabled by testing the value of spark2-defaults/spark.history.kerberos.enabled enabled.
+    If the property exists and is equal to "true", then is it enabled; otherwise is it assumed to be
+    disabled.
+
+    :type services: dict
+    :param services: the dictionary containing the existing configuration values
+    :type configurations: dict
+    :param configurations: the dictionary containing the updated configuration values
+    :rtype: bool
+    :return: True or False
+    """
+    if configurations and "spark2-defaults" in configurations and \
+            "spark.history.kerberos.enabled" in configurations["spark2-defaults"]["properties"]:
+      return configurations["spark2-defaults"]["properties"]["spark.history.kerberos.enabled"].lower() == "true"
+    elif services and "spark2-defaults" in services["configurations"] and \
+            "spark.history.kerberos.enabled" in services["configurations"]["spark2-defaults"]["properties"]:
+      return services["configurations"]["spark2-defaults"]["properties"]["spark.history.kerberos.enabled"].lower() == "true"
+    else:
+      return False
+
 
 class Spark2Recommender(service_advisor.ServiceAdvisor):
   """
@@ -185,7 +208,7 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
     :type hosts dict
     """
 
-    if self.isSecurityEnabled(services):
+    if Spark2ServiceAdvisor.isKerberosEnabled(services, configurations):
 
       spark2_defaults = self.getServicesSiteProperties(services, "spark2-defaults")
 
@@ -209,7 +232,7 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
     :param configurations:
     :param services:
     """
-    if self.isSecurityEnabled(services):
+    if Spark2ServiceAdvisor.isKerberosEnabled(services, configurations):
       zeppelin_site = self.getServicesSiteProperties(services, "zeppelin-site")
 
       if zeppelin_site and 'zeppelin.server.kerberos.principal' in zeppelin_site:

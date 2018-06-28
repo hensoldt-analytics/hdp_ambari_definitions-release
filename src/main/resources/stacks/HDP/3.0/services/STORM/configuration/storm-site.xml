@@ -138,7 +138,7 @@
   </property>
   <property>
     <name>storm.thrift.transport</name>
-    <value>{{storm_thrift_transport}}</value>
+    <value>org.apache.storm.security.auth.SimpleTransportPlugin</value>
     <description>The transport plug-in that used for Thrift client/server communication.</description>
     <on-ambari-upgrade add="true"/>
   </property>
@@ -851,18 +851,6 @@
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>_storm.thrift.nonsecure.transport</name>
-    <value>org.apache.storm.security.auth.SimpleTransportPlugin</value>
-    <description>The transport plug-in that used for non-secure mode for for Thrift client/server communication.</description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>_storm.thrift.secure.transport</name>
-    <value>org.apache.storm.security.auth.kerberos.KerberosSaslTransportPlugin</value>
-    <description>The transport plug-in that used for secure mode for Thrift client/server communication.</description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>

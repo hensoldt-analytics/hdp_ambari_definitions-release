@@ -141,6 +141,30 @@ class Ranger_KMSServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  @staticmethod
+  def isKerberosEnabled(services, configurations):
+    """
+    Determines if security is enabled by testing the value of kms-site/hadoop.kms.authentication.type enabled.
+    If the property exists and is equal to "kerberos", then is it enabled; otherwise is it assumed to be
+    disabled.
+
+    :type services: dict
+    :param services: the dictionary containing the existing configuration values
+    :type configurations: dict
+    :param configurations: the dictionary containing the updated configuration values
+    :rtype: bool
+    :return: True or False
+    """
+    if configurations and "kms-site" in configurations and \
+            "hadoop.kms.authentication.type" in configurations["kms-site"]["properties"]:
+      return configurations["kms-site"]["properties"]["hadoop.kms.authentication.type"].lower() == "kerberos"
+    elif services and "kms-site" in services["configurations"] and \
+            "hadoop.kms.authentication.type" in services["configurations"]["kms-site"]["properties"]:
+      return services["configurations"]["kms-site"]["properties"]["hadoop.kms.authentication.type"].lower() == "kerberos"
+    else:
+      return False
+
+
 class RangerKMSRecommender(service_advisor.ServiceAdvisor):
   """
   RangerKMS Recommender suggests properties when adding the service for the first time or modifying configs via the UI.
@@ -158,7 +182,7 @@ class RangerKMSRecommender(service_advisor.ServiceAdvisor):
     putCoreSiteProperty = self.putProperty(configurations, "core-site", services)
     putCoreSitePropertyAttribute = self.putPropertyAttribute(configurations, "core-site")
     putRangerKmsAuditProperty = self.putProperty(configurations, "ranger-kms-audit", services)
-    security_enabled = self.isSecurityEnabled(services)
+    security_enabled = Ranger_KMSServiceAdvisor.isKerberosEnabled(services, configurations)
     putRangerKmsSiteProperty = self.putProperty(configurations, "kms-site", services)
     putRangerKmsSitePropertyAttribute = self.putPropertyAttribute(configurations, "kms-site")
 
@@ -233,7 +257,7 @@ class RangerKMSRecommender(service_advisor.ServiceAdvisor):
 
   def recommendRangerKMSConfigurationsFromHDP25(self, configurations, clusterData, services, hosts):
 
-    security_enabled = self.isSecurityEnabled(services)
+    security_enabled = Ranger_KMSServiceAdvisor.isKerberosEnabled(services, configurations)
     required_services = [{'service' : 'RANGER', 'config-type': 'ranger-env', 'property-name': 'ranger_user', 'proxy-category': ['hosts', 'users', 'groups']},
                         {'service' : 'SPARK2', 'config-type': 'livy2-env', 'property-name': 'livy2_user', 'proxy-category': ['hosts', 'users', 'groups']}]
 

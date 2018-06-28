@@ -154,6 +154,30 @@ class RangerServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  @staticmethod
+  def isKerberosEnabled(services, configurations):
+    """
+    Determines if security is enabled by testing the value of core-site/hadoop.security.authentication enabled.
+    If the property exists and is equal to "kerberos", then is it enabled; otherwise is it assumed to be
+    disabled.
+
+    :type services: dict
+    :param services: the dictionary containing the existing configuration values
+    :type configurations: dict
+    :param configurations: the dictionary containing the updated configuration values
+    :rtype: bool
+    :return: True or False
+    """
+    if configurations and "core-site" in configurations and \
+            "hadoop.security.authentication" in configurations["core-site"]["properties"]:
+      return configurations["core-site"]["properties"]["hadoop.security.authentication"].lower() == "kerberos"
+    elif services and "core-site" in services["configurations"] and \
+            "hadoop.security.authentication" in services["configurations"]["core-site"]["properties"]:
+      return services["configurations"]["core-site"]["properties"]["hadoop.security.authentication"].lower() == "kerberos"
+    else:
+      return False
+
+
 class RangerRecommender(service_advisor.ServiceAdvisor):
   """
   Ranger Recommender suggests properties when adding the service for the first time or modifying configs via the UI.
@@ -775,7 +799,7 @@ class RangerValidator(service_advisor.ServiceAdvisor):
   def validateRangerConfigurationsEnvFromHDP23(self, properties, recommendedDefaults, configurations, services, hosts):
     ranger_env_properties = properties
     validationItems = []
-    security_enabled = self.isSecurityEnabled(services)
+    security_enabled = RangerServiceAdvisor.isKerberosEnabled(services, configurations)
 
     if "ranger-kafka-plugin-enabled" in ranger_env_properties and ranger_env_properties["ranger-kafka-plugin-enabled"].lower() == 'yes' and not security_enabled:
       validationItems.append({"config-name": "ranger-kafka-plugin-enabled",

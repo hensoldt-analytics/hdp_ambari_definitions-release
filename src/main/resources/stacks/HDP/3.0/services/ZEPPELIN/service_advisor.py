@@ -137,6 +137,33 @@ class ZeppelinServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  @staticmethod
+  def isKerberosEnabled(services, configurations):
+    """
+    Determine if Kerberos is enabled for Zeppelin.
+
+    If zeppelin-env/zeppelin.kerberos.enabled exists and is set to "true", return True;
+    otherwise return false.
+
+    The value of this property is first tested in the updated configurations (configurations) then
+    tested in the current configuration set (services)
+
+    :type services: dict
+    :param services: the dictionary containing the existing configuration values
+    :type configurations: dict
+    :param configurations: the dictionary containing the updated configuration values
+    :rtype: bool
+    :return: True or False
+    """
+    if configurations and "zeppelin-env" in configurations and \
+            "zeppelin.kerberos.enabled" in configurations["zeppelin-env"]["properties"]:
+      return configurations["zeppelin-env"]["properties"]["zeppelin.kerberos.enabled"].lower() == "true"
+    elif services and "zeppelin-env" in services["configurations"] and \
+            "zeppelin.kerberos.enabled" in services["configurations"]["zeppelin-env"]["properties"]:
+      return services["configurations"]["zeppelin-env"]["properties"]["zeppelin.kerberos.enabled"].lower() == "true"
+    else:
+      return False
+
 
 
 class ZeppelinRecommender(service_advisor.ServiceAdvisor):
@@ -166,7 +193,7 @@ class ZeppelinRecommender(service_advisor.ServiceAdvisor):
     :param configurations:
     :param services:
     """
-    if self.isSecurityEnabled(services):
+    if ZeppelinServiceAdvisor.isKerberosEnabled(services, configurations):
       zeppelin_env = self.getServicesSiteProperties(services, "zeppelin-env")
 
       if zeppelin_env and 'zeppelin.server.kerberos.principal' in zeppelin_env:

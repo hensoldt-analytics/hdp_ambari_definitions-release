@@ -153,6 +153,29 @@ class AtlasServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  @staticmethod
+  def isKerberosEnabled(services, configurations):
+      """
+      Determines if security is enabled by testing the value of application-properties/atlas.authentication.method.kerberos enabled.
+      If the property exists and is equal to "true", then is it enabled; otherwise is it assumed to be
+      disabled.
+
+      :type services: dict
+      :param services: the dictionary containing the existing configuration values
+      :type configurations: dict
+      :param configurations: the dictionary containing the updated configuration values
+      :rtype: bool
+      :return: True or False
+      """
+      if configurations and "application-properties" in configurations and \
+              "atlas.authentication.method.kerberos" in configurations["application-properties"]["properties"]:
+          return configurations["application-properties"]["properties"]["atlas.authentication.method.kerberos"].lower() == "true"
+      elif services and "application-properties" in services["configurations"] and \
+              "atlas.authentication.method.kerberos" in services["configurations"]["application-properties"]["properties"]:
+          return services["configurations"]["application-properties"]["properties"]["atlas.authentication.method.kerberos"].lower() == "true"
+      else:
+          return False
+
 
 
 class AtlasRecommender(service_advisor.ServiceAdvisor):
@@ -252,7 +275,7 @@ class AtlasRecommender(service_advisor.ServiceAdvisor):
       else:
         kafka_server_listeners = 'PLAINTEXT://localhost:6667'
 
-      security_enabled = self.isSecurityEnabled(services)
+      security_enabled = AtlasServiceAdvisor.isKerberosEnabled(services, configurations)
 
       if ',' in kafka_server_listeners and len(kafka_server_listeners.split(',')) > 1:
         for listener in kafka_server_listeners.split(','):

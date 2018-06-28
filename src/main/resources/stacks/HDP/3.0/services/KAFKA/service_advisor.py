@@ -140,6 +140,36 @@ class KafkaServiceAdvisor(service_advisor.ServiceAdvisor):
     # method(siteProperties, siteRecommendations, configurations, services, hosts)
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
+  @staticmethod
+  def isKerberosEnabled(services, configurations):
+    """
+    Determine if Kerberos is enabled for Kafka.
+
+    If kafka-broker/security.inter.broker.protocol exists and is set to "PLAINTEXTSASL" or "SASL_PLAINTEXT", return True;
+    otherwise return false.
+
+    The value of this property is first tested in the updated configurations (configurations) then
+    tested in the current configuration set (services)
+
+    :type services: dict
+    :param services: the dictionary containing the existing configuration values
+    :type configurations: dict
+    :param configurations: the dictionary containing the updated configuration values
+    :rtype: bool
+    :return: True or False
+    """
+
+    if configurations and "kafka-broker" in configurations and \
+            "security.inter.broker.protocol" in configurations["kafka-broker"]["properties"]:
+      return (configurations["kafka-broker"]["properties"]["security.inter.broker.protocol"] == "PLAINTEXTSASL" or
+              configurations["kafka-broker"]["properties"]["security.inter.broker.protocol"] == "SASL_PLAINTEXT")
+    elif services and "kafka-broker" in services["configurations"] and \
+            "security.inter.broker.protocol" in services["configurations"]["kafka-broker"]["properties"]:
+      return (services["configurations"]["kafka-broker"]["properties"]["security.inter.broker.protocol"] == "PLAINTEXTSASL" or
+              services["configurations"]["kafka-broker"]["properties"]["security.inter.broker.protocol"] == "SASL_PLAINTEXT")
+    else:
+      return False
+
 
 
 class KafkaRecommender(service_advisor.ServiceAdvisor):
@@ -169,7 +199,7 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
     if not kafka_env: #Kafka check not required
       return
 
-    security_enabled = self.isSecurityEnabled(services)
+    security_enabled = KafkaServiceAdvisor.isKerberosEnabled(services, configurations)
 
     putKafkaBrokerProperty = self.putProperty(configurations, "kafka-broker", services)
     putKafkaLog4jProperty = self.putProperty(configurations, "kafka-log4j", services)
@@ -197,7 +227,6 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
         putKafkaBrokerProperty("super.users", kafka_super_users)
 
       putKafkaBrokerProperty("principal.to.local.class", "kafka.security.auth.KerberosPrincipalToLocal")
-      putKafkaBrokerProperty("security.inter.broker.protocol", "PLAINTEXTSASL")
       putKafkaBrokerProperty("zookeeper.set.acl", "true")
 
     else:  # not security_enabled
@@ -339,7 +368,7 @@ class KafkaValidator(service_advisor.ServiceAdvisor):
     ranger_plugin_properties = self.getSiteProperties(configurations, "ranger-kafka-plugin-properties")
     ranger_plugin_enabled = ranger_plugin_properties['ranger-kafka-plugin-enabled'] if ranger_plugin_properties else 'No'
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
-    security_enabled = self.isSecurityEnabled(services)
+    security_enabled = KafkaServiceAdvisor.isKerberosEnabled(services, configurations)
     if 'RANGER' in servicesList and ranger_plugin_enabled.lower() == 'yes':
       # ranger-hdfs-plugin must be enabled in ranger-env
       ranger_env = self.getServicesSiteProperties(services, 'ranger-env')

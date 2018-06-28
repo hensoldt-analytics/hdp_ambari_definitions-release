@@ -67,7 +67,6 @@ conf_dir = status_params.conf_dir
 stack_version_unformatted = status_params.stack_version_unformatted
 stack_version_formatted = status_params.stack_version_formatted
 stack_supports_ru = stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE, stack_version_formatted)
-stack_supports_storm_kerberos = stack_version_formatted and check_stack_feature(StackFeature.STORM_KERBEROS, stack_version_formatted)
 stack_supports_storm_ams = stack_version_formatted and check_stack_feature(StackFeature.STORM_AMS, stack_version_formatted)
 stack_supports_core_site_for_ranger_plugin = check_stack_feature(StackFeature.CORE_SITE_FOR_RANGER_PLUGINS_SUPPORT, stack_version_formatted)
 
@@ -152,27 +151,22 @@ if security_enabled:
   _ambari_principal_name = default('/configurations/cluster-env/ambari_principal_name', None)
   storm_keytab_path = config['configurations']['storm-env']['storm_keytab']
 
-  if stack_supports_storm_kerberos:
-    storm_ui_keytab_path = config['configurations']['storm-env']['storm_ui_keytab']
-    _storm_ui_jaas_principal_name = config['configurations']['storm-env']['storm_ui_principal_name']
-    storm_ui_jaas_principal = _storm_ui_jaas_principal_name.replace('_HOST',_hostname_lowercase)
-    storm_bare_jaas_principal = get_bare_principal(_storm_principal_name)
-    if _ambari_principal_name:
-      ambari_bare_jaas_principal = get_bare_principal(_ambari_principal_name)
-    _nimbus_principal_name = config['configurations']['storm-env']['nimbus_principal_name']
-    nimbus_jaas_principal = _nimbus_principal_name.replace('_HOST', _hostname_lowercase)
-    nimbus_bare_jaas_principal = get_bare_principal(_nimbus_principal_name)
-    nimbus_keytab_path = config['configurations']['storm-env']['nimbus_keytab']
+  storm_ui_keytab_path = config['configurations']['storm-env']['storm_ui_keytab']
+  _storm_ui_jaas_principal_name = config['configurations']['storm-env']['storm_ui_principal_name']
+  storm_ui_jaas_principal = _storm_ui_jaas_principal_name.replace('_HOST',_hostname_lowercase)
+  storm_bare_jaas_principal = get_bare_principal(_storm_principal_name)
+  if _ambari_principal_name:
+    ambari_bare_jaas_principal = get_bare_principal(_ambari_principal_name)
+  _nimbus_principal_name = config['configurations']['storm-env']['nimbus_principal_name']
+  nimbus_jaas_principal = _nimbus_principal_name.replace('_HOST', _hostname_lowercase)
+  nimbus_bare_jaas_principal = get_bare_principal(_nimbus_principal_name)
+  nimbus_keytab_path = config['configurations']['storm-env']['nimbus_keytab']
 
 kafka_bare_jaas_principal = None
-if stack_supports_storm_kerberos:
-  if security_enabled:
-    storm_thrift_transport = config['configurations']['storm-site']['_storm.thrift.secure.transport']
-    # generate KafkaClient jaas config if kafka is kerberoized
+if security_enabled:
+    # generate KafkaClient jaas config if kafka is kerberized
     _kafka_principal_name = default("/configurations/kafka-env/kafka_principal_name", None)
     kafka_bare_jaas_principal = get_bare_principal(_kafka_principal_name)
-  else:
-    storm_thrift_transport = config['configurations']['storm-site']['_storm.thrift.nonsecure.transport']
 
 set_instanceId = "false"
 if 'cluster-env' in config['configurations'] and \

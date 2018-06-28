@@ -45,6 +45,7 @@
       "configurations": [
         {
           "storm-site": {
+            "storm.thrift.transport": "org.apache.storm.security.auth.kerberos.KerberosSaslTransportPlugin",
             "nimbus.authorizer": "org.apache.storm.security.auth.authorizer.SimpleACLAuthorizer",
             "drpc.authorizer": "org.apache.storm.security.auth.authorizer.DRPCSimpleACLAuthorizer",
             "ui.filter": "org.apache.storm.org.apache.hadoop.security.authentication.server.AuthenticationFilter",
