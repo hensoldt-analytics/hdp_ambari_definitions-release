@@ -667,11 +667,31 @@
       </execute-stage>
     </group>
 
+    <!-- This group is necessary since new components are being added to the cluster in this upgrade -->
     <group xsi:type="cluster" name="REGENERATE_KEYTABS" title="Regenerate Missing Keytabs">
       <condition xsi:type="security" type="kerberos"/>
       <direction>UPGRADE</direction>
       <execute-stage title="Regenerate Missing Keytabs">
         <task xsi:type="regenerate_keytabs"/>
+      </execute-stage>
+    </group>
+
+    <!-- This group is necessary since new components are being added to the cluster in this upgrade -->
+    <group xsi:type="cluster" name="MANUAL_REGENERATE_KEYTABS" title="Manually Regenerate Missing Keytabs">
+      <condition xsi:type="security" type="kerberos" kdc-type="none"/>
+      <direction>UPGRADE</direction>
+      <execute-stage title="Manually Regenerate Missing Keytabs">
+        <task xsi:type="manual">
+          <message>Ambari is configured to have principals and keytabs managed externally.
+            Before proceeding, you will need to manually create new principals and keytabs for the following cluster changes which have been made.
+            You can download a summary of all principals and keytabs from the Kerberos section in Ambari.</message>
+          <message> · All Spark Job History Server hosts now have a Hive Client installed</message>
+          <message> · All YARN Application Timeline Service hosts now have Timeline Reader installed</message>
+          <message> · All YARN Application Timeline Service hosts now have Registry DNS installed</message>
+          <message> · The principal yarn-ats-hbase is required for all YARN hosts</message>
+          <message> · The principal amsmon is required for all AMS Monitors</message>
+          <message> · A Spark service principal replaces a legacy Spark headless principal on all Spark hosts</message>
+        </task>
       </execute-stage>
     </group>
 
