@@ -69,8 +69,14 @@
         <changes>
           <definition xsi:type="configure" id="hdp_30_accumulo_stack_variables_update" summary="Convert HDP 2.6 variable naming to HDP 3.0">
             <type>accumulo-env</type>
-            <replace key="content" find="HADOOP_PREFIX" replace-with="HADOOP_HOME"/>
-            <replace key="server_content" find="HADOOP_PREFIX" replace-with="HADOOP_HOME"/>
+            <!-- Accumulo scripts still expect HADOOP_PREFIX, so don't break them by removing HADOOP_PREFIX -->
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value="export HADOOP_HOME={{hadoop_prefix}}"/>
+            <insert key="server_content" insert-type="append" newline-before="true" newline-after="true" value="export HADOOP_HOME={{hadoop_prefix}}"/>
+          </definition>
+          <definition xsi:type="configure" id="hdp_30_accumulo_classpath_update" summary="Update HDP 2.6 classpath for HDP 3.0">
+            <type>accumulo-site</type>
+            <!-- Expand the regex classpath matching of jersey.*.jar to be [^.].*.jar instead -->
+            <replace key="general.classpaths" find="jersey" replace-with="[^.]"/>
           </definition>
         </changes>
       </component>

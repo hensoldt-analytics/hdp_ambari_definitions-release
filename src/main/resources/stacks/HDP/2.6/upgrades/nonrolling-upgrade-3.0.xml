@@ -664,6 +664,15 @@
         <task xsi:type="configure" id="hdp_3_0_0_0_spark2_env"/>
       </execute-stage>
 
+      <!--ACCUMULO-->
+      <execute-stage service="ACCUMULO" component="ACCUMULO_MASTER" title="Convert Accumulo HDP 2.6 env variable naming to HDP 3.0">
+        <task xsi:type="configure" id="hdp_30_accumulo_stack_variables_update"/>
+      </execute-stage>
+
+      <execute-stage service="ACCUMULO" component="ACCUMULO_MASTER" title="Update Accumulo HDP 2.6 classpath for HDP 3.0">
+        <task xsi:type="configure" id="hdp_30_accumulo_classpath_update"/>
+      </execute-stage>
+
     </group>
 
     <!--
@@ -675,11 +684,6 @@
       <execute-stage title="Update the user-specified Kerberos descriptor">
         <task xsi:type="server_action"
               class="org.apache.ambari.server.serveraction.upgrades.UpgradeUserKerberosDescriptor"/>
-      </execute-stage>
-
-      <!--ACCUMULO-->
-      <execute-stage service="ACCUMULO" component="ACCUMULO_MASTER" title="Convert HDP 2.6 variable naming to HDP 3.0">
-        <task xsi:type="configure" id="hdp_30_accumulo_stack_variables_update"/>
       </execute-stage>
     </group>
 
