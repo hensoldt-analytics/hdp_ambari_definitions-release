@@ -964,7 +964,7 @@
         "packages": ["atlas"]
       },
       "DRUID": {
-        "packages": ["druid", "superset"]
+        "packages": ["druid"]
       },
       "FLUME": {
         "packages": ["flume"]
@@ -1010,6 +1010,9 @@
       },
       "STORM": {
         "packages": ["storm", "storm-slider-client"]
+      },
+      "SUPERSET": {
+        "packages": ["superset"]
       },
       "SYSTEMML": {
         "packages": []

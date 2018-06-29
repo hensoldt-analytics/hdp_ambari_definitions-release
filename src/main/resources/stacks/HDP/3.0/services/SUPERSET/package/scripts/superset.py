@@ -98,7 +98,7 @@ class Superset(Script):
     env.set_params(params)
 
     if params.stack_version and check_stack_feature(StackFeature.ROLLING_UPGRADE, params.stack_version):
-      stack_select.select_packages(params.version)
+      stack_select.select_packages(params.stack_version)
 
   def start(self, env, upgrade_type=None):
     import params
