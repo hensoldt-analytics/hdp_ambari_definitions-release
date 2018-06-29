@@ -534,8 +534,28 @@
       </execute-stage>
 
       <!--HIVE-->
+      <execute-stage service="HIVE" component="HIVE_SERVER" title="Update default hive-env.sh">
+        <task xsi:type="configure" id="update_hive_env_default" />
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_SERVER" title="Update default hive-exec-log4j2.properties">
+        <task xsi:type="configure" id="update_hive_exec_log4j2_default" />
+      </execute-stage>
+
       <execute-stage service="HIVE" component="HIVE_SERVER" title="Update default HSI hive-env.sh">
         <task xsi:type="configure" id="update_hsi_hive_env_sh_default" />
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_SERVER" title="Update default hive-log4j2.properties">
+        <task xsi:type="configure" id="update_hive_log4j2_default" />
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_SERVER" title="Update default llap-daemon-log4j2.properties">
+        <task xsi:type="configure" id="update_llap_cli_log4j2_default" />
+      </execute-stage>
+
+      <execute-stage service="HIVE" component="HIVE_SERVER" title="Update default llap-cli-log4j2.properties">
+        <task xsi:type="configure" id="update_llap_daemon_log4j_default" />
       </execute-stage>
 
       <execute-stage service="HIVE" component="HIVE_SERVER_INTERACTIVE" title="Update HSI hive_hcatalog jar path">
