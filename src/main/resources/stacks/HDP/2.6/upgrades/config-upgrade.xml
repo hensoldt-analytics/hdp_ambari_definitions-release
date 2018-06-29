@@ -192,6 +192,40 @@
             <set key ="atlas.jaas.ticketBased-KafkaClient.option.useTicketCache" value="true"
               if-type="cluster-env" if-key="security_enabled" if-value="true"/>
           </definition>
+          <!-- HACK: Ambari fails to replace not modified content type properties to the new default due to a bug, it has to be done here. This is a HSI property, but as the HSI component may not be present during the upgrade (not activated yet) the replacement must be done here -->
+          <definition xsi:type="configure" id="update_hsi_hive_env_sh_default" summary="Update default HSI hive-env.sh">
+            <type>hive-interactive-env</type>
+            <regex-replace key="content"
+              find='if \[ "\$SERVICE" = "cli" \]; then$[\r\n]  if \[ -z "\$DEBUG" \]; then$[\r\n]    export HADOOP_OPTS="\$HADOOP_OPTS -XX:NewRatio=12 -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:\+UseParNewGC -XX:-UseGCOverheadLimit"$[\r\n]  else$[\r\n]    export HADOOP_OPTS="\$HADOOP_OPTS -XX:NewRatio=12 -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:-UseGCOverheadLimit"$[\r\n]  fi$[\r\n]fi$[\r\n]$[\r\n]# The heap size of the jvm stared by hive shell script can be controlled via:$[\r\n]$[\r\n]if \[ "\$SERVICE" = "metastore" \]; then$[\r\n]  export HADOOP_HEAPSIZE=\{\{hive_metastore_heapsize\}\} # Setting for HiveMetastore$[\r\n]else$[\r\n]  export HADOOP_HEAPSIZE=\{\{hive_interactive_heapsize\}\} # Setting for HiveServer2 and Client$[\r\n]fi$[\r\n]$[\r\n]export HADOOP_CLIENT_OPTS="\$HADOOP_CLIENT_OPTS  -Xmx\$\{HADOOP_HEAPSIZE\}m"$[\r\n]export HADOOP_CLIENT_OPTS="\$HADOOP_CLIENT_OPTS\{\{heap_dump_opts\}\}"$[\r\n]$[\r\n]# Larger heap size may be required when running queries over large number of files or partitions.$[\r\n]# By default hive shell scripts use a heap size of 256 \(MB\).  Larger heap size would also be$[\r\n]# appropriate for hive server \(hwi etc\).$[\r\n]$[\r\n]$[\r\n]# Set HADOOP_HOME to point to a specific hadoop install directory$[\r\n]HADOOP_HOME=\$\{HADOOP_HOME:-\{\{hadoop_home\}\}}$[\r\n]$[\r\n]# Hive Configuration Directory can be controlled by:$[\r\n]export HIVE_CONF_DIR=\{\{hive_server_interactive_conf_dir\}\}$[\r\n]$[\r\n]# Add additional hcatalog jars$[\r\n]if \[ "\$\{HIVE_AUX_JARS_PATH\}" != "" \]; then$[\r\n]  export HIVE_AUX_JARS_PATH=\$\{HIVE_AUX_JARS_PATH\}$[\r\n]else$[\r\n]  export HIVE_AUX_JARS_PATH=/usr/hdp/current/hive-server2-hive2/lib/hive-hcatalog-core.jar$[\r\n]fi$[\r\n]$[\r\n]export METASTORE_PORT=\{\{hive_metastore_port\}\}$[\r\n]$[\r\n]# Spark assembly contains a conflicting copy of HiveConf from hive-1.2$[\r\n]export HIVE_SKIP_SPARK_ASSEMBLY=true'
+              replace-with='export HADOOP_OPTS="$HADOOP_OPTS -Xloggc:{{hive_log_dir}}/hiveserverinteractive-gc-%t.log -XX:+UseG1GC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCCause -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath={{hive_log_dir}}/hsi_heapdump.hprof -Dhive.log.dir={{hive_log_dir}} -Dhive.log.file=hiveserver2Interactive.log"&#10;
+&#10;
+# The heap size of the jvm stared by hive shell script can be controlled via:&#10;
+export HADOOP_HEAPSIZE={{hive_interactive_heapsize}} # Setting for HiveServer2 and Client&#10;
+&#10;
+export HADOOP_CLIENT_OPTS="$HADOOP_CLIENT_OPTS  -Xmx${HADOOP_HEAPSIZE}m"&#10;
+export HADOOP_CLIENT_OPTS="$HADOOP_CLIENT_OPTS{{heap_dump_opts}}"&#10;
+&#10;
+# Larger heap size may be required when running queries over large number of files or partitions.&#10;
+# By default hive shell scripts use a heap size of 256 (MB).  Larger heap size would also be&#10;
+# appropriate for hive server (hwi etc).&#10;
+&#10;
+&#10;
+# Set HADOOP_HOME to point to a specific hadoop install directory&#10;
+HADOOP_HOME=${HADOOP_HOME:-{{hadoop_home}}}&#10;
+&#10;
+# Hive Configuration Directory can be controlled by:&#10;
+export HIVE_CONF_DIR={{hive_server_interactive_conf_dir}}&#10;
+&#10;
+# Add additional hcatalog jars&#10;
+if [ "${HIVE_AUX_JARS_PATH}" != "" ]; then&#10;
+  export HIVE_AUX_JARS_PATH=${HIVE_AUX_JARS_PATH}&#10;
+else&#10;
+  export HIVE_AUX_JARS_PATH=/usr/hdp/current/hive-server2/lib/hive-hcatalog-core.jar&#10;
+fi&#10;
+&#10;
+export METASTORE_PORT={{hive_metastore_port}}' match-all="true"
+            />
+          </definition>
         </changes>
       </component>
       <component name="HIVE_SERVER_INTERACTIVE">
@@ -213,7 +247,7 @@
             <set key="hive.druid.working.directory" value="/tmp/druid-indexing" if-type="druid-common"/>
             <set key="hive.druid.bitmap.type" value="roaring" if-type="druid-common"/>
           </definition>
-          <definition xsi:type="configure" id="hive_hcatalog_jar_path" summary="Update hive_hcatalog jar path">
+          <definition xsi:type="configure" id="update_hsi_hive_hcatalog_jar_path" summary="Update HSI hive_hcatalog jar path">
             <type>hive-interactive-env</type>
             <replace key="content" find="/usr/hdp/current/hive-server2-hive2/lib/hive-hcatalog-core.jar" replace-with="/usr/hdp/current/hive-server2/lib/hive-hcatalog-core.jar"/>
           </definition>
