@@ -64,6 +64,10 @@
                 &lt;name&gt;AclsAuthz&lt;/name&gt;
                 &lt;enabled&gt;true&lt;/enabled&gt;
                 &lt;param&gt;
+	               &lt;name>knox.acl.mode&lt;/name&gt;
+	               &lt;value&gt;OR&lt;/value&gt;
+                   &lt;/param&gt;
+                &lt;param&gt;
                     &lt;name&gt;knox.acl&lt;/name&gt;
                     &lt;value&gt;KNOX_ADMIN_USERS;KNOX_ADMIN_GROUPS;*&lt;/value&gt;
                 &lt;/param&gt;
