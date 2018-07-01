@@ -136,7 +136,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.compactor.worker.threads</name>
-    <value>0</value>
+    <value>5</value>
     <description>Number of compactor worker threads to run on this metastore instance. Can be different values on different metastore instances.</description>
     <display-name>Number of threads used by Compactor</display-name>
     <value-attributes>
@@ -145,7 +145,7 @@ limitations under the License.
       <maximum>20</maximum>
       <increment-step>1</increment-step>
     </value-attributes>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.create.as.insert.only</name>
@@ -513,6 +513,14 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.lock.manager</name>
+    <value/>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <on-ambari-upgrade update="true"/>
+  </property>
+  <property>
     <name>hive.metastore.uris</name>
     <value>thrift://localhost:9083</value>
     <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
@@ -622,6 +630,41 @@ limitations under the License.
       <type>boolean</type>
     </value-attributes>
     <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.server2.idle.session.timeout</name>
+    <value>1d</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.server2.idle.operation.timeout</name>
+    <value>6h</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.start.cleanup.scratchdir</name>
+    <value>true</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.limit.optimize.enable</name>
+    <value>false</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.strict.managed.tables</name>
+    <value>true</value>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>hive.load.data.owner</name>
+    <value>hive</value>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>hive.txn.strict.locking.mode</name>
+    <value>false</value>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
@@ -1975,11 +2018,11 @@ limitations under the License.
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.mapjoin.hybridgrace.hashtable</name>
-    <value>true</value>
+    <value>false</value>
     <description>Whether to use hybrid grace hash join as the join method for mapjoin.
       Applies to dynamically partitioned joins when running in LLAP, but not to regular
       broadcast(map) joins. hive.llap.enable.grace.join.in.llap is used for this.
@@ -1987,7 +2030,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.tez.cartesian-product.enabled</name>
@@ -2023,12 +2066,12 @@ limitations under the License.
   <!-- Hive replication properties -->
   <property>
     <name>hive.metastore.dml.events</name>
-    <value/>
+    <value>true</value>
     <description>If true, the metastore will be asked to fire events for DML operations</description>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.repl.cm.enabled</name>
@@ -2041,12 +2084,12 @@ limitations under the License.
   </property>
   <property>
     <name>hive.metastore.transactional.event.listeners</name>
-    <value/>
+    <value>org.apache.hive.hcatalog.listener.DbNotificationListener</value>
     <description>A comma separated list of Java classes that implement the org.apache.hadoop.hive.metastore.MetaStoreEventListener interface. Both the metastore event and corresponding listener method will be invoked in the same JDO transaction.</description>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
     <name>hive.repl.cmrootdir</name>

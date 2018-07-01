@@ -537,6 +537,54 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.lock.manager</name>
+    <value/>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <on-ambari-upgrade update="true"/>
+  </property>
+  <property>
+    <name>hive.txn.strict.locking.mode</name>
+    <value>false</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.limit.optimize.enable</name>
+    <value>false</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.strict.managed.tables</name>
+    <value>true</value>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>hive.load.data.owner</name>
+    <value>hive</value>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>hive.server2.idle.session.timeout</name>
+    <value>1d</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.server2.idle.operation.timeout</name>
+    <value>6h</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.start.cleanup.scratchdir</name>
+    <value>true</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
+    <name>hive.llap.mapjoin.memory.oversubscribe.factor</name>
+    <value>0.3f</value>
+    <on-ambari-upgrade add="false" update="true"/>
+  </property>
+  <property>
     <name>llap.shuffle.connection-keep-alive.timeout</name>
     <value>60</value>
     <on-ambari-upgrade add="false"/>
@@ -742,7 +790,7 @@ limitations under the License.
 
   <property>
     <name>hive.mapjoin.hybridgrace.hashtable</name>
-    <value>true</value>
+    <value>false</value>
     <description>Whether to use hybrid grace hash join as the join method for mapjoin.
       Applies to dynamically partitioned joins when running in LLAP, but not to regular
       broadcast(map) joins. hive.llap.enable.grace.join.in.llap is used for this.
@@ -750,7 +798,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false"/>
+    <on-ambari-upgrade add="false" update="true"/>
   </property>
 
   <property>
