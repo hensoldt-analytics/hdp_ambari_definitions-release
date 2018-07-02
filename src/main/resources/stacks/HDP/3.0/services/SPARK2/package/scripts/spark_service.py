@@ -31,6 +31,7 @@ from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.constants import StackFeature
 from resource_management.libraries.functions.show_logs import show_logs
+from resource_management.core.shell import as_sudo
 
 
 def make_tarfile(output_filename, source_dir):
@@ -104,10 +105,9 @@ def spark_service(name, upgrade_type=None, action=None):
       Execute(create_catalog_cmd,
                 user = params.hive_user)
 
-      historyserver_no_op_test = format(
-      'ls {spark_history_server_pid_file} >/dev/null 2>&1 && ps -p `cat {spark_history_server_pid_file}` >/dev/null 2>&1')
+      historyserver_no_op_test = as_sudo(["test", "-f", params.spark_history_server_pid_file]) + " && " + as_sudo(["pgrep", "-F", params.spark_history_server_pid_file])
       try:
-        Execute(format('{spark_history_server_start}'),
+        Execute(params.spark_history_server_start,
                 user=params.spark_user,
                 environment={'JAVA_HOME': params.java_home},
                 not_if=historyserver_no_op_test)
@@ -120,8 +120,7 @@ def spark_service(name, upgrade_type=None, action=None):
         hive_kinit_cmd = format("{kinit_path_local} -kt {hive_kerberos_keytab} {hive_kerberos_principal}; ")
         Execute(hive_kinit_cmd, user=params.spark_user)
 
-      thriftserver_no_op_test = format(
-      'ls {spark_thrift_server_pid_file} >/dev/null 2>&1 && ps -p `cat {spark_thrift_server_pid_file}` >/dev/null 2>&1')
+      thriftserver_no_op_test= as_sudo(["test", "-f", params.spark_thrift_server_pid_file]) + " && " + as_sudo(["pgrep", "-F", params.spark_thrift_server_pid_file])
       try:
         Execute(format('{spark_thrift_server_start} --properties-file {spark_thrift_server_conf_file} {spark_thrift_cmd_opts_properties}'),
                 user=params.spark_user,
