@@ -47,7 +47,7 @@
   </property>
   <property>
     <name>druid.indexer.runner.javaOpts</name>
-    <value>-server -Xmx2g -Duser.timezone=UTC -Dfile.encoding=UTF-8 -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager -Dhdp.version={{stack_version}} -Dhadoop.mapreduce.job.classloader=true -Djava.security.auth.login.config={{druid_jaas_file}}</value>
+    <value>-server -Xmx2g -Duser.timezone=UTC -Dfile.encoding=UTF-8 -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager -Dhdp.version={stack_version} -Dhadoop.mapreduce.job.classloader=true -Djava.security.auth.login.config={druid_jaas_file}</value>
     <description>
       A string of -X Java options to pass to the peon's JVM.
     </description>

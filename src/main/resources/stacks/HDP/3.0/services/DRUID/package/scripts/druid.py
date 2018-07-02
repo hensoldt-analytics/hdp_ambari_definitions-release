@@ -100,6 +100,9 @@ def druid(upgrade_type=None, nodeType=None):
 
     # Write runtime.properties file
     node_config = mutable_config_dict(params.config['configurations'][format('druid-{node_type_lowercase}')])
+    if(node_type == 'middleManager'):
+        # Replace correct values for stack_version and druid_jaas_file
+        node_config['druid.indexer.runner.javaOpts'] = format(node_config['druid.indexer.runner.javaOpts'])
     PropertiesFile("runtime.properties",
                    dir=node_config_dir,
                    properties=node_config,
@@ -119,7 +122,7 @@ def druid(upgrade_type=None, nodeType=None):
            log4j_config_file=format("{params.druid_common_conf_dir}/druid-log4j.xml"),
            node_direct_memory=druid_env_config[
              format('druid.{node_type_lowercase}.jvm.direct.memory')],
-           node_jvm_opts=druid_env_config[format('druid.{node_type_lowercase}.jvm.opts')])
+           node_jvm_opts=format(druid_env_config[format('druid.{node_type_lowercase}.jvm.opts')]))
          )
     Logger.info(format("Created druid-{node_type_lowercase} jvm.config"))
     # Handling hadoop Lzo jars if enable and node type is hadoop related eg Overlords and MMs
