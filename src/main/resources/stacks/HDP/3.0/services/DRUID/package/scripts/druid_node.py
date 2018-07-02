@@ -27,6 +27,7 @@ from resource_management.libraries.functions import StackFeature
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.functions.show_logs import show_logs
+from resource_management.core.shell import as_sudo
 from druid import druid, get_daemon_cmd, getPid
 
 
@@ -79,9 +80,13 @@ class DruidBase(Script):
                user=params.druid_user
                )
 
+    pid_file = getPid(params, self.nodeType)
+    process_id_exists_command = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
+
     try:
       Execute(daemon_cmd,
-              user=params.druid_user
+              user=params.druid_user,
+              not_if=process_id_exists_command,
               )
     except:
       show_logs(params.druid_log_dir, params.druid_user)
@@ -91,10 +96,14 @@ class DruidBase(Script):
     import params
     env.set_params(params)
 
+    pid_file = getPid(params, self.nodeType)
+    process_id_exists_command = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
+
     daemon_cmd = get_daemon_cmd(params, self.nodeType, "stop")
     try:
       Execute(daemon_cmd,
-              user=params.druid_user
+              user=params.druid_user,
+              only_if=pid_file,
               )
     except:
       show_logs(params.druid_log_dir, params.druid_user)
