@@ -547,6 +547,12 @@
                     if-value="org.apache.hadoop.yarn.applications.distributedshell.DistributedShellTimelinePlugin"
                     if-value-not-matched="true" if-value-match-type="partial"/>
           </definition>
+          <definition xsi:type="configure" id="hdp_30_removed_tez_plugin_class_from_ats" summary="Removed Tez Plugin from ATS">
+            <type>yarn-site</type>
+            <regex-replace key="yarn.timeline-service.entity-group-fs-store.group-id-plugin-classes"
+                           find=",?(org\.apache\.tez\.dag\.history\.logging\.ats\.TimelineCachePluginImpl,?)"
+                           replace-with=""/>
+          </definition>
         </changes>
       </component>
     </service>
