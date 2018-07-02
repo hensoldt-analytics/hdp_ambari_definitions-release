@@ -1568,8 +1568,21 @@ yarn.node-labels.manager-class
   </property>
 
   <property>
+    <name>yarn.resourcemanager.monitor.capacity.preemption.intra-queue-preemption.enabled</name>
+    <value>true</value>
+    <description>This property need to be set to make preemption within a Leaf Queue based on user-limit and application priority.</description>
+    <depends-on>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.resourcemanager.scheduler.monitor.enable</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
     <name>yarn.scheduler.capacity.ordering-policy.priority-utilization.underutilized-preemption.enabled</name>
-    <value>false</value>
+    <value>true</value>
     <description>This property need to be set to make preemption can happen under a fragmented cluster.</description>
     <depends-on>
       <property>
@@ -1610,6 +1623,12 @@ yarn.node-labels.manager-class
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hadoop.registry.dns.bind-address</name>
+    <value>0.0.0.0</value>
+    <description>Address associated with the network interface to which the DNS listener should bind.</description>
     <on-ambari-upgrade add="false"/>
   </property>
 </configuration>
