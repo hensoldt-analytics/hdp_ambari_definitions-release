@@ -291,8 +291,16 @@ class HiveServerInteractive(Script):
           Logger.error("LLAP app '{0}' deployment unsuccessful.".format(params.llap_app_name))
           return False
       except:
-        # throw the original exception
-        raise
+        if params.hive_server_interactive_ha:
+          Logger.error("Exception occured. Checking if LLAP was started by another HSI instance ...")
+          status = self.check_llap_app_status(params.llap_app_name, 2, params.hive_server_interactive_ha)
+          if status:
+            Logger.info("LLAP app '{0}' is running.".format(params.llap_app_name))
+            return True
+          else:
+            Logger.info("LLAP app '{0}' is not running.".format(params.llap_app_name))
+          
+          raise # throw the original exception
 
     """
     Checks and deletes previous run 'LLAP package' folders, ignoring three latest packages.
