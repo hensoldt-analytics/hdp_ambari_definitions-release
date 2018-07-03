@@ -191,22 +191,45 @@ def setup_hiveserver2():
 
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
-    if not is_empty(params.hive_hook_proto_base_directory):
-        params.HdfsResource(params.hive_hook_proto_base_directory,
-                            type="directory",
-                            action="create_on_execute",
-                            owner=params.hive_user,
-                            mode=0777
-                            )
-
     if not is_empty(params.tez_hook_proto_base_directory):
       params.HdfsResource(params.tez_hook_proto_base_directory,
-                          type="directory",
-                          action="create_on_execute",
-                          owner=params.hive_user,
-                          mode=0777
+                          type = "directory",
+                          action = "create_on_execute",
+                          owner = params.hive_user,
+                          mode = 01755
                           )
 
+    if not is_empty(params.hive_hook_proto_base_directory):
+        params.HdfsResource(params.hive_hook_proto_base_directory,
+                            type = "directory",
+                            action = "create_on_execute",
+                            owner = params.hive_user,
+                            mode = 01777
+                            )
+
+        dag_meta = params.tez_hook_proto_base_directory + "dag_meta"
+        params.HdfsResource(dag_meta,
+                            type = "directory",
+                            action = "create_on_execute",
+                            owner = params.hive_user,
+                            mode = 01777
+                            )
+
+        dag_data = params.tez_hook_proto_base_directory + "dag_data"
+        params.HdfsResource(dag_data,
+                            type = "directory",
+                            action = "create_on_execute",
+                            owner = params.hive_user,
+                            mode = 01777
+                            )
+
+        app_data = params.tez_hook_proto_base_directory + "app_data"
+        params.HdfsResource(app_data,
+                            type = "directory",
+                            action = "create_on_execute",
+                            owner = params.hive_user,
+                            mode = 01777
+                            )
 
   if not is_empty(params.hive_exec_scratchdir) and not urlparse(params.hive_exec_scratchdir).path.startswith("/tmp"):
     params.HdfsResource(params.hive_exec_scratchdir,
