@@ -667,6 +667,11 @@ limitations under the License.
     <on-ambari-upgrade add="false" update="true"/>
   </property>
   <property>
+    <name>hive.materializedview.rewriting.incremental</name>
+    <value>false</value>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
     <value>com.mysql.jdbc.Driver</value>
     <display-name>JDBC Driver Class</display-name>

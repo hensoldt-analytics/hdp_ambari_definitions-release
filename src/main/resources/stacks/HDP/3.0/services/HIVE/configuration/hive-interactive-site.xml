@@ -545,6 +545,11 @@ limitations under the License.
     <on-ambari-upgrade update="true"/>
   </property>
   <property>
+    <name>hive.materializedview.rewriting.incremental</name>
+    <value>false</value>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>hive.txn.strict.locking.mode</name>
     <value>false</value>
     <on-ambari-upgrade add="false" update="true"/>
