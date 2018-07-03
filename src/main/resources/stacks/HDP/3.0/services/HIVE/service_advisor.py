@@ -294,13 +294,13 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     tez_container_size = min(containerSize, yarnMaxAllocationSize)
     putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
     putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
-    if "yarn-site" in services["configurations"]:
-      if "yarn.scheduler.minimum-allocation-mb" in services["configurations"]["yarn-site"]["properties"]:
-        putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(services["configurations"]["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
-        tez_container_size = max(tez_container_size, int(services["configurations"]["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
-      if "yarn.scheduler.maximum-allocation-mb" in services["configurations"]["yarn-site"]["properties"]:
-        putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(services["configurations"]["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
-        tez_container_size = min(tez_container_size, int(services["configurations"]["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
+    if "yarn-site" in configurations:
+      if "yarn.scheduler.minimum-allocation-mb" in configurations["yarn-site"]["properties"]:
+        putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
+        tez_container_size = max(tez_container_size, int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
+      if "yarn.scheduler.maximum-allocation-mb" in configurations["yarn-site"]["properties"]:
+        putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
+        tez_container_size = min(tez_container_size, int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
 
     putHiveSiteProperty("hive.tez.container.size", tez_container_size)
     tez_container_size_bytes = int(int(tez_container_size)*0.8*1024*1024) # Xmx == 80% of container
