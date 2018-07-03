@@ -222,6 +222,9 @@
         <component>DRUID_OVERLORD</component>
         <component>DRUID_SUPERSET</component>
       </service>
+      <service name="SUPERSET">
+        <component>SUPERSET</component>
+      </service>
     </group>
 
     <group xsi:type="cluster" name="Backups" title="Perform Backups">
@@ -1117,6 +1120,13 @@
       </service>
     </group>
 
+    <group xsi:type="restart" name="SUPERSET" title="Superset">
+      <skippable>true</skippable>
+      <service name="SUPERSET">
+        <component>SUPERSET</component>
+      </service>
+    </group>
+
     <group name="SERVICE_CHECK_3" title="All Service Checks" xsi:type="service-check">
       <direction>UPGRADE</direction>
       <skippable>true</skippable>
@@ -1125,6 +1135,7 @@
         <service>STORM</service>
         <service>ACCUMULO</service>
         <service>DRUID</service>
+        <service>SUPERSET</service>
       </priority>
     </group>
 
