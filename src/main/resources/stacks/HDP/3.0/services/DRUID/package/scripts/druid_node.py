@@ -103,7 +103,7 @@ class DruidBase(Script):
     try:
       Execute(daemon_cmd,
               user=params.druid_user,
-              only_if=pid_file,
+              only_if=process_id_exists_command,
               )
     except:
       show_logs(params.druid_log_dir, params.druid_user)
