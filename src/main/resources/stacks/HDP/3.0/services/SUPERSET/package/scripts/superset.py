@@ -32,6 +32,7 @@ from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.resources.properties_file import PropertiesFile
+from resource_management.core.shell import as_sudo
 
 class Superset(Script):
 
@@ -105,9 +106,14 @@ class Superset(Script):
     env.set_params(params)
     self.configure(env, upgrade_type=upgrade_type)
     daemon_cmd = self.get_daemon_cmd(params, "start")
+
+    pid_file = params.superset_pid_dir + '/superset.pid'
+    process_id_exists_command = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
+
     try:
       Execute(daemon_cmd,
-              user=params.superset_user
+              user=params.superset_user,
+              not_if=process_id_exists_command,
               )
     except:
       show_logs(params.superset_log_dir, params.superset_user)
@@ -118,9 +124,14 @@ class Superset(Script):
     env.set_params(params)
     self.configure(env, upgrade_type=upgrade_type)
     daemon_cmd = self.get_daemon_cmd(params, "stop")
+
+    pid_file = params.superset_pid_dir + '/superset.pid'
+    process_id_exists_command = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
+
     try:
       Execute(daemon_cmd,
-              user=params.superset_user
+              user=params.superset_user,
+              only_if=process_id_exists_command,
               )
     except:
       show_logs(params.superset_log_dir, params.superset_user)
