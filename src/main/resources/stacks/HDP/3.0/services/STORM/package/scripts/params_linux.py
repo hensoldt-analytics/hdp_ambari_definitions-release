@@ -137,6 +137,11 @@ if 'ganglia_server_host' in config['clusterHostInfo'] and len(config['clusterHos
 else:
   ganglia_installed = False
 
+if 'streamline_server_hosts' in config['clusterHostInfo'] and len(config['clusterHostInfo']['streamline_server_hosts']) > 0:
+  streamline_installed = True
+else:
+  streamline_installed = False
+
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
 storm_ui_host = default("/clusterHostInfo/storm_ui_server_hosts", [])
@@ -161,6 +166,10 @@ if security_enabled:
   nimbus_jaas_principal = _nimbus_principal_name.replace('_HOST', _hostname_lowercase)
   nimbus_bare_jaas_principal = get_bare_principal(_nimbus_principal_name)
   nimbus_keytab_path = config['configurations']['storm-env']['nimbus_keytab']
+
+  if streamline_installed and 'streamline_principal_name' in config['configurations']['streamline-env']:
+    _streamline_principal_name = config['configurations']['streamline-env']['streamline_principal_name']
+    streamline_bare_jaas_principal = get_bare_principal(_streamline_principal_name)
 
 kafka_bare_jaas_principal = None
 if security_enabled:
