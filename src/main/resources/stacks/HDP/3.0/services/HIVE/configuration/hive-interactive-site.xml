@@ -542,52 +542,52 @@ limitations under the License.
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.materializedview.rewriting.incremental</name>
     <value>false</value>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.txn.strict.locking.mode</name>
     <value>false</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.limit.optimize.enable</name>
     <value>false</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.strict.managed.tables</name>
     <value>true</value>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.load.data.owner</name>
     <value>hive</value>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.server2.idle.session.timeout</name>
     <value>1d</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.server2.idle.operation.timeout</name>
     <value>6h</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.start.cleanup.scratchdir</name>
     <value>true</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.llap.mapjoin.memory.oversubscribe.factor</name>
     <value>0.3f</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>llap.shuffle.connection-keep-alive.timeout</name>
@@ -803,7 +803,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
 
   <property>

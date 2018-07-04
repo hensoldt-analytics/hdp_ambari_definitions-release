@@ -145,7 +145,7 @@ limitations under the License.
       <maximum>20</maximum>
       <increment-step>1</increment-step>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.create.as.insert.only</name>
@@ -518,7 +518,7 @@ limitations under the License.
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade update="true"/>
+    <on-ambari-upgrade update="false"/>
   </property>
   <property>
     <name>hive.metastore.uris</name>
@@ -634,42 +634,42 @@ limitations under the License.
   <property>
     <name>hive.server2.idle.session.timeout</name>
     <value>1d</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.server2.idle.operation.timeout</name>
     <value>6h</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.start.cleanup.scratchdir</name>
     <value>true</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.limit.optimize.enable</name>
     <value>false</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.strict.managed.tables</name>
     <value>true</value>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.load.data.owner</name>
     <value>hive</value>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.txn.strict.locking.mode</name>
     <value>false</value>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.materializedview.rewriting.incremental</name>
     <value>false</value>
-    <on-ambari-upgrade add="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
@@ -2023,7 +2023,7 @@ limitations under the License.
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.mapjoin.hybridgrace.hashtable</name>
@@ -2035,7 +2035,7 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.tez.cartesian-product.enabled</name>
@@ -2076,7 +2076,7 @@ limitations under the License.
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.repl.cm.enabled</name>
@@ -2094,7 +2094,7 @@ limitations under the License.
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="false" update="true"/>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>hive.repl.cmrootdir</name>
