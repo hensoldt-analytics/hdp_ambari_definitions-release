@@ -372,6 +372,13 @@ class AtlasRecommender(service_advisor.ServiceAdvisor):
         knox_port = services['configurations']["gateway-site"]["properties"]['gateway.port']
       putAtlasApplicationProperty('atlas.sso.knox.providerurl', 'https://{0}:{1}/gateway/knoxsso/api/v1/websso'.format(knox_host, knox_port))
 
+    # Set the proxy user for Atlas
+    knox_service_user = services['configurations']['knox-env']['properties']['knox_user'] \
+      if 'knox-env' in services['configurations'] and 'knox_user' in \
+         services['configurations']['knox-env']['properties'] \
+      else 'knox'
+    putAtlasApplicationProperty('atlas.proxyusers', knox_service_user)
+
   def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
     ambari_configuration = self.get_ambari_configuration(services)
     ambari_sso_details = ambari_configuration.get_ambari_sso_details() if ambari_configuration else None
@@ -385,12 +392,6 @@ class AtlasRecommender(service_advisor.ServiceAdvisor):
         putAtlasApplicationProperty('atlas.sso.knox.providerurl', ambari_sso_details.get_sso_provider_url())
         putAtlasApplicationProperty('atlas.sso.knox.publicKey', ambari_sso_details.get_sso_provider_certificate(False, True))
         putAtlasApplicationProperty('atlas.sso.knox.browser.useragent', 'Mozilla,Chrome')
-        # Set the proxy user
-        knox_service_user = services['configurations']['knox-env']['properties']['knox_user'] \
-          if 'knox-env' in services['configurations'] and 'knox_user' in \
-             services['configurations']['knox-env']['properties'] \
-          else 'knox'
-        putAtlasApplicationProperty('atlas.proxyusers', knox_service_user)
 
       # If SSO should be disabled for this service
       elif ambari_sso_details.should_disable_sso('ATLAS'):
