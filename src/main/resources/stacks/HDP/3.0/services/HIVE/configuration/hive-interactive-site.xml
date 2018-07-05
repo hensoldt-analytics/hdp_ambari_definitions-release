@@ -499,10 +499,11 @@ limitations under the License.
     </description>
     <value>0</value>
     <value-attributes>
+      <type>int</type>
+      <unit>MB</unit>
       <minimum>0</minimum>
       <maximum>10000</maximum>
       <increment-step>1</increment-step>
-      <unit>MB</unit>
     </value-attributes>
     <depends-on>
       <property>

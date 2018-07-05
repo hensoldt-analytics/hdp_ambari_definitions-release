@@ -955,6 +955,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     if not services["changed-configurations"]:
       read_llap_daemon_yarn_cont_mb = long(self.get_yarn_min_container_size(services, configurations))
       putHiveInteractiveSiteProperty("hive.llap.daemon.yarn.container.mb", read_llap_daemon_yarn_cont_mb)
+      putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.yarn.container.mb', "minimum", read_llap_daemon_yarn_cont_mb)
+      putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.yarn.container.mb', "maximum", self.__get_min_hsi_mem(services, hosts) * 0.8)
 
     if hsi_site and "hive.llap.daemon.queue.name" in hsi_site:
       llap_daemon_selected_queue_name = hsi_site["hive.llap.daemon.queue.name"]
@@ -1366,6 +1368,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
 
     llap_container_size = long(llap_daemon_mem_per_node)
     putHiveInteractiveSiteProperty('hive.llap.daemon.yarn.container.mb', llap_container_size)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.yarn.container.mb', "minimum", yarn_min_container_size)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.yarn.container.mb', "maximum", self.__get_min_hsi_mem(services, hosts) * 0.8)
 
     # Set 'hive.tez.container.size' only if it is read as "SET_ON_FIRST_INVOCATION", implying initialization.
     # Else, we don't (1). Override the previous calculated value or (2). User provided value.
