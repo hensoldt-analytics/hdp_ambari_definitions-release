@@ -173,7 +173,7 @@ def check_fs_root(conf_dir, execution_path):
             environment = {'PATH': execution_path}
     )
 
-@retry(times=30, sleep_time=5, err_class=Fail)
+@retry(times=30, sleep_time=10, err_class=Fail)
 def wait_for_znode():
   import params
   import status_params
