@@ -372,12 +372,12 @@ class AtlasRecommender(service_advisor.ServiceAdvisor):
         knox_port = services['configurations']["gateway-site"]["properties"]['gateway.port']
       putAtlasApplicationProperty('atlas.sso.knox.providerurl', 'https://{0}:{1}/gateway/knoxsso/api/v1/websso'.format(knox_host, knox_port))
 
-    # Set the proxy user for Atlas
-    knox_service_user = services['configurations']['knox-env']['properties']['knox_user'] \
-      if 'knox-env' in services['configurations'] and 'knox_user' in \
-         services['configurations']['knox-env']['properties'] \
-      else 'knox'
-    putAtlasApplicationProperty('atlas.proxyusers', knox_service_user)
+      # Set the proxy user for Atlas
+      knox_service_user = services['configurations']['knox-env']['properties']['knox_user'] \
+        if 'knox-env' in services['configurations'] and 'knox_user' in \
+          services['configurations']['knox-env']['properties'] \
+        else 'knox'
+      putAtlasApplicationProperty('atlas.proxyusers', knox_service_user)
 
   def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
     ambari_configuration = self.get_ambari_configuration(services)
