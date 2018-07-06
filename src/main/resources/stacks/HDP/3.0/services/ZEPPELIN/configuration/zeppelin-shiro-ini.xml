@@ -24,10 +24,10 @@
 [users]
 # List of users with their password allowed to access Zeppelin.
 # To use a different strategy (LDAP / Database / ...) check the shiro doc at http://shiro.apache.org/configuration.html#Configuration-INISections
-admin = admin, admin
-user1 = user1, role1, role2
-user2 = user2, role3
-user3 = user3, role2
+admin = $shiro1$SHA-256$500000$p6Be9+t2hdUXJQj2D0b1fg==$bea5JIMqcVF3J6eNZGWQ/3eeDByn5iEZDuGsEip06+M=, admin
+user1 = $shiro1$SHA-256$500000$G2ymy/qmuZnGY6or4v2KfA==$v9fabqWgCNCgechtOUqAQenGDs0OSLP28q2wolPT4wU=, role1, role2
+user2 = $shiro1$SHA-256$500000$aHBgiuwSgAcP3Xt5mEzeFw==$KosBnN2BNKA9/KHBL0hnU/woJFl+xzJFj12NQ0fnjCU=, role3
+user3 = $shiro1$SHA-256$500000$nf0GzH10GbYVoxa7DOlOSw==$ov/IA5W8mRWPwvAoBjNYxg3udJK0EmrVMvFCwcr9eAs=, role2
 
 # Sample LDAP configuration, for user Authentication, currently tested for single Realm
 [main]
@@ -55,6 +55,9 @@ user3 = user3, role2
 #pamRealm=org.apache.zeppelin.realm.PamRealm
 #pamRealm.service=sshd
 
+## To be commented out when not using [user] block / paintext
+passwordMatcher = org.apache.shiro.authc.credential.PasswordMatcher
+iniRealm.credentialsMatcher = $passwordMatcher
 
 sessionManager = org.apache.shiro.web.session.mgt.DefaultWebSessionManager
 ### If caching of user is required then uncomment below lines
