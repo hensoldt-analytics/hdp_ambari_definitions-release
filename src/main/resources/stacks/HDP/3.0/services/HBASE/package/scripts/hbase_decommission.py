@@ -28,7 +28,6 @@ def hbase_decommission(env):
   import params
 
   env.set_params(params)
-  File(params.region_drainer, content=StaticFile("draining_servers.rb"), owner=params.hbase_user, mode="f")
 
   hosts = params.hbase_excluded_hosts.split(",")
   for host in hosts:
@@ -38,7 +37,7 @@ def hbase_decommission(env):
         Execute(regiondrainer_cmd, user=params.hbase_user, logoutput=True)
       else:
         regiondrainer_cmd = format("cmd /c {hbase_executable} org.jruby.Main {region_drainer} add {host}")
-        regionmover_cmd = format("cmd /c {hbase_executable} org.jruby.Main {region_mover} unload {host}")
+        regionmover_cmd = format("cmd /c {hbase_executable} org.jruby.Main {region_mover} -o unload -r {host}")
         Execute(regiondrainer_cmd, user=params.hbase_user, logoutput=True)
         Execute(regionmover_cmd, user=params.hbase_user, logoutput=True)
 
@@ -50,11 +49,6 @@ def hbase_decommission(env):
   env.set_params(params)
   kinit_cmd = params.kinit_cmd_master
 
-  File(params.region_drainer,
-       content=StaticFile("draining_servers.rb"),
-       mode=0755
-  )
-  
   if params.hbase_excluded_hosts and params.hbase_excluded_hosts.split(","):
     hosts = params.hbase_excluded_hosts.split(",")
   elif params.hbase_included_hosts and params.hbase_included_hosts.split(","):
@@ -78,7 +72,7 @@ def hbase_decommission(env):
         regiondrainer_cmd = format(
           "{kinit_cmd} HBASE_OPTS=\"$HBASE_OPTS {master_security_config}\" {hbase_cmd} --config {hbase_conf_dir} org.jruby.Main {region_drainer} add {host}")
         regionmover_cmd = format(
-          "{kinit_cmd} HBASE_OPTS=\"$HBASE_OPTS {master_security_config}\" {hbase_cmd} --config {hbase_conf_dir} org.jruby.Main {region_mover} unload {host}")
+          "{kinit_cmd} HBASE_OPTS=\"$HBASE_OPTS {master_security_config}\" {hbase_cmd} --config {hbase_conf_dir} org.jruby.Main {region_mover} -o unload -r {host}")
 
         Execute(regiondrainer_cmd,
                 user=params.hbase_user,
