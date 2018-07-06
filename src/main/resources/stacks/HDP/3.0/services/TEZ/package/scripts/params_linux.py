@@ -114,12 +114,6 @@ HdfsResource = functools.partial(
 )
 
 tez_site_config = dict(config['configurations']['tez-site'])
-# Only set hive related proto hooks only if hive is installed
-if 'hive-site' in config['configurations'] \
-  and 'hive.metastore.warehouse.external.dir' in config['configurations']['hive-site']:
-  hive_metastore_warehouse_external_dir = config['configurations']['hive-site']['hive.metastore.warehouse.external.dir']
-  tez_site_config["tez.history.logging.proto-base-dir"] = format("{hive_metastore_warehouse_external_dir}/sys.db")
-  tez_site_config["tez.history.logging.service.class"] = "org.apache.tez.dag.history.logging.proto.ProtoHistoryLoggingService"
 
 
 
