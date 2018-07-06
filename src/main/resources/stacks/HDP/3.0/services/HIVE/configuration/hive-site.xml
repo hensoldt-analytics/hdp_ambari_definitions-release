@@ -642,11 +642,6 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>hive.start.cleanup.scratchdir</name>
-    <value>true</value>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
     <name>hive.limit.optimize.enable</name>
     <value>false</value>
     <on-ambari-upgrade add="false"/>

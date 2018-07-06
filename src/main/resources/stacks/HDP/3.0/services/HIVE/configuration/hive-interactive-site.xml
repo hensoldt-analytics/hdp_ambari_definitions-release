@@ -581,11 +581,6 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>hive.start.cleanup.scratchdir</name>
-    <value>true</value>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
     <name>hive.llap.mapjoin.memory.oversubscribe.factor</name>
     <value>0.3f</value>
     <on-ambari-upgrade add="false"/>
