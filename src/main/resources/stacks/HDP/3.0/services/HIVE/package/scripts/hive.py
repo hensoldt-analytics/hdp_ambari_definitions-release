@@ -279,7 +279,7 @@ def create_hive_hdfs_dirs():
                         action = "create_on_execute",
                         owner = params.hive_user,
                         group = params.user_group,
-                        mode = 0777
+                        mode = 01777
     )
     params.HdfsResource(managed_dir,
                         type = "directory",
@@ -294,9 +294,7 @@ def create_hive_hdfs_dirs():
         kinit_cmd = format("{kinit_path_local} -kt {hdfs_user_keytab} {hdfs_principal_name}; ")
         Execute(kinit_cmd, user=params.hdfs_user)
 
-      Execute(format("hdfs dfs -setfacl -m default:group:hive:rwx {external_dir}"),
-              user = params.hdfs_user)
-      Execute(format("hdfs dfs -setfacl -m default:group:hive:rwx {managed_dir}"),
+      Execute(format("hdfs dfs -setfacl -m default:user:{hive_user}:rwx {external_dir}"),
               user = params.hdfs_user)
       Execute(format("hdfs dfs -setfacl -m default:user:{hive_user}:rwx {managed_dir}"),
               user = params.hdfs_user)

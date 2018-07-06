@@ -57,7 +57,7 @@ def hive_interactive(name = None):
                         action = "create_on_execute",
                         owner = params.hive_user,
                         group = params.user_group,
-                        mode = 0777
+                        mode = 0700
     )
     # create directories for llap package
     pkg_dir = '/user/' + params.hive_user + '/.yarn'
