@@ -694,3 +694,11 @@ hbase_log_maxfilesize = default('configurations/yarn-hbase-log4j/hbase_log_maxfi
 hbase_log_maxbackupindex = default('configurations/yarn-hbase-log4j/hbase_log_maxbackupindex',20)
 hbase_security_log_maxfilesize = default('configurations/yarn-hbase-log4j/hbase_security_log_maxfilesize',256)
 hbase_security_log_maxbackupindex = default('configurations/yarn-hbase-log4j/hbase_security_log_maxbackupindex',20)
+
+rm_cross_origin_enabled = config['configurations']['yarn-site']['yarn.resourcemanager.webapp.cross-origin.enabled']
+
+cross_origins = '*'
+if rm_cross_origin_enabled:
+  host_suffix = rm_host.rsplit('.', 2)[1:]
+  if len(host_suffix) == 2 :
+    cross_origins = 'regex:.*[.]' + '[.]'.join(host_suffix)

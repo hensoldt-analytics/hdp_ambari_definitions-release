@@ -1631,4 +1631,11 @@ yarn.node-labels.manager-class
     <description>Address associated with the network interface to which the DNS listener should bind.</description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>hadoop.http.cross-origin.allowed-origins</name>
+    <value>{{cross_origins}}</value>
+    <description>Comma separated list of origins that are allowed for web services
+    needing cross-origin (CORS) support.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
