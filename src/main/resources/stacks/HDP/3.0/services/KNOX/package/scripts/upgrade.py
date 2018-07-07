@@ -21,9 +21,9 @@ limitations under the License.
 import os
 import tempfile
 
+from resource_management.core import sudo
 from resource_management.core.logger import Logger
 from resource_management.core.exceptions import Fail
-from resource_management.core.resources.system import Execute
 from resource_management.libraries.functions import tar_archive
 from resource_management.libraries.functions import format
 from resource_management.libraries.functions.stack_features import check_stack_feature
@@ -34,6 +34,7 @@ from resource_management.libraries.script.script import Script
 BACKUP_TEMP_DIR = "knox-upgrade-backup"
 BACKUP_DATA_ARCHIVE = "knox-data-backup.tar"
 STACK_ROOT_DEFAULT = Script.get_stack_root()
+
 
 def backup_data():
   """
@@ -65,6 +66,34 @@ def backup_data():
   return absolute_backup_dir
 
 
+def copytree(src, dst, exclude_sub_dirs=set(), force_replace=False):
+  """
+  Copy content of directory from source path to the target path with possibility to exclude some directories
+
+  :type src str
+  :type dst str
+  :type exclude_sub_dirs list|set
+  :type force_replace bool
+  """
+
+  def copy(_src, _dst):
+    from resource_management.core import shell
+    if force_replace:
+      shell.checked_call(["cp", "-r", "-p", "-f", _src, _dst], sudo=True)
+    else:
+      shell.checked_call(["cp", "-r", "-p", _src, _dst], sudo=True)
+
+  if not sudo.path_isdir(src) or not sudo.path_isdir(dst):
+    raise Fail("The source or the destination is not a folder")
+
+  sub_dirs_to_copy = sudo.listdir(src)
+  for d in sub_dirs_to_copy:
+    if d not in exclude_sub_dirs:
+      src_path = os.path.join(src, d)
+      dst_path = os.path.join(dst, d)
+      copy(src_path, dst_path)
+
+
 def seed_current_data_directory():
   """
   HDP stack example:
@@ -90,14 +119,14 @@ def seed_current_data_directory():
   if check_stack_feature(StackFeature.KNOX_VERSIONED_DATA_DIR, params.version):
     Logger.info("Seeding Knox data from prior version...")
 
-    # <stack-root>/2.3.0.0-1234/knox/data/.
-    source_data_dir = os.path.join(params.stack_root, params.upgrade_from_version, "knox", "data", ".")
-
-    # <stack-root>/current/knox-server/data
+    application_dir_name = "applications"
+    exclude_applications_from_copy = ["admin-ui", "knoxauth"]
+    source_data_dir = os.path.join(params.stack_root, params.upgrade_from_version, "knox", "data")
     target_data_dir = os.path.join(params.stack_root, "current", "knox-server", "data")
 
-    # recursive copy, overwriting, and preserving attributes
-    Execute(("cp", "-R", "-p", "-f", source_data_dir, target_data_dir), sudo = True)
+    copytree(source_data_dir, target_data_dir, [application_dir_name], True)
+    copytree(os.path.join(source_data_dir, application_dir_name), os.path.join(target_data_dir, application_dir_name),
+             exclude_applications_from_copy, True)
 
 
 def _get_directory_mappings_during_upgrade():
