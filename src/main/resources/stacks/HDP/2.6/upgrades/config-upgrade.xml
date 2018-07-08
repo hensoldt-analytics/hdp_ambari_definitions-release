@@ -179,6 +179,10 @@
     <service name="HIVE">
       <component name="HIVE_SERVER">
         <changes>
+          <definition xsi:type="configure" id="hive_exec_dynamic_partition_mode_nonstrict" summary="Update hive.exec.dynamic.partition.mode to 'nonstrict'">
+            <type>hive-site</type>
+            <set key="hive.exec.dynamic.partition.mode" value="nonstrict"/>
+          </definition>
           <definition xsi:type="configure" id="hdp_2_6_maint_ranger_hive_plugin_cluster_name">
             <type>ranger-hive-audit</type>
             <set key="ranger.plugin.hive.ambari.cluster.name" value="{{cluster_name}}"
