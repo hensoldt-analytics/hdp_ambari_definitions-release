@@ -569,6 +569,10 @@
         <task xsi:type="configure" id="update_hsi_hive_hcatalog_jar_path" />
       </execute-stage>
 
+      <execute-stage service="HIVE" component="HIVE_SERVER_INTERACTIVE" title="Update HSI hive_druid jar path">
+        <task xsi:type="configure" id="update_hsi_hive_druid_jar_path" />
+      </execute-stage>
+
       <!--OOZIE-->
       <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Apply config changes for Oozie Server">
         <task xsi:type="server_action"
