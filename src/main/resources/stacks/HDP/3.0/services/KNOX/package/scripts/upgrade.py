@@ -78,10 +78,11 @@ def copytree(src, dst, exclude_sub_dirs=set(), force_replace=False):
 
   def copy(_src, _dst):
     from resource_management.core import shell
+    # full path is required to avoid usage of system command aliases like 'cp -i', which block overwrite
     if force_replace:
-      shell.checked_call(["cp", "-r", "-p", "-f", _src, _dst], sudo=True)
+      shell.checked_call(["/bin/cp", "-rfp", _src, _dst], sudo=True)
     else:
-      shell.checked_call(["cp", "-r", "-p", _src, _dst], sudo=True)
+      shell.checked_call(["/bin/cp", "-rp", _src, _dst], sudo=True)
 
   if not sudo.path_isdir(src) or not sudo.path_isdir(dst):
     raise Fail("The source or the destination is not a folder")
@@ -90,8 +91,7 @@ def copytree(src, dst, exclude_sub_dirs=set(), force_replace=False):
   for d in sub_dirs_to_copy:
     if d not in exclude_sub_dirs:
       src_path = os.path.join(src, d)
-      dst_path = os.path.join(dst, d)
-      copy(src_path, dst_path)
+      copy(src_path, dst)
 
 
 def seed_current_data_directory():
