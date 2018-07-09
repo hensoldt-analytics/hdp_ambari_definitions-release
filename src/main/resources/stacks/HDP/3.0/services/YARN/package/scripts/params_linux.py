@@ -701,4 +701,4 @@ cross_origins = '*'
 if rm_cross_origin_enabled:
   host_suffix = rm_host.rsplit('.', 2)[1:]
   if len(host_suffix) == 2 :
-    cross_origins = 'regex:.*[.]' + '[.]'.join(host_suffix)
+    cross_origins = 'regex:.*[.]' + '[.]'.join(host_suffix) + "(:\d*)?"
