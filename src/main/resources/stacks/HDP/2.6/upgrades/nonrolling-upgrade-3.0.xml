@@ -1478,6 +1478,12 @@
         </upgrade>
       </component>
       <component name="SPARK2_THRIFTSERVER">
+        <pre-upgrade>
+          <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.AddSparkUserToYarnACLAdminQueue">
+            <summary>Adding spark user to ACL admin queue property in capacity-scheduler config.</summary>
+          </task>
+        </pre-upgrade>
+        <pre-downgrade/>
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
