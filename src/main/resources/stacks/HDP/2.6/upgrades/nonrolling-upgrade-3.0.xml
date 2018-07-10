@@ -569,12 +569,8 @@
         <task xsi:type="configure" id="hdp_30_hive_log_file" />
       </execute-stage>
 
-      <execute-stage service="HIVE" component="HIVE_SERVER_INTERACTIVE" title="Update HSI hive_hcatalog jar path">
-        <task xsi:type="configure" id="update_hsi_hive_hcatalog_jar_path" />
-      </execute-stage>
-
-      <execute-stage service="HIVE" component="HIVE_SERVER_INTERACTIVE" title="Update HSI hive_druid jar path">
-        <task xsi:type="configure" id="update_hsi_hive_druid_jar_path" />
+      <execute-stage service="HIVE" component="HIVE_SERVER_INTERACTIVE" title="Update HSI hive jar path">
+        <task xsi:type="configure" id="update_hsi_hive_jar_path" />
       </execute-stage>
 
       <execute-stage service="HIVE" component="HIVE_SERVER_INTERACTIVE" title="Update HSI log file location">
