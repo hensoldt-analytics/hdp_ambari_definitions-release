@@ -683,6 +683,12 @@
         <task xsi:type="configure" id="hdp_3_0_0_0_spark2_env"/>
       </execute-stage>
 
+      <execute-stage service="SPARK2" component="SPARK2_THRIFTSERVER" title="Update Yarn ACL Admin queue">
+        <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.AddSparkUserToYarnACLAdminQueue">
+            <summary>Adding spark user to ACL admin queue property in capacity-scheduler config.</summary>
+        </task>
+      </execute-stage>
+
       <!--ACCUMULO-->
       <execute-stage service="ACCUMULO" component="ACCUMULO_MASTER" title="Convert Accumulo HDP 2.6 env variable naming to HDP 3.0">
         <task xsi:type="configure" id="hdp_30_accumulo_stack_variables_update"/>
@@ -1490,12 +1496,6 @@
         </upgrade>
       </component>
       <component name="SPARK2_THRIFTSERVER">
-        <pre-upgrade>
-          <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.AddSparkUserToYarnACLAdminQueue">
-            <summary>Adding spark user to ACL admin queue property in capacity-scheduler config.</summary>
-          </task>
-        </pre-upgrade>
-        <pre-downgrade/>
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
