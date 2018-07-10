@@ -429,8 +429,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         putYarnProperty('yarn.nodemanager.linux-container-executor.group', 'hadoop')
         putYarnProperty('yarn.nodemanager.linux-container-executor.resources-handler.class', 'org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler')
         putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.hierarchy', '/yarn')
-        putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'true')
-        putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', '/cgroup')
+        putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount', 'false')
+        putYarnProperty('yarn.nodemanager.linux-container-executor.cgroups.mount-path', '/sys/fs/cgroup')
       else:
         if not kerberos_authentication_enabled:
           putYarnProperty('yarn.nodemanager.container-executor.class', 'org.apache.hadoop.yarn.server.nodemanager.DefaultContainerExecutor')
@@ -673,7 +673,7 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       # yarn_hierarchy should always have same value of yarn.nodemanager.linux-container-executor.cgroups.hierarchy
       putCanExecProperty('yarn_hierarchy', '/yarn')
       # cgroup_root should always have same value of yarn.nodemanager.linux-container-executor.cgroups.mount-path
-      putCanExecProperty('cgroup_root', '/cgroup')
+      putCanExecProperty('cgroup_root', '/sys/fs/cgroup')
 
       if docker_module_enabled and docker_module_enabled.lower() == 'true':
         if "nvidia-docker-v1" in rp_gpu_dp_list:
