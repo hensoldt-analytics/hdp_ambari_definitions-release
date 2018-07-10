@@ -39,6 +39,7 @@ from resource_management import is_empty
 from resource_management import shell
 from resource_management.core.resources.zkmigrator import ZkMigrator
 from resource_management.libraries.functions import namenode_ha_utils
+from resource_management.libraries.functions.copy_tarball import copy_to_hdfs
 
 from yarn import yarn
 from service import service
@@ -112,6 +113,9 @@ class ResourcemanagerDefault(Resourcemanager):
 
     if params.version and check_stack_feature(StackFeature.ROLLING_UPGRADE, params.version):
       stack_select.select_packages(params.version)
+      # MC Hammer said, "Can't touch this"
+      copy_to_hdfs("yarn", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
+      params.HdfsResource(None, action="execute")
 
   def disable_security(self, env):
     import params
@@ -140,6 +144,16 @@ class ResourcemanagerDefault(Resourcemanager):
     if params.has_ats:
       Logger.info("Verifying DFS directories where ATS stores time line data for active and completed applications.")
       self.wait_for_dfs_directories_created(params.entity_groupfs_store_dir, params.entity_groupfs_active_dir)
+
+    if params.stack_version_formatted_major and check_stack_feature(StackFeature.COPY_TARBALL_TO_HDFS, params.stack_version_formatted_major):
+      # MC Hammer said, "Can't touch this"
+      resource_created = copy_to_hdfs(
+        "yarn",
+        params.user_group,
+        params.hdfs_user,
+        skip=params.sysprep_skip_copy_tarballs_hdfs) or resource_created
+      if resource_created:
+        params.HdfsResource(None, action="execute")
 
     service('resourcemanager', action='start')
 
