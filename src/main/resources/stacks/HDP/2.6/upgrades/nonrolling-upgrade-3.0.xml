@@ -876,7 +876,7 @@
       </service>
     </group>
 
-    <group xsi:type="restart" name="YARN_AND_MAPR" title="YARN and MapReduce2">
+    <group xsi:type="restart" name="MAPREDUCE2" title="MapReduce2">
       <service-check>false</service-check>
       <skippable>true</skippable>
       <supports-auto-skip-failure>false</supports-auto-skip-failure>
@@ -886,11 +886,27 @@
         <component>HISTORYSERVER</component>
         <component>MAPREDUCE2_CLIENT</component>
       </service>
+    </group>
+
+    <group xsi:type="restart" name="YARN_RESOURCE_MANAGERS" title="YARN ResourceManagers">
+      <service-check>false</service-check>
+      <skippable>true</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+
+      <service name="YARN">
+        <component>RESOURCEMANAGER</component>
+      </service>
+    </group>
+
+    <group xsi:type="restart" name="YARN" title="YARN">
+      <service-check>false</service-check>
+      <skippable>true</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+      <parallel-scheduler/>
 
       <service name="YARN">
         <component>APP_TIMELINE_SERVER</component>
         <component>TIMELINE_READER</component>
-        <component>RESOURCEMANAGER</component>
         <component>YARN_REGISTRY_DNS</component>
         <component>YARN_CLIENT</component>
       </service>
