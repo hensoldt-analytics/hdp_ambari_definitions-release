@@ -577,6 +577,10 @@
         <task xsi:type="configure" id="hdp_30_hsi_log_file" />
       </execute-stage>
 
+      <execute-stage service="HIVE" component="HIVE_SERVER" title="Updating Ranger Hive Policy Rest SSL File path config">
+        <task xsi:type="configure" id="hdp_3_0_updating_ranger_hive_policy_rest_ssl_file" />
+      </execute-stage>
+
       <!--OOZIE-->
       <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Apply config changes for Oozie Server">
         <task xsi:type="server_action"
