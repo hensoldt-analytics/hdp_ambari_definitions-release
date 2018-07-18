@@ -208,8 +208,6 @@ has_ranger_admin = not len(ranger_admin_hosts) == 0
 # ranger support xml_configuration flag, instead of depending on ranger xml_configurations_supported/ranger-env, using stack feature
 xml_configurations_supported = check_stack_feature(StackFeature.RANGER_XML_CONFIGURATION, version_for_stack_feature_checks)
 
-ranger_admin_log_dir = default("/configurations/ranger-env/ranger_admin_log_dir","/var/log/ranger/admin")
-
 # ranger kafka plugin enabled property
 enable_ranger_kafka = default("configurations/ranger-kafka-plugin-properties/ranger-kafka-plugin-enabled", "No")
 enable_ranger_kafka = True if enable_ranger_kafka.lower() == 'yes' else False

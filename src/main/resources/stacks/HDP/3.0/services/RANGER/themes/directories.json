@@ -61,11 +61,11 @@
       "configuration-layout": "directories",
       "configs": [
         {
-          "config": "ranger-env/ranger_admin_log_dir",
+          "config": "ranger-admin-site/ranger.logs.base.dir",
           "subsection-name": "subsection-log-dirs"
         },
         {
-          "config": "ranger-env/ranger_usersync_log_dir",
+          "config": "ranger-ugsync-site/ranger.usersync.logdir",
           "subsection-name": "subsection-log-dirs"
         },
         {
@@ -80,13 +80,13 @@
     },
     "widgets": [
       {
-        "config": "ranger-env/ranger_admin_log_dir",
+        "config": "ranger-admin-site/ranger.logs.base.dir",
         "widget": {
           "type": "text-field"
         }
       },
       {
-        "config": "ranger-env/ranger_usersync_log_dir",
+        "config": "ranger-ugsync-site/ranger.usersync.logdir",
         "widget": {
           "type": "text-field"
         }

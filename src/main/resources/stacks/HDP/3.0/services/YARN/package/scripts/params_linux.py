@@ -402,8 +402,6 @@ node_label_enable = config['configurations']['yarn-site']['yarn.node-labels.enab
 
 cgroups_dir = "/cgroups_test/cpu"
 
-ranger_admin_log_dir = default("/configurations/ranger-env/ranger_admin_log_dir","/var/log/ranger/admin")
-
 scheme = 'http' if not yarn_https_on else 'https'
 yarn_rm_address = config['configurations']['yarn-site']['yarn.resourcemanager.webapp.address'] if not yarn_https_on else config['configurations']['yarn-site']['yarn.resourcemanager.webapp.https.address']
 rm_active_port = rm_https_port if yarn_https_on else rm_port
