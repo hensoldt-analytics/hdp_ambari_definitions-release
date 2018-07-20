@@ -798,6 +798,8 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     hsi_env_poperties = self.getServicesSiteProperties(services, "hive-interactive-env")
     if hsi_env_poperties and 'enable_hive_interactive' in hsi_env_poperties:
       if hsi_env_poperties['enable_hive_interactive'] == 'true':
+        if 'forced-configurations' not in services:
+          services["forced-configurations"] = []
         services["forced-configurations"].append({"type" : "yarn-site", "name" : "yarn.nodemanager.container-monitor.procfs-tree.smaps-based-rss.enabled"})
         putYarnSiteProperty("yarn.nodemanager.container-monitor.procfs-tree.smaps-based-rss.enabled", "true")
 
