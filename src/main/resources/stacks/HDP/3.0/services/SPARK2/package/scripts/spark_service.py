@@ -27,6 +27,7 @@ from resource_management.libraries.resources.hdfs_resource import HdfsResource
 from resource_management.libraries.functions.copy_tarball import copy_to_hdfs, get_tarball_paths
 from resource_management.libraries.functions import format
 from resource_management.core.resources.system import File, Execute
+from resource_management.core.source import InlineTemplate
 from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.constants import StackFeature
@@ -64,7 +65,8 @@ def spark_service(name, upgrade_type=None, action=None):
           source_dir=params.spark_home+"/jars"
           tmp_archive_file=get_tarball_paths("spark2")[1]
           make_tarfile(tmp_archive_file, source_dir)
-          copy_to_hdfs("spark2", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
+          copy_to_hdfs("spark2", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True,
+                       custom_dest_file=InlineTemplate(params.spark_yarn_archive_hdfs_path).get_content())
 
       # create & copy spark2-hdp-hive-archive.tar.gz to hdfs
       if not params.sysprep_skip_copy_tarballs_hdfs:

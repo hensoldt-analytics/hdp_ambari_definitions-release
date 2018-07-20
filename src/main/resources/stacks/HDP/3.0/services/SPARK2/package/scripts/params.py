@@ -65,6 +65,7 @@ tmp_dir = Script.get_tmp_dir()
 sudo = AMBARI_SUDO_BINARY
 
 stack_name = status_params.stack_name
+stack_name_in_lower_case = str(stack_name).lower()
 stack_root = Script.get_stack_root()
 stack_version_unformatted = config['clusterLevelParams']['stack_version']
 stack_version_formatted = format_stack_version(stack_version_unformatted)
@@ -75,6 +76,8 @@ sysprep_skip_copy_tarballs_hdfs = get_sysprep_skip_copy_tarballs_hdfs()
 # New Cluster Stack Version that is defined during the RESTART of a Stack Upgrade
 version = default("/commandParams/version", None)
 
+spark_yarn_archive_hdfs_path = config['configurations']['spark2-defaults']["spark.yarn.archive"]
+spark_yarn_archive_hdfs_path = spark_yarn_archive_hdfs_path.replace("hdfs://", "/").replace("//","/")
 spark_conf = '/etc/spark2/conf'
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
