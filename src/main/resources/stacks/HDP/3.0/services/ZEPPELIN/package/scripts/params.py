@@ -61,6 +61,9 @@ install_dir = os.path.join(stack_root, "current")
 
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
+ui_ssl_enabled = config['configurations']['zeppelin-site']['zeppelin.ssl']
+is_ui_ssl_enabled = str(ui_ssl_enabled).upper() == 'TRUE'
+
 setup_view = True
 temp_file = config['configurations']['zeppelin-env']['zeppelin.temp.file']
 
@@ -81,6 +84,8 @@ stack_name = default("/clusterLevelParams/stack_name", None)
 
 # params from zeppelin-site
 zeppelin_port = str(config['configurations']['zeppelin-site']['zeppelin.server.port'])
+if is_ui_ssl_enabled:
+  zeppelin_port = str(config['configurations']['zeppelin-site']['zeppelin.server.ssl.port'])
 zeppelin_interpreter = None
 if 'zeppelin.interpreter.group.order' in config['configurations']['zeppelin-site']:
   zeppelin_interpreter = str(config['configurations']['zeppelin-site']
@@ -118,7 +123,6 @@ master_configs = config['clusterHostInfo']
 java64_home = config['ambariLevelParams']['java_home']
 ambari_host = str(config['ambariLevelParams']['ambari_server_host'])
 zeppelin_host = str(master_configs['zeppelin_master_hosts'][0])
-ui_ssl_enabled = config['configurations']['zeppelin-site']['zeppelin.ssl']
 
 # detect HS2 details, if installed
 
@@ -203,9 +207,14 @@ elif 'spark2-defaults' in config['configurations'] and 'spark.yarn.queue' in con
 else:
   spark_queue = 'default'
 
+smoke_user = config['configurations']['cluster-env']['smokeuser']
+
 if security_enabled:
   zeppelin_kerberos_keytab = config['configurations']['zeppelin-site']['zeppelin.server.kerberos.keytab']
   zeppelin_kerberos_principal = config['configurations']['zeppelin-site']['zeppelin.server.kerberos.principal']
+
+  smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
+  smokeuser_principal =  config['configurations']['cluster-env']['smokeuser_principal_name']
 
 if 'zeppelin.interpreter.config.upgrade' in config['configurations']['zeppelin-site']:
   zeppelin_interpreter_config_upgrade = config['configurations']['zeppelin-site']['zeppelin.interpreter.config.upgrade']

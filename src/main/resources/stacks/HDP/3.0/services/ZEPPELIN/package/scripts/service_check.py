@@ -26,13 +26,14 @@ class ZeppelinServiceCheck(Script):
         env.set_params(params)
 
         if params.security_enabled:
-          zeppelin_kinit_cmd = format("{kinit_path_local} -kt {zeppelin_kerberos_keytab} {zeppelin_kerberos_principal}; ")
-          Execute(zeppelin_kinit_cmd, user=params.zeppelin_user)
+          kinit_cmd = format("{kinit_path_local} -kt {smoke_user_keytab} {smokeuser_principal}; ")
+          Execute(kinit_cmd, user=params.smoke_user)
 
         scheme = "https" if params.ui_ssl_enabled else "http"
-        Execute(format("curl -s -o /dev/null -w'%{{http_code}}' --negotiate -u: -k {scheme}://{zeppelin_host}:{zeppelin_port} | grep 200"),
+        Execute(format("curl -s -o /dev/null -w'%{{http_code}}' --negotiate -u: -k {scheme}://{zeppelin_host}:{zeppelin_port}/api/version | grep 200"),
                 tries = 10,
                 try_sleep=3,
+                user=params.smoke_user,
                 logoutput=True)
 
 if __name__ == "__main__":
