@@ -73,8 +73,8 @@
   </property>
   <property>
     <name>spark_daemon_memory</name>
-    <value>1024</value>
-    <description>Memory for Master, Worker and history server (default: 1G)</description>
+    <value>2048</value>
+    <description>Memory for Master, Worker and history server (default: 2G)</description>
     <value-attributes>
       <type>int</type>
       <unit>MB</unit>

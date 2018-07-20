@@ -81,7 +81,7 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
     self.heap_size_properties = {"SPARK2_JOBHISTORYSERVER":
                                    [{"config-name": "spark2-env",
                                      "property": "spark_daemon_memory",
-                                     "default": "1024m"}]}
+                                     "default": "2048m"}]}
 
   def modifyNotValuableComponents(self):
     """
