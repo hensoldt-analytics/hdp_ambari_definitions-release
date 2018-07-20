@@ -677,6 +677,12 @@ def setup_atsv2_hbase_files():
              group=params.user_group,
              content=Template("yarn_hbase_regionserver_jaas.conf.j2")
              )
+    # Metrics properties
+    File(os.path.join(params.yarn_hbase_conf_dir, 'hadoop-metrics2-hbase.properties'),
+         owner=params.yarn_hbase_user,
+         group=params.user_group,
+         content=Template("hadoop-metrics2-hbase.properties.j2")
+         )
 
 def setup_atsv2_hbase_directories():
     import  params
@@ -768,6 +774,13 @@ def setup_system_services(config_dir=None):
                         type="file",
                         action="create_on_execute",
                         source=format("{yarn_hbase_conf_dir}/log4j.properties"),
+                        owner=params.yarn_hbase_user,
+                        group=params.user_group
+                        )
+    params.HdfsResource(format("{yarn_hbase_user_version_home}/hadoop-metrics2-hbase.properties"),
+                        type="file",
+                        action="create_on_execute",
+                        source=format("{yarn_hbase_conf_dir}/hadoop-metrics2-hbase.properties"),
                         owner=params.yarn_hbase_user,
                         group=params.user_group
                         )
