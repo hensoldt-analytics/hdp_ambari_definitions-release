@@ -7,7 +7,7 @@
         "label": "Spark2 History Server",
         "description": "This host-level alert is triggered if the Spark2 History Server cannot be determined to be up.",
         "interval": 1,
-        "scope": "HOST",
+        "scope": "ANY",
         "source": {
           "type": "PORT",
           "uri": "{{spark2-defaults/spark.history.ui.port}}",
@@ -34,7 +34,7 @@
         "label": "Spark2 Livy Server",
         "description": "This host-level alert is triggered if the Livy2 Server cannot be determined to be up.",
         "interval": 1,
-        "scope": "HOST",
+        "scope": "ANY",
         "source": {
           "type": "SCRIPT",
           "path": "HDP/3.0/services/SPARK2/package/scripts/alerts/alert_spark2_livy_port.py",
@@ -58,7 +58,7 @@
         "label": "Spark2 Thrift Server",
         "description": "This host-level alert is triggered if the Spark2 Thrift Server cannot be determined to be up.",
         "interval": 1,
-        "scope": "HOST",
+        "scope": "ANY",
         "source": {
           "type": "SCRIPT",
           "path": "HDP/3.0/services/SPARK2/package/scripts/alerts/alert_spark2_thrift_port.py",

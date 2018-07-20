@@ -139,8 +139,8 @@ def execute(configurations={}, parameters={}, host_name=None):
         # append url according to used transport
 
         beeline_cmd = os.path.join(spark_home, "bin", "beeline")
-        cmd = "! beeline -u %s  -e '' 2>&1| awk '{print}'|grep -i -e 'Connection refused' -e 'Invalid URL'" % \
-              (format(" ".join(beeline_url)))
+        cmd = "! %s -u %s  -e '' 2>&1| awk '{print}'|grep -i -e 'Connection refused' -e 'Invalid URL' -e 'Error: Could not open'" % \
+              (beeline_cmd, format(" ".join(beeline_url)))
 
         start_time = time.time()
         try:

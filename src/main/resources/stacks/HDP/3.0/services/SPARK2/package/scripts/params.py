@@ -187,7 +187,15 @@ if security_enabled:
     })
 
     hive_kerberos_keytab = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.keytab']
-    hive_kerberos_principal = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.principal'].replace('_HOST', socket.getfqdn().lower())
+    default_hive_kerberos_principal = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.principal']
+    hive_kerberos_principal = default_hive_kerberos_principal.replace('_HOST', socket.getfqdn().lower())
+
+spark_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
+
+if spark_transport_mode.lower() == 'binary':
+  spark_thrift_port = int(config['configurations']['spark2-hive-site-override']['hive.server2.thrift.port'])
+elif spark_transport_mode.lower() == 'http':
+  spark_thrift_port = int(config['configurations']['spark2-hive-site-override']['hive.server2.thrift.http.port'])
 
 # thrift server support - available on HDP 2.3 or higher
 spark_thrift_sparkconf = None
