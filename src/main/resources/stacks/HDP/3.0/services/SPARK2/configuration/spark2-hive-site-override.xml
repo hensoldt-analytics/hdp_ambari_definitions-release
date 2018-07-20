@@ -68,4 +68,10 @@ limitations under the License.
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>hive.exec.scratchdir</name>
+    <value>/tmp/spark</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
