@@ -649,6 +649,7 @@ if security_enabled and has_atsv2:
 yarn_hbase_grant_premissions_file = format("{yarn_hbase_conf_dir}/hbase_grant_permissions.sh")
 yarn_hbase_package_preparation_file = format("{tmp_dir}/hbase_package_preparation.sh")
 is_hbase_system_service_launch = config['configurations']['yarn-hbase-env']['is_hbase_system_service_launch']
+use_external_hbase = config['configurations']['yarn-hbase-env']['use_external_hbase']
 hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
 class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -Dhbase.client.retries.number=35 -create -s")
 yarn_hbase_table_create_cmd = format("export HBASE_CLASSPATH_PREFIX={stack_root}/{version}/hadoop-yarn/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")

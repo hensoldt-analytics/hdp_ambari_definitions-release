@@ -95,7 +95,7 @@ def yarn(name=None, config_dir=None):
   elif name == 'historyserver':
     setup_historyserver()
   elif name == 'apptimelinereader':
-    if not params.is_hbase_system_service_launch:
+    if not params.use_external_hbase and not params.is_hbase_system_service_launch:
        setup_atsv2_hbase_directories()
        setup_atsv2_hbase_files()
 
@@ -620,7 +620,7 @@ def yarn(name = None):
 
 def setup_atsv2_backend(name=None, config_dir=None):
     import params
-    if params.is_hbase_system_service_launch:
+    if not params.use_external_hbase and params.is_hbase_system_service_launch:
        if name == 'resourcemanager':
           setup_system_services(config_dir)
        elif name == 'nodemanager':

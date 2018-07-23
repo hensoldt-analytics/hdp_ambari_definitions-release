@@ -127,7 +127,10 @@
   <property>
     <name>is_hbase_system_service_launch</name>
     <value>false</value>
-    <description>Should Hbase cluster started as system service.</description>
+    <description>Should Hbase cluster started as system service. This
+      configuration depends on use_external_hbase property. If
+      use_external_hbase is set, then this property doesn't take effect.
+    </description>
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
@@ -235,6 +238,18 @@
     <name>yarn_hbase_heap_memory_factor</name>
     <value>0.8</value>
     <description>Heap memory is auto derived using this factor.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>use_external_hbase</name>
+    <value>false</value>
+    <description>Setting true, doesn't start embedded hbase or system service
+      hbase. Note: Admin/User need to take care of pointing right hbase-site.xml
+      into RM/NM classpath. If system service hbase is started, then admin must
+      clean up system service hbase before making this change.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
 </configuration>
