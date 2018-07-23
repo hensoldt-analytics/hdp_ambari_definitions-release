@@ -126,6 +126,7 @@ class Ranger_KMSServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendRangerKMSConfigurationsFromHDP23(configurations, clusterData, services, hosts)
     recommender.recommendRangerKMSConfigurationsFromHDP25(configurations, clusterData, services, hosts)
     recommender.recommendRangerKMSConfigurationsFromHDP26(configurations, clusterData, services, hosts)
+    recommender.recommendRangerKMSConfigurationsFromHDP30(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
     """
@@ -282,6 +283,27 @@ class RangerKMSRecommender(service_advisor.ServiceAdvisor):
       putRangerKmsEnvProperty("kms_port", ranger_kms_ssl_port)
     else:
       putRangerKmsEnvProperty("kms_port", "9292")
+
+  def recommendRangerKMSConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
+    putRangerKmsEnvProperty = self.putProperty(configurations, "kms-env", services)
+
+    if 'kms-properties' in services['configurations'] and ('DB_FLAVOR' in services['configurations']['kms-properties']['properties']) \
+      and ('db_host' in services['configurations']['kms-properties']['properties']):
+
+      rangerKmsDbFlavor = services['configurations']["kms-properties"]["properties"]["DB_FLAVOR"]
+      rangerKmsDbHost =   services['configurations']["kms-properties"]["properties"]["db_host"]
+
+      ranger_kms_db_privelege_url_dict = {
+        'MYSQL': {'ranger_kms_privelege_user_jdbc_url': 'jdbc:mysql://' + self.getDBConnectionHostPort(rangerKmsDbFlavor, rangerKmsDbHost)},
+        'ORACLE': {'ranger_kms_privelege_user_jdbc_url': 'jdbc:oracle:thin:@' + self.getOracleDBConnectionHostPort(rangerKmsDbFlavor, rangerKmsDbHost, None)},
+        'POSTGRES': {'ranger_kms_privelege_user_jdbc_url': 'jdbc:postgresql://' + self.getDBConnectionHostPort(rangerKmsDbFlavor, rangerKmsDbHost) + '/postgres'},
+        'MSSQL': {'ranger_kms_privelege_user_jdbc_url': 'jdbc:sqlserver://' + self.getDBConnectionHostPort(rangerKmsDbFlavor, rangerKmsDbHost) + ';'},
+        'SQLA': {'ranger_kms_privelege_user_jdbc_url': 'jdbc:sqlanywhere:host=' + self.getDBConnectionHostPort(rangerKmsDbFlavor, rangerKmsDbHost) + ';'}
+      }
+
+      rangerKmsPrivelegeDbProperties = ranger_kms_db_privelege_url_dict.get(rangerKmsDbFlavor, ranger_kms_db_privelege_url_dict['MYSQL'])
+      for key in rangerKmsPrivelegeDbProperties:
+        putRangerKmsEnvProperty(key, rangerKmsPrivelegeDbProperties.get(key))
 
   def getDBConnectionHostPort(self, db_type, db_host):
     connection_string = ""
