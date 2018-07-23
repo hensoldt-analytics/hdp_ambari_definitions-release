@@ -221,6 +221,8 @@ if 'zeppelin.interpreter.config.upgrade' in config['configurations']['zeppelin-s
 else:
   zeppelin_interpreter_config_upgrade = False
 
+exclude_interpreter_autoconfig = default("/configurations/zeppelin-site/exclude.interpreter.autoconfig", None)
+
 # e.g. 2.3
 stack_version_unformatted = config['clusterLevelParams']['stack_version']
 

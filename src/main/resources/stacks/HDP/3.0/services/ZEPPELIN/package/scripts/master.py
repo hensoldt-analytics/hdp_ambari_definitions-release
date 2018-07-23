@@ -503,6 +503,24 @@ class Master(Script):
     config_data = self.get_interpreter_settings()
     interpreter_settings = config_data['interpreterSettings']
 
+    exclude_interpreter_autoconfig_list = []
+    exclude_interpreter_property_groups_map = {}
+
+    if params.exclude_interpreter_autoconfig:
+      excluded_interpreters = params.exclude_interpreter_autoconfig.strip().split(";")
+      for interpreter in excluded_interpreters:
+        if interpreter and interpreter.strip():
+          splitted_line = interpreter.split('(')
+          interpreter_name = splitted_line[0].strip()
+          exclude_interpreter_autoconfig_list.append(interpreter_name)
+          if len(splitted_line) > 1:
+            property_groups_list = splitted_line[1].replace(')','').strip().split(',')
+            if len(property_groups_list) > 0 and property_groups_list[0]:
+              exclude_interpreter_property_groups_map[interpreter_name] = property_groups_list
+
+
+
+
     if params.zeppelin_interpreter:
       settings_to_delete = []
       for settings_key, interpreter in interpreter_settings.items():
@@ -515,13 +533,16 @@ class Master(Script):
     hive_interactive_properties_key = 'hive_interactive'
     for setting_key in interpreter_settings.keys():
       interpreter = interpreter_settings[setting_key]
-      if interpreter['group'] == 'jdbc' and interpreter['name'] == 'jdbc':
+      if interpreter['group'] == 'jdbc' and interpreter['name'] == 'jdbc' and ('jdbc' not in exclude_interpreter_autoconfig_list
+                                                               or 'jdbc' in exclude_interpreter_property_groups_map.keys()):
         interpreter['dependencies'] = []
-
+        jdbc_property_groups = []
+        if 'jdbc' in exclude_interpreter_property_groups_map.keys():
+          jdbc_property_groups = exclude_interpreter_property_groups_map.get('jdbc')
         if not params.hive_server_host and params.hive_server_interactive_hosts:
           hive_interactive_properties_key = 'hive'
 
-        if params.hive_server_host:
+        if params.hive_server_host and 'hive-server' not in jdbc_property_groups:
           self.storePropertyToInterpreter(interpreter, 'hive.driver', 'string', 'org.apache.hive.jdbc.HiveDriver')
           self.storePropertyToInterpreter(interpreter, 'hive.user', 'string', 'hive')
           self.storePropertyToInterpreter(interpreter, 'hive.password', 'string', '')
@@ -538,7 +559,7 @@ class Master(Script):
           if 'hive.splitQueries' not in interpreter['properties']:
             self.storePropertyToInterpreter(interpreter, "hive.splitQueries", 'string', "true")
 
-        if params.hive_server_interactive_hosts:
+        if params.hive_server_interactive_hosts and 'hive-interactive' not in jdbc_property_groups:
           self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.driver', 'string', 'org.apache.hive.jdbc.HiveDriver')
           self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.user', 'string', 'hive')
           self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.password', 'string', '')
@@ -555,21 +576,9 @@ class Master(Script):
           if hive_interactive_properties_key + '.splitQueries' not in interpreter['properties']:
             self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.splitQueries', 'string', "true")
 
-        if params.spark_thrift_server_hosts:
-          self.storePropertyToInterpreter(interpreter, 'spark.driver', 'string', 'org.apache.hive.jdbc.HiveDriver')
-          self.storePropertyToInterpreter(interpreter, 'spark.user', 'string', 'hive')
-          self.storePropertyToInterpreter(interpreter, 'spark.password', 'string', '')
-          self.storePropertyToInterpreter(interpreter, 'spark.proxy.user.property', 'string', 'hive.server2.proxy.user')
-          self.storePropertyToInterpreter(interpreter, 'spark.url', 'string', 'jdbc:hive2://' + \
-                           params.spark_thrift_server_hosts + ':' + params.spark_hive_thrift_port + '/')
-          if params.hive_principal:
-            self.storePropertyToInterpreter(interpreter, 'spark.url', 'string', ';principal=' + params.hive_principal, 'add')
-          if params.hive_transport_mode:
-            self.storePropertyToInterpreter(interpreter, 'spark.url', 'string', ';transportMode=' + params.hive_transport_mode, 'add')
-          if 'spark.splitQueries' not in interpreter['properties']:
-            self.storePropertyToInterpreter(interpreter, 'spark.splitQueries', 'string', "true")
 
-        if params.spark2_thrift_server_hosts:
+
+        if params.spark2_thrift_server_hosts and 'spark2' not in jdbc_property_groups:
           self.storePropertyToInterpreter(interpreter, 'spark2.driver', 'string', 'org.apache.spark-project.org.apache.hive.jdbc.HiveDriver')
           self.storePropertyToInterpreter(interpreter, 'spark2.user', 'string', 'hive')
           self.storePropertyToInterpreter(interpreter, 'spark2.password', 'string', '')
@@ -585,7 +594,7 @@ class Master(Script):
             self.storePropertyToInterpreter(interpreter, 'spark2.splitQueries', 'string', "true")
 
         if params.zookeeper_znode_parent \
-                and params.hbase_zookeeper_quorum:
+                and params.hbase_zookeeper_quorum and 'hbase' not in jdbc_property_groups:
             self.storePropertyToInterpreter(interpreter, 'phoenix.driver', 'string', 'org.apache.phoenix.jdbc.PhoenixDriver')
             if 'phoenix.hbase.client.retries.number' not in interpreter['properties']:
               self.storePropertyToInterpreter(interpreter, 'phoenix.hbase.client.retries.number', 'string', '1')
@@ -603,15 +612,7 @@ class Master(Script):
               self.storePropertyToInterpreter(interpreter, 'phoenix.splitQueries', 'string', "true")
 
 
-      elif interpreter['group'] == 'livy' and interpreter['name'] == 'livy':
-        if params.livy_livyserver_host:
-          self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.url', 'string', params.livy_livyserver_protocol + \
-                                                                                      "://" + params.livy_livyserver_host + \
-                                                                                      ":" + params.livy_livyserver_port)
-        else:
-          del interpreter_settings[setting_key]
-
-      elif interpreter['group'] == 'livy' and interpreter['name'] == 'livy2':
+      elif interpreter['group'] == 'livy' and interpreter['name'] == 'livy2' and 'livy2' not in exclude_interpreter_autoconfig_list:
         if params.livy2_livyserver_host:
           self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.url', 'string', params.livy2_livyserver_protocol + \
                                                                                       "://" + params.livy2_livyserver_host + \
@@ -620,14 +621,7 @@ class Master(Script):
           del interpreter_settings[setting_key]
 
 
-      elif interpreter['group'] == 'spark' and interpreter['name'] == 'spark':
-        if 'spark-env' in params.config['configurations']:
-          self.storePropertyToInterpreter(interpreter, 'master', 'string', "yarn-client")
-          self.storePropertyToInterpreter(interpreter, 'SPARK_HOME', 'string', "/usr/hdp/current/spark-client/")
-        else:
-          del interpreter_settings[setting_key]
-
-      elif interpreter['group'] == 'spark' and interpreter['name'] == 'spark2':
+      elif interpreter['group'] == 'spark' and interpreter['name'] == 'spark2' and 'spark2' not in exclude_interpreter_autoconfig_list:
         if 'spark2-env' in params.config['configurations']:
           self.storePropertyToInterpreter(interpreter, 'master', 'string', "yarn-client")
           self.storePropertyToInterpreter(interpreter, 'SPARK_HOME', 'string', "/usr/hdp/current/spark2-client/")
