@@ -98,6 +98,13 @@ and the -Xmn ratio (hbase_regionserver_xmn_ratio) exceeds this value.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hbase_parallel_gc_threads</name>
+    <value>8</value>
+    <description>The number of JVM parallel garbage collection threads (e.g. -XX:ParallelGCThreads)</description>
+    <display-name>HBase Parallel GC Threads</display-name>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hbase_user</name>
     <display-name>HBase User</display-name>
     <value>hbase</value>
@@ -227,18 +234,21 @@ export HBASE_PID_DIR={{pid_dir}}
 export HBASE_MANAGES_ZK=false
 
 {% if java_version &lt; 8 %}
-JDK_DEPENDED_OPTS="-XX:PermSize=128m -XX:MaxPermSize=128m"
+JDK_DEPENDED_OPTS="-XX:PermSize=128m -XX:MaxPermSize=128m -XX:ReservedCodeCacheSize=256m"
 {% endif %}
 
-{% if security_enabled %}
-export HBASE_OPTS="$HBASE_OPTS -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:-ResizePLAB -XX:ErrorFile={{log_dir}}/hs_err_pid%p.log -Djava.security.auth.login.config={{client_jaas_config_file}} -Djava.io.tmpdir={{java_io_tmpdir}}"
-export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx{{master_heapsize}} -Djava.security.auth.login.config={{master_jaas_config_file}} -Djavax.security.auth.useSubjectCredsOnly=false $JDK_DEPENDED_OPTS"
-export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -XX:ReservedCodeCacheSize=256m -Xms{{regionserver_heapsize}} -Xmx{{regionserver_heapsize}} -Djava.security.auth.login.config={{regionserver_jaas_config_file}} -Djavax.security.auth.useSubjectCredsOnly=false $JDK_DEPENDED_OPTS"
-export PHOENIX_QUERYSERVER_OPTS="$PHOENIX_QUERYSERVER_OPTS -Djava.security.auth.login.config={{queryserver_jaas_config_file}}"
-{% else %}
+# Set common JVM configuration
 export HBASE_OPTS="$HBASE_OPTS -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:-ResizePLAB -XX:ErrorFile={{log_dir}}/hs_err_pid%p.log -Djava.io.tmpdir={{java_io_tmpdir}}"
-export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx{{master_heapsize}} $JDK_DEPENDED_OPTS"
-export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xms{{regionserver_heapsize}} -Xmx{{regionserver_heapsize}} $JDK_DEPENDED_OPTS"
+export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx{{master_heapsize}} -XX:ParallelGCThreads={{parallel_gc_threads}} $JDK_DEPENDED_OPTS "
+export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xms{{regionserver_heapsize}} -Xmx{{regionserver_heapsize}} -XX:ParallelGCThreads={{parallel_gc_threads}} $JDK_DEPENDED_OPTS"
+export PHOENIX_QUERYSERVER_OPTS="$PHOENIX_QUERYSERVER_OPTS -XX:ParallelGCThreads={{parallel_gc_threads}} $JDK_DEPENDED_OPTS"
+
+# Add Kerberos authentication-related configuration
+{% if security_enabled %}
+export HBASE_OPTS="$HBASE_OPTS -Djava.security.auth.login.config={{client_jaas_config_file}}"
+export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Djava.security.auth.login.config={{master_jaas_config_file}} -Djavax.security.auth.useSubjectCredsOnly=false"
+export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Djava.security.auth.login.config={{regionserver_jaas_config_file}} -Djavax.security.auth.useSubjectCredsOnly=false"
+export PHOENIX_QUERYSERVER_OPTS="$PHOENIX_QUERYSERVER_OPTS -Djava.security.auth.login.config={{queryserver_jaas_config_file}}"
 {% endif %}
 
 # HBase off-heap MaxDirectMemorySize

@@ -115,6 +115,22 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>phoenix.rpc.index.handler.count</name>
+    <value>10</value>
+    <description>
+      Count of RPC Handlers used to service Phoenix secondary index writes
+      inside of each RegionServer.
+    </description>
+    <display-name>Number of Phoenix Index Handlers per RegionServer</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>5</minimum>
+      <maximum>100</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hbase.hregion.majorcompaction</name>
     <value>604800000</value>
     <description>Time between major compactions, expressed in milliseconds. Set to 0 to disable
@@ -305,7 +321,7 @@
   <property>
     <name>hbase.hstore.blockingStoreFiles</name>
     <display-name>hstore blocking storefiles</display-name>
-    <value>10</value>
+    <value>100</value>
     <description>
     If more than this number of StoreFiles in any one Store
     (one StoreFile is written per flush of MemStore) then updates are

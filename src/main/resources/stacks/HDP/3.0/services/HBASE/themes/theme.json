@@ -224,6 +224,10 @@
         {
           "config": "hbase-site/phoenix.query.timeoutMs",
           "subsection-name": "subsection-hbase-phoenix-col1"
+        },
+        {
+          "config": "hbase-site/phoenix.rpc.index.handler.count",
+          "subsection-name": "subsection-hbase-phoenix-col1"
         }
       ]
     },
@@ -397,6 +401,17 @@
           "units": [
             {
               "unit-name": "minutes,seconds"
+            }
+          ]
+        }
+      },
+      {
+        "config": "hbase-site/phoenix.rpc.index.handler.count",
+        "widget": {
+          "type": "slider",
+          "units": [
+            {
+              "unit-name": "int"
             }
           ]
         }

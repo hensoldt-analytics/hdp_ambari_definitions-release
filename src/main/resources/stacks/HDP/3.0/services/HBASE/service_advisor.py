@@ -128,6 +128,7 @@ class HBASEServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendHBASEConfigurationsFromHDP23(configurations, clusterData, services, hosts)
     recommender.recommendHBASEConfigurationsFromHDP26(configurations, clusterData, services, hosts)
     recommender.recommendHBASEConfigurationsFromHDP30(configurations, clusterData, services, hosts)
+    recommender.recommendHBASEConfigurationsFromHDP301(configurations, clusterData, services, hosts)
     recommender.recommendHBASEConfigurationsForKerberos(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationRecommendationsForKerberos(self, configurations, clusterData, services, hosts):
@@ -427,6 +428,77 @@ class HBASERecommender(service_advisor.ServiceAdvisor):
     hbase_master_coprocessor_value = '' if len(hbase_master_coprocessor_list) == 0 else ",".join(hbase_master_coprocessor_list)
     putHbaseSiteProperty(hbase_atlas_hook_property,hbase_master_coprocessor_value)
 
+  def recommendHBASEConfigurationsFromHDP301(self, configurations, clusterData, services, hosts):
+    # Setters
+    putHbaseSiteProperty = self.putProperty(configurations, "hbase-site", services)
+    putHbaseEnvProperty = self.putProperty(configurations, "hbase-env", services)
+
+    # Pick the first regionserver and figure out how many cores it has
+    cores = 8
+    regionServerHosts = self.getHostsWithComponent("HBASE", "HBASE_REGIONSERVER", services, hosts)
+    if regionServerHosts is not None and len(regionServerHosts):
+      cores = int(regionServerHosts[0]['Hosts']['cpu_count'])
+
+    # We want a maximum of 8 parallel GC threads by default, but do not
+    # exceed the number of CPUs available.
+    parallelGCThreads = math.floor(cores / 2) if cores > 8 else min(8, cores)
+    putHbaseEnvProperty('hbase_parallel_gc_threads', parallelGCThreads)
+
+    # Increase the number of small compaction threads by default
+    putHbaseSiteProperty('hbase.regionserver.thread.compaction.small', 3)
+    putHbaseSiteProperty('hbase.hstore.blockingStoreFiles', 100)
+
+    # Try to give a good guess for the number of handlers
+    self.setHandlerCounts(configurations, clusterData, services, hosts, cores)
+
+  def setHandlerCounts(self, configurations, clusterData, services, hosts, cores):
+    putHbaseSiteProperty = self.putProperty(configurations, "hbase-site", services)
+    # The amount of RAM that Ambari says HBase should use
+    hbaseRamInMB = int(clusterData["hbaseRam"]) * 1024
+    self.logger.info("hbaseRam=%d, cores=%d" % (hbaseRamInMB, cores))
+    # A mapping of JVM max heap and number of cores to the number of handlers we should use
+    # Logic should choose the first element in the list in which either mem_limit or cpu_limit
+    # are not met.
+    #
+    # e.g. 4G and 2 CPU would choose 30 handlers. 4G and 4 CPU would choose 60 handlers.
+    #   6G and 8 CPU would choose 60 handlers. 32G and 32 CPU would choose 120 handlers.
+    hbase_recommendations = [ {'mem_limit':2048, 'cpu_limit':4, 'handlers': 30},
+            {'mem_limit':8192, 'cpu_limit':8, 'handlers': 60},
+            {'mem_limit':12288, 'cpu_limit':16, 'handlers': 90},
+            {'mem_limit':16384, 'cpu_limit':24, 'handlers': 120} ]
+    phoenix_recommendations = [ {'mem_limit':2048, 'cpu_limit':4, 'handlers': 20, 'index_handlers': 10},
+            {'mem_limit':8192, 'cpu_limit':8, 'handlers': 50, 'index_handlers': 15},
+            {'mem_limit':12288, 'cpu_limit':16, 'handlers': 70, 'index_handlers': 20},
+            {'mem_limit':16384, 'cpu_limit':24, 'handlers': 100, 'index_handlers': 30} ]
+
+    # Is Phoenix enabled?
+    phoenix_enabled = 'hbase-env' in services['configurations'] and 'phoenix_sql_enabled' in services['configurations']['hbase-env']['properties'] and \
+                'true' == services['configurations']['hbase-env']['properties']['phoenix_sql_enabled'].lower()
+    recommendations = phoenix_recommendations if phoenix_enabled else hbase_recommendations
+    self.logger.info("phoenix_enabled=" + str(phoenix_enabled))
+
+    # Determine the limit
+    handlers = None
+    index_handlers = None
+    for level in recommendations:
+      if level['mem_limit'] > hbaseRamInMB or level['cpu_limit'] > cores:
+        handlers = level['handlers']
+        if phoenix_enabled:
+          index_handlers = level['index_handlers']
+        break
+
+    # For lots of RAM+CPU, we may have exceeded the final level's limits. Just use the last one.
+    if handlers is None:
+      level = recommendations[-1]
+      handlers = level['handlers']
+      if phoenix_enabled:
+        index_handlers = level['index_handlers']
+
+    self.logger.info("Setting HBase handlers to %d" % (handlers))
+    putHbaseSiteProperty('hbase.regionserver.handler.count', handlers)
+    if phoenix_enabled:
+      self.logger.info("Setting Phoenix index handlers to %d" % (index_handlers))
+      putHbaseSiteProperty('phoenix.rpc.index.handler.count', index_handlers)
 
   def recommendHBASEConfigurationsForKerberos(self, configurations, clusterData, services, hosts):
     putHbaseSiteProperty = self.putProperty(configurations, "hbase-site", services)
