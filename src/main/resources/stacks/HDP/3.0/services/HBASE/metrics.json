@@ -5224,6 +5224,11 @@
               "pointInTime": true,
               "temporal": false
             },
+            "metrics/hbase/master/liveRegionServersHosts": {
+              "metric": "Hadoop:service=HBase,name=Master,sub=Server.tag.liveRegionServers",
+              "pointInTime": true,
+              "temporal": false
+            },
             "metrics/rpc/bulkLoadHFilesAvgTime": {
               "metric": "hadoop:service=HBase,name=RPCStatistics.bulkLoadHFilesAvgTime",
               "pointInTime": true,
@@ -5721,6 +5726,11 @@
             },
             "metrics/hbase/master/DeadRegionServers": {
               "metric": "Hadoop:service=HBase,name=Master,sub=Server.numDeadRegionServers",
+              "pointInTime": true,
+              "temporal": false
+            },
+            "metrics/hbase/master/deadRegionServersHosts": {
+              "metric": "Hadoop:service=HBase,name=Master,sub=Server.tag.deadRegionServers",
               "pointInTime": true,
               "temporal": false
             },
@@ -8261,6 +8271,11 @@
               "pointInTime": true,
               "temporal": false
             },
+            "metrics/hbase/master/liveRegionServersHosts": {
+              "metric": "Hadoop:service=HBase,name=Master,sub=Server.tag.liveRegionServers",
+              "pointInTime": true,
+              "temporal": false
+            },
             "metrics/rpc/bulkLoadHFilesAvgTime": {
               "metric": "hadoop:service=HBase,name=RPCStatistics.bulkLoadHFilesAvgTime",
               "pointInTime": true,
@@ -8758,6 +8773,11 @@
             },
             "metrics/hbase/master/DeadRegionServers": {
               "metric": "Hadoop:service=HBase,name=Master,sub=Server.numDeadRegionServers",
+              "pointInTime": true,
+              "temporal": false
+            },
+            "metrics/hbase/master/deadRegionServersHosts": {
+              "metric": "Hadoop:service=HBase,name=Master,sub=Server.tag.deadRegionServers",
               "pointInTime": true,
               "temporal": false
             },
