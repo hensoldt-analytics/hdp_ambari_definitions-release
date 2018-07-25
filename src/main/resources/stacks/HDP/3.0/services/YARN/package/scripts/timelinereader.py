@@ -25,19 +25,15 @@ from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.constants import StackFeature
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions import check_process_status
-from resource_management.libraries.functions.security_commons import build_expectations, \
-  cached_kinit_executor, get_params_from_filesystem, validate_security_config_properties,\
-  FILE_TYPE_XML
 from resource_management.libraries.functions.format import format
 from resource_management.core.logger import Logger
-from resource_management.core.resources.system import Execute
 
 from yarn import yarn
 from service import service
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyImpl
-from hbase_service import hbase, configure_hbase
-
+from hbase_service import hbase, configure_hbase, create_hbase_package, copy_hbase_package_to_hdfs
+from resource_management.libraries.functions.copy_tarball import copy_to_hdfs
 
 class ApplicationTimelineReader(Script):
   def install(self, env):
@@ -47,6 +43,21 @@ class ApplicationTimelineReader(Script):
     import params
     env.set_params(params)
     self.configure(env) # FOR SECURITY
+
+    if params.stack_version_formatted_major and check_stack_feature(StackFeature.COPY_TARBALL_TO_HDFS, params.stack_version_formatted_major):
+      # MC Hammer said, "Can't touch this"
+      resource_created = copy_to_hdfs(
+        "yarn",
+        params.user_group,
+        params.hdfs_user,
+        skip=params.sysprep_skip_copy_tarballs_hdfs)
+      if resource_created:
+        params.HdfsResource(None, action="execute")
+
+      # upload package by default
+      create_hbase_package()
+      copy_hbase_package_to_hdfs()
+
     if not params.use_external_hbase and not params.is_hbase_system_service_launch:
        hbase(action='start')
     service('timelinereader', action='start')
@@ -80,6 +91,13 @@ class ApplicationTimelineReaderDefault(ApplicationTimelineReader):
 
     if params.version and check_stack_feature(StackFeature.ROLLING_UPGRADE, params.version):
       stack_select.select_packages(params.version)
+      # MC Hammer said, "Can't touch this"
+      resource_created = copy_to_hdfs("yarn", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
+      if resource_created:
+         params.HdfsResource(None, action="execute")
+      # upload package by default
+      create_hbase_package()
+      copy_hbase_package_to_hdfs()
 
   def status(self, env):
     import status_params

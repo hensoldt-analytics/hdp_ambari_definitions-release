@@ -108,7 +108,7 @@ def create_hbase_package():
             "Error occured while executing hbase package creation file '" + file_path + "'.")
         raise
 
-def copy_to_hdfs():
+def copy_hbase_package_to_hdfs():
     import params
 
     try:

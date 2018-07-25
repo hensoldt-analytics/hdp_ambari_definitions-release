@@ -34,12 +34,10 @@ from resource_management.core.resources.system import Directory, Execute
 from resource_management.core.resources.system import File
 from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.core.source import InlineTemplate, Template
-from resource_management.core.logger import Logger
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
 
 from resource_management.libraries.functions.mounted_dirs_helper import handle_mounted_dirs
-from hbase_service import create_hbase_package, copy_to_hdfs
 
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
@@ -626,7 +624,6 @@ def setup_atsv2_backend(name=None, config_dir=None):
        elif name == 'nodemanager':
           setup_atsv2_hbase_files()
 
-
 def setup_atsv2_hbase_files():
     import params
     if 'yarn-hbase-policy' in params.config['configurations']:
@@ -790,6 +787,3 @@ def setup_system_services(config_dir=None):
                         owner=params.yarn_hbase_user
                         )
     params.HdfsResource(None, action="execute")
-
-    create_hbase_package()
-    copy_to_hdfs()

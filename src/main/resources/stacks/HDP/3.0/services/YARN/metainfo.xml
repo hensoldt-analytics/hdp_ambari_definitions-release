@@ -33,6 +33,10 @@
           <cardinality>1</cardinality>
           <versionAdvertised>true</versionAdvertised>
           <reassignAllowed>true</reassignAllowed>
+          <auto-deploy>
+            <enabled>true</enabled>
+            <co-locate>YARN/RESOURCEMANAGER</co-locate>
+          </auto-deploy>
 
           <commandScript>
             <script>scripts/timelinereader.py</script>

@@ -37,11 +37,18 @@
 #
 
 echo "`date` Running hbase package creation script"
-if [ ! -d {{yarn_hbase_user_tmp}} ];then echo "Creating a tmp path {{yarn_hbase_user_tmp}}"; mkdir -p {{yarn_hbase_user_tmp}};fi;
-cd {{yarn_hbase_user_tmp}}
-if [ -f hbase.tar.gz ];then echo "hbase.tar.gz package exist in path {{yarn_hbase_user_tmp}}.. Exitting from script..";exit;fi;
-
+yarn_hbase_user_tmp="{{yarn_hbase_user_tmp}}"
 version_home="{{stack_root}}/{{version}}"
+if [ ! -d $yarn_hbase_user_tmp ];then echo "Creating a tmp path $yarn_hbase_user_tmp"; mkdir -p $yarn_hbase_user_tmp;fi;
+cd $yarn_hbase_user_tmp
+if [ -f hbase.tar.gz ]
+then
+    echo "`date` hbase.tar.gz package exist in path $yarn_hbase_user_tmp."
+    echo "`date` File status: `ls -l hbase.tar.gz`"
+    echo "`date` Exitting from script.."
+    exit
+fi;
+
 cp -rf $version_home/hbase .
 mv hbase/bin/hbase.distro hbase/bin/hbase
 rm -rf hbase/conf
@@ -52,8 +59,10 @@ cp -rf $version_home/zookeeper/zookeeper-*.jar hbase/lib
 cp -rf $version_home/hadoop/mapreduce.tar.gz .
 tar -xzf mapreduce.tar.gz
 rm -rf mapreduce.tar.gz
-tar -czf hbase.tar.gz hbase hadoop
+tar -czf hbase.tar.gz hbase hadoop && echo "`date` HBase package created in path $yarn_hbase_user_tmp"
+chmod 644 hbase.tar.gz && echo "`date` hbase.tar.gz has set with ugo=644"
 rm -rf hbase
 rm -rf hadoop
-echo "`date` HBase package created in path {{yarn_hbase_user_tmp}}"
+echo "`date` File status: `ls -l $yarn_hbase_user_tmp/hbase.tar.gz`"
+echo "`date` Exitting from script.."
 exit
