@@ -131,6 +131,9 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
     # Due to the existing stack inheritance, make it clear where each calculation came from.
     recommender = YARNRecommender()
 
+    if 'forced-configurations' not in services:
+      services["forced-configurations"] = []
+
     # YARN
     recommender.recommendYARNConfigurationsFromHDP206(configurations, clusterData, services, hosts)
     recommender.recommendYARNConfigurationsFromHDP22(configurations, clusterData, services, hosts)
@@ -1406,7 +1409,9 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     if hive_server_interactive_heapsize is not None:
       putHiveInteractiveEnvProperty("hive_heapsize", int(hive_server_interactive_heapsize))
 
-    llap_io_enabled = 'true' if long(cache_mem_per_node) >= 64 else 'false'
+    ssd_cache_on = services["configurations"]["hive-interactive-site"]["properties"]["hive.llap.io.allocator.mmap"] == "true"
+    llap_io_enabled = 'true' if long(cache_mem_per_node) >= 1024 or ssd_cache_on else 'false'
+    services["forced-configurations"].append({"type" : "hive-interactive-site", "name" : "hive.llap.io.enabled"})
     putHiveInteractiveSiteProperty('hive.llap.io.enabled', llap_io_enabled)
 
     putHiveInteractiveEnvProperty('llap_heap_size', long(llap_xmx))
@@ -1448,6 +1453,11 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     putHiveInteractiveSiteProperty('hive.llap.io.memory.size', 0)
     putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'minimum', 0)
     putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'maximum', self.__get_min_hsi_mem(services, hosts) * 0.5)
+    
+    ssd_cache_on = services["configurations"]["hive-interactive-site"]["properties"]["hive.llap.io.allocator.mmap"] == "true"
+    if ssd_cache_on:
+      services["forced-configurations"].append({"type" : "hive-interactive-site", "name" : "hive.llap.io.enabled"})
+      putHiveInteractiveSiteProperty("hive.llap.io.enabled", "true")
 
   def __get_min_hsi_mem(self, services, hosts):
     hsiHosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
