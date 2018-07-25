@@ -209,17 +209,17 @@ if 'nm_hosts' in config['clusterHostInfo'] and len(config['clusterHostInfo']['no
 if has_spark_thriftserver and 'spark2-thrift-sparkconf' in config['configurations']:
   spark_thrift_sparkconf = config['configurations']['spark2-thrift-sparkconf']
   spark_thrift_cmd_opts_properties = config['configurations']['spark2-env']['spark_thrift_cmd_opts']
-  if is_hive_installed:
-    # update default metastore client properties (async wait for metastore component) it is useful in case of
-    # blueprint provisioning when hive-metastore and spark-thriftserver is not on the same host.
-    spark_hive_properties.update({
-      'hive.metastore.client.socket.timeout' : config['configurations']['hive-site']['hive.metastore.client.socket.timeout']
-    })
-    spark_hive_properties.update(config['configurations']['spark2-hive-site-override'])
 
   if 'spark2-thrift-fairscheduler' in config['configurations'] and 'fairscheduler_content' in config['configurations']['spark2-thrift-fairscheduler']:
     spark_thrift_fairscheduler_content = config['configurations']['spark2-thrift-fairscheduler']['fairscheduler_content']
 
+if is_hive_installed:
+  # update default metastore client properties (async wait for metastore component) it is useful in case of
+  # blueprint provisioning when hive-metastore and spark-thriftserver is not on the same host.
+  spark_hive_properties.update({
+    'hive.metastore.client.socket.timeout' : config['configurations']['hive-site']['hive.metastore.client.socket.timeout']
+  })
+  spark_hive_properties.update(config['configurations']['spark2-hive-site-override'])
 default_fs = config['configurations']['core-site']['fs.defaultFS']
 hdfs_site = config['configurations']['hdfs-site']
 hdfs_resource_ignore_file = "/var/lib/ambari-agent/data/.hdfs_resource_ignore"
