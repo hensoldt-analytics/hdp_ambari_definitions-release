@@ -97,6 +97,48 @@
     },
     {
       "filter":"grok",
+      "sort_order":2,
+      "conditions":{
+        "fields":{
+          "type":[
+            "storm_worker"
+          ]
+        }
+      },
+      "source_field":"thread_name",
+      "remove_source_field":"false",
+      "message_pattern":"(Thread\\-[\\-0-9]+\\-*[\\-0-9]*\\-%{DATA:sdi_streamline_component_name}\\-executor%{DATA}|%{DATA:thread_name})"
+    },
+    {
+      "filter":"grok",
+      "sort_order":3,
+      "conditions":{
+        "fields":{
+          "type":[
+            "storm_worker"
+          ]
+        }
+      },
+      "source_field":"path",
+      "remove_source_field":"false",
+      "message_pattern":"{{default('/configurations/storm-env/storm_log_dir', '/var/log/storm')}}/workers-artifacts/%{DATA:sdi_storm_topology_id}/%{DATA:sdi_storm_worker_port}/worker\\.log"
+    },
+    {
+      "filter":"grok",
+      "sort_order":4,
+      "conditions":{
+        "fields":{
+          "type":[
+            "storm_worker"
+          ]
+        }
+      },
+      "source_field":"sdi_storm_topology_id",
+      "remove_source_field":"false",
+      "message_pattern":"(streamline\\-%{DATA:sdi_streamline_topology_id}\\-%{DATA:sdi_streamline_topology_name}\\-[0-9]+\\-[0-9]+)|(%{DATA:sdi_storm_topology_id})"
+    },
+    {
+      "filter":"grok",
       "sort_order":5,
       "conditions":{
         "fields":{
