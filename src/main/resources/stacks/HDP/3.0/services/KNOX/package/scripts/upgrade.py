@@ -120,11 +120,12 @@ def seed_current_data_directory():
     Logger.info("Seeding Knox data from prior version...")
 
     application_dir_name = "applications"
+    exclude_root_dirs = [application_dir_name, "deployments"]
     exclude_applications_from_copy = ["admin-ui", "knoxauth"]
     source_data_dir = os.path.join(params.stack_root, params.upgrade_from_version, "knox", "data")
     target_data_dir = os.path.join(params.stack_root, "current", "knox-server", "data")
 
-    copytree(source_data_dir, target_data_dir, [application_dir_name], True)
+    copytree(source_data_dir, target_data_dir, exclude_root_dirs, True)
     copytree(os.path.join(source_data_dir, application_dir_name), os.path.join(target_data_dir, application_dir_name),
              exclude_applications_from_copy, True)
 
