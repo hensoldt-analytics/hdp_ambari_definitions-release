@@ -238,11 +238,4 @@
     <on-ambari-upgrade add="false"/>
   </property>
 
-  <property>
-    <name>spark.yarn.archive</name>
-    <value>hdfs:///{{stack_name_in_lower_case}}/apps/{{version}}/spark2/spark2-{{stack_name_in_lower_case}}-yarn-archive.tar.gz</value>
-    <description></description>
-    <on-ambari-upgrade add="false"/>
-  </property>
-
 </configuration>
