@@ -148,7 +148,7 @@
         }
       },
       "log4j_format":"",
-      "message_pattern":"^%{TIMESTAMP_ISO8601:logtime}(!_DELIM_!&lt;STREAMLINE_EVENT&gt;!_DELIM_!%{DATA:sdi_streamline_component_name}!_DELIM_!%{DATA:sdi_streamline_event_id}!_DELIM_!%{DATA:sdi_streamline_root_ids}!_DELIM_!%{DATA:sdi_streamline_parent_ids}!_DELIM_!%{DATA:sdi_streamline_event_fields_and_values}!_DELIM_!%{DATA:sdi_streamline_event_headers}!_DELIM_!%{DATA:sdi_streamline_event_aux_fields_and_values})|(%{GREEDYDATA})",
+      "message_pattern":"^%{TIMESTAMP_ISO8601:logtime}(!_DELIM_!<STREAMLINE_EVENT>!_DELIM_!%{DATA:sdi_streamline_component_name}!_DELIM_!%{DATA:sdi_streamline_event_id}!_DELIM_!%{DATA:sdi_streamline_root_ids}!_DELIM_!%{DATA:sdi_streamline_parent_ids}!_DELIM_!%{DATA:sdi_streamline_event_fields_and_values}!_DELIM_!%{DATA:sdi_streamline_event_headers}!_DELIM_!%{DATA:sdi_streamline_event_aux_fields_and_values})|(%{GREEDYDATA})",
       "post_map_values":{
         "logtime":{
           "map_date":{
