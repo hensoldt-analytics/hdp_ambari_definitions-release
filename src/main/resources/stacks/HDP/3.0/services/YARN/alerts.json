@@ -414,6 +414,38 @@
           }
         }
       }
+    ],
+    "TIMELINE_READER": [
+      {
+        "name": "yarn_timeline_reader_webui",
+        "label": "Timeline Reader Web UI",
+        "description": "This host-level alert is triggered if Timeline Reader Web UI is unreachable.",
+        "interval": 1,
+        "scope": "ANY",
+        "source": {
+          "type": "WEB",
+          "uri": {
+            "http": "{{yarn-site/yarn.timeline-service.reader.webapp.address}}/ws/v2/timeline",
+            "https": "{{yarn-site/yarn.timeline-service.reader.webapp.https.address}}/ws/v2/timeline",
+            "https_property": "{{yarn-site/yarn.http.policy}}",
+            "https_property_value": "HTTPS_ONLY",
+            "kerberos_keytab": "{{yarn-site/yarn.timeline-service.http-authentication.kerberos.keytab}}",
+            "kerberos_principal": "{{yarn-site/yarn.timeline-service.http-authentication.kerberos.principal}}",
+            "connection_timeout": 5.0
+          },
+          "reporting": {
+            "ok": {
+              "text": "HTTP {0} response in {2:.3f}s"
+            },
+            "warning":{
+              "text": "HTTP {0} response from {1} in {2:.3f}s ({3})"
+            },
+            "critical": {
+              "text": "Connection failed to {1} ({3})"
+            }
+          }
+        }
+      }
     ]
   }
 }
