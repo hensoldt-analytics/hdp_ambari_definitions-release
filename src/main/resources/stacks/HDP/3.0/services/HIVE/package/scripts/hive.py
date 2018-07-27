@@ -308,6 +308,8 @@ def create_hive_hdfs_dirs():
 def __is_hdfs_acls_enabled():
   import params
   
+  hdfs_protocol = params.fs_root.startswith("hdfs://")
+  
   return_code, stdout, _ = get_user_call_output("hdfs getconf -confKey dfs.namenode.acls.enabled",
                                                 user = params.hdfs_user)
   acls_enabled = stdout == "true"
@@ -315,7 +317,7 @@ def __is_hdfs_acls_enabled():
                                                 user = params.hdfs_user)
   acls_inheritance_enabled = stdout == "true"
   
-  return acls_enabled and acls_inheritance_enabled
+  return hdfs_protocol and acls_enabled and acls_inheritance_enabled
 
 def setup_non_client():
   import params
