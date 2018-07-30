@@ -212,6 +212,7 @@
   </property>
   <property>
     <name>ranger.ldap.user.dnpattern</name>
+    <display-name>Ldap User DN Pattern</display-name>
     <value>uid={0},ou=users,dc=xasecure,dc=net</value>
     <description>LDAP user DN, only used if Authentication method is LDAP</description>
     <value-attributes>
@@ -235,6 +236,7 @@
   </property>
   <property>
     <name>ranger.ldap.group.roleattribute</name>
+    <display-name>Ldap Group Role Attribute</display-name>
     <value>cn</value>
     <description>LDAP group role attribute, only used if Authentication method is LDAP</description>
     <value-attributes>
@@ -244,6 +246,7 @@
   </property>
   <property>
     <name>ranger.ldap.base.dn</name>
+    <display-name>Ldap Base DN</display-name>
     <value>dc=example,dc=com</value>
     <description>The Distinguished Name (DN) of the starting point for directory server searches.</description>
     <value-attributes>
@@ -275,6 +278,7 @@
   </property>
   <property>
     <name>ranger.ldap.referral</name>
+    <display-name>Ldap Referral</display-name>
     <value>ignore</value>
     <description>Set to follow if multiple LDAP servers are configured to return continuation references for results. Set to ignore (default) if no referrals should be followed. Possible values are follow|throw|ignore</description>
     <value-attributes>
@@ -294,6 +298,7 @@
   </property>
   <property>
     <name>ranger.ldap.ad.url</name>
+    <display-name>AD URL</display-name>
     <value>{{ranger_ug_ldap_url}}</value>
     <description>AD URL, only used if Authentication method is AD</description>
     <value-attributes>
@@ -303,6 +308,7 @@
   </property>
   <property>
     <name>ranger.ldap.ad.base.dn</name>
+    <display-name>AD Base DN</display-name>
     <value>dc=example,dc=com</value>
     <description>The Distinguished Name (DN) of the starting point for directory server searches.</description>
     <value-attributes>
@@ -312,6 +318,7 @@
   </property>
   <property>
     <name>ranger.ldap.ad.bind.dn</name>
+    <display-name>AD Bind DN</display-name>
     <value>{{ranger_ug_ldap_bind_dn}}</value>
     <description>Full distinguished name (DN), including common name (CN), of an LDAP user account that has privileges to search for users.</description>
     <value-attributes>
@@ -321,6 +328,7 @@
   </property>
   <property>
     <name>ranger.ldap.ad.bind.password</name>
+    <display-name>AD Bind Password</display-name>
     <value></value>
     <property-type>PASSWORD</property-type>
     <description>Password for the account that can search for users</description>
@@ -332,6 +340,7 @@
   </property>
   <property>
     <name>ranger.ldap.ad.referral</name>
+    <display-name>AD Referral</display-name>
     <value>ignore</value>
     <description>Set to follow if multiple LDAP servers are configured to return continuation references for results. Set to ignore (default) if no referrals should be followed. Possible values are follow|throw|ignore</description>
     <value-attributes>
@@ -364,6 +373,7 @@
   </property>
   <property>
     <name>ranger.unixauth.service.hostname</name>
+    <display-name>Unix Auth Service Hostname</display-name>
     <value>{{ugsync_host}}</value>
     <description>Host where unix authentication service is running - only used if Authentication method is UNIX</description>
     <value-attributes>
@@ -373,6 +383,7 @@
   </property>
   <property>
     <name>ranger.unixauth.service.port</name>
+    <display-name>Unix Auth Service Port</display-name>
     <value>5151</value>
     <description>Port for unix authentication service - only used if Authentication method is UNIX</description>
     <value-attributes>
@@ -581,6 +592,7 @@
   </property>
   <property>
     <name>ranger.ldap.ad.user.searchfilter</name>
+    <display-name>AD User Search Filter</display-name>
     <value>(sAMAccountName={0})</value>
     <description>Search filter used for Bind Authentication</description>
     <value-attributes>
