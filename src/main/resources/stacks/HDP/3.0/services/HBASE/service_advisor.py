@@ -441,7 +441,7 @@ class HBASERecommender(service_advisor.ServiceAdvisor):
 
     # We want a maximum of 8 parallel GC threads by default, but do not
     # exceed the number of CPUs available.
-    parallelGCThreads = math.floor(cores / 2) if cores > 8 else min(8, cores)
+    parallelGCThreads = int(math.floor(cores / 2)) if cores > 8 else min(8, cores)
     putHbaseEnvProperty('hbase_parallel_gc_threads', parallelGCThreads)
 
     # Increase the number of small compaction threads by default
