@@ -224,10 +224,6 @@ hdfs_resource_ignore_file = "/var/lib/ambari-agent/data/.hdfs_resource_ignore"
 hive_schematool_bin = format('{stack_root}/current/{hive_component_directory}/bin')
 hive_metastore_db_type = config['configurations']['hive-env']['hive_database_type']
 
-#HACK Temporarily use dbType=azuredb while invoking schematool
-if hive_metastore_db_type == "mssql":
-  hive_metastore_db_type = "azuredb"
-
 ats_host = set(default("/clusterHostInfo/app_timeline_server_hosts", []))
 has_ats = len(ats_host) > 0
 
