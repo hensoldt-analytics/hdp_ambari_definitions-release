@@ -20,8 +20,14 @@ Ambari Agent
 """
 
 from resource_management.libraries.script.script import Script
+from resource_management.libraries.functions import stack_select
+from resource_management.libraries.functions import StackFeature
+from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.functions.format import format
+from resource_management.libraries.functions.security_commons import build_expectations, \
+  cached_kinit_executor, get_params_from_filesystem, validate_security_config_properties, \
+  FILE_TYPE_XML
 from resource_management.libraries.functions.decorator import retry
 from resource_management.core.resources.system import File, Execute
 from resource_management.core.source import Template
@@ -103,6 +109,9 @@ class ResourcemanagerDefault(Resourcemanager):
     Logger.info("Executing Stack Upgrade post-restart")
     import params
     env.set_params(params)
+
+    if params.version and check_stack_feature(StackFeature.ROLLING_UPGRADE, params.version):
+      stack_select.select_packages(params.version)
 
   def disable_security(self, env):
     import params
