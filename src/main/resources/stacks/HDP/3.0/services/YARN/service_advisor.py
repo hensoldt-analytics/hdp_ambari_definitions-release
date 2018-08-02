@@ -24,6 +24,7 @@ import traceback
 import inspect
 import socket
 import math
+import re
 from math import floor, ceil
 
 # Local imports
@@ -798,6 +799,9 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
     putCapSchedProperty = self.putProperty(configurations, "capacity-scheduler", services)
 
+    self.update_timeline_reader_address(configurations, services, 'yarn.timeline-service.reader.webapp.address')
+    self.update_timeline_reader_address(configurations, services, 'yarn.timeline-service.reader.webapp.https.address')
+
     hsi_env_poperties = self.getServicesSiteProperties(services, "hive-interactive-env")
     if hsi_env_poperties and 'enable_hive_interactive' in hsi_env_poperties:
       if hsi_env_poperties['enable_hive_interactive'] == 'true':
@@ -906,6 +910,18 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       self.logger.error("'{0}' was not found in the services".format(yarn_ats_app_cache_size_config))
 
     return yarn_ats_app_cache_size
+
+  def update_timeline_reader_address(self, configurations, services, property_name):
+    putYarnProperty = self.putProperty(configurations, 'yarn-site', services)
+    yarn_site = self.getServicesSiteProperties(services, 'yarn-site')
+    if yarn_site and property_name in yarn_site:
+      timeline_hosts = self.getHostsForComponent(services, 'YARN', 'TIMELINE_READER')
+      old_address = yarn_site[property_name]
+      if old_address and old_address.count(':') <= 1 and len(timeline_hosts) == 1:
+        new_address = re.sub('[^:]+', timeline_hosts[0], old_address, 1)
+        if old_address != new_address:
+          putYarnProperty(property_name, new_address)
+          self.logger.info('Updated YARN config {0} to {1}'.format(property_name, new_address))
 
   #region LLAP
   def updateLlapConfigs(self, configurations, services, hosts, llap_queue_name):

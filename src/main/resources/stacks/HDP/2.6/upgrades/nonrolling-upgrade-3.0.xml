@@ -521,6 +521,13 @@
         <task xsi:type="configure" id="hdp_30_remove_spark_classpaths_injections" />
       </execute-stage>
 
+      <execute-stage service="YARN" title="Apply config changes for Timeline Reader">
+        <task xsi:type="server_action"
+              class="org.apache.ambari.server.serveraction.upgrades.FixTimelineReaderAddress">
+          <summary>Setting YARN Timeline Reader Url</summary>
+        </task>
+      </execute-stage>
+
       <execute-stage>
         <task xsi:type="server_action"
               class="org.apache.ambari.server.serveraction.upgrades.FixCapacitySchedulerOrderingPolicy">
