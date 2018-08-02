@@ -685,8 +685,7 @@
 
     <service name="TEZ">
       <component name="TEZ_CLIENT">
-        <pre-upgrade>
-          <task xsi:type="configure" id="hdp_3_0_config_for_tez_das_hook" />
+        <pre-upgrade><!--  no-op  -->
         </pre-upgrade>
 
         <pre-downgrade/> <!--  no-op to prevent config changes on downgrade -->

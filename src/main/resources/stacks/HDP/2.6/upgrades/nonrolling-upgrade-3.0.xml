@@ -576,6 +576,12 @@
         <task xsi:type="configure" id="hdp_30_hive_log_file" />
       </execute-stage>
 
+      <execute-stage service="HIVE" component="HIVE_SERVER" title="Update Hive hook for DAS">
+        <task xsi:type="configure" id="hdp_3_0_config_for_hive_das_hook">
+          <summary>Update org.apache.hadoop.hive.ql.hooks.ATSHook to org.apache.hadoop.hive.ql.hooks.HiveProtoLoggingHook</summary>
+        </task>
+      </execute-stage>
+
       <execute-stage service="HIVE" component="HIVE_SERVER_INTERACTIVE" title="Update HSI hive jar path">
         <task xsi:type="configure" id="update_hsi_hive_jar_path" />
       </execute-stage>
