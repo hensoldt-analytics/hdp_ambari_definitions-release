@@ -166,11 +166,11 @@
             <scriptType>PYTHON</scriptType>
             <timeout>1200</timeout>
           </commandScript>
-           <bulkCommands>
-             <displayName>NodeManagers</displayName>
-             <!-- Used by decommission and recommission -->
-             <masterComponent>RESOURCEMANAGER</masterComponent>
-           </bulkCommands>
+          <bulkCommands>
+            <displayName>NodeManagers</displayName>
+            <!-- Used by decommission and recommission -->
+            <masterComponent>RESOURCEMANAGER</masterComponent>
+          </bulkCommands>
           <logs>
             <log>
               <logId>yarn_nodemanager</logId>
@@ -219,7 +219,7 @@
               <type>xml</type>
               <fileName>capacity-scheduler.xml</fileName>
               <dictionaryName>capacity-scheduler</dictionaryName>
-            </configFile>                        
+            </configFile>
             <configFile>
               <type>xml</type>
               <fileName>resource-types.xml</fileName>
@@ -267,7 +267,7 @@
         <scriptType>PYTHON</scriptType>
         <timeout>300</timeout>
       </commandScript>
-      
+
       <requiredServices>
         <service>HDFS</service>
         <service>MAPREDUCE2</service>
@@ -284,6 +284,48 @@
           <default>true</default>
         </theme>
       </themes>
+
+      <sso>
+        <supported>true</supported>
+        <kerberosRequired>true</kerberosRequired>
+        <ssoEnabledTest>
+          {
+          "or": [
+          {
+          "equals": [
+          "yarn-site/hadoop.http.authentication.type",
+          "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
+          ]
+          },
+          {
+          "equals": [
+          "core-site/hadoop.http.authentication.type",
+          "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
+          ]
+          }
+          ]
+          }
+        </ssoEnabledTest>
+      </sso>
+
+      <kerberosEnabledTest>
+        {
+        "or": [
+        {
+        "equals": [
+        "yarn-site/hadoop.security.authentication",
+        "kerberos"
+        ]
+        },
+        {
+        "equals": [
+        "core-site/hadoop.security.authentication",
+        "kerberos"
+        ]
+        }
+        ]
+        }
+      </kerberosEnabledTest>
 
       <quickLinksConfigurations>
         <quickLinksConfiguration>
@@ -330,7 +372,7 @@
             <enabled>true</enabled>
             <co-locate>YARN/RESOURCEMANAGER</co-locate>
           </auto-deploy>
-          
+
           <dependencies>
             <dependency>
               <name>HDFS/HDFS_CLIENT</name>
@@ -416,7 +458,7 @@
         <scriptType>PYTHON</scriptType>
         <timeout>300</timeout>
       </commandScript>
-      
+
       <requiredServices>
         <service>YARN</service>
       </requiredServices>
@@ -432,6 +474,48 @@
           <default>true</default>
         </theme>
       </themes>
+
+      <sso>
+        <supported>true</supported>
+        <kerberosRequired>true</kerberosRequired>
+        <ssoEnabledTest>
+          {
+          "or": [
+          {
+          "equals": [
+          "mapred-site/hadoop.http.authentication.type",
+          "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
+          ]
+          },
+          {
+          "equals": [
+          "core-site/hadoop.http.authentication.type",
+          "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
+          ]
+          }
+          ]
+          }
+        </ssoEnabledTest>
+      </sso>
+
+      <kerberosEnabledTest>
+        {
+        "or": [
+        {
+        "equals": [
+        "mapred-site/hadoop.security.authentication",
+        "kerberos"
+        ]
+        },
+        {
+        "equals": [
+        "core-site/hadoop.security.authentication",
+        "kerberos"
+        ]
+        }
+        ]
+        }
+      </kerberosEnabledTest>
 
       <quickLinksConfigurations-dir>quicklinks-mapred</quickLinksConfigurations-dir>
       <quickLinksConfigurations>

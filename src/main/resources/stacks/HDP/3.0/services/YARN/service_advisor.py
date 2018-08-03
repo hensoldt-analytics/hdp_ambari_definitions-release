@@ -65,7 +65,7 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyMastersWithMultipleInstances(self):
     """
     Modify the set of masters with multiple instances.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -73,7 +73,7 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyCardinalitiesDict(self):
     """
     Modify the dictionary of cardinalities.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -81,21 +81,21 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyHeapSizeProperties(self):
     """
     Modify the dictionary of heap size properties.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.heap_size_properties = {}
 
   def modifyNotValuableComponents(self):
     """
     Modify the set of components whose host assignment is based on other services.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.notValuableComponents.add("APP_TIMELINE_SERVER")
 
   def modifyComponentsNotPreferableOnServer(self):
     """
     Modify the set of components that are not preferable on the server.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -105,7 +105,7 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
     Modify layout scheme dictionaries for components.
     The scheme dictionary basically maps the number of hosts to
     host index where component should exist.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.componentLayoutSchemes.update({
       'APP_TIMELINE_SERVER': {31: 1, "else": 2},
@@ -114,7 +114,7 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
   def getServiceComponentLayoutValidations(self, services, hosts):
     """
     Get a list of errors.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.logger.info("Class: %s, Method: %s. Validating Service Component Layout." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
@@ -124,7 +124,7 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
     Entry point.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.logger.info("Class: %s, Method: %s. Recommending Service Configurations." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
@@ -142,6 +142,15 @@ class YARNServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendYARNConfigurationsFromHDP25(configurations, clusterData, services, hosts)
     recommender.recommendYARNConfigurationsFromHDP26(configurations, clusterData, services, hosts)
     recommender.recommendYARNConfigurationsFromHDP30(configurations, clusterData, services, hosts)
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
+
+  def getServiceConfigurationRecommendationsForSSO(self, configurations, clusterData, services, hosts):
+    """
+    Entry point.
+    Must be overridden in child class.
+    """
+    recommender = YARNRecommender()
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
     """
@@ -198,7 +207,7 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyMastersWithMultipleInstances(self):
     """
     Modify the set of masters with multiple instances.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -206,7 +215,7 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyCardinalitiesDict(self):
     """
     Modify the dictionary of cardinalities.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -214,14 +223,14 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyHeapSizeProperties(self):
     """
     Modify the dictionary of heap size properties.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.heap_size_properties = {}
 
   def modifyNotValuableComponents(self):
     """
     Modify the set of components whose host assignment is based on other services.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -229,7 +238,7 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyComponentsNotPreferableOnServer(self):
     """
     Modify the set of components that are not preferable on the server.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -239,7 +248,7 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
     Modify layout scheme dictionaries for components.
     The scheme dictionary basically maps the number of hosts to
     host index where component should exist.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.componentLayoutSchemes.update({
       'HISTORYSERVER': {31: 1, "else": 2},
@@ -248,7 +257,7 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
   def getServiceComponentLayoutValidations(self, services, hosts):
     """
     Get a list of errors.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.logger.info("Class: %s, Method: %s. Validating Service Component Layout." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
@@ -258,7 +267,7 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
     Entry point.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.logger.info("Class: %s, Method: %s. Recommending Service Configurations." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
@@ -267,6 +276,15 @@ class MAPREDUCE2ServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender = MAPREDUCE2Recommender()
     recommender.recommendMapReduce2ConfigurationsFromHDP206(configurations, clusterData, services, hosts)
     recommender.recommendMapReduce2ConfigurationsFromHDP22(configurations, clusterData, services, hosts)
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
+
+  def getServiceConfigurationRecommendationsForSSO(self, configurations, clusterData, services, hosts):
+    """
+    Entry point.
+    Must be overridden in child class.
+    """
+    recommender = MAPREDUCE2Recommender()
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
     """
@@ -863,6 +881,62 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
         if yarn_nm_mem_in_mb >= 10240 and total_cluster_capacity >= 51200:
            putYarnHBaseEnv("is_hbase_system_service_launch", "true")
         # Do not set to false in else
+
+  def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
+    ambari_configuration = self.get_ambari_configuration(services)
+    ambari_sso_details = ambari_configuration.get_ambari_sso_details() if ambari_configuration else None
+
+    if ambari_sso_details and ambari_sso_details.is_managing_services():
+      putYarnSiteProperty = self.putProperty(configurations, "yarn-site", services)
+
+      # If SSO should be enabled for this service
+      if ambari_sso_details.should_enable_sso('YARN'):
+        if(self.is_kerberos_enabled(configurations, services)):
+          putYarnSiteProperty('hadoop.http.authentication.type', "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler")
+          putYarnSiteProperty('hadoop.http.authentication.authentication.provider.url', ambari_sso_details.get_sso_provider_url())
+          putYarnSiteProperty('hadoop.http.authentication.public.key.pem', ambari_sso_details.get_sso_provider_certificate(False, True))
+        else:
+          # Since Kerberos is not enabled, we can not enable SSO
+          self.logger.warn("Enabling SSO integration for Yarn requires Kerberos, Since Kerberos is not enabled, SSO integration is not being recommended.")
+          putYarnSiteProperty('hadoop.http.authentication.type', "simple")
+          pass
+
+      # If SSO should be disabled for this service
+      elif ambari_sso_details.should_disable_sso('YARN'):
+        if(self.is_kerberos_enabled(configurations, services)):
+          putYarnSiteProperty('hadoop.http.authentication.type', "kerberos")
+        else:
+          putYarnSiteProperty('hadoop.http.authentication.type', "simple")
+
+  def is_kerberos_enabled(self, configurations, services):
+    """
+    Tests if Yarn has Kerberos enabled by first checking the recommended changes and then the
+    existing settings.
+    :type configurations dict
+    :type services dict
+    :rtype bool
+    """
+    return self._is_kerberos_enabled(configurations) or \
+           (services and 'configurations' in services and self._is_kerberos_enabled(services['configurations']))
+
+  def _is_kerberos_enabled(self, config):
+    """
+    Detects if Yarn has Kerberos enabled given a dictionary of configurations.
+    :type config dict
+    :rtype bool
+    """
+    return config and \
+           (
+             (
+               "yarn-site" in config and
+               'hadoop.security.authentication' in config['yarn-site']["properties"] and
+               config['yarn-site']["properties"]['hadoop.security.authentication'] == 'kerberos'
+             ) or (
+               "core-site" in config and
+               'hadoop.security.authentication' in config['core-site']["properties"] and
+               config['core-site']["properties"]['hadoop.security.authentication'] == 'kerberos'
+             )
+           )
 
   """
   Calculate YARN config 'apptimelineserver_heapsize' in MB.
@@ -2163,6 +2237,62 @@ class MAPREDUCE2Recommender(YARNRecommender):
     mr_queue = self.recommendYarnQueue(services, "mapred-site", "mapreduce.job.queuename")
     if mr_queue is not None:
       putMapredProperty("mapreduce.job.queuename", mr_queue)
+
+  def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
+    ambari_configuration = self.get_ambari_configuration(services)
+    ambari_sso_details = ambari_configuration.get_ambari_sso_details() if ambari_configuration else None
+
+    if ambari_sso_details and ambari_sso_details.is_managing_services():
+      putMapRedSiteProperty = self.putProperty(configurations, "mapred-site", services)
+
+      # If SSO should be enabled for this service
+      if ambari_sso_details.should_enable_sso('MAPREDUCE2'):
+        if(self.is_kerberos_enabled(configurations, services)):
+          putMapRedSiteProperty('hadoop.http.authentication.type', "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler")
+          putMapRedSiteProperty('hadoop.http.authentication.authentication.provider.url', ambari_sso_details.get_sso_provider_url())
+          putMapRedSiteProperty('hadoop.http.authentication.public.key.pem', ambari_sso_details.get_sso_provider_certificate(False, True))
+        else:
+          # Since Kerberos is not enabled, we can not enable SSO
+          self.logger.warn("Enabling SSO integration for MapReduce requires Kerberos, Since Kerberos is not enabled, SSO integration is not being recommended.")
+          putMapRedSiteProperty('hadoop.http.authentication.type', "simple")
+          pass
+
+      # If SSO should be disabled for this service
+      elif ambari_sso_details.should_disable_sso('MAPREDUCE2'):
+        if(self.is_kerberos_enabled(configurations, services)):
+          putMapRedSiteProperty('hadoop.http.authentication.type', "kerberos")
+        else:
+          putMapRedSiteProperty('hadoop.http.authentication.type', "simple")
+
+  def is_kerberos_enabled(self, configurations, services):
+    """
+    Tests if MapReduce has Kerberos enabled by first checking the recommended changes and then the
+    existing settings.
+    :type configurations dict
+    :type services dict
+    :rtype bool
+    """
+    return self._is_kerberos_enabled(configurations) or \
+           (services and 'configurations' in services and self._is_kerberos_enabled(services['configurations']))
+
+  def _is_kerberos_enabled(self, config):
+    """
+    Detects if MapReduce has Kerberos enabled given a dictionary of configurations.
+    :type config dict
+    :rtype bool
+    """
+    return config and \
+           (
+             (
+               "mapred-site" in config and
+               'hadoop.security.authentication' in config['mapred-site']["properties"] and
+               config['mapred-site']["properties"]['hadoop.security.authentication'] == 'kerberos'
+             ) or (
+               "core-site" in config and
+               'hadoop.security.authentication' in config['core-site']["properties"] and
+               config['core-site']["properties"]['hadoop.security.authentication'] == 'kerberos'
+             )
+           )
 
 
 class YARNValidator(service_advisor.ServiceAdvisor):
