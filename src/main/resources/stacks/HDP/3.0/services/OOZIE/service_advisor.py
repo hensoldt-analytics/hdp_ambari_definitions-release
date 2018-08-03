@@ -57,7 +57,7 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyMastersWithMultipleInstances(self):
     """
     Modify the set of masters with multiple instances.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -66,7 +66,7 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyCardinalitiesDict(self):
     """
     Modify the dictionary of cardinalities.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -75,7 +75,7 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyHeapSizeProperties(self):
     """
     Modify the dictionary of heap size properties.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     pass
 
@@ -83,7 +83,7 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyNotValuableComponents(self):
     """
     Modify the set of components whose host assignment is based on other services.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -92,7 +92,7 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyComponentsNotPreferableOnServer(self):
     """
     Modify the set of components that are not preferable on the server.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -103,7 +103,7 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
     Modify layout scheme dictionaries for components.
     The scheme dictionary basically maps the number of hosts to
     host index where component should exist.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -112,7 +112,7 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
   def getServiceComponentLayoutValidations(self, services, hosts):
     """
     Get a list of errors.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
 
     return self.getServiceComponentCardinalityValidations(services, hosts, "OOZIE")
@@ -121,14 +121,22 @@ class OozieServiceAdvisor(service_advisor.ServiceAdvisor):
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
     Entry point.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.logger.info("Class: %s, Method: %s. Recommending Service Configurations." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
 
     recommender = OozieRecommender()
     recommender.recommendOozieConfigurationsFromHDP30(configurations, clusterData, services, hosts)
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
 
+  def getServiceConfigurationRecommendationsForSSO(self, configurations, clusterData, services, hosts):
+    """
+    Entry point.
+    Must be overridden in child class.
+    """
+    recommender = OozieRecommender()
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
     """
@@ -367,3 +375,55 @@ class OozieRecommender(service_advisor.ServiceAdvisor):
 
     services["forced-configurations"].append({"type" : "oozie-env", "name" : "oozie_admin_users"})
     putOozieEnvProperty("oozie_admin_users", newAdminUsers)
+
+  def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
+    ambari_configuration = self.get_ambari_configuration(services)
+    ambari_sso_details = ambari_configuration.get_ambari_sso_details() if ambari_configuration else None
+
+    if ambari_sso_details and ambari_sso_details.is_managing_services():
+      putOozieSiteProperty = self.putProperty(configurations, "oozie-site", services)
+
+      # If SSO should be enabled for this service
+      if ambari_sso_details.should_enable_sso('OOZIE'):
+        if(self.is_kerberos_enabled(configurations, services)):
+          putOozieSiteProperty('oozie.authentication.type', "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler")
+          putOozieSiteProperty('oozie.authentication.authentication.provider.url', ambari_sso_details.get_sso_provider_url())
+          putOozieSiteProperty('oozie.authentication.public.key.pem', ambari_sso_details.get_sso_provider_certificate(False, True))
+          putOozieSiteProperty('oozie.authentication.expected.jwt.audiences', ambari_sso_details.get_jwt_audiences())
+          putOozieSiteProperty('oozie.authentication.jwt.cookie', ambari_sso_details.get_jwt_cookie_name())
+        else:
+          # Since Kerberos is not enabled, we can not enable SSO
+          self.logger.warn("Enabling SSO integration for Oozie requires Kerberos, Since Kerberos is not enabled, SSO integration is not being recommended.")
+          pass
+
+      # If SSO should be disabled for this service
+      elif ambari_sso_details.should_disable_sso('OOZIE'):
+        if(self.is_kerberos_enabled(configurations, services)):
+          putOozieSiteProperty('oozie.authentication.type', "kerberos")
+        else:
+          pass
+
+  def is_kerberos_enabled(self, configurations, services):
+    """
+    Tests if Oozie has Kerberos enabled by first checking the recommended changes and then the
+    existing settings.
+    :type configurations dict
+    :type services dict
+    :rtype bool
+    """
+    return self._is_kerberos_enabled(configurations) or \
+           (services and 'configurations' in services and self._is_kerberos_enabled(services['configurations']))
+
+  def _is_kerberos_enabled(self, config):
+    """
+    Detects if Oozie has Kerberos enabled given a dictionary of configurations.
+    :type config dict
+    :rtype bool
+    """
+    return config and \
+           (
+             "oozie-site" in config and
+             'oozie.authentication.type' in config['oozie-site']["properties"] and
+             (config['oozie-site']["properties"]['oozie.authentication.type'] == 'kerberos' or
+              config['oozie-site']["properties"]['oozie.authentication.type'] == 'org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler')
+           )

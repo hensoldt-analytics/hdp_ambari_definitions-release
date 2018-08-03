@@ -21,7 +21,10 @@
     <service>
       <name>OOZIE</name>
       <displayName>Oozie</displayName>
-      <comment>System for workflow coordination and execution of Apache Hadoop jobs.  This also includes the installation of the optional Oozie Web Console which relies on and will install the &lt;a target="_blank" href="http://www.sencha.com/legal/open-source-faq/"&gt;ExtJS&lt;/a&gt; Library.
+      <comment>System for workflow coordination and execution of Apache Hadoop jobs. This also
+        includes the installation of the optional Oozie Web Console which relies on and will install
+        the &lt;a target="_blank" href="http://www.sencha.com/legal/open-source-faq/"&gt;ExtJS&lt;/a&gt;
+        Library.
       </comment>
       <version>4.4.0</version>
       <credential-store>
@@ -186,6 +189,38 @@
           <default>true</default>
         </theme>
       </themes>
+
+      <sso>
+        <supported>true</supported>
+        <kerberosRequired>true</kerberosRequired>
+        <ssoEnabledTest>
+          {
+          "equals": [
+          "oozie-site/oozie.authentication.type",
+          "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
+          ]
+          }
+        </ssoEnabledTest>
+      </sso>
+
+      <kerberosEnabledTest>
+        {
+        "or": [
+        {
+        "equals": [
+        "oozie-site/oozie.authentication.type",
+        "kerberos"
+        ]
+        },
+        {
+        "equals": [
+        "oozie-site/oozie.authentication.type",
+        "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
+        ]
+        }
+        ]
+        }
+      </kerberosEnabledTest>
 
       <quickLinksConfigurations>
         <quickLinksConfiguration>
