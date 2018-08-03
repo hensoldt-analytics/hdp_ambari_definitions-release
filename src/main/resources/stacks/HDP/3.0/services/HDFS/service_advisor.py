@@ -60,7 +60,7 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyMastersWithMultipleInstances(self):
     """
     Modify the set of masters with multiple instances.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -68,7 +68,7 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyCardinalitiesDict(self):
     """
     Modify the dictionary of cardinalities.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -76,7 +76,7 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyHeapSizeProperties(self):
     """
     Modify the dictionary of heap size properties.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.heap_size_properties = {"NAMENODE":
                                    [{"config-name": "hadoop-env",
@@ -94,14 +94,14 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
   def modifyNotValuableComponents(self):
     """
     Modify the set of components whose host assignment is based on other services.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.notValuableComponents |= set(['JOURNALNODE', 'ZKFC'])
 
   def modifyComponentsNotPreferableOnServer(self):
     """
     Modify the set of components that are not preferable on the server.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     # Nothing to do
     pass
@@ -111,7 +111,7 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
     Modify layout scheme dictionaries for components.
     The scheme dictionary basically maps the number of hosts to
     host index where component should exist.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.componentLayoutSchemes.update({
       'NAMENODE': {"else": 0},
@@ -121,7 +121,7 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
   def getServiceComponentLayoutValidations(self, services, hosts):
     """
     Get a list of errors.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.logger.info("Class: %s, Method: %s. Validating Service Component Layout." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
@@ -132,7 +132,7 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
     Entry point.
-    Must be overriden in child class.
+    Must be overridden in child class.
     """
     self.logger.info("Class: %s, Method: %s. Recommending Service Configurations." %
                 (self.__class__.__name__, inspect.stack()[0][3]))
@@ -143,6 +143,15 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendConfigurationsFromHDP22(configurations, clusterData, services, hosts)
     recommender.recommendConfigurationsFromHDP23(configurations, clusterData, services, hosts)
     recommender.recommendConfigurationsFromHDP26(configurations, clusterData, services, hosts)
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
+
+  def getServiceConfigurationRecommendationsForSSO(self, configurations, clusterData, services, hosts):
+    """
+    Entry point.
+    Must be overridden in child class.
+    """
+    recommender = HDFSRecommender()
+    recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
     """
@@ -472,6 +481,61 @@ class HDFSRecommender(service_advisor.ServiceAdvisor):
     else:
       self.logger.info("Not setting HDFS Repo user for Ranger.")
 
+  def recommendConfigurationsForSSO(self, configurations, clusterData, services, hosts):
+    ambari_configuration = self.get_ambari_configuration(services)
+    ambari_sso_details = ambari_configuration.get_ambari_sso_details() if ambari_configuration else None
+
+    if ambari_sso_details and ambari_sso_details.is_managing_services():
+      putHdfsSiteProperty = self.putProperty(configurations, "hdfs-site", services)
+
+      # If SSO should be enabled for this service
+      if ambari_sso_details.should_enable_sso('HDFS'):
+        if(self.is_kerberos_enabled(configurations, services)):
+          putHdfsSiteProperty('hadoop.http.authentication.type', "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler")
+          putHdfsSiteProperty('hadoop.http.authentication.authentication.provider.url', ambari_sso_details.get_sso_provider_url())
+          putHdfsSiteProperty('hadoop.http.authentication.public.key.pem', ambari_sso_details.get_sso_provider_certificate(False, True))
+        else:
+          # Since Kerberos is not enabled, we can not enable SSO
+          self.logger.warn("Enabling SSO integration for HDFS requires Kerberos, Since Kerberos is not enabled, SSO integration is not being recommended.")
+          putHdfsSiteProperty('hadoop.http.authentication.type', "simple")
+          pass
+
+      # If SSO should be disabled for this service
+      elif ambari_sso_details.should_disable_sso('HDFS'):
+        if(self.is_kerberos_enabled(configurations, services)):
+          putHdfsSiteProperty('hadoop.http.authentication.type', "kerberos")
+        else:
+          putHdfsSiteProperty('hadoop.http.authentication.type', "simple")
+
+  def is_kerberos_enabled(self, configurations, services):
+    """
+    Tests if HDFS has Kerberos enabled by first checking the recommended changes and then the
+    existing settings.
+    :type configurations dict
+    :type services dict
+    :rtype bool
+    """
+    return self._is_kerberos_enabled(configurations) or \
+           (services and 'configurations' in services and self._is_kerberos_enabled(services['configurations']))
+
+  def _is_kerberos_enabled(self, config):
+    """
+    Detects if HDFS has Kerberos enabled given a dictionary of configurations.
+    :type config dict
+    :rtype bool
+    """
+    return config and \
+           (
+             (
+               "hdfs-site" in config and
+               'hadoop.security.authentication' in config['hdfs-site']["properties"] and
+               config['hdfs-site']["properties"]['hadoop.security.authentication'] == 'kerberos'
+             ) or (
+               "core-site" in config and
+               'hadoop.security.authentication' in config['core-site']["properties"] and
+               config['core-site']["properties"]['hadoop.security.authentication'] == 'kerberos'
+             )
+           )
 
 class HDFSValidator(service_advisor.ServiceAdvisor):
   """

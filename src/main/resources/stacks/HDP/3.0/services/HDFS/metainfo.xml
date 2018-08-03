@@ -126,7 +126,7 @@
               <commandScript>
                 <script>scripts/namenode.py</script>
                 <scriptType>PYTHON</scriptType>
-              <timeout>600</timeout>
+                <timeout>600</timeout>
               </commandScript>
             </customCommand>
           </customCommands>
@@ -205,7 +205,7 @@
               <type>env</type>
               <fileName>log4j.properties</fileName>
               <dictionaryName>hdfs-log4j,yarn-log4j</dictionaryName>
-            </configFile>                          
+            </configFile>
             <configFile>
               <type>env</type>
               <fileName>hadoop-env.sh</fileName>
@@ -225,9 +225,9 @@
             <scriptType>PYTHON</scriptType>
             <timeout>1200</timeout>
           </commandScript>
-           <bulkCommands>
-              <displayName>JournalNodes</displayName>
-              <masterComponent>NAMENODE</masterComponent>
+          <bulkCommands>
+            <displayName>JournalNodes</displayName>
+            <masterComponent>NAMENODE</masterComponent>
           </bulkCommands>
           <logs>
             <log>
@@ -309,7 +309,7 @@
             </package>
           </packages>
         </osSpecific>
-        
+
         <osSpecific>
           <osFamily>redhat7,amazonlinux2,redhat6,suse11</osFamily>
           <packages>
@@ -330,7 +330,7 @@
             </package>
           </packages>
         </osSpecific>
-        
+
         <osSpecific>
           <osFamily>suse12</osFamily>
           <packages>
@@ -415,7 +415,7 @@
               <name>libhdfs0-${stack_version}</name>
             </package>
           </packages>
-      </osSpecific>
+        </osSpecific>
       </osSpecifics>
 
       <commandScript>
@@ -423,7 +423,7 @@
         <scriptType>PYTHON</scriptType>
         <timeout>300</timeout>
       </commandScript>
-      
+
       <configuration-dependencies>
         <config-type>core-site</config-type>
         <config-type>viewfs-mount-table</config-type>
@@ -441,6 +441,48 @@
         <config-type>hadoop-metrics2.properties</config-type>
       </configuration-dependencies>
       <restartRequiredAfterRackChange>true</restartRequiredAfterRackChange>
+
+      <sso>
+        <supported>true</supported>
+        <kerberosRequired>true</kerberosRequired>
+        <ssoEnabledTest>
+          {
+          "or": [
+          {
+          "equals": [
+          "hdfs-site/hadoop.http.authentication.type",
+          "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
+          ]
+          },
+          {
+          "equals": [
+          "core-site/hadoop.http.authentication.type",
+          "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
+          ]
+          }
+          ]
+          }
+        </ssoEnabledTest>
+      </sso>
+
+      <kerberosEnabledTest>
+        {
+        "or": [
+        {
+        "equals": [
+        "hdfs-site/hadoop.security.authentication",
+        "kerberos"
+        ]
+        },
+        {
+        "equals": [
+        "core-site/hadoop.security.authentication",
+        "kerberos"
+        ]
+        }
+        ]
+        }
+      </kerberosEnabledTest>
 
       <quickLinksConfigurations>
         <quickLinksConfiguration>
