@@ -33,6 +33,9 @@ from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.resources.properties_file import PropertiesFile
 from resource_management.core.shell import as_sudo
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
+
 
 class Superset(Script):
 
@@ -91,6 +94,8 @@ class Superset(Script):
     if len(params.druid_coordinator_hosts) > 0 :
       Execute(format("source {params.superset_config_dir}/superset-env.sh ; {params.superset_bin_dir}/superset configure_druid_cluster --name druid-ambari --coordinator-host {params.druid_coordinator_host} --coordinator-port {params.druid_coordinator_port} --broker-host {params.druid_router_host} --broker-port {params.druid_router_port} --coordinator-endpoint druid/coordinator/v1 --broker-endpoint druid/v2"),
             user=params.superset_user)
+
+      generate_logfeeder_input_config('superset', Template("input.config-superset.json.j2", extra_imports=[default]))
 
   def pre_upgrade_restart(self, env, upgrade_type=None):
     Logger.info("Executing superset Upgrade pre-restart")

@@ -27,7 +27,9 @@ from resource_management.libraries.functions import format
 from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.libraries.resources.template_config import TemplateConfig
 from resource_management.core.logger import Logger
-
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
+from resource_management.core.source import Template
 
 def druid(upgrade_type=None, nodeType=None):
   import params
@@ -135,6 +137,8 @@ def druid(upgrade_type=None, nodeType=None):
                 format('{sudo} cp {hadoop_lib_home}/hadoop-lzo*.jar {druid_hadoop_dependencies_dir}/hadoop-client/*/'))
         except Fail as ex:
             Logger.info(format("No Hadoop LZO found at {hadoop_lib_home}/hadoop-lzo*.jar"))
+
+  generate_logfeeder_input_config('druid', Template("input.config-druid.json.j2", extra_imports=[default]))
 
   # All druid nodes have dependency on hdfs_client
   ensure_hadoop_directories()
