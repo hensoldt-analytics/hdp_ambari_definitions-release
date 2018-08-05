@@ -227,7 +227,7 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
     """
     If Kerberos is enabled AND Zeppelin is installed AND Spark2 Livy Server is installed, then set
     livy2-conf/livy.superusers to contain the Zeppelin principal name from
-    zeppelin-env/zeppelin.server.kerberos.principal
+    zeppelin-site/zeppelin.server.kerberos.principal
 
     :param configurations:
     :param services:

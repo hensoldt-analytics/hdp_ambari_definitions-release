@@ -188,16 +188,16 @@ class ZeppelinRecommender(service_advisor.ServiceAdvisor):
     """
     If Kerberos is enabled AND Zeppelin is installed and Spark Livy Server is installed, then set
     livy-conf/livy.superusers to contain the Zeppelin principal name from
-    zeppelin-env/zeppelin.server.kerberos.principal
+    zeppelin-site/zeppelin.server.kerberos.principal
 
     :param configurations:
     :param services:
     """
     if ZeppelinServiceAdvisor.isKerberosEnabled(services, configurations):
-      zeppelin_env = self.getServicesSiteProperties(services, "zeppelin-env")
+      zeppelin_site = self.getServicesSiteProperties(services, "zeppelin-site")
 
-      if zeppelin_env and 'zeppelin.server.kerberos.principal' in zeppelin_env:
-        zeppelin_principal = zeppelin_env['zeppelin.server.kerberos.principal']
+      if zeppelin_site and 'zeppelin.server.kerberos.principal' in zeppelin_site:
+        zeppelin_principal = zeppelin_site['zeppelin.server.kerberos.principal']
         zeppelin_user = zeppelin_principal.split('@')[0] if zeppelin_principal else None
 
         if zeppelin_user:
