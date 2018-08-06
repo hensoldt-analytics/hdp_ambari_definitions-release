@@ -59,7 +59,8 @@ class HiveMetastore(Script):
     self.configure(env)
     if params.init_metastore_schema:
       create_metastore_schema() # execute without config lock
-      create_hive_metastore_schema() # before starting metastore create info schema
+
+    create_hive_metastore_schema() # before starting metastore create info schema
 
     hive_service('metastore', action='start', upgrade_type=upgrade_type)
 
