@@ -38,9 +38,9 @@ CRITICAL_RESULT_CODE = 'CRITICAL'
 OK_RESULT_CODE = 'OK'
 UKNOWN_STATUS_CODE = 'UNKNOWN'
 
-OK_MESSAGE = "The application reported a '{0}' state in {1:.3f}s"
+OK_MESSAGE = "The HBase application reported a '{0}' state in {1:.3f}s"
 MESSAGE_WITH_STATE_AND_INSTANCES = "The application reported a '{0}' state in {1:.3f}s. [Live: {2}, Desired: {3}]"
-CRITICAL_MESSAGE_WITH_STATE = "The application reported a '{0}' state. Check took {1:.3f}s"
+CRITICAL_MESSAGE_WITH_STATE = "The HBase application reported a '{0}' state. Check took {1:.3f}s"
 CRITICAL_MESSAGE = "ats-hbase service information could not be retrieved"
 
 
@@ -54,7 +54,6 @@ ATS_HBASE_PRINCIPAL_KEYTAB_KEY = '{{yarn-hbase-site/hbase.master.keytab.file}}'
 ATS_HBASE_USER_KEY = '{{yarn-env/yarn_ats_user}}'
 ATS_HBASE_SYSTEM_SERVICE_LAUNCH_KEY = '{{yarn-hbase-env/is_hbase_system_service_launch}}'
 USE_EXTERNAL_HBASE_KEY = '{{yarn-hbase-env/use_external_hbase}}'
-ATS_HBASE_APP_NAME_KEY = 'ats-hbase'
 ATS_HBASE_PID_DIR_PREFIX = '{{yarn-hbase-env/yarn_hbase_pid_dir_prefix}}'
 
 ATS_HBASE_APP_NOT_FOUND_KEY = format("Service {ATS_HBASE_APP_NAME_KEY} not found")
@@ -76,7 +75,7 @@ def get_tokens():
     to build the dictionary passed into execute
     """
     return (SECURITY_ENABLED_KEY, KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY, ATS_HBASE_PRINCIPAL_KEY, ATS_HBASE_PRINCIPAL_KEYTAB_KEY,
-            ATS_HBASE_USER_KEY, STACK_ROOT, ATS_HBASE_APP_NAME_KEY, USE_EXTERNAL_HBASE_KEY, ATS_HBASE_PID_DIR_PREFIX)
+            ATS_HBASE_USER_KEY, STACK_ROOT, USE_EXTERNAL_HBASE_KEY, ATS_HBASE_PID_DIR_PREFIX, ATS_HBASE_SYSTEM_SERVICE_LAUNCH_KEY)
 
 
 def execute(configurations={}, parameters={}, host_name=None):
@@ -169,12 +168,11 @@ def execute(configurations={}, parameters={}, host_name=None):
                     kinit_lock.release()
 
             start_time = time.time()
-            ats_hbase_status_cmd = STACK_ROOT_DEFAULT + format("/current/hadoop-yarn-client/bin/yarn app -status {ATS_HBASE_APP_NAME_KEY}")
+            ats_hbase_status_cmd = STACK_ROOT_DEFAULT + format("/current/hadoop-yarn-client/bin/yarn app -status ats-hbase")
 
             code, output, error = shell.checked_call(ats_hbase_status_cmd, user=yarn_hbase_user, stderr=subprocess.PIPE,
                                                  timeout=check_command_timeout,
                                                  logoutput=False)
-
             if code != 0:
                 alert_label = traceback.format_exc()
                 result_code = UKNOWN_STATUS_CODE
@@ -195,6 +193,7 @@ def execute(configurations={}, parameters={}, host_name=None):
                 return (result_code, [alert_label])
 
             retrieved_ats_hbase_app_state = ats_hbase_app_info['state'].upper()
+
             if retrieved_ats_hbase_app_state in ['STABLE']:
                 result_code = OK_RESULT_CODE
                 total_time = time.time() - start_time
@@ -206,7 +205,7 @@ def execute(configurations={}, parameters={}, host_name=None):
     except:
         alert_label = traceback.format_exc()
         traceback.format_exc()
-        result_code = UKNOWN_STATUS_CODE
+        result_code = CRITICAL_RESULT_CODE
     return (result_code, [alert_label])
 
 
