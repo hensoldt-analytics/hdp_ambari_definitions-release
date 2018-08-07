@@ -252,29 +252,34 @@ def yarn(name=None, config_dir=None):
     File(os.path.join(config_dir, 'yarn_jaas.conf'),
          owner=params.yarn_user,
          group=params.user_group,
+         mode=0644,
          content=Template("yarn_jaas.conf.j2")
     )
     if params.has_ats:
       File(os.path.join(config_dir, 'yarn_ats_jaas.conf'),
            owner=params.yarn_user,
            group=params.user_group,
+           mode=0644,
            content=Template("yarn_ats_jaas.conf.j2")
       )
     if params.has_registry_dns:
       File(os.path.join(config_dir, 'yarn_registry_dns_jaas.conf'),
            owner=params.yarn_user,
            group=params.user_group,
+           mode=0644,
            content=Template("yarn_registry_dns_jaas.conf.j2")
       )
     File(os.path.join(config_dir, 'yarn_nm_jaas.conf'),
          owner=params.yarn_user,
          group=params.user_group,
+         mode=0644,
          content=Template("yarn_nm_jaas.conf.j2")
     )
     if params.has_hs:
       File(os.path.join(config_dir, 'mapred_jaas.conf'),
            owner=params.mapred_user,
            group=params.user_group,
+           mode=0644,
            content=Template("mapred_jaas.conf.j2")
       )
   else:
@@ -287,6 +292,7 @@ def yarn(name=None, config_dir=None):
             conf_dir=config_dir,
             configurations=params.config['configurations']['mapred-site'],
             configuration_attributes=params.config['configurationAttributes']['mapred-site'],
+            mode=0644,
             owner=params.mapred_user,
             group=params.user_group
   )
@@ -296,6 +302,7 @@ def yarn(name=None, config_dir=None):
             configurations=params.config['configurations'][
               'capacity-scheduler'],
             configuration_attributes=params.config['configurationAttributes']['capacity-scheduler'],
+            mode=0644,
             owner=params.hdfs_user,
             group=params.user_group
   )
@@ -305,6 +312,7 @@ def yarn(name=None, config_dir=None):
               conf_dir=config_dir,
               configurations=params.config['configurations']['ssl-client'],
               configuration_attributes=params.config['configurationAttributes']['ssl-client'],
+              mode=0644,
               owner=params.hdfs_user,
               group=params.user_group
     )
@@ -329,11 +337,13 @@ def yarn(name=None, config_dir=None):
               conf_dir=config_dir,
               configurations=params.config['configurations']['ssl-server'],
               configuration_attributes=params.config['configurationAttributes']['ssl-server'],
+              mode=0644,
               owner=params.hdfs_user,
               group=params.user_group
     )
   if os.path.exists(os.path.join(config_dir, 'fair-scheduler.xml')):
     File(os.path.join(config_dir, 'fair-scheduler.xml'),
+         mode=0644,
          owner=params.mapred_user,
          group=params.user_group
     )
@@ -341,6 +351,7 @@ def yarn(name=None, config_dir=None):
   if os.path.exists(
     os.path.join(config_dir, 'ssl-client.xml.example')):
     File(os.path.join(config_dir, 'ssl-client.xml.example'),
+         mode=0644,
          owner=params.mapred_user,
          group=params.user_group
     )
@@ -348,6 +359,7 @@ def yarn(name=None, config_dir=None):
   if os.path.exists(
     os.path.join(config_dir, 'ssl-server.xml.example')):
     File(os.path.join(config_dir, 'ssl-server.xml.example'),
+         mode=0644,
          owner=params.mapred_user,
          group=params.user_group
     )

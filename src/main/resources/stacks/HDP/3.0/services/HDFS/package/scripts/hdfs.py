@@ -59,17 +59,20 @@ def hdfs(name=None):
     File(os.path.join(params.hadoop_conf_dir, 'hdfs_dn_jaas.conf'),
          owner=params.hdfs_user,
          group=params.user_group,
+         mode=0644,
          content=Template("hdfs_dn_jaas.conf.j2")
     )
     File(os.path.join(params.hadoop_conf_dir, 'hdfs_nn_jaas.conf'),
          owner=params.hdfs_user,
          group=params.user_group,
+         mode=0644,
          content=Template("hdfs_nn_jaas.conf.j2")
     )
     if params.dfs_ha_enabled:
       File(os.path.join(params.hadoop_conf_dir, 'hdfs_jn_jaas.conf'),
            owner=params.hdfs_user,
            group=params.user_group,
+           mode=0644,
            content=Template("hdfs_jn_jaas.conf.j2")
       )
 
@@ -83,6 +86,7 @@ def hdfs(name=None):
     XmlConfig("hadoop-policy.xml",
               conf_dir=params.hadoop_conf_dir,
               configurations=params.config['configurations']['hadoop-policy'],
+              mode=0644,
               configuration_attributes=params.config['configurationAttributes']['hadoop-policy'],
               owner=params.hdfs_user,
               group=params.user_group
@@ -93,6 +97,7 @@ def hdfs(name=None):
               conf_dir=params.hadoop_conf_dir,
               configurations=params.config['configurations']['ssl-client'],
               configuration_attributes=params.config['configurationAttributes']['ssl-client'],
+              mode=0644,
               owner=params.hdfs_user,
               group=params.user_group
     )
@@ -117,6 +122,7 @@ def hdfs(name=None):
               conf_dir=params.hadoop_conf_dir,
               configurations=params.config['configurations']['ssl-server'],
               configuration_attributes=params.config['configurationAttributes']['ssl-server'],
+              mode=0644,
               owner=params.hdfs_user,
               group=params.user_group
     )
@@ -125,6 +131,7 @@ def hdfs(name=None):
             conf_dir=params.hadoop_conf_dir,
             configurations=params.config['configurations']['hdfs-site'],
             configuration_attributes=params.config['configurationAttributes']['hdfs-site'],
+            mode=0644,
             owner=params.hdfs_user,
             group=params.user_group
   )
