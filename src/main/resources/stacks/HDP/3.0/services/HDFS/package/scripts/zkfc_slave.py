@@ -167,6 +167,11 @@ def initialize_ha_zookeeper(params):
       elif code == 2:
         Logger.info("HA state already initialized in ZooKeeper")
         return True
+      # Precondition to starting zkfc is being formatted.
+      # So zkfc being already started means format was already done.
+      elif code == 1 and "zkfc is running as process " in out:
+        Logger.info("HA state already initialized in ZooKeeper, since '{0}'".format(out))
+        return True
       else:
         Logger.warning('HA state initialization in ZooKeeper failed with %d error code. Will retry' % (code))
   except Exception as ex:
