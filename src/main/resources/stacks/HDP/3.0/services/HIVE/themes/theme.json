@@ -230,7 +230,7 @@
           "subsection-name": "interactive-query-row1-col1"
         },
         {
-          "config": "hive-interactive-site/hive.llap.daemon.queue.name",
+          "config": "hive-interactive-env/enable_wm",
           "subsection-name": "interactive-query-row1-col1",
           "depends-on": [
             {
@@ -238,6 +238,29 @@
                 "hive-interactive-env/enable_hive_interactive"
               ],
               "if": "${hive-interactive-env/enable_hive_interactive}",
+              "then": {
+                "property_value_attributes": {
+                  "visible": true
+                }
+              },
+              "else": {
+                "property_value_attributes": {
+                  "visible": false
+                }
+              }
+            }
+          ]
+        },
+        {
+          "config": "hive-interactive-site/hive.llap.daemon.queue.name",
+          "subsection-name": "interactive-query-row1-col1",
+          "depends-on": [
+            {
+              "configs":[
+                "hive-interactive-env/enable_hive_interactive",
+                "hive-interactive-env/enable_wm"
+              ],
+              "if": "${hive-interactive-env/enable_hive_interactive} && ${hive-interactive-env/enable_wm} === false",
               "then": {
                 "property_value_attributes": {
                   "visible": true
@@ -279,9 +302,10 @@
           "depends-on": [
             {
               "configs":[
-                "hive-interactive-env/enable_hive_interactive"
+                "hive-interactive-env/enable_hive_interactive",
+                "hive-interactive-env/enable_wm"
               ],
-              "if": "${hive-interactive-env/enable_hive_interactive}",
+              "if": "${hive-interactive-env/enable_hive_interactive} && ${hive-interactive-env/enable_wm} === false",
               "then": {
                 "property_value_attributes": {
                   "visible": true
@@ -561,6 +585,12 @@
         }
       },
       {
+        "config": "hive-interactive-env/enable_wm",
+        "widget": {
+          "type": "toggle"
+        }
+      },
+      {
         "config": "hive-interactive-site/hive.llap.daemon.queue.name",
         "widget": {
           "type": "combo"
@@ -632,6 +662,12 @@
         "config": "hive-interactive-site/hive.server2.active.passive.ha.registry.namespace",
         "widget": {
           "type": "text-field"
+        }
+      },
+      {
+        "config": "hive-interactive-site/hive.server2.active.passive.ha.enable",
+        "widget": {
+          "type": "toggle"
         }
       },
       {
