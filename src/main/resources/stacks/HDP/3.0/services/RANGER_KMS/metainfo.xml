@@ -87,6 +87,8 @@
         <config-type>ranger-kms-policymgr-ssl</config-type>
         <config-type>ranger-kms-security</config-type>
         <config-type>kms-env</config-type>
+        <config-type>core-site</config-type>
+        <config-type>hdfs-site</config-type>
       </configuration-dependencies>
 
       <commandScript>

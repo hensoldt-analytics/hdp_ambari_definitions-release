@@ -330,26 +330,25 @@ def kms(upgrade_type=None):
       content=InlineTemplate(params.kms_log4j),
       mode=0644
     )
-    if params.security_enabled:
-      # core-site.xml linking required by setup for HDFS encryption
-      XmlConfig("core-site.xml",
-        conf_dir=params.kms_conf_dir,
-        configurations=params.config['configurations']['core-site'],
-        configuration_attributes=params.config['configurationAttributes']['core-site'],
+
+    # core-site.xml linking required by setup for HDFS encryption
+    XmlConfig("core-site.xml",
+      conf_dir=params.kms_conf_dir,
+      configurations=params.config['configurations']['core-site'],
+      configuration_attributes=params.config['configurationAttributes']['core-site'],
+      owner=params.kms_user,
+      group=params.kms_group,
+      mode=0644,
+      xml_include_file=params.mount_table_xml_inclusion_file_full_path
+    )
+
+    if params.mount_table_content:
+      File(params.mount_table_xml_inclusion_file_full_path,
         owner=params.kms_user,
         group=params.kms_group,
-        mode=0644,
-        xml_include_file=params.mount_table_xml_inclusion_file_full_path
+        content=params.mount_table_content,
+        mode=0644
       )
-      if params.mount_table_content:
-        File(params.mount_table_xml_inclusion_file_full_path,
-             owner=params.kms_user,
-             group=params.kms_group,
-             content=params.mount_table_content,
-             mode=0644
-        )
-    else:
-      File(format('{kms_conf_dir}/core-site.xml'), action="delete")
 
 def copy_jdbc_connector(kms_home):
   import params
