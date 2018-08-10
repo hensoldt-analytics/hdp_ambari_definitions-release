@@ -450,4 +450,13 @@
     </description>
     <on-ambari-upgrade add="true"/>
   </property>
+  <property>
+    <name>oozie.action.sharelib.for.spark.exclude</name>
+    <value>oozie/jackson.*</value>
+    <description>
+      Exclude jackson dependencies from oozie share lib folder to avoid dependency hell in spark jobs.
+      This property can be defined in workflows, too. You shall format this value as a regex pattern.
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
 </configuration>
