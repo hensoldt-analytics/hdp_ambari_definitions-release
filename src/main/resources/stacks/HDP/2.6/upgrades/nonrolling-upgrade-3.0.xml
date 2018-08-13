@@ -481,6 +481,13 @@
         <task xsi:type="configure" id="hdp_30_add_timeline_reader_opts"/>
       </execute-stage>
 
+      <execute-stage service="YARN" component="RESOURCEMANAGER" title="Create yarn-system queue if cluster is bigger">
+        <task xsi:type="server_action"
+              class="org.apache.ambari.server.serveraction.upgrades.YarnConfigCalculation">
+          <summary>If cluster is bigger, create a yarn-system queue</summary>
+        </task>
+      </execute-stage>
+
       <!-- Do this last to convert any variable which remained -->
       <execute-stage service="YARN" component="RESOURCEMANAGER" title="Convert YARN HDP 2.6 variable naming to HDP 3.0">
         <task xsi:type="configure" id="hdp_30_yarn_stack_variables_update"/>
