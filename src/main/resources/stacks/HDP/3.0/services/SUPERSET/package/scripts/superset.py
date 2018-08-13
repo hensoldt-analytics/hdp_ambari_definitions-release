@@ -72,12 +72,16 @@ class Superset(Script):
          )
     superset_config =  mutable_config_dict(params.config["configurations"]["superset"])
 
+    if superset_config['AUTH_TYPE'] is not None \
+            and params.AUTH_NAME_TO_AUTH_ID_MAP[superset_config['AUTH_TYPE']] is not None:
+        superset_config['AUTH_TYPE'] = params.AUTH_NAME_TO_AUTH_ID_MAP[superset_config['AUTH_TYPE']]
+
     if params.superset_db_uri:
       superset_config["SQLALCHEMY_DATABASE_URI"] = params.superset_db_uri
 
     PropertiesFile("superset_config.py",
                    dir=params.superset_config_dir,
-                   properties=quote_string_values(superset_config),
+                   properties=quote_string_values(superset_config, params.non_quoted_configs),
                    owner=params.superset_user,
                    group=params.user_group
                    )
@@ -165,19 +169,17 @@ def mutable_config_dict(config):
     rv[key] = value
   return rv
 
-def quote_string_values(config):
+def quote_string_values(config, non_quoted_configs):
   rv = {}
   for key, value in config.iteritems():
-    rv[key] = quote_string_value(value)
+    rv[key] = quote_string_value(value, non_quoted_configs)
   return rv
 
-def quote_string_value(value):
-  if value.lower() == "true" or value.lower() == "false" or value.isdigit():
+def quote_string_value(value, non_quoted_configs):
+  if value.isdigit() or value.lower() == "true" or value.lower() == "false" or value in non_quoted_configs:
     return value
   else:
     return "'{0}'".format(value)
-
-
 
 if __name__ == "__main__":
   Superset().execute()

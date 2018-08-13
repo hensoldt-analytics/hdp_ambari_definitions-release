@@ -86,3 +86,13 @@ druid_router_hosts = default("/clusterHostInfo/druid_router_hosts", [])
 if not len(druid_router_hosts) == 0:
   druid_router_host = druid_router_hosts[0]
   druid_router_port = config['configurations']['druid-router']['druid.port']
+
+# Configs for which string values need not be quoted
+non_quoted_configs = ['AUTH_TYPE']
+AUTH_NAME_TO_AUTH_ID_MAP = {
+  'AUTH_OID': '0',
+  'AUTH_DB': '1',
+  'AUTH_LDAP': '2',
+  'AUTH_REMOTE': '3',
+  'AUTH_OAUTH' : '4'
+}

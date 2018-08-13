@@ -175,4 +175,38 @@
     <description>Secret Key used to encrypt user passwords. A Long Random String is recommended.</description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>AUTH_TYPE</name>
+    <value>AUTH_DB</value>
+    <description>Authentication Type to be used for authenticating superset users.
+      Supported types [AUTH_OID, AUTH_DB, AUTH_LDAP, AUTH_REMOTE, AUTH_OAUTH]. Default is AUTH_DB</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>AUTH_LDAP_SERVER</name>
+    <value>unspecified</value>
+    <description>Define your ldap server when AUTH_TYPE=AUTH_LDAP</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>AUTH_LDAP_BIND_USER</name>
+    <value>unspecified</value>
+    <description>Define the DN for the user that will be used for the initial LDAP BIND. This is necessary for OpenLDAP and can be used on MSFT AD.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>AUTH_LDAP_BIND_PASSWORD</name>
+    <value>unspecified</value>
+    <value-attributes>
+      <type>password</type>
+    </value-attributes>
+    <description>Define password for the bind user.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>AUTH_LDAP_SEARCH</name>
+    <value>unspecified</value>
+    <description>Use search with self user registration or when using AUTH_LDAP_BIND_USER.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
