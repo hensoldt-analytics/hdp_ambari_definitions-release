@@ -43,13 +43,14 @@ def setup_livy(env, type, upgrade_type = None, action = None):
     )
     params.HdfsResource(None, action="execute")
 
-    params.HdfsResource(params.livy2_recovery_dir,
-                        type="directory",
-                        action="create_on_execute",
-                        owner=params.livy2_user,
-                        mode=0700
-       )
-    params.HdfsResource(None, action="execute")
+    if params.livy2_recovery_store == 'filesystem':
+      params.HdfsResource(params.livy2_recovery_dir,
+                          type="directory",
+                          action="create_on_execute",
+                          owner=params.livy2_user,
+                          mode=0700
+         )
+      params.HdfsResource(None, action="execute")
 
     generate_logfeeder_input_config('spark2', Template("input.config-spark2.json.j2", extra_imports=[default]))
 
