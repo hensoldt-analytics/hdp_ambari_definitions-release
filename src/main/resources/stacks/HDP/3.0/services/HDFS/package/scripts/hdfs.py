@@ -113,6 +113,7 @@ def hdfs(name=None):
               conf_dir=params.hadoop_conf_secure_dir,
               configurations=params.config['configurations']['ssl-client'],
               configuration_attributes=params.config['configurationAttributes']['ssl-client'],
+              mode=0644,
               owner=params.hdfs_user,
               group=params.user_group
     )
