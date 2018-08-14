@@ -104,8 +104,8 @@ class AtlasServiceAdvisor(service_advisor.ServiceAdvisor):
     host index where component should exist.
     Must be overriden in child class.
     """
-    # Nothing to do
-    pass
+
+    self.componentLayoutSchemes.update({'ATLAS_SERVER': {3: 0, 6: 1, 31: 2, "else": 2}})
 
   def getServiceComponentLayoutValidations(self, services, hosts):
     """
