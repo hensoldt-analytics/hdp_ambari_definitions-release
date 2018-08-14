@@ -25,6 +25,9 @@
     "type": "TARBALL"
   },
   "configuration": {
+    "properties" : {
+      "yarn.service.container-failure.retry.max" : 10
+    },
     "env": {
       "HBASE_IDENT_STRING": "${USER}",
       "HBASE_LOG_DIR": "<LOG_DIR>",
