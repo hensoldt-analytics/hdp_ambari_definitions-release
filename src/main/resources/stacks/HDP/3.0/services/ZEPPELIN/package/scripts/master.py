@@ -613,7 +613,10 @@ class Master(Script):
 
 
       elif interpreter['group'] == 'livy' and interpreter['name'] == 'livy2' and 'livy2' not in exclude_interpreter_autoconfig_list:
-        if params.livy2_livyserver_host:
+        # Honor this Zeppelin setting if it exists
+        if 'zeppelin.livy.url' in params.config['configurations']['zeppelin-site']:
+          interpreter['properties']['zeppelin.livy.url'] = params.config['configurations']['zeppelin-site']['zeppelin.livy.url']
+        elif params.livy2_livyserver_host:
           self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.url', 'string', params.livy2_livyserver_protocol + \
                                                                                       "://" + params.livy2_livyserver_host + \
                                                                                       ":" + params.livy2_livyserver_port)
