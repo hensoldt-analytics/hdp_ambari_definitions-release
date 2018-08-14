@@ -32,7 +32,7 @@ from yarn import yarn
 from service import service
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyImpl
-from hbase_service import hbase, configure_hbase, create_hbase_package, copy_hbase_package_to_hdfs
+from hbase_service import hbase, configure_hbase
 from resource_management.libraries.functions.copy_tarball import copy_to_hdfs
 
 class ApplicationTimelineReader(Script):
@@ -53,10 +53,6 @@ class ApplicationTimelineReader(Script):
         skip=params.sysprep_skip_copy_tarballs_hdfs)
       if resource_created:
         params.HdfsResource(None, action="execute")
-
-      # upload package by default
-      create_hbase_package()
-      copy_hbase_package_to_hdfs()
 
     if not params.use_external_hbase and not params.is_hbase_system_service_launch:
        hbase(action='start')
@@ -95,9 +91,6 @@ class ApplicationTimelineReaderDefault(ApplicationTimelineReader):
       resource_created = copy_to_hdfs("yarn", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
       if resource_created:
          params.HdfsResource(None, action="execute")
-      # upload package by default
-      create_hbase_package()
-      copy_hbase_package_to_hdfs()
 
   def status(self, env):
     import status_params

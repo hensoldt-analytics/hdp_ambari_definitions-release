@@ -38,6 +38,7 @@ from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
 
 from resource_management.libraries.functions.mounted_dirs_helper import handle_mounted_dirs
+from hbase_service import create_hbase_package, copy_hbase_package_to_hdfs
 
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
@@ -801,4 +802,24 @@ def setup_system_services(config_dir=None):
                         action="create_on_execute",
                         owner=params.yarn_hbase_user
                         )
+    # copy service-dep.tar.gz into hdfs
+    params.HdfsResource(format("{yarn_service_app_hdfs_path}"),
+                        type="directory",
+                        action="create_on_execute",
+                        owner=params.hdfs_user,
+                        group=params.hdfs_user,
+                        mode=0555,
+                        )
+    params.HdfsResource(format("{yarn_service_app_hdfs_path}/service-dep.tar.gz"),
+                    type="file",
+                    action="create_on_execute",
+                    source=format("{yarn_service_dep_source_path}"),
+                    owner=params.hdfs_user,
+                    group=params.user_group,
+                    mode=0444,
+                    )
+
     params.HdfsResource(None, action="execute")
+
+    create_hbase_package()
+    copy_hbase_package_to_hdfs()

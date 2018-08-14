@@ -404,6 +404,7 @@ yarn_rm_address = config['configurations']['yarn-site']['yarn.resourcemanager.we
 rm_active_port = rm_https_port if yarn_https_on else rm_port
 
 rm_ha_enabled = False
+rm_ha_id = None
 rm_ha_ids_list = []
 rm_webapp_addresses_list = [yarn_rm_address]
 rm_ha_ids = default("/configurations/yarn-site/yarn.resourcemanager.ha.rm-ids", None)
@@ -419,6 +420,9 @@ if rm_ha_enabled:
     rm_webapp_address_property = format('yarn.resourcemanager.webapp.address.{rm_id}') if not yarn_https_on else format('yarn.resourcemanager.webapp.https.address.{rm_id}')
     rm_webapp_address = config['configurations']['yarn-site'][rm_webapp_address_property]
     rm_webapp_addresses_list.append(rm_webapp_address)
+    rm_host_name = config['configurations']['yarn-site'][format('yarn.resourcemanager.hostname.{rm_id}')]
+    if rm_host_name == hostname.lower():
+      rm_ha_id = rm_id
 
 # for curl command in ranger plugin to get db connector
 jdk_location = config['ambariLevelParams']['jdk_location']
@@ -583,6 +587,11 @@ yarn_hbase_user = status_params.yarn_hbase_user
 yarn_hbase_user_home = format("/user/{yarn_hbase_user}")
 yarn_hbase_user_version_home = format("{yarn_hbase_user_home}/{version}")
 yarn_hbase_app_hdfs_path = format("/hdp/apps/{version}/hbase")
+yarn_service_app_hdfs_path = format("/hdp/apps/{version}/yarn")
+if rm_ha_id is not None:
+  yarn_hbase_app_hdfs_path = format("{yarn_hbase_app_hdfs_path}/{rm_ha_id}")
+  yarn_service_app_hdfs_path = format("{yarn_service_app_hdfs_path}/{rm_ha_id}")
+yarn_service_dep_source_path = format("{stack_root}/{version}/hadoop-yarn/lib/service-dep.tar.gz")
 yarn_hbase_user_tmp = format("{tmp_dir}/{yarn_hbase_user}/{version}")
 yarn_hbase_log_dir = os.path.join(yarn_log_dir_prefix, "embedded-yarn-ats-hbase")
 yarn_hbase_pid_dir_prefix = status_params.yarn_hbase_pid_dir_prefix

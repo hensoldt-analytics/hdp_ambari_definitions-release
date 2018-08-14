@@ -26,7 +26,8 @@
   },
   "configuration": {
     "properties" : {
-      "yarn.service.container-failure.retry.max" : 10
+      "yarn.service.container-failure.retry.max" : 10,
+      "yarn.service.framework.path" : "{{yarn_service_app_hdfs_path}}/service-dep.tar.gz"
     },
     "env": {
       "HBASE_IDENT_STRING": "${USER}",
