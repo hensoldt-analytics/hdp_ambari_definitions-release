@@ -62,6 +62,14 @@ def setup_livy(env, type, upgrade_type = None, action = None):
        mode=0644,
   )
 
+  # create livy-client.conf in etc/conf dir
+  PropertiesFile(format("{livy2_conf}/livy-client.conf"),
+                properties = params.config['configurations']['livy2-client-conf'],
+                key_value_delimiter = " ",
+                owner=params.livy2_user,
+                group=params.livy2_group,
+  )
+
   # create livy.conf in etc/conf dir
   PropertiesFile(format("{livy2_conf}/livy.conf"),
                 properties = params.config['configurations']['livy2-conf'],
