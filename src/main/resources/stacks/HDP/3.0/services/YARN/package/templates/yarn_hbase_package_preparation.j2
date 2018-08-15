@@ -37,9 +37,18 @@
 #
 
 echo "`date` Running hbase package creation script"
+ambari_agent_tmp_dir="{{tmp_dir}}"
+yarn_hbase_user="{{yarn_hbase_user}}"
 yarn_hbase_user_tmp="{{yarn_hbase_user_tmp}}"
 version_home="{{stack_root}}/{{version}}"
-if [ ! -d $yarn_hbase_user_tmp ];then echo "Creating a tmp path $yarn_hbase_user_tmp"; mkdir -p $yarn_hbase_user_tmp;fi;
+if [ ! -d $yarn_hbase_user_tmp ]
+then
+    echo "Creating a tmp path $yarn_hbase_user_tmp";
+    mkdir -p $yarn_hbase_user_tmp;
+    cd $ambari_agent_tmp_dir;
+    chmod -R 0755 $yarn_hbase_user;
+fi;
+
 cd $yarn_hbase_user_tmp
 if [ -f hbase.tar.gz ]
 then
