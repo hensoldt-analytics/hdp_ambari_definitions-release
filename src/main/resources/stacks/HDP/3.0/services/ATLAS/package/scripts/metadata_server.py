@@ -205,6 +205,24 @@ class MetadataServer(Script):
         only_if=format("test -e {atlas_simple_auth_policy_file_target}"),
         mode=0644
       )
+  def update_atlas_simple_authz(self,env):
+    import params
+    env.set_params(params)
+    if params.upgrade_direction == Direction.UPGRADE:
+      target_version = upgrade_summary.get_target_version('ATLAS')
+      update_atlas_simple_authz_script = os.path.join(format('{stack_root}'),target_version,'atlas','bin','atlas_update_simple_auth_json.py')
+      update_atlas_simple_authz_command = format('ambari-python-wrap {update_atlas_simple_authz_script} {conf_dir}')
+      Execute(update_atlas_simple_authz_command,
+              only_if=format("test -e {update_atlas_simple_authz_script}"),
+              sudo=True)
+      atlas_simple_auth_policy_file = os.path.join(format('{conf_dir}'),'atlas-simple-authz-policy.json')
+      File(atlas_simple_auth_policy_file,
+        group=params.user_group,
+        owner=params.metadata_user,
+        only_if=format("test -e {atlas_simple_auth_policy_file}"),
+        mode=0644
+      )
+
 
 if __name__ == "__main__":
   MetadataServer().execute()

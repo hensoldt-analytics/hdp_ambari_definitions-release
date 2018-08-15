@@ -923,7 +923,14 @@
 
     <service name="ATLAS">
       <component name="ATLAS_SERVER">
-
+        <pre-upgrade>
+          <task xsi:type="execute" hosts="master">
+            <summary>Upgrading the Atlas simple authorization policies</summary>
+            <script>scripts/metadata_server.py</script>
+            <function>update_atlas_simple_authz</function>
+          </task>
+        </pre-upgrade>
+        <pre-downgrade/>
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
