@@ -266,7 +266,7 @@ class Master(Script):
       self.create_interpreter_json()
 
     if params.zeppelin_interpreter_config_upgrade == True:
-      self.reset_interpreter_settings()
+      self.reset_interpreter_settings(upgrade_type)
       self.update_zeppelin_interpreter()
 
     Execute(params.zeppelin_dir + '/bin/zeppelin-daemon.sh restart >> '
@@ -286,12 +286,19 @@ class Master(Script):
         pid_file = ''
     check_process_status(pid_file)
 
-  def reset_interpreter_settings(self):
+  def reset_interpreter_settings(self, upgrade_type):
     import json
     import interpreter_json_template
     interpreter_json_template = json.loads(interpreter_json_template.template)['interpreterSettings']
     config_data = self.get_interpreter_settings()
     interpreter_settings = config_data['interpreterSettings']
+
+    if upgrade_type is not None:
+      current_interpreters_keys = interpreter_settings.keys()
+      for key in current_interpreters_keys:
+        interpreter_data = interpreter_settings[key]
+        if interpreter_data["name"] == "sh" and interpreter_data["group"] == "sh":
+          del interpreter_settings[key]
 
     for setting_key in interpreter_json_template.keys():
       if setting_key not in interpreter_settings:
