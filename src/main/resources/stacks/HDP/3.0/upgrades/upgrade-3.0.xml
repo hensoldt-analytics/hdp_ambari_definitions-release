@@ -627,6 +627,12 @@
       </component>
 
       <component name="TIMELINE_READER">
+        <pre-upgrade>
+          <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixTimelineReaderAddress">
+            <summary>Setting YARN Timeline Reader Url</summary>
+          </task>
+        </pre-upgrade>
+        <pre-downgrade/>
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
