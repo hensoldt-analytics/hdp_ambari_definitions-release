@@ -209,12 +209,38 @@ class MetadataServer(Script):
     import params
     env.set_params(params)
     if params.upgrade_direction == Direction.UPGRADE:
+      orchestration = stack_select.PACKAGE_SCOPE_STANDARD
+      summary = upgrade_summary.get_upgrade_summary()
+
+      if summary is not None:
+        orchestration = summary.orchestration
+        if orchestration is None:
+          raise Fail("The upgrade summary does not contain an orchestration type")
+
+        if orchestration.upper() in stack_select._PARTIAL_ORCHESTRATION_SCOPES:
+          orchestration = stack_select.PACKAGE_SCOPE_PATCH
+
+      stack_select_packages = stack_select.get_packages(orchestration, service_name = "ATLAS", component_name = "ATLAS_SERVER")
+      if stack_select_packages is None:
+        raise Fail("Unable to get packages for stack-select")
+
+      Logger.info("ATLAS_SERVER component will be stack-selected to version {0} using a {1} orchestration".format(params.version, orchestration.upper()))
+
+      for stack_select_package_name in stack_select_packages:
+        stack_select.select(stack_select_package_name, params.version)
+      Directory(format('{metadata_home}/'),
+        owner = params.metadata_user,
+        group = params.user_group,
+        recursive_ownership = True,
+      )
+
       target_version = upgrade_summary.get_target_version('ATLAS')
       update_atlas_simple_authz_script = os.path.join(format('{stack_root}'),target_version,'atlas','bin','atlas_update_simple_auth_json.py')
-      update_atlas_simple_authz_command = format('ambari-python-wrap {update_atlas_simple_authz_script} {conf_dir}')
+      update_atlas_simple_authz_command = format('source {params.conf_dir}/atlas-env.sh ; {update_atlas_simple_authz_script} {conf_dir}')
       Execute(update_atlas_simple_authz_command,
               only_if=format("test -e {update_atlas_simple_authz_script}"),
-              sudo=True)
+              user=params.metadata_user
+      )
       atlas_simple_auth_policy_file = os.path.join(format('{conf_dir}'),'atlas-simple-authz-policy.json')
       File(atlas_simple_auth_policy_file,
         group=params.user_group,
