@@ -23,6 +23,7 @@ from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
 from resource_management.core import shell
 from resource_management.core.shell import as_user, as_sudo
+from resource_management.core.logger import Logger
 from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.libraries.functions.format import format
 from resource_management.core.resources.system import Execute, File
@@ -166,6 +167,8 @@ def checkAndStopRegistyDNS(cmd):
                              try_sleep = 5)
       if code != 0:
           code, out, err = shell.checked_call(("cat", dns_pid_file), sudo=True, env=hadoop_env_exports, stderr=subprocess32.PIPE)
+          Logger.info("PID to kill was retrieved: '" + out + "'.")
+          out=out.splitlines()[0]
           pid = out
           Execute(("kill", "-9", pid), sudo=True)
           File(dns_pid_file, action="delete")
