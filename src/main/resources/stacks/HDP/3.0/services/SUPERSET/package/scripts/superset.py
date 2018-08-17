@@ -72,8 +72,7 @@ class Superset(Script):
          )
     superset_config =  mutable_config_dict(params.config["configurations"]["superset"])
 
-    if superset_config['AUTH_TYPE'] is not None \
-            and params.AUTH_NAME_TO_AUTH_ID_MAP[superset_config['AUTH_TYPE']] is not None:
+    if 'AUTH_TYPE' in superset_config and superset_config['AUTH_TYPE'] in params.AUTH_NAME_TO_AUTH_ID_MAP:
         superset_config['AUTH_TYPE'] = params.AUTH_NAME_TO_AUTH_ID_MAP[superset_config['AUTH_TYPE']]
 
     if params.superset_db_uri:
