@@ -172,7 +172,7 @@
           </commandScript>
           <logs>
             <log>
-              <logId>hdfs_secondarynamenode</logId>
+              <logId>hdfs_secondary_namenode</logId>
               <primary>true</primary>
             </log>
           </logs>
@@ -296,6 +296,12 @@
               </auto-deploy>
             </dependency>
           </dependencies>
+          <logs>
+            <log>
+              <logId>hdfs_nfs3</logId>
+              <primary>true</primary>
+            </log>
+          </logs>
         </component>
       </components>
 

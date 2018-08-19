@@ -20,32 +20,32 @@
     {
       "type":"druid_coordinator",
       "rowtype":"service",
-      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/superset')}}/coordinator.log"
+      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/druid')}}/coordinator.log"
     },
     {
       "type":"druid_overlord",
       "rowtype":"service",
-      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/superset')}}/overlord.log"
+      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/druid')}}/overlord.log"
     },
     {
       "type":"druid_historical",
       "rowtype":"service",
-      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/superset')}}/historical.log"
+      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/druid')}}/historical.log"
     },
     {
       "type":"druid_broker",
       "rowtype":"service",
-      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/superset')}}/broker.log"
+      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/druid')}}/broker.log"
     },
     {
       "type":"druid_middlemanager",
       "rowtype":"service",
-      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/superset')}}/middleManager.log"
+      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/druid')}}/middleManager.log"
     },
     {
       "type":"druid_router",
       "rowtype":"service",
-      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/superset')}}/router.log"
+      "path":"{{default('/configurations/druid-env/druid_log_dir', '/var/log/druid')}}/router.log"
     }
   ],
   "filter":[

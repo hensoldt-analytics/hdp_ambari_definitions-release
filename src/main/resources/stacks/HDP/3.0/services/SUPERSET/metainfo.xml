@@ -39,6 +39,12 @@
           <configuration-dependencies>
             <config-type>superset</config-type>
           </configuration-dependencies>
+          <logs>
+            <log>
+              <logId>suberset</logId>
+              <primary>true</primary>
+            </log>
+          </logs>
         </component>
       </components>
 
