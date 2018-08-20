@@ -123,6 +123,8 @@ def hive_interactive(name = None):
                       mode = params.hive_hdfs_user_mode
   )
 
+  params.HdfsResource(None, action="execute")
+
   # list of properties that should be excluded from the config
   # this approach is a compromise against adding a dedicated config
   # type for hive_server_interactive or needed config groups on a
