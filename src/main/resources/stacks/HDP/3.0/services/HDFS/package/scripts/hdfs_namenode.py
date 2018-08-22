@@ -143,7 +143,7 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
         if params.upgrade_direction == Direction.UPGRADE:
           options = "-rollingUpgrade started"
         elif params.upgrade_direction == Direction.DOWNGRADE:
-          options = "-rollingUpgrade downgrade"
+          options = ""
       elif upgrade_type == constants.UPGRADE_TYPE_NON_ROLLING:
         is_previous_image_dir = is_previous_fs_image()
         Logger.info("Previous file system image dir present is {0}".format(str(is_previous_image_dir)))
@@ -173,7 +173,7 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
               options = ""
 
         elif params.upgrade_direction == Direction.DOWNGRADE:
-          options = "-rollingUpgrade downgrade"
+          options = ""
       elif upgrade_type == constants.UPGRADE_TYPE_HOST_ORDERED:
         # nothing special to do for HOU - should be very close to a normal restart
         pass
