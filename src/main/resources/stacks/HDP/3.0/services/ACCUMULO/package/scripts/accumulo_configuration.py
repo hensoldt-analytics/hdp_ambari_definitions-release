@@ -176,7 +176,7 @@ def setup_conf_dir(name=None): # 'master' or 'tserver' or 'monitor' or 'gc' or '
                          owner=params.accumulo_user,
                          mode=0700
     )
-    params.HdfsResource(format("{params.parent_dir}"),
+    params.HdfsResource(params.instance_volumes_list,
                          type="directory",
                          action="create_on_execute",
                          owner=params.accumulo_user,
@@ -194,7 +194,7 @@ def setup_conf_dir(name=None): # 'master' or 'tserver' or 'monitor' or 'gc' or '
                not_if=as_user(format("{params.kinit_cmd} "
                                      "{params.hadoop_bin_dir}/hadoop --config "
                                      "{params.hadoop_conf_dir} fs -stat "
-                                     "{params.instance_volumes}"),
+                                     "{params.instance_volumes_space_separated}"),
                               params.accumulo_user),
                logoutput=True,
                user=params.accumulo_user)
@@ -216,7 +216,7 @@ def setup_conf_dir(name=None): # 'master' or 'tserver' or 'monitor' or 'gc' or '
                  not_if=as_user(format("{params.kinit_cmd} "
                                        "{params.hadoop_bin_dir}/hadoop --config "
                                        "{params.hadoop_conf_dir} fs -stat "
-                                       "{params.instance_volumes}"),
+                                       "{params.instance_volumes_space_separated}"),
                                 params.accumulo_user),
                  logoutput=True,
                  user=params.accumulo_user)

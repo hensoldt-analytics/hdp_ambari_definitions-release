@@ -95,6 +95,8 @@ instance_name = config['configurations']['accumulo-env']['accumulo_instance_name
 instance_secret = config['configurations']['accumulo-env']['instance_secret']
 root_password = config['configurations']['accumulo-env']['accumulo_root_password']
 instance_volumes = config['configurations']['accumulo-site']['instance.volumes']
+instance_volumes_space_separated = instance_volumes.replace(',', ' ')
+instance_volumes_list = [x.strip() for x in instance_volumes.split(',')]
 parent_dir = instance_volumes[0:instance_volumes.rfind('/')]
 
 # tracer properties
