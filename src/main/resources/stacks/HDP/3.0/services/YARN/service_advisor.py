@@ -1527,22 +1527,21 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     # This can happen if we upgrade from Ambari 2.4 (with HDP 2.5) to Ambari 2.5, as this config is from 2.6 stack onwards only.
     if "hive-interactive-env" in services["configurations"] and \
         "num_llap_nodes_for_llap_daemons" in services["configurations"]["hive-interactive-env"]["properties"]:
-      putHiveInteractiveEnvProperty('num_llap_nodes_for_llap_daemons', 0)
-    putHiveInteractiveEnvProperty('num_llap_nodes', 0)
+      putHiveInteractiveEnvProperty('num_llap_nodes_for_llap_daemons', 1)
+    putHiveInteractiveEnvProperty('num_llap_nodes', 1)
     putHiveInteractiveEnvPropertyAttribute('num_llap_nodes', "minimum", 0)
     putHiveInteractiveEnvPropertyAttribute('num_llap_nodes', "maximum", node_manager_cnt)
     putHiveInteractiveSiteProperty('hive.llap.daemon.yarn.container.mb', yarn_min_container_size)
     putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.yarn.container.mb', "minimum", yarn_min_container_size)
     putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.yarn.container.mb', "maximum", self.__get_min_hsi_mem(services, hosts) * 0.8)
-    putHiveInteractiveSiteProperty('hive.llap.daemon.num.executors', 0)
+    putHiveInteractiveSiteProperty('hive.llap.daemon.num.executors', 1)
     putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.num.executors', "minimum", 0)
     putHiveInteractiveSitePropertyAttribute('hive.llap.daemon.num.executors', "maximum", 1)
-    putHiveInteractiveSiteProperty('hive.llap.io.threadpool.size', 0)
-    putHiveInteractiveSiteProperty('hive.llap.io.memory.size', 0)
-    putHiveInteractiveEnvProperty('llap_heap_size', 0)
-    putHiveInteractiveSiteProperty('hive.llap.io.memory.size', 0)
+    putHiveInteractiveSiteProperty('hive.llap.io.threadpool.size', 2)
+    putHiveInteractiveEnvProperty('llap_heap_size', 8192)
+    putHiveInteractiveSiteProperty('hive.llap.io.memory.size', 2048)
     putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'minimum', 0)
-    putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'maximum', self.__get_min_hsi_mem(services, hosts) * 0.5)
+    putHiveInteractiveSitePropertyAttribute('hive.llap.io.memory.size', 'maximum', max(self.__get_min_hsi_mem(services, hosts) * 0.5, 2048))
     
     ssd_cache_on = services["configurations"]["hive-interactive-site"]["properties"]["hive.llap.io.allocator.mmap"] == "true"
     if ssd_cache_on:
