@@ -1,0 +1,1 @@
+# hdp_ambari_definitions-release
