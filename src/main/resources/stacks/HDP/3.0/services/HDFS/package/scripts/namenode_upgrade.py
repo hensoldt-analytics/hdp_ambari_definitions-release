@@ -236,15 +236,19 @@ def prepare_rolling_upgrade(hdfs_binary):
       if not safemode_transition_successful:
         raise Fail("Could not transition to safemode state %s. Please check logs to make sure namenode is up." % str(desired_state))
 
-    dfsadmin_base_command = get_dfsadmin_base_command(hdfs_binary)
-    prepare = dfsadmin_base_command + " -rollingUpgrade prepare"
-    query = dfsadmin_base_command + " -rollingUpgrade query"
-    Execute(prepare,
-            user=params.hdfs_user,
-            logoutput=True)
-    Execute(query,
-            user=params.hdfs_user,
-            logoutput=True)
+    summary = upgrade_summary.get_upgrade_summary()
+    if summary is not None and summary.is_switch_bits:
+      Logger.info("The {0} switches the binaries only.  No need to call prepare.".format(summary.direction))
+    else:
+      dfsadmin_base_command = get_dfsadmin_base_command(hdfs_binary)
+      prepare = dfsadmin_base_command + " -rollingUpgrade prepare"
+      query = dfsadmin_base_command + " -rollingUpgrade query"
+      Execute(prepare,
+              user=params.hdfs_user,
+              logoutput=True)
+      Execute(query,
+              user=params.hdfs_user,
+              logoutput=True)
 
 def finalize_upgrade(upgrade_type, hdfs_binary):
   """
