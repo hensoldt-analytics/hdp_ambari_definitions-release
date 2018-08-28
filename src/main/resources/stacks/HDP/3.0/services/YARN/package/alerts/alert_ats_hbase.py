@@ -56,7 +56,7 @@ ATS_HBASE_SYSTEM_SERVICE_LAUNCH_KEY = '{{yarn-hbase-env/is_hbase_system_service_
 USE_EXTERNAL_HBASE_KEY = '{{yarn-hbase-env/use_external_hbase}}'
 ATS_HBASE_PID_DIR_PREFIX = '{{yarn-hbase-env/yarn_hbase_pid_dir_prefix}}'
 
-ATS_HBASE_APP_NOT_FOUND_KEY = format("Service {ATS_HBASE_APP_NAME_KEY} not found")
+ATS_HBASE_APP_NOT_FOUND_KEY = format("Service ats-hbase not found")
 
 # The configured Kerberos executable search paths, if any
 KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY = '{{kerberos-env/executable_search_paths}}'
