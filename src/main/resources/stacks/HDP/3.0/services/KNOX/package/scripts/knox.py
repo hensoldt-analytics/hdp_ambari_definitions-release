@@ -59,6 +59,7 @@ def knox():
   )
 
   File(os.path.join(params.knox_conf_dir, "topologies", "default.xml"),
+       mode=0600,
        group=params.knox_group,
        owner=params.knox_user,
        content=InlineTemplate(params.topology_template)
@@ -66,6 +67,7 @@ def knox():
 
   if params.admin_topology_template:
     File(os.path.join(params.knox_conf_dir, "topologies", "admin.xml"),
+       mode=0600,
        group=params.knox_group,
        owner=params.knox_user,
        content=InlineTemplate(params.admin_topology_template)
@@ -75,6 +77,7 @@ def knox():
     knoxsso_topology_template_content = get_config("knoxsso-topology")
     if knoxsso_topology_template_content:
       File(os.path.join(params.knox_conf_dir, "topologies", "knoxsso.xml"),
+        mode=0600,
         group=params.knox_group,
         owner=params.knox_user,
         content=InlineTemplate(params.knoxsso_topology_template)
@@ -120,6 +123,7 @@ def knox():
     )
 
     File(format("{params.knox_conf_dir}/topologies/default.xml"),
+         mode=0600,
          group=params.knox_group,
          owner=params.knox_user,
          content=InlineTemplate(params.topology_template)
@@ -127,6 +131,7 @@ def knox():
 
     if params.admin_topology_template:
       File(format("{params.knox_conf_dir}/topologies/admin.xml"),
+           mode=0600,
            group=params.knox_group,
            owner=params.knox_user,
            content=InlineTemplate(params.admin_topology_template)
@@ -136,6 +141,7 @@ def knox():
       knoxsso_topology_template_content = get_config("knoxsso-topology")
       if knoxsso_topology_template_content:
         File(os.path.join(params.knox_conf_dir, "topologies", "knoxsso.xml"),
+            mode=0600,
             group=params.knox_group,
             owner=params.knox_user,
             content=InlineTemplate(params.knoxsso_topology_template)
@@ -191,6 +197,6 @@ def update_knox_logfolder_permissions():
             group = params.knox_group,
             create_parents = True,
             cd_access = "a",
-            mode = 0755,
+            mode=0600,
             recursive_ownership = True,
   )
