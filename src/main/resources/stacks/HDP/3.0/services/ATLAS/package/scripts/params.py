@@ -129,6 +129,9 @@ java64_home = config['ambariLevelParams']['java_home']
 java_exec = format("{java64_home}/bin/java")
 env_sh_template = config['configurations']['atlas-env']['content']
 
+zk_principal_name = default("/configurations/zookeeper-env/zookeeper_principal_name", "zookeeper/_HOST@EXAMPLE.COM")
+zk_principal_user = zk_principal_name.split('/')[0]
+
 # credential provider
 credential_provider = format( "jceks://file@{conf_dir}/atlas-site.jceks")
 
