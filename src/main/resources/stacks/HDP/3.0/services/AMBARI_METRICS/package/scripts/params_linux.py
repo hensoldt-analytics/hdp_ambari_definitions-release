@@ -69,6 +69,8 @@ hbase_regionserver_shutdown_timeout = expect('/configurations/ams-hbase-env/hbas
 grafana_pid_file = format("{ams_grafana_pid_dir}/grafana-server.pid")
 grafana_process_exists_cmd = as_user(format("test -f {grafana_pid_file} && ps -p `cat {grafana_pid_file}`"), ams_user)
 
+zk_principal_name = default("/configurations/zookeeper-env/zookeeper_principal_name", "zookeeper/_HOST@EXAMPLE.COM")
+zk_principal_user = zk_principal_name.split('/')[0]
 
 mount_table_content = None
 if 'viewfs-mount-table' in config['configurations']:
