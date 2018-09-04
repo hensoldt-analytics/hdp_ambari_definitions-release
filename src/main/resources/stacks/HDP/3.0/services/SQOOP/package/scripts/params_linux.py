@@ -23,11 +23,14 @@ from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.get_kinit_path import get_kinit_path
 from resource_management.libraries.script import Script
+from resource_management.libraries.functions import conf_select
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions import StackFeature
+from resource_management.libraries.functions.get_not_managed_resources import get_not_managed_resources
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.expect import expect
+from resource_management.libraries.resources.hdfs_resource import HdfsResource
 from resource_management.core.exceptions import Fail
 
 
@@ -82,6 +85,7 @@ smokeuser = config['configurations']['cluster-env']['smokeuser']
 smokeuser_principal = config['configurations']['cluster-env']['smokeuser_principal_name']
 user_group = config['configurations']['cluster-env']['user_group']
 sqoop_env_sh_template = config['configurations']['sqoop-env']['content']
+hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 
 sqoop_user = config['configurations']['sqoop-env']['sqoop_user']
 
@@ -135,3 +139,31 @@ sqoop_atlas_application_properties = default('/configurations/sqoop-atlas-applic
 enable_atlas_hook = default('/configurations/sqoop-env/sqoop.atlas.hook', False)
 atlas_hook_filename = default('/configurations/atlas-env/metadata_conf_file', 'atlas-application.properties')
 #endregion
+
+hostname = config['agentLevelParams']['hostname']
+hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
+hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
+hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
+hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name', 'missing_principal').replace("_HOST", hostname)
+hdfs_site = config['configurations']['hdfs-site']
+default_fs = config['configurations']['core-site']['fs.defaultFS']
+dfs_type = default("/clusterLevelParams/dfs_type", "")
+
+import functools
+#create partial functions with common arguments for every HdfsResource call
+#to create hdfs directory we need to call params.HdfsResource in code
+HdfsResource = functools.partial(
+ HdfsResource,
+  user = hdfs_user,
+  hdfs_resource_ignore_file = "/var/lib/ambari-agent/data/.hdfs_resource_ignore",
+  security_enabled = security_enabled,
+  keytab = hdfs_user_keytab,
+  kinit_path_local = kinit_path_local,
+  hadoop_bin_dir = hadoop_bin_dir,
+  hadoop_conf_dir = hadoop_conf_dir,
+  principal_name = hdfs_principal_name,
+  hdfs_site = hdfs_site,
+  default_fs = default_fs,
+  immutable_paths = get_not_managed_resources(),
+  dfs_type = dfs_type
+ )

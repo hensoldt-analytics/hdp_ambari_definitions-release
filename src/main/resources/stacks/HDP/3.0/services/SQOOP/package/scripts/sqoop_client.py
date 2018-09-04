@@ -25,6 +25,7 @@ from resource_management.libraries.script.script import Script
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions import StackFeature
+from resource_management.libraries.functions.copy_tarball import copy_to_hdfs
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from sqoop import sqoop
 from ambari_commons.os_family_impl import OsFamilyImpl
@@ -51,6 +52,7 @@ class SqoopClientDefault(SqoopClient):
 
     if params.version and check_stack_feature(StackFeature.ROLLING_UPGRADE, params.version):
       stack_select.select_packages(params.version)
+      copy_to_hdfs("mapreduce", params.user_group, params.hdfs_user, use_upgrading_version_during_upgrade=True)
 
 
 @OsFamilyImpl(os_family=OSConst.WINSRV_FAMILY)
