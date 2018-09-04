@@ -657,6 +657,9 @@ hive_cluster_token_zkstore = default("/configurations/hive-site/hive.cluster.del
 jaas_file = os.path.join(hive_config_dir, 'zkmigrator_jaas.conf')
 hive_zk_namespace = default("/configurations/hive-site/hive.zookeeper.namespace", None)
 
+zk_principal_name = default("/configurations/zookeeper-env/zookeeper_principal_name", "zookeeper/_HOST@EXAMPLE.COM")
+zk_principal_user = zk_principal_name.split('/')[0]
+
 # ranger hive plugin section start
 
 # ranger host
