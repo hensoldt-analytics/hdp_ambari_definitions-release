@@ -25,8 +25,6 @@ import os
 from hive_service import check_fs_root
 
 # Ambari Commons & Resource Management Imports
-from resource_management.core import shell
-from resource_management.core.exceptions import Fail
 from resource_management.core.logger import Logger
 from resource_management.core.resources.system import File, Execute
 from resource_management.libraries.functions import get_user_call_output
@@ -73,7 +71,6 @@ def hive_service_interactive(name, action='start', upgrade_type=None):
         "{java64_home}/bin/java -cp {check_db_connection_jar}:{path_to_jdbc} org.apache.ambari.server.DBConnectionVerification '{hive_jdbc_connection_url}' {hive_metastore_user_name} {hive_metastore_user_passwd!p} {hive_jdbc_driver}")
       Execute(db_connection_check_command,
               path='/usr/sbin:/sbin:/usr/local/bin:/bin:/usr/bin', tries=5, try_sleep=10)
-      manage_wm()
   elif action == 'stop':
 
     daemon_kill_cmd = format("{sudo} kill {pid}")
@@ -103,49 +100,3 @@ def hive_service_interactive(name, action='start', upgrade_type=None):
     File(pid_file,
          action = "delete"
          )
-
-def manage_wm():
-  import params
-  if params.is_wm_enabled:
-    cmd = format("CREATE RESOURCE PLAN IF NOT EXISTS {default_plan} WITH QUERY_PARALLELISM=1")
-    execute_beeline(cmd)
-    
-    if not is_default_resource_plan_active():
-      cmd = format("ALTER RESOURCE PLAN {default_plan} ENABLE ACTIVATE")
-      execute_beeline(cmd)
-  else:
-    if default_resource_plan_exists() and is_default_resource_plan_active():
-      cmd = format("DISABLE WORKLOAD MANAGEMENT")
-      execute_beeline(cmd)
-
-def default_resource_plan_exists():
-  import params
-  cmd = format("SHOW RESOURCE PLANS")
-  output = execute_beeline(cmd)
-  return params.default_plan in output
-
-def is_default_resource_plan_active():
-  import params
-  cmd = format("SHOW RESOURCE PLAN {default_plan}")
-  output = execute_beeline(cmd)
-  return "status=ACTIVE" in output
-
-def execute_beeline(hive_cmd):
-  import params
-  success = False
-  retry = 10
-  cmd = format("beeline -u '{hsi_jdbc_url}' -n hive -e '{hive_cmd}'")
-  while not success and retry > 0:
-    code, output, error = shell.call(cmd,
-                                     user = params.hive_user,
-                                     stderr = subprocess.PIPE,
-                                     logoutput = True)
-    success = "Failed to connect" not in error and "Error:" not in error
-    if not success:
-      Logger.error("Could not execute command, retrying " + str(retry) + " more times")
-    retry -= 1
-  
-  if not success:
-    raise Fail("Could not execute command: " + cmd)
-  
-  return output

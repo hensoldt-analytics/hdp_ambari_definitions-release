@@ -20,7 +20,6 @@ limitations under the License.
 
 # Python Imports
 import os
-import subprocess
 from urlparse import urlparse
 
 # Local Imports
@@ -151,11 +150,6 @@ def hive_interactive(name = None):
   for item in exclude_list:
     if item in merged_hive_interactive_site.keys():
       del merged_hive_interactive_site[item]
-      
-  if params.is_wm_enabled:
-    merged_hive_interactive_site.pop("hive.server2.tez.default.queues")
-    merged_hive_interactive_site.pop("hive.server2.tez.sessions.per.default.queue")
-    merged_hive_interactive_site["hive.server2.tez.interactive.queue"] = "llap"
 
   merged_hive_interactive_site['hive.llap.daemon.vcpus.per.instance'] = format(merged_hive_interactive_site['hive.llap.daemon.vcpus.per.instance'] )
   merged_hive_interactive_site['hive.server2.active.passive.ha.enable'] = str(params.hive_server_interactive_ha).lower()
