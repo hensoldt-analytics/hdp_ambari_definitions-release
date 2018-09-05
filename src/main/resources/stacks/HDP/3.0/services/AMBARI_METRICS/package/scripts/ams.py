@@ -607,13 +607,13 @@ def export_ca_certs(dir_path):
   if (params.metric_truststore_type.lower() == 'jks'):
     for alias in params.metric_truststore_alias_list:
       # Convert truststore from JKS to PKCS12
-      cmd = format("{sudo} {java64_home}/bin/keytool -importkeystore -srckeystore {metric_truststore_path} -destkeystore {truststore_p12} -srcalias " + alias + " -deststoretype PKCS12 -srcstorepass {metric_truststore_password} -deststorepass {metric_truststore_password}")
+      cmd = format("{sudo} {java64_home}/bin/keytool -importkeystore -srckeystore {metric_truststore_path} -destkeystore {truststore_p12} -srcalias " + alias + " -deststoretype PKCS12 -srcstorepass {metric_truststore_password!p} -deststorepass {metric_truststore_password!p}")
       Execute(cmd,
               )
     truststore = truststore_p12
 
   # Export all CA certificates from the truststore to the conf directory
-  cmd = format("{sudo} openssl pkcs12 -in {truststore} -out {ca_certs_path} -cacerts -nokeys -passin pass:{metric_truststore_password}")
+  cmd = format("{sudo} openssl pkcs12 -in {truststore} -out {ca_certs_path} -cacerts -nokeys -passin pass:{metric_truststore_password!p}")
   Execute(cmd,
   )
   Execute(('chown', format('{ams_user}:{user_group}'), ca_certs_path),
