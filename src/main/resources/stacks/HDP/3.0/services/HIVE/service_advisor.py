@@ -432,6 +432,7 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
     if hive_server2_auth == "ldap":
       putHiveSiteProperty("hive.server2.authentication.ldap.url", "")
+      putHiveSitePropertyAttribute("hive.server2.authentication.ldap.url", "delete", "false")
     else:
       if ("hive.server2.authentication.ldap.url" in configurations["hive-site"]["properties"]) or \
               ("hive-site" not in services["configurations"]) or \
