@@ -335,9 +335,15 @@ def oozie_server_specific(upgrade_type):
                                                          params.oozie_user,
                                                          params.user_group
                                                          )
+      # Remove sensitive passwords before persisting hive-site.xml for Oozie
+      hive_site_copy = {}
+      for key,value in hive_site_config.items():
+          if not "password" in key.lower():
+              hive_site_copy[key]=value
+
       XmlConfig("hive-site.xml",
         conf_dir=params.hive_conf_dir,
-        configurations=hive_site_config,
+        configurations=hive_site_copy,
         configuration_attributes=params.config['configurationAttributes']['hive-site'],
         owner=params.oozie_user,
         group=params.user_group,
