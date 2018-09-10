@@ -29,7 +29,7 @@ from resource_management.libraries.functions.stack_features import check_stack_f
 from resource_management.core import shell
 from resource_management.core.shell import as_user, as_sudo
 from resource_management.core.source import Template
-from resource_management.core.exceptions import ComponentIsNotRunning
+from resource_management.core.exceptions import ComponentIsNotRunning, ExecutionFailed, Fail
 from resource_management.core.logger import Logger
 from resource_management.libraries.functions.curl_krb_request import curl_krb_request
 from resource_management.libraries.functions.namenode_ha_utils import get_namenode_states
@@ -190,10 +190,12 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
   elif name == "datanode":
     pid_file = datanode_pid_file(params)
 
+  pid_files = [pid_file]
   process_id_exists_command = as_sudo(["test", "-f", pid_file]) + " && " + as_sudo(["pgrep", "-F", pid_file])
 
   if name == "nfs3":
     process_id_exists_command += " || " + as_sudo(["test", "-f", status_params.unprivileged_nfsgateway_pid_file]) + " && " + as_sudo(["pgrep", "-F", status_params.unprivileged_nfsgateway_pid_file])
+    pid_files.append(status_params.unprivileged_nfsgateway_pid_file)
   elif name =="datanode":
     process_id_exists_command = PidFiles(params.possible_datanode_pid_files).test_command()
 
@@ -270,17 +272,15 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
     # Wait until stop actually happens
     process_id_does_not_exist_command = format("! ( {process_id_exists_command} )")
     code, out = shell.call(process_id_does_not_exist_command,
-            env=hadoop_env_exports,
             tries = 6,
             try_sleep = 10,
     )
 
     # If stop didn't happen, kill it forcefully
     if code != 0:
-      code, out, err = shell.checked_call(("cat", pid_file), sudo=True, env=hadoop_env_exports, stderr=subprocess32.PIPE)
-      pid = out
-      Execute(("kill", "-9", pid), sudo=True)
+      PidFiles(pid_files).force_kill()
       
+    Execute(process_id_does_not_exist_command)
     File(pid_file, action="delete")
 
 def get_jmx_data(nn_address, modeler_type, metric, encrypted=False, security_enabled=False):
@@ -416,6 +416,12 @@ def set_up_zkfc_security(params):
 class PidFiles:
   def __init__(self, paths):
     self.paths = paths
+
+  def force_kill(self):
+    for pid_file in self.paths:
+      code, out, err = shell.call(("cat", pid_file), sudo=True, stderr=subprocess32.PIPE)
+      if code == 0:
+        Execute(("kill", "-9", out), sudo=True)
 
   def test_command(self):
     def test_pid_command(pid_file):
