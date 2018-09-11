@@ -718,6 +718,7 @@ yarn_hbase_heap_memory_factor = expect("/configurations/yarn-hbase-env/yarn_hbas
 yarn_hbase_master_heapsize = ensure_unit_for_memory(calc_heap_memory(yarn_hbase_master_memory, yarn_hbase_heap_memory_factor))
 yarn_hbase_regionserver_heapsize = ensure_unit_for_memory(calc_heap_memory(yarn_hbase_regionserver_memory, yarn_hbase_heap_memory_factor))
 
+yarn_hbase_log_level = str(config['configurations']['yarn-hbase-env']['yarn_hbase_log_level']).upper()
 # ATSv2 integration properties ended
 
 gpu_module_enabled = str(config['configurations']['container-executor']['gpu_module_enabled']).lower()
