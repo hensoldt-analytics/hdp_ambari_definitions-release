@@ -59,30 +59,7 @@ class SparkServiceCheck(Script):
           pass
       if len(params.livy2_livyserver_hosts) > 0 and live_livyserver_host == "":
         raise Fail("Connection to all Livy servers failed")
-
-    if params.has_spark_thriftserver:
-      healthy_spark_thrift_host = ""
-      for spark_thrift_host in params.spark_thriftserver_hosts:
-        if params.security_enabled:
-          kerberos_principal = params.default_hive_kerberos_principal.replace('_HOST', spark_thrift_host)
-          beeline_url = ["jdbc:hive2://{spark_thrift_host}:{spark_thrift_port}/default;principal={kerberos_principal}","transportMode={spark_transport_mode}"]
-        else:
-          beeline_url = ["jdbc:hive2://{spark_thrift_host}:{spark_thrift_port}/default","transportMode={spark_transport_mode}"]
-        # append url according to used transport
-
-        beeline_cmd = os.path.join(params.spark_home, "bin", "beeline")
-        cmd = "! %s -u '%s'  -e '' 2>&1| awk '{print}'|grep -i -e 'Connection refused' -e 'Invalid URL' -e 'Error: Could not open'" % \
-              (beeline_cmd, format(";".join(beeline_url)))
-
-        try:
-          Execute(cmd, user=params.smoke_user, path=[beeline_cmd], timeout=CHECK_COMMAND_TIMEOUT_DEFAULT)
-          healthy_spark_thrift_host = spark_thrift_host
-          break
-        except:
-          pass
-
-      if len(params.spark_thriftserver_hosts) > 0 and healthy_spark_thrift_host == "":
-        raise Fail("Connection to all Spark thrift servers failed.")
+    
 
 if __name__ == "__main__":
   SparkServiceCheck().execute()

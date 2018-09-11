@@ -19,7 +19,6 @@ limitations under the License.
 '''
 import socket
 import tarfile
-import time
 import os
 from contextlib import closing
 
@@ -30,14 +29,10 @@ from resource_management.libraries.functions import format
 from resource_management.core.resources.system import File, Execute
 from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.stack_features import check_stack_feature
-from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.functions.constants import StackFeature
 from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.core.shell import as_sudo
-from resource_management.core.exceptions import ComponentIsNotRunning
-from resource_management.core.logger import Logger
 
-CHECK_COMMAND_TIMEOUT_DEFAULT = 60.0
 
 def make_tarfile(output_filename, source_dir):
   try:
@@ -121,7 +116,6 @@ def spark_service(name, upgrade_type=None, action=None):
         raise
 
     elif name == 'sparkthriftserver':
-      import status_params
       if params.security_enabled:
         hive_kinit_cmd = format("{kinit_path_local} -kt {hive_kerberos_keytab} {hive_kerberos_principal}; ")
         Execute(hive_kinit_cmd, user=params.spark_user)
@@ -136,40 +130,6 @@ def spark_service(name, upgrade_type=None, action=None):
       except:
         show_logs(params.spark_log_dir, user=params.spark_user)
         raise
-
-      sts_connection_created = False
-      i = 0
-      while i < 15:
-        time.sleep(30)
-        Logger.info("Check connection to STS is created.")
-        if params.security_enabled:
-          beeline_url = ["jdbc:hive2://{fqdn}:{spark_thrift_port}/default;principal={hive_kerberos_principal}","transportMode={spark_transport_mode}"]
-        else:
-          beeline_url = ["jdbc:hive2://{fqdn}:{spark_thrift_port}/default","transportMode={spark_transport_mode}"]
-        # append url according to used transport
-
-        beeline_cmd = os.path.join(params.spark_home, "bin", "beeline")
-        cmd = "! %s -u '%s'  -e '' 2>&1| awk '{print}'|grep -i -e 'Connection refused' -e 'Invalid URL' -e 'Error: Could not open'" % \
-              (beeline_cmd, format(";".join(beeline_url)))
-
-        try:
-          Execute(cmd, user=params.smoke_user, path=[beeline_cmd], timeout=CHECK_COMMAND_TIMEOUT_DEFAULT)
-          sts_connection_created = True
-          Logger.info("Connection to STS is created.")
-          break
-        except:
-          Logger.info("Connection to STS still is not created.")
-          pass
-
-        Logger.info("Check STS process status.")
-        check_process_status(status_params.spark_thrift_server_pid_file)
-
-        i+=1
-
-      if not sts_connection_created:
-        raise ComponentIsNotRunning("Something goes wrong, STS connection was not created but STS process still alive. "
-                                    "Potential problems: Hive/YARN doesn't work correctly or too slow. For more information check STS logs.")
-
   elif action == 'stop':
     if name == 'jobhistoryserver':
       try:
