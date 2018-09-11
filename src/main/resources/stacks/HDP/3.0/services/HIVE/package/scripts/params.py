@@ -812,9 +812,11 @@ if 'druid-common' in config['configurations'] \
 
 #beeline-site config
 
+beeline_jdbc_url_default = default("/configurations/hive-env/beeline_jdbc_url_default", "container")
+
 beeline_site_config = {
   'beeline.hs2.jdbc.url.container': hive_jdbc_url,
-  'beeline.hs2.jdbc.url.default': 'container'
+  'beeline.hs2.jdbc.url.default': beeline_jdbc_url_default
 }
 
 if has_hive_interactive:

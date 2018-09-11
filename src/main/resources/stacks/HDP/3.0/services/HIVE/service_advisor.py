@@ -199,6 +199,10 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     putHiveInteractiveSitePropertyAttribute = self.putPropertyAttribute(configurations, "hive-interactive-site")
     putHiveAtlasHookPropertyAttribute = self.putPropertyAttribute(configurations,"hive-atlas-application.properties")
 
+    hive_server_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER", services, hosts)
+    hive_server_interactive_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
+    hive_client_hosts = self.getHostsWithComponent("HIVE", "HIVE_CLIENT", services, hosts)
+
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
 
     containerSize = clusterData["mapMemory"] if clusterData["mapMemory"] > 2048 else int(clusterData["reduceMemory"])
@@ -258,9 +262,8 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
           putHiveProperty("javax.jdo.option.ConnectionURL", dbConnection)
 
     # Transactions
-    hs2Hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER", services, hosts)
     cpu_count = 0
-    for hostData in hs2Hosts:
+    for hostData in hive_server_hosts:
       cpu_count = max(cpu_count, hostData["Hosts"]["cpu_count"])
     putHiveSiteProperty("hive.compactor.worker.threads", str(max(cpu_count / 8, 1)))
 
@@ -349,7 +352,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     putHiveSiteProperty("hive.server2.tez.default.queues", ",".join([leafQueue["value"] for leafQueue in leafQueues]))
 
     #HSI HA
-    hive_server_interactive_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
     is_hsi_ha = len(hive_server_interactive_hosts) > 1
     putHiveInteractiveSitePropertyAttribute("hive.server2.active.passive.ha.registry.namespace", "visible", str(is_hsi_ha).lower())
 
@@ -474,9 +476,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     hs_heapsize_multiplier = 3.0/8
     hm_heapsize_multiplier = 1.0/8
     # HiveServer2 and HiveMetastore located on the same host
-    hive_server_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER", services, hosts)
-    hive_client_hosts = self.getHostsWithComponent("HIVE", "HIVE_CLIENT", services, hosts)
-
     if hive_server_hosts is not None and len(hive_server_hosts):
       hs_host_ram = hive_server_hosts[0]["Hosts"]["total_mem"]/1024
       putHiveEnvProperty("hive.metastore.heapsize", max(512, int(hs_host_ram*hm_heapsize_multiplier)))
@@ -626,6 +625,10 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
         putHiveAtlasHookPropertyAttribute("atlas.jaas.ticketBased-KafkaClient.loginModuleName", "delete", "true")
         putHiveAtlasHookPropertyAttribute("atlas.jaas.ticketBased-KafkaClient.option.useTicketCache", "delete", "true")
 
+    #beeline-site
+    beeline_jdbc_url_default = "llap" if (hive_server_interactive_hosts and not hive_server_hosts) else "container"
+    putHiveEnvProperty("beeline_jdbc_url_default", beeline_jdbc_url_default)
+
   def druid_host(self, component_name, config_type, services, hosts, default_host=None):
     hosts = self.getHostsWithComponent('DRUID', component_name, services, hosts)
     if hosts and config_type in services['configurations']:
@@ -770,6 +773,10 @@ class HiveValidator(service_advisor.ServiceAdvisor):
     hive_env = properties
     hive_site = self.getSiteProperties(configurations, "hive-site")
     
+    hive_server_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER", services, hosts)
+    hive_server_interactive_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
+    hive_client_hosts = self.getHostsWithComponent("HIVE", "HIVE_CLIENT", services, hosts)
+    
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
     if "hive_security_authorization" in hive_env and \
         str(hive_env["hive_security_authorization"]).lower() == "none" \
@@ -797,7 +804,21 @@ class HiveValidator(service_advisor.ServiceAdvisor):
         validationItems.append({"config-name": "alert_ldap_password",
                                 "item": self.getWarnItem(
                                   "Provide the password for the alert user. Hive authentication type LDAP requires valid LDAP credentials for the alerts.")})
-
+    
+    beeline_jdbc_url_default = hive_env["beeline_jdbc_url_default"]
+    if beeline_jdbc_url_default not in ["container", "llap"]:
+      validationItems.append({"config-name": "beeline_jdbc_url_default",
+                                "item": self.getWarnItem(
+                                  "beeline_jdbc_url_default should be \"container\" or \"llap\".")})
+    if beeline_jdbc_url_default == "container" and not hive_server_hosts and hive_server_interactive_hosts:
+      validationItems.append({"config-name": "beeline_jdbc_url_default",
+                                "item": self.getWarnItem(
+                                  "beeline_jdbc_url_default may not be \"container\" if only HSI is installed.")})
+    if beeline_jdbc_url_default == "llap" and not hive_server_interactive_hosts:
+      validationItems.append({"config-name": "beeline_jdbc_url_default",
+                                "item": self.getWarnItem(
+                                  "beeline_jdbc_url_default may not be \"llap\" if no HSI is installed.")})
+    
     return self.toConfigurationValidationProblems(validationItems, "hive-env")
 
 
