@@ -252,4 +252,10 @@
     </value-attributes>
     <on-ambari-upgrade add="true"/>
   </property>
+  <property>
+    <name>yarn_hbase_log_level</name>
+    <value>INFO</value>
+    <description>Setting log level to hmaster and regionserver. Default to info logs. Log levels could be INFO, DEBUG, WARN</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
 </configuration>
