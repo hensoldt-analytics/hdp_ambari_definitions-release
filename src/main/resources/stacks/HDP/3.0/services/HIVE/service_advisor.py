@@ -374,15 +374,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
       elif (rangerEnvHiveAuthProperty.lower() == "ranger"):
         putHiveEnvProperty("hive_security_authorization", "None")
 
-    # hive_security_authorization == "none"
-    # this property is unrelated to Kerberos
-    if str(configurations["hive-env"]["properties"]["hive_security_authorization"]).lower() == "none":
-      putHiveSiteProperty("hive.security.authorization.manager", "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdConfOnlyAuthorizerFactory")
-      if "KERBEROS" not in servicesList: # Kerberos security depends on this property
-        putHiveSiteProperty("hive.security.authorization.enabled", "false")
-    else:
-      putHiveSiteProperty("hive.security.authorization.enabled", "true")
-
     try:
       auth_manager_value = str(configurations["hive-env"]["properties"]["hive.security.metastore.authorization.manager"])
     except KeyError:
@@ -399,7 +390,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
       putHiveServerProperty("hive.security.authenticator.manager", "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator")
       putHiveServerProperty("hive.conf.restricted.list", "hive.security.authenticator.manager,hive.security.authorization.manager,hive.security.metastore.authorization.manager,"
                                                          "hive.security.metastore.authenticator.manager,hive.users.in.admin.role,hive.server2.xsrf.filter.enabled,hive.security.authorization.enabled")
-      putHiveSiteProperty("hive.security.authorization.manager", "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdConfOnlyAuthorizerFactory")
       if sqlstdauth_class not in auth_manager_values:
         auth_manager_values.append(sqlstdauth_class)
     elif sqlstdauth_class in auth_manager_values:
@@ -772,6 +762,7 @@ class HiveValidator(service_advisor.ServiceAdvisor):
     
     hive_env = properties
     hive_site = self.getSiteProperties(configurations, "hive-site")
+    hiveserver2_site = self.getSiteProperties(configurations, "hiveserver2-site")
     
     hive_server_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER", services, hosts)
     hive_server_interactive_hosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
@@ -780,7 +771,7 @@ class HiveValidator(service_advisor.ServiceAdvisor):
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
     if "hive_security_authorization" in hive_env and \
         str(hive_env["hive_security_authorization"]).lower() == "none" \
-      and str(hive_site["hive.security.authorization.enabled"]).lower() == "true":
+      and str(hiveserver2_site["hive.security.authorization.enabled"]).lower() == "true":
       authorization_item = self.getErrorItem("hive_security_authorization should not be None "
                                              "if hive.security.authorization.enabled is set")
       validationItems.append({"config-name": "hive_security_authorization", "item": authorization_item})

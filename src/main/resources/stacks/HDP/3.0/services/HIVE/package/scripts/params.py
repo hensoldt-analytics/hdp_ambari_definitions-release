@@ -478,7 +478,7 @@ else:
 mysql_user = 'mysql'
 
 # Hive security
-hive_authorization_enabled = config['configurations']['hive-site']['hive.security.authorization.enabled']
+hive_authorization_enabled = config['configurations']['hiveserver2-site']['hive.security.authorization.enabled']
 
 mysql_jdbc_driver_jar = "/usr/share/java/mysql-connector-java.jar"
 
