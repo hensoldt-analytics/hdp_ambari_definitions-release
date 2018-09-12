@@ -77,12 +77,9 @@ class HdfsServiceCheckDefault(HdfsServiceCheck):
     test_file = params.hdfs_service_check_test_file
     if not os.path.isfile(test_file):
       try:
-        Execute(format("dd if=/dev/urandom of={test_file} count=1 bs=1024"))
+        Execute(format("dd if=/dev/urandom of={test_file} count=1 bs=1024"), user=params.hdfs_user)
       except:
-        try:
-          Execute(format("rm {test_file}")) #clean up
-        except:
-          pass
+        File(test_file, action="delete")
         test_file = "/etc/passwd"
 
     params.HdfsResource(tmp_file,
