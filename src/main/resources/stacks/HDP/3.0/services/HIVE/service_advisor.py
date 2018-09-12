@@ -1013,7 +1013,11 @@ class HiveValidator(service_advisor.ServiceAdvisor):
             errMsg3 = " Reducing the 'Maximum Total Concurrent Queries' (value: {0}) is advisable as it is consuming more than 50% of " \
                       "'{1}' queue for LLAP.".format(num_tez_sessions, llap_queue_name)
             validationItems.append({"config-name": "hive.server2.tez.sessions.per.default.queue","item": self.getWarnItem(errMsg3)})
-
+      
+      if int(hsi_site["hive.llap.io.memory.size"]) > int(hsi_site["hive.llap.daemon.yarn.container.mb"]):
+        errorMessage = "In-Memory Cache per Daemon (value: {0}) may not be more then Memory per Daemon (value: {1})".format(hsi_site["hive.llap.io.memory.size"], hsi_site["hive.llap.daemon.yarn.container.mb"])
+        validationItems.append({"config-name": "hive.llap.io.memory.size","item": self.getErrorItem(errorMessage)})
+      
     # Validate that "remaining available capacity" in cluster is at least 512 MB, after "llap" queue is selected,
     # in order to run Service Checks.
     if llap_queue_name and llap_queue_cap_perc and llap_queue_name == self.AMBARI_MANAGED_LLAP_QUEUE_NAME:
