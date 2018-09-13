@@ -68,7 +68,7 @@ def hive_interactive(name = None):
                           action = "create_on_execute",
                           owner = params.hive_user,
                           group = params.user_group,
-                          mode = 0755
+                          mode = 01755
       )
 
     if not is_empty(params.tez_hook_proto_base_directory):
