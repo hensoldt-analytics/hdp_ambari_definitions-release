@@ -125,8 +125,13 @@ def setup_spark(env, type, upgrade_type = None, action = None):
           mode=0644)
 
   if params.has_spark_thriftserver:
+    spark2_thrift_sparkconf = dict(params.config['configurations']['spark2-thrift-sparkconf'])
+
+    if params.security_enabled:
+      spark2_thrift_sparkconf['spark.yarn.principal'] = spark2_thrift_sparkconf['spark.yarn.principal'].replace('_HOST', socket.getfqdn().lower())
+
     PropertiesFile(params.spark_thrift_server_conf_file,
-      properties = params.config['configurations']['spark2-thrift-sparkconf'],
+      properties = spark2_thrift_sparkconf,
       owner = params.hive_user,
       group = params.user_group,
       key_value_delimiter = " ",
