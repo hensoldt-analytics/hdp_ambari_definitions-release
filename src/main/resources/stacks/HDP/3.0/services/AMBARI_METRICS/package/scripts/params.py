@@ -101,6 +101,8 @@ metric_truststore_type= default("/configurations/ams-ssl-client/ssl.client.trust
 metric_truststore_password= default("/configurations/ams-ssl-client/ssl.client.truststore.password", "")
 metric_truststore_ca_certs='ca.pem'
 
+metrics_truststore_use_alias = default("/configurations/ams-ssl-client/ssl.client.truststore.use.alias", False)
+
 metric_truststore_alias_list = []
 for host in ams_collector_hosts.split(","):
   metric_truststore_alias = default("/configurations/ams-ssl-client/{host}.ssl.client.truststore.alias", None)
