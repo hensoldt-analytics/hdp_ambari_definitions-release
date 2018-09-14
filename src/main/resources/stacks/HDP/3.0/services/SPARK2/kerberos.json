@@ -88,7 +88,17 @@
               "keytab": {
                 "configuration": "spark2-defaults/spark.history.kerberos.keytab"
               }
-            }
+            },
+            {
+              "name": "sts_spark_service_identity_2_thrift",
+              "reference": "/SPARK2/spark_service_keytab",
+              "principal": {
+                "configuration": "spark2-thrift-sparkconf/spark.yarn.principal"
+              },
+              "keytab": {
+                "configuration": "spark2-thrift-sparkconf/spark.yarn.keytab"
+              }
+	        }
           ]
         },
         {
