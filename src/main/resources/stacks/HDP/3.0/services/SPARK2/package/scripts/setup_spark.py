@@ -127,7 +127,7 @@ def setup_spark(env, type, upgrade_type = None, action = None):
   if params.has_spark_thriftserver:
     spark2_thrift_sparkconf = dict(params.config['configurations']['spark2-thrift-sparkconf'])
 
-    if params.security_enabled:
+    if params.security_enabled and 'spark.yarn.principal' in spark2_thrift_sparkconf:
       spark2_thrift_sparkconf['spark.yarn.principal'] = spark2_thrift_sparkconf['spark.yarn.principal'].replace('_HOST', socket.getfqdn().lower())
 
     PropertiesFile(params.spark_thrift_server_conf_file,
