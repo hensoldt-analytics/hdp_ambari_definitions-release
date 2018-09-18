@@ -25,6 +25,6 @@
         <description>
             Address for the RSC driver to connect back with it's connection info.
         </description>
-        <on-ambari-upgrade add="false"/>
+        <on-ambari-upgrade add="true"/>
     </property>
 </configuration>
