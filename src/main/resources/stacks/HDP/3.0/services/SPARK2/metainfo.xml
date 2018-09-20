@@ -222,6 +222,7 @@
       </components>
 
       <configuration-dependencies>
+        <config-type>core-site</config-type>
         <config-type>spark2-defaults</config-type>
         <config-type>spark2-env</config-type>
         <config-type>spark2-log4j-properties</config-type>
