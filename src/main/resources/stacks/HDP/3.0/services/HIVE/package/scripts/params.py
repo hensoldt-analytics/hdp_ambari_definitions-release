@@ -610,7 +610,7 @@ if has_hive_interactive:
   start_hiveserver2_interactive_path = format("{tmp_dir}/start_hiveserver2_interactive_script")
   hive_interactive_env_sh_template = config['configurations']['hive-interactive-env']['content']
   hive_interactive_enabled = default('/configurations/hive-interactive-env/enable_hive_interactive', False)
-  llap_app_java_opts = default('/configurations/hive-interactive-env/llap_java_opts', '-XX:+AlwaysPreTouch {% if java_version > 7 %}-XX:+UseG1GC -XX:TLABSize=8m -XX:+ResizeTLAB -XX:+UseNUMA -XX:+AggressiveOpts -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:G1MaxNewSizePercent=40  -XX:MaxGCPauseMillis=200{% else %}-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC{% endif %}')
+  llap_app_java_opts = default('/configurations/hive-interactive-env/llap_java_opts', '-XX:+AlwaysPreTouch -XX:+UseG1GC -XX:TLABSize=8m -XX:+ResizeTLAB -XX:+UseNUMA -XX:+AggressiveOpts -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:G1MaxNewSizePercent=40 -XX:MaxGCPauseMillis=200')
   hive_interactive_heapsize = hive_heapsize
   llap_app_name = config['configurations']['hive-interactive-env']['llap_app_name']
   # Ambari upgrade may not add this config as it will force restart of HSI (stack upgrade should)

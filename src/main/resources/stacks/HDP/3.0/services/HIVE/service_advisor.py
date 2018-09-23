@@ -204,15 +204,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     hive_client_hosts = self.getHostsWithComponent("HIVE", "HIVE_CLIENT", services, hosts)
 
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
-
-    containerSize = clusterData["mapMemory"] if clusterData["mapMemory"] > 2048 else int(clusterData["reduceMemory"])
-    containerSize = min(clusterData["containers"] * clusterData["ramPerContainer"], containerSize)
-    container_size_bytes = int(containerSize)*1024*1024
-    
-    putHiveProperty("hive.auto.convert.join.noconditionaltask.size", int(round(container_size_bytes / 3)))
-    putHiveProperty("hive.tez.java.opts", "-server -Xmx" + str(int(round((0.8 * containerSize) + 0.5))) + "m " +
-                    "-Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseParallelGC -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps")
-    putHiveProperty("hive.tez.container.size", containerSize)
     
     # druid is not in list of services to be installed
     if 'DRUID' in servicesList:
@@ -292,6 +283,12 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
     if not "yarn-site" in configurations:
       self.calculateYarnAllocationSizes(configurations, services, hosts)
+
+
+    containerSize = clusterData["mapMemory"] if clusterData["mapMemory"] > 2048 else int(clusterData["reduceMemory"])
+    containerSize = min(clusterData["containers"] * clusterData["ramPerContainer"], containerSize)
+    container_size_bytes = int(containerSize)*1024*1024
+
     yarnMaxAllocationSize = min(30 * int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]), int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
     #duplicate tez task resource calc logic, direct dependency doesn't look good here (in case of Hive without Tez)
     tez_container_size = min(containerSize, yarnMaxAllocationSize)
@@ -472,11 +469,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
       putHiveEnvProperty("hive.heapsize", max(512, int(hs_host_ram*hs_heapsize_multiplier)))
       putHiveEnvPropertyAttribute("hive.metastore.heapsize", "maximum", max(1024, hs_host_ram))
       putHiveEnvPropertyAttribute("hive.heapsize", "maximum", max(1024, hs_host_ram))
-
-    # TEZ JVM options
-    # These jvm params are jdk8 only may not work on prior jdk versions but thats ok since HDP3 is jdk8 only
-    jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
-    putHiveSiteProperty("hive.tez.java.opts", "-server -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA " + jvmGCParams + " -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps")
 
     # if hive using sqla db, then we should add DataNucleus property
     sqla_db_used = "hive-env" in services["configurations"] and "hive_database" in services["configurations"]["hive-env"]["properties"] and \
@@ -711,7 +703,6 @@ class HiveValidator(service_advisor.ServiceAdvisor):
 
   def validateHiveConfigurationsFromHDP30(self, properties, recommendedDefaults, configurations, services, hosts):
     validationItems = [ {"config-name": "hive.tez.container.size", "item": self.validatorLessThenDefaultValue(properties, recommendedDefaults, "hive.tez.container.size")},
-                        {"config-name": "hive.tez.java.opts", "item": self.validateXmxValue(properties, recommendedDefaults, "hive.tez.java.opts")},
                         {"config-name": "hive.auto.convert.join.noconditionaltask.size", "item": self.validatorLessThenDefaultValue(properties, recommendedDefaults, "hive.auto.convert.join.noconditionaltask.size")} ]
     
     hive_site = properties

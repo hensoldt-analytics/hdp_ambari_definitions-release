@@ -114,8 +114,8 @@ limitations under the License.
   </property>
   <property>
     <name>hive.tez.java.opts</name>
-    <value>-server -Xmx545m -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseParallelGC -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps</value>
-    <description>Java command line options for Tez. The -Xmx parameter value is generally 80% of hive.tez.container.size.</description>
+    <value>-server -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseG1GC -XX:+ResizeTLAB -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps</value>
+    <description>Java command line options for Tez.</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>

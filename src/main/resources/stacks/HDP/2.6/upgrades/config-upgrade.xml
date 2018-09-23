@@ -261,6 +261,10 @@
             <set key="ranger.plugin.hive.policy.rest.ssl.config.file" value="{{ranger_hive_ssl_config_file}}"
               if-type="ranger-hive-security" if-key="ranger.plugin.hive.policy.rest.ssl.config.file" if-key-state="present"/>
           </definition>
+          <definition xsi:type="configure" id="hdp_30_hs_gc_jvm_args">
+            <type>hive-site</type>
+            <replace key="hive.tez.java.opts" find="-XX:+UseParallelGC" replace-with="-XX:+UseG1GC -XX:+ResizeTLAB"/>
+          </definition>
         </changes>
       </component>
       <component name="HIVE_SERVER_INTERACTIVE">
@@ -709,6 +713,11 @@
             <type>tez-site</type>
             <set key="tez.am.launch.env" value="LD_LIBRARY_PATH=/usr/hdp/${hdp.version}/hadoop/lib/native:/usr/hdp/${hdp.version}/hadoop/lib/native/Linux-{{architecture}}-64:./tezlib/lib/native:./tezlib/lib/native/Linux-{{architecture}}-64" />
             <set key="tez.task.launch.env" value="LD_LIBRARY_PATH=/usr/hdp/${hdp.version}/hadoop/lib/native:/usr/hdp/${hdp.version}/hadoop/lib/native/Linux-{{architecture}}-64:./tezlib/lib/native:./tezlib/lib/native/Linux-{{architecture}}-64" />
+          </definition>
+          <definition xsi:type="configure" id="hdp_30_tez_gc_jvm_args">
+            <type>tez-site</type>
+            <replace key="tez.task.launch.cmd-opts" find="-XX:+UseParallelGC" replace-with="-XX:+UseG1GC -XX:+ResizeTLAB"/>
+            <replace key="tez.am.launch.cmd-opts" find="-XX:+UseParallelGC" replace-with="-XX:+UseG1GC -XX:+ResizeTLAB"/>
           </definition>
         </changes>
       </component>

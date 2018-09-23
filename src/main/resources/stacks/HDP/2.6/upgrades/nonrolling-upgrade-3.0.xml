@@ -596,8 +596,17 @@
         <task xsi:type="configure" id="hdp_30_hsi_log_file" />
       </execute-stage>
 
+      <execute-stage service="HIVE" component="HIVE_SERVER" title="Update Hive GC JVM args">
+        <task xsi:type="configure" id="hdp_30_hs_gc_jvm_args" />
+      </execute-stage>
+
       <execute-stage service="HIVE" component="HIVE_SERVER" title="Updating Ranger Hive Policy Rest SSL File path config">
         <task xsi:type="configure" id="hdp_3_0_updating_ranger_hive_policy_rest_ssl_file" />
+      </execute-stage>
+
+      <!--TEZ-->
+      <execute-stage service="TEZ" component="TEZ_CLIENT" title="Update Tez GC JVM args">
+        <task xsi:type="configure" id="hdp_30_tez_gc_jvm_args" />
       </execute-stage>
 
       <!--OOZIE-->

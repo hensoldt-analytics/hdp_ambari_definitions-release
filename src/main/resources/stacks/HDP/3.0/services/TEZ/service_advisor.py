@@ -125,7 +125,6 @@ class TezServiceAdvisor(service_advisor.ServiceAdvisor):
     recommender.recommendTezConfigurationsFromHDP21(configurations, clusterData, services, hosts)
     recommender.recommendTezConfigurationsFromHDP22(configurations, clusterData, services, hosts)
     recommender.recommendTezConfigurationsFromHDP23(configurations, clusterData, services, hosts)
-    recommender.recommendTezConfigurationsFromHDP26(configurations, clusterData, services, hosts)
     recommender.recommendTezConfigurationsFromHDP30(configurations, clusterData, services, hosts)
 
 
@@ -284,38 +283,6 @@ class TezRecommender(service_advisor.ServiceAdvisor):
       putTezProperty("tez.tez-ui.history-url.base", tez_url)
     pass
 
-    # TEZ JVM options
-    jvmGCParams = "-XX:+UseParallelGC"
-    if "ambari-server-properties" in services and "java.home" in services["ambari-server-properties"]:
-      # JDK8 needs different parameters
-      jdkMajorVersion = self.__getJdkMajorVersion(services["ambari-server-properties"]["java.home"])
-      if jdkMajorVersion and len(jdkMajorVersion) > 1 and int(jdkMajorVersion[0]) > 0 and int(jdkMajorVersion[1]) > 7:
-        jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
-      # Note: Same calculation is done in 2.6/stack_advisor::recommendTezConfigurations() for 'tez.task.launch.cmd-opts',
-    # and along with it, are appended heap dump opts. If something changes here, make sure to change it in 2.6 stack.
-    putTezProperty('tez.am.launch.cmd-opts', "-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA " + jvmGCParams)
-    putTezProperty('tez.task.launch.cmd-opts', "-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA " + jvmGCParams)
-
-
-  def recommendTezConfigurationsFromHDP26(self, configurations, clusterData, services, hosts):
-    putTezProperty = self.putProperty(configurations, "tez-site")
-
-    # TEZ JVM options
-    jvmGCParams = "-XX:+UseParallelGC"
-    if "ambari-server-properties" in services and "java.home" in services["ambari-server-properties"]:
-      # JDK8 needs different parameters
-      jdkMajorVersion = self.__getJdkMajorVersion(services["ambari-server-properties"]["java.home"])
-      if jdkMajorVersion and len(jdkMajorVersion) > 1 and int(jdkMajorVersion[0]) > 0 and int(jdkMajorVersion[1]) > 7:
-        jvmGCParams = "-XX:+UseG1GC -XX:+ResizeTLAB"
-    tez_jvm_opts = "-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA "
-    # Append 'jvmGCParams' and 'Heap Dump related option' (({{heap_dump_opts}}) Expanded while writing the
-    # configurations at start/restart time).
-    tez_jvm_updated_opts = tez_jvm_opts + jvmGCParams + "{{heap_dump_opts}}"
-    putTezProperty('tez.am.launch.cmd-opts', tez_jvm_updated_opts)
-    putTezProperty('tez.task.launch.cmd-opts', tez_jvm_updated_opts)
-    self.logger.info("Updated 'tez-site' config 'tez.task.launch.cmd-opts' and 'tez.am.launch.cmd-opts' as "
-                ": {0}".format(tez_jvm_updated_opts))
-
   def recommendTezConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
     putTezProperty = self.putProperty(configurations, "tez-site")
     if "HIVE" in self.getServiceNames(services) and "hive-site" in services["configurations"] and "hive.metastore.warehouse.external.dir" in services["configurations"]["hive-site"]["properties"]:
@@ -323,16 +290,6 @@ class TezRecommender(service_advisor.ServiceAdvisor):
       putTezProperty("tez.history.logging.proto-base-dir", "{0}/sys.db".format(hive_metastore_warehouse_external_dir))
       putTezProperty("tez.history.logging.service.class", "org.apache.tez.dag.history.logging.proto.ProtoHistoryLoggingService")
       self.logger.info("Updated 'tez-site' config 'tez.history.logging.proto-base-dir' and 'tez.history.logging.service.class'")
-
-
-  def __getJdkMajorVersion(self, javaHome):
-    jdkVersion = subprocess.check_output([javaHome + "/bin/java", "-version"], stderr=subprocess.STDOUT)
-    pattern = '\"(\d+\.\d+).*\"'
-    majorVersionString = re.search(pattern, jdkVersion).groups()[0]
-    if majorVersionString:
-      return re.split("\.", majorVersionString)
-    else:
-      return None
 
 
 class TezValidator(service_advisor.ServiceAdvisor):
