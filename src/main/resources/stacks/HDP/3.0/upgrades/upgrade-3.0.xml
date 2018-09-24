@@ -759,6 +759,10 @@
 
     <service name="SPARK2">
       <component name="SPARK2_JOBHISTORYSERVER">
+        <pre-upgrade>
+          <task xsi:type="configure" id="hdp_3_0_*_spark2-thrift-sparkconf" />
+        </pre-upgrade>
+        <pre-downgrade />
         <upgrade>
           <task xsi:type="restart-task" />
         </upgrade>
