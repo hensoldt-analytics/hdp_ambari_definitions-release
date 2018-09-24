@@ -63,6 +63,7 @@ hive_component_directory = Script.get_component_from_role(HIVE_SERVER_ROLE_DIREC
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 sudo = AMBARI_SUDO_BINARY
+fqdn = socket.getfqdn().lower()
 
 stack_name = status_params.stack_name
 stack_root = Script.get_stack_root()
@@ -166,10 +167,10 @@ spark_hive_properties = {
 # security settings
 if security_enabled:
   spnego_principal = config['configurations']['spark2-defaults']['history.server.spnego.kerberos.principal']
-  spnego_principal = spnego_principal.replace('_HOST', socket.getfqdn().lower())
+  spnego_principal = spnego_principal.replace('_HOST', fqdn)
   spnego_keytab = config['configurations']['spark2-defaults']['history.server.spnego.keytab.file']
 
-  spark_principal = spark_kerberos_principal.replace('_HOST', socket.getfqdn().lower())
+  spark_principal = spark_kerberos_principal.replace('_HOST', fqdn)
 
   if is_hive_installed:
     spark_hive_properties.update({
@@ -185,7 +186,7 @@ if security_enabled:
 
     hive_kerberos_keytab = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.keytab']
     default_hive_kerberos_principal = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.principal']
-    hive_kerberos_principal = default_hive_kerberos_principal.replace('_HOST', socket.getfqdn().lower())
+    hive_kerberos_principal = default_hive_kerberos_principal.replace('_HOST', fqdn)
 
 spark_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
 
