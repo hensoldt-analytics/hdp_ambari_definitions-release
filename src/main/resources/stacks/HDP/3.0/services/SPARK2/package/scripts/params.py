@@ -103,6 +103,9 @@ user_group = status_params.user_group
 spark_hdfs_user_dir = format("/user/{spark_user}")
 spark_history_dir = default('/configurations/spark2-defaults/spark.history.fs.logDirectory', "hdfs:///spark2-history")
 
+spark2_lib_dir = "/var/lib/spark2"
+spark_history_store_path = default("/configurations/spark2-defaults/spark.history.store.path", "/var/lib/spark2/shs_db")
+
 spark_warehouse_dir = config['configurations']['spark2-defaults']["spark.sql.warehouse.dir"]
 whs_dir_protocol = urlparse(spark_warehouse_dir).scheme
 default_metastore_catalog = config['configurations']['spark2-hive-site-override']["metastore.catalog.default"]

@@ -238,4 +238,11 @@
     <on-ambari-upgrade add="false"/>
   </property>
 
+  <property>
+    <name>spark.history.store.path</name>
+    <value>/var/lib/spark2/shs_db</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
 </configuration>

@@ -53,6 +53,20 @@ def setup_spark(env, type, upgrade_type = None, action = None):
             create_parents = True
   )
   if type == 'server' and action == 'config':
+    Directory(params.spark2_lib_dir,
+              owner=params.spark_user,
+              group=params.user_group,
+              create_parents = True,
+              mode=0775
+    )
+
+    Directory(params.spark_history_store_path,
+              owner=params.spark_user,
+              group=params.user_group,
+              create_parents = True,
+              mode=0775
+    )
+
     params.HdfsResource(params.spark_hdfs_user_dir,
                        type="directory",
                        action="create_on_execute",
