@@ -561,6 +561,10 @@
 
     <service name="KAFKA">
       <component name="KAFKA_BROKER">
+        <pre-upgrade>
+          <task xsi:type="configure" id="hdp_3_0_x_kafka_plaintext_sasl_removal"/>
+        </pre-upgrade>
+        <pre-downgrade/>
         <upgrade>
           <task xsi:type="restart-task" />
         </upgrade>
