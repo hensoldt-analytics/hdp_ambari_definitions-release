@@ -94,10 +94,18 @@ server_env_sh_template = config['configurations']['accumulo-env']['server_conten
 instance_name = config['configurations']['accumulo-env']['accumulo_instance_name']
 instance_secret = config['configurations']['accumulo-env']['instance_secret']
 root_password = config['configurations']['accumulo-env']['accumulo_root_password']
+
+def make_parent_dir(uri):
+    return uri[0:uri.rfind('/')]
+
+# A comma-separated list of HDFS URIs (e.g. "hdfs://nn1:8020/dir1,hdfs://nn2:8020/dir2")
 instance_volumes = config['configurations']['accumulo-site']['instance.volumes']
-instance_volumes_space_separated = instance_volumes.replace(',', ' ')
+# Build a list from the comma-separated value
 instance_volumes_list = [x.strip() for x in instance_volumes.split(',')]
-parent_dir = instance_volumes[0:instance_volumes.rfind('/')]
+instance_volumes_space_separated = " ".join(instance_volumes_list)
+# Construct the list of parent directories for all instance volumes
+parent_dirs_to_create = " ".join([make_parent_dir(x) for x in instance_volumes_list])
+parent_dir = make_parent_dir(instance_volumes)
 
 # tracer properties
 trace_user = config['configurations']['accumulo-site']['trace.user']

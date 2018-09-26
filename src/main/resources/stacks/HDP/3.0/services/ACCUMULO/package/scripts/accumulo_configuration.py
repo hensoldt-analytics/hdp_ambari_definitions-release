@@ -176,7 +176,7 @@ def setup_conf_dir(name=None): # 'master' or 'tserver' or 'monitor' or 'gc' or '
                          owner=params.accumulo_user,
                          mode=0700
     )
-    params.HdfsResource(params.instance_volumes_list,
+    params.HdfsResource(params.parent_dirs_to_create,
                          type="directory",
                          action="create_on_execute",
                          owner=params.accumulo_user,
