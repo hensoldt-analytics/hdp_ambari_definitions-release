@@ -613,6 +613,12 @@
             <type>kafka-broker</type>
               <set key="log.message.format.version" value="1.0" if-type="kafka-broker" if-key="log.message.format.version" if-key-state="absent"/>
           </definition>
+          <definition xsi:type="configure" id="hdp_3_0_x_kafka_plaintext_sasl_removal">
+            <type>kafka-broker</type>
+            <set key="security.inter.broker.protocol" value="SASL_PLAINTEXT"
+                 if-type="kafka-broker" if-key="security.inter.broker.protocol" if-value="PLAINTEXTSASL"/>
+            <replace key="listeners" find="PLAINTEXTSASL" replace-with="SASL_PLAINTEXT"/>
+          </definition>
         </changes>
       </component>
     </service>

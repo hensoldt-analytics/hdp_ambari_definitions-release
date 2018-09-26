@@ -661,6 +661,13 @@
         </task>
       </execute-stage>
 
+      <execute-stage service="KAFKA" component="KAFKA_BROKER" title="Remove deprecated PLAINTEXTSASL usage">
+        <task xsi:type="configure" id="hdp_3_0_x_kafka_plaintext_sasl_removal">
+          <summary>Remove deprecated PLAINTEXTSASL protocol in flavor of SASL_PLAINTEXT.
+          </summary>
+        </task>
+      </execute-stage>
+
       <!--STORM-->
       <execute-stage service="STORM" component="NIMBUS" title="Apply config changes for Storm AutoCreds">
         <task xsi:type="configure" id="storm_nimbus_autocred_config"/>
