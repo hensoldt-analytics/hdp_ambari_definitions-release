@@ -764,7 +764,9 @@
     <service name="SPARK2">
       <component name="SPARK2_JOBHISTORYSERVER">
         <pre-upgrade>
-          <task xsi:type="configure" id="hdp_3_0_*_spark2-thrift-sparkconf" />
+          <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixSparkYarnIdentity">
+            <summary>Adding spark.yarn.keytab/principal properties</summary>
+          </task>
         </pre-upgrade>
         <pre-downgrade />
         <upgrade>

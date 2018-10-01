@@ -278,7 +278,9 @@
       <skippable>true</skippable> <!-- May fix configuration problems manually -->
 
       <execute-stage service="SPARK2" component="SPARK2_JOBHISTORYSERVER" title="Create spark.yarn.keytab/principal based on spark history keytab/principal">
-        <task xsi:type="configure" id="hdp_3_0_*_spark2-thrift-sparkconf"/>
+        <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixSparkYarnIdentity">
+          <summary>Adding spark.yarn.keytab/principal properties</summary>
+        </task>
       </execute-stage>
 
       <!-- ZEPPELIN -->
