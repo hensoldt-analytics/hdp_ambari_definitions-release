@@ -660,6 +660,11 @@
             <type>atlas-log4j</type>
             <replace key="content" find="&lt;logger name=&quot;com.thinkaurelius.titan&quot; additivity=&quot;false&quot;&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;level value=&quot;warn&quot;/&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;appender-ref ref=&quot;FILE&quot;/&gt;&#xA;&#x20;&#x20;&lt;/logger&gt;" replace-with="&lt;logger name=&quot;com.thinkaurelius.titan&quot; additivity=&quot;false&quot;&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;level value=&quot;warn&quot;/&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;appender-ref ref=&quot;FILE&quot;/&gt;&#xA;&#x20;&#x20;&lt;/logger&gt;&#xA;&#xA;&#xA;&#x20;&#x20;&lt;logger name=&quot;org.janusgraph&quot; additivity=&quot;false&quot;&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;level value=&quot;warn&quot;/&gt;&#xA;&#x20;&#x20;&#x20;&#x20;&lt;appender-ref ref=&quot;FILE&quot;/&gt;&#xA;&#x20;&#x20;&lt;/logger&gt;&#xA;"/>
           </definition>
+          <definition xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal" summary="Updating Atlas security protocol for Kafka">
+            <type>application-properties</type>
+            <set key="atlas.kafka.security.protocol" value="SASL_PLAINTEXT"
+                 if-type="application-properties" if-key="atlas.kafka.security.protocol" if-key-state="present" if-value="PLAINTEXTSASL"/>
+          </definition>
         </changes>
       </component>
     </service>
@@ -784,6 +789,11 @@
           <definition xsi:type="configure" id="hdp_3_0_add_ranger_tagsync_cookie_enabled_config">
             <type>ranger-tagsync-site</type>
             <set key="ranger.tagsync.cookie.enabled" value="true" if-type="ranger-tagsync-site" if-key="ranger.tagsync.cookie.enabled" if-key-state="absent" />
+          </definition>
+          <definition xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal" summary="Updating Tagsync security protocol for Kafka">
+            <type>tagsync-application-properties</type>
+            <set key="atlas.kafka.security.protocol" value="SASL_PLAINTEXT"
+                 if-type="tagsync-application-properties" if-key="atlas.kafka.security.protocol" if-key-state="present" if-value="PLAINTEXTSASL"/>
           </definition>
         </changes>
       </component>

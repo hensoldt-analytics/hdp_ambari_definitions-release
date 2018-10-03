@@ -529,6 +529,10 @@
       </component>
 
       <component name="RANGER_TAGSYNC">
+        <pre-upgrade>
+          <task xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal"/>
+        </pre-upgrade>
+        <pre-downgrade/>
         <upgrade>
           <task xsi:type="restart-task" />
         </upgrade>
@@ -940,6 +944,7 @@
             <script>scripts/metadata_server.py</script>
             <function>update_atlas_simple_authz</function>
           </task>
+          <task xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal"/>
         </pre-upgrade>
         <pre-downgrade/>
         <upgrade>

@@ -32,5 +32,29 @@
       </component>
     </service>
 
+    <service name="ATLAS">
+      <component name="ATLAS_SERVER">
+        <changes>
+          <definition xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal" summary="Updating Atlas security protocol for Kafka">
+            <type>application-properties</type>
+            <set key="atlas.kafka.security.protocol" value="SASL_PLAINTEXT"
+                 if-type="application-properties" if-key="atlas.kafka.security.protocol" if-key-state="present" if-value="PLAINTEXTSASL"/>
+          </definition>
+        </changes>
+      </component>
+    </service>
+
+    <service name="RANGER">
+      <component name="RANGER_TAGSYNC">
+        <changes>
+          <definition xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal" summary="Updating Tagsync security protocol for Kafka">
+            <type>tagsync-application-properties</type>
+            <set key="atlas.kafka.security.protocol" value="SASL_PLAINTEXT"
+                 if-type="tagsync-application-properties" if-key="atlas.kafka.security.protocol" if-key-state="present" if-value="PLAINTEXTSASL"/>
+          </definition>
+        </changes>
+      </component>
+    </service>
+
   </services>
 </upgrade-config-changes>

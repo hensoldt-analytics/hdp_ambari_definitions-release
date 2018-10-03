@@ -631,6 +631,10 @@
         <task xsi:type="configure" id="hdp_3_0_add_ranger_tagsync_cookie_enabled_config"/>
       </execute-stage>
 
+      <execute-stage service="RANGER" component="RANGER_TAGSYNC" title="Updating Tagsync security protocol for Kafka">
+        <task xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal"/>
+      </execute-stage>
+
       <!--ATLAS-->
       <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Updating Atlas configurations.">
         <task xsi:type="configure" id="atlas_upgrade_configuration"/>
@@ -638,6 +642,10 @@
 
       <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Adding Janus-graph logger configurations for Atlas.">
         <task xsi:type="configure" id="atlas_log4j_adding_janus_graph"/>
+      </execute-stage>
+
+      <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Updating Atlas security protocol for Kafka">
+        <task xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal"/>
       </execute-stage>
 
       <!--KAFKA-->
