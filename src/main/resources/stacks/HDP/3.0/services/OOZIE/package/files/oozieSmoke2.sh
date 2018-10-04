@@ -40,6 +40,12 @@ function checkOozieJobStatus {
   local num_of_tries=$2
   #default num_of_tries to 10 if not present
   num_of_tries=${num_of_tries:-10}
+
+  # If job_id is empty due to an error when submitting then exit and notify user
+  if [ "" == "$job_id" ]; then
+    return 1;
+  fi
+
   local i=0
   local rc=1
   local cmd="source ${oozie_conf_dir}/oozie-env.sh ; ${oozie_bin_dir}/oozie job -oozie ${OOZIE_SERVER} -info $job_id"
