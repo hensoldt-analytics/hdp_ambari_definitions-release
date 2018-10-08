@@ -187,16 +187,18 @@ class ZeppelinRecommender(service_advisor.ServiceAdvisor):
     zeppelin_shiro_ini = self.getServicesSiteProperties(services, "zeppelin-shiro-ini")
     zeppelin_site = self.getServicesSiteProperties(services, "zeppelin-site")
     putZeppelinShiroIniProperty = self.putProperty(configurations, "zeppelin-shiro-ini", services)
-    shiro_ini_content = zeppelin_shiro_ini['shiro_ini_content']
 
-    if zeppelin_shiro_ini and zeppelin_site and "zeppelin.ssl" in zeppelin_site and zeppelin_site["zeppelin.ssl"] == 'true':
-      shiro_ini_content = shiro_ini_content.replace("#cookie.secure = true", "cookie.secure = true")
-      putZeppelinShiroIniProperty('shiro_ini_content', str(shiro_ini_content))
+    if zeppelin_shiro_ini and "shiro_ini_content" in zeppelin_shiro_ini:
+      shiro_ini_content = zeppelin_shiro_ini['shiro_ini_content']
 
-    else:
-      if not "#cookie.secure = true" in shiro_ini_content:
-        shiro_ini_content = shiro_ini_content.replace("cookie.secure = true", "#cookie.secure = true")
+      if zeppelin_site and "zeppelin.ssl" in zeppelin_site and zeppelin_site["zeppelin.ssl"] == 'true':
+        shiro_ini_content = shiro_ini_content.replace("#cookie.secure = true", "cookie.secure = true")
         putZeppelinShiroIniProperty('shiro_ini_content', str(shiro_ini_content))
+
+      else:
+        if not "#cookie.secure = true" in shiro_ini_content:
+          shiro_ini_content = shiro_ini_content.replace("cookie.secure = true", "#cookie.secure = true")
+          putZeppelinShiroIniProperty('shiro_ini_content', str(shiro_ini_content))
 
 
   def __recommendLivySuperUsers(self, configurations, services):
