@@ -182,7 +182,7 @@
           <definition xsi:type="configure" id="hdp_30_hive_log_file" summary="Configure hive log file names and dir">
             <type>hive-env</type>
             <insert key="content" insert-type="append" newline-before="true" newline-after="true"
-                value="&#10;if [[ $HADOOP_OPTS != *-Dhive.log.file* ]]; then&#10;  if [ &quot;$SERVICE&quot; = &quot;metastore&quot; ]; then&#10;    export HADOOP_OPTS=&quot;$HADOOP_OPTS -Dhive.log.dir={{hive_log_dir}} -Dhive.log.file=hivemetastore.log&quot;&#10;  fi&#10;  if [ &quot;$SERVICE&quot; = &quot;hiveserver2&quot; ]; then&#10;    export HADOOP_OPTS=&quot;$HADOOP_OPTS -Dhive.log.dir={{hive_log_dir}} -Dhive.log.file=hiveserver2.log&quot;&#10;  fi&#10;fi" />
+                value="&#10;if [[ &quot;$HADOOP_OPTS&quot; != *-Dhive.log.file* ]]; then&#10;  if [ &quot;$SERVICE&quot; = &quot;metastore&quot; ]; then&#10;    export HADOOP_OPTS=&quot;$HADOOP_OPTS -Dhive.log.dir={{hive_log_dir}} -Dhive.log.file=hivemetastore.log&quot;&#10;  fi&#10;  if [ &quot;$SERVICE&quot; = &quot;hiveserver2&quot; ]; then&#10;    export HADOOP_OPTS=&quot;$HADOOP_OPTS -Dhive.log.dir={{hive_log_dir}} -Dhive.log.file=hiveserver2.log&quot;&#10;  fi&#10;fi" />
           </definition>
           <definition xsi:type="configure" id="hive_exec_dynamic_partition_mode_nonstrict" summary="Update hive.exec.dynamic.partition.mode to 'nonstrict'">
             <type>hive-site</type>
@@ -272,7 +272,7 @@
           <definition xsi:type="configure" id="hdp_30_hsi_log_file" summary="Configure hive log file names and dir">
             <type>hive-interactive-env</type>
             <insert key="content" insert-type="append" newline-before="true" newline-after="true"
-                value="&#10;if [ $HADOOP_OPTS != *-Dhive.log.file* ]; then&#10;  export HADOOP_OPTS=&quot;$HADOOP_OPTS -Dhive.log.dir={{hive_log_dir}} -Dhive.log.file=hiveserver2Interactive.log&quot;&#10;fi" />
+                value="&#10;if [ &quot;$HADOOP_OPTS&quot; != *-Dhive.log.file* ]; then&#10;  export HADOOP_OPTS=&quot;$HADOOP_OPTS -Dhive.log.dir={{hive_log_dir}} -Dhive.log.file=hiveserver2Interactive.log&quot;&#10;fi" />
           </definition>
           <definition xsi:type="configure" id="llap_update_tez_shuffle_ssl_enable" summary="Update additional LLAP-Tez settings">
             <type>tez-interactive-site</type>
