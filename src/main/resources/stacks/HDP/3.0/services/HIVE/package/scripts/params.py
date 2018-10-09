@@ -471,9 +471,9 @@ tez_local_lib_jars = '/usr/lib/tez/lib/*.jar'
 tez_lib_uris = default("/configurations/tez-site/tez.lib.uris", None)
 
 if OSCheck.is_ubuntu_family():
-  mysql_configname = '/etc/mysql/my.cnf'
+  mysql_confignames = ['/etc/mysql/my.cnf', '/etc/mysql/mysql.conf.d/mysqld.cnf']
 else:
-  mysql_configname = '/etc/my.cnf'
+  mysql_confignames = ['/etc/my.cnf']
 
 mysql_user = 'mysql'
 
