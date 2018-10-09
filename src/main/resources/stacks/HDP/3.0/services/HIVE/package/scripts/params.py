@@ -53,6 +53,8 @@ from resource_management.libraries.resources.hdfs_resource import HdfsResource
 from resource_management.libraries.script.script import Script
 
 
+host_sys_prepped = default("/ambariLevelParams/host_sys_prepped", False)
+sysprep_skip_hive_schema_create = host_sys_prepped and default("/configurations/cluster-env/sysprep_skip_hive_schema_create", False)
 sysprep_skip_copy_tarballs_hdfs = get_sysprep_skip_copy_tarballs_hdfs()
 retryAble = default("/commandParams/command_retry_enabled", False)
 
