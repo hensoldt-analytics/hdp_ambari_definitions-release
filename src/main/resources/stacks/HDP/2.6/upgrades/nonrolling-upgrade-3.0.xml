@@ -134,7 +134,7 @@
 
     <group xsi:type="cluster" name="CONVERT_HIVE_TABLES" title="Convert Hive Tables">
       <execute-stage service="HIVE" component="HIVE_METASTORE" title="Convert Hive Tables">
-        <task xsi:type="execute" hosts="any">
+        <task xsi:type="execute" hosts="any" timeout-config="upgrade.parameter.convert.hive.tables.timeout">
           <script>scripts/pre_upgrade.py</script>
           <function>convert_tables</function>
         </task>
