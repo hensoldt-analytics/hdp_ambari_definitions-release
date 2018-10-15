@@ -105,7 +105,7 @@ metrics_truststore_use_alias = default("/configurations/ams-ssl-client/ssl.clien
 
 metric_truststore_alias_list = []
 for host in ams_collector_hosts.split(","):
-  metric_truststore_alias = default("/configurations/ams-ssl-client/{host}.ssl.client.truststore.alias", None)
+  metric_truststore_alias = default("/configurations/ams-ssl-client/{0}.ssl.client.truststore.alias".format(host), None)
   if not metric_truststore_alias:
     metric_truststore_alias = host
   metric_truststore_alias_list.append(metric_truststore_alias)
