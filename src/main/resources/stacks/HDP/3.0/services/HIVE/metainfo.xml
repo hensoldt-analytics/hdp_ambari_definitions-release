@@ -309,7 +309,7 @@
           </packages>
         </osSpecific>
         <osSpecific>
-          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
+          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16,ubuntu18</osFamily>
           <packages>
             <package>
               <name>hive-${stack_version}</name>
@@ -320,7 +320,7 @@
           </packages>
         </osSpecific>
         <osSpecific>
-          <osFamily>amazonlinux2,redhat6,debian7,debian9,ubuntu12,ubuntu14,ubuntu16</osFamily>
+          <osFamily>amazonlinux2,redhat6,debian7,debian9,ubuntu12,ubuntu14,ubuntu16,ubuntu18</osFamily>
           <packages>
             <package>
               <name>mysql-server</name>
