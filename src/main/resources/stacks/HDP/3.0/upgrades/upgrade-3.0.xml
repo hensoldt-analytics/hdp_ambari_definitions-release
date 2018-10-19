@@ -512,6 +512,8 @@
             <script>scripts/ranger_admin.py</script>
             <function>setup_ranger_java_patches</function>
           </task>
+
+          <task xsi:type="configure" id="hdp_3_0_3_0_ranger_services_heap_size_configuration"/>
         </pre-upgrade>
 
         <pre-downgrade copy-upgrade="true" />
@@ -547,6 +549,8 @@
             <script>scripts/kms_server.py</script>
             <function>setup_ranger_kms_database</function>
           </task>
+
+          <task xsi:type="configure" id="hdp_3_0_3_0_ranger_kms_services_heap_size_configuration"/>
         </pre-upgrade>
 
         <pre-downgrade>

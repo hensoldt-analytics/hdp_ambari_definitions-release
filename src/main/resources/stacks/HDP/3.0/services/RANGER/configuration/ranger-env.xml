@@ -564,4 +564,25 @@
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>ranger_admin_max_heap_size</name>
+    <value>1g</value>
+    <display-name>Ranger Admin heap size.</display-name>
+    <description>Ranger Admin maximum heap size limit.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>ranger_usersync_max_heap_size</name>
+    <value>1g</value>
+    <display-name>Ranger Usersync max heap size.</display-name>
+    <description>Ranger Usersync maximum heap size limit.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>ranger_tagsync_max_heap_size</name>
+    <value>1g</value>
+    <display-name>Ranger Tagsync max heap size.</display-name>
+    <description>Ranger Tagsync maximum heap size limit.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>

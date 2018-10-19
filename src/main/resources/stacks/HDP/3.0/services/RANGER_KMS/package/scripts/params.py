@@ -359,3 +359,6 @@ if 'viewfs-mount-table' in config['configurations']:
   if 'content' in mount_table and mount_table['content'].strip():
     mount_table_xml_inclusion_file_full_path = os.path.join(kms_conf_dir, xml_inclusion_file_name)
     mount_table_content = mount_table['content']
+
+# Ranger KMS Service maximum heap size configurations
+ranger_kms_max_heap_size=default('/configurations/kms-env/ranger_kms_max_heap_size','1g')

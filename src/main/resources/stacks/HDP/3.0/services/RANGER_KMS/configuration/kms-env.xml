@@ -156,4 +156,11 @@
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>ranger_kms_max_heap_size</name>
+    <value>1g</value>
+    <display-name>Ranger KMS max heap size.</display-name>
+    <description>Ranger KMS maximum heap size limit.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>

@@ -472,3 +472,8 @@ if 'viewfs-mount-table' in config['configurations']:
 
   if 'content' in mount_table and mount_table['content'].strip():
     mount_table_content = mount_table['content']
+
+# Ranger Services maximum heap size configurations
+ranger_admin_max_heap_size=default('/configurations/ranger-env/ranger_admin_max_heap_size','1g')
+ranger_usersync_max_heap_size=default('/configurations/ranger-env/ranger_usersync_max_heap_size','1g')
+ranger_tagsync_max_heap_size=default('/configurations/ranger-env/ranger_tagsync_max_heap_size','1g')

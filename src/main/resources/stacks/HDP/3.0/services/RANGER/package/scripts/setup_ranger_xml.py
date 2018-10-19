@@ -253,6 +253,11 @@ def setup_ranger_db(stack_version=None):
     owner = params.unix_user,
   )
 
+  ModifyPropertiesFile(format("{ranger_home}/install.properties"),
+    properties = {'ranger_admin_max_heap_size': params.ranger_admin_max_heap_size},
+    owner = params.unix_user,
+  )
+
   env_dict = {'RANGER_ADMIN_HOME':ranger_home, 'JAVA_HOME':params.java_home}
   if params.db_flavor.lower() == 'sqla':
     env_dict = {'RANGER_ADMIN_HOME':ranger_home, 'JAVA_HOME':params.java_home, 'LD_LIBRARY_PATH':params.ld_lib_path}
