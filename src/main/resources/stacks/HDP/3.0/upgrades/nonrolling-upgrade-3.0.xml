@@ -248,7 +248,7 @@
 
       <execute-stage service="RANGER" component="RANGER_ADMIN" title="Restore Ranger Database">
         <task xsi:type="manual">
-          <message>Before continuing, please restore the Ranger Admin database and Ranger Audit database on the following host(s): {{hosts.all}}.</message>
+          <message>Before continuing, please restore the Ranger Admin database on the following host(s): {{hosts.all}}.</message>
         </task>
       </execute-stage>
 
