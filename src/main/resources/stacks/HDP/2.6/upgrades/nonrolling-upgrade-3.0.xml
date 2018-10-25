@@ -457,6 +457,10 @@
         <task xsi:type="configure" id="hdfs_user_agent"/>
       </execute-stage>
 
+      <execute-stage service="HDFS" component="HDFS_CLIENT" title="Set properties for GCS">
+        <task xsi:type="configure" id="gcs_properties" />
+      </execute-stage>
+
       <!--YARN-->
       <execute-stage service="YARN" component="RESOURCEMANAGER" title="Remove invalid HADOOP_OPTS and YARN_OPTS">
         <task xsi:type="configure" id="hdp_30_remove_invalid_hadoop_and_yarn_opts"/>
