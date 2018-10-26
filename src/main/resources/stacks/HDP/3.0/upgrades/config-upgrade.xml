@@ -57,11 +57,19 @@
 
       <component name="RANGER_ADMIN">
         <changes>
-          <definition xsi:type="configure" id="hdp_3_0_3_0_ranger_services_heap_size_configuration">
+          <definition xsi:type="configure" id="hdp_3_0_3_0_ranger_services_heap_size_configuration" summary="Upgrading ranger-env configurations for Ranger service components">
             <type>ranger-env</type>
             <replace key="content" find="export RANGER_USER={{unix_user}}" replace-with="export RANGER_USER={{unix_user}}&#xA;ranger_admin_max_heap_size={{ranger_admin_max_heap_size}}&#xA;"/>
+
+            <set key="ranger_admin_max_heap_size" value="1g" if-type="ranger-env" if-key="ranger_admin_max_heap_size" if-key-state="absent"/>
+
             <replace key="content" find="export UNIX_USERSYNC_USER={{unix_user}}" replace-with="export UNIX_USERSYNC_USER={{unix_user}}&#xA;ranger_usersync_max_heap_size={{ranger_usersync_max_heap_size}}&#xA;"/>
+
+            <set key="ranger_usersync_max_heap_size" value="1g" if-type="ranger-env" if-key="ranger_usersync_max_heap_size" if-key-state="absent"/>
+
             <replace key="content" find="export UNIX_TAGSYNC_USER={{unix_user}}" replace-with="export UNIX_TAGSYNC_USER={{unix_user}}&#xA;ranger_tagsync_max_heap_size={{ranger_tagsync_max_heap_size}}&#xA;"/>
+
+            <set key="ranger_tagsync_max_heap_size" value="1g" if-type="ranger-env" if-key="ranger_tagsync_max_heap_size" if-key-state="absent"/>
           </definition>
         </changes>
       </component>
@@ -73,6 +81,8 @@
           <definition xsi:type="configure" id="hdp_3_0_3_0_ranger_kms_services_heap_size_configuration">
             <type>kms-env</type>
             <replace key="content" find="export KMS_USER={{kms_user}}" replace-with="export KMS_USER={{kms_user}}&#xA;ranger_kms_max_heap_size={{ranger_kms_max_heap_size}}&#xA;"/>
+
+            <set key="ranger_kms_max_heap_size" value="1g" if-type="ranger-env" if-key="ranger_kms_max_heap_size" if-key-state="absent"/>
           </definition>
         </changes>
       </component>

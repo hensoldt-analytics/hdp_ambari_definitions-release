@@ -308,7 +308,7 @@
         <task xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal"/>
       </execute-stage>
 
-      <execute-stage service="RANGER" component="RANGER_ADMIN" title="Upgrading ranger-env configurations for Ranger services.">
+      <execute-stage service="RANGER" component="RANGER_ADMIN" title="Upgrading ranger-env configurations for Ranger service components">
         <task xsi:type="configure" id="hdp_3_0_3_0_ranger_services_heap_size_configuration" />
       </execute-stage>
 
