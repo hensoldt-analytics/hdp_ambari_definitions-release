@@ -246,7 +246,7 @@ export ACCUMULO_TSERVER_OPTS="${ACCUMULO_TSERVER_OPTS} -Djava.security.auth.logi
 export ACCUMULO_MASTER_OPTS="${ACCUMULO_MASTER_OPTS} -Djava.security.auth.login.config={{accumulo_jaas_file}} -Djavax.security.auth.useSubjectCredsOnly=false"
 export ACCUMULO_GC_OPTS="${ACCUMULO_GC_OPTS} -Djava.security.auth.login.config={{accumulo_jaas_file}} -Djavax.security.auth.useSubjectCredsOnly=false"
 {% endif %}
-export ACCUMULO_MONITOR_BIND_ALL={{monitor_bind_str}}
+export ACCUMULO_MONITOR_BIND_ALL="{{accumulo_monitor_bind_str}}"
 # what do when the JVM runs out of heap memory
 export ACCUMULO_KILL_CMD='kill -9 %p'
     </value>

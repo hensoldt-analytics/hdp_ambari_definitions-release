@@ -83,10 +83,10 @@ accumulo_tserver_heapsize = config['configurations']['accumulo-env']['accumulo_t
 accumulo_monitor_heapsize = config['configurations']['accumulo-env']['accumulo_monitor_heapsize']
 accumulo_gc_heapsize = config['configurations']['accumulo-env']['accumulo_gc_heapsize']
 accumulo_other_heapsize = config['configurations']['accumulo-env']['accumulo_other_heapsize']
-accumulo_monitor_bind_all = config['configurations']['accumulo-env']['accumulo_monitor_bind_all']
-monitor_bind_str = "false"
-if accumulo_monitor_bind_all:
-  monitor_bind_str = "true"
+# Make sure we convert a boolean into a string and lowercase the value
+accumulo_monitor_bind_all = str(config['configurations']['accumulo-env']['accumulo_monitor_bind_all']).lower()
+# Leave in the old config key to keep old accumulo-env.sh files working
+monitor_bind_all=accumulo_monitor_bind_all
 env_sh_template = config['configurations']['accumulo-env']['content']
 server_env_sh_template = config['configurations']['accumulo-env']['server_content']
 
