@@ -499,6 +499,9 @@
             <function>set_pre_start</function>
           </task>
 
+          <task xsi:type="configure" id="hdp_3_0_3_0_ranger_services_heap_size_configuration"/>
+          <task xsi:type="configure" id="hdp_3_0_3_0_ranger_patch_retry_configuration"/>
+
           <task xsi:type="execute" hosts="any">
             <summary>Upgrading Ranger database schema</summary>
             <script>scripts/ranger_admin.py</script>
@@ -520,7 +523,6 @@
             <function>setup_ranger_java_patches</function>
           </task>
 
-          <task xsi:type="configure" id="hdp_3_0_3_0_ranger_services_heap_size_configuration"/>
         </pre-upgrade>
 
         <pre-downgrade />
