@@ -136,15 +136,20 @@ class RangerAdmin(Script):
     # set up java patches if we are not upgrading and setup_db is true
     if setup_db and upgrade_type is None:
       setup_ranger_xml.setup_java_patch()
-
-      # Updating password for Ranger Admin user
-      setup_ranger_xml.setup_ranger_admin_passwd_change(params.admin_username, params.admin_password, params.default_admin_password)
-      # Updating password for Ranger Usersync user
-      setup_ranger_xml.setup_ranger_admin_passwd_change(params.rangerusersync_username, params.rangerusersync_user_password, params.default_rangerusersync_user_password)
-      # Updating password for Ranger Tagsync user
-      setup_ranger_xml.setup_ranger_admin_passwd_change(params.rangertagsync_username, params.rangertagsync_user_password, params.default_rangertagsync_user_password)
-      # Updating password for Ranger Keyadmin user
-      setup_ranger_xml.setup_ranger_admin_passwd_change(params.keyadmin_username, params.keyadmin_user_password, params.default_keyadmin_user_password)
+      if params.stack_supports_ranger_all_admin_change_default_password:
+        setup_ranger_xml.setup_ranger_all_admin_password_change(params.admin_username, params.default_admin_password, params.admin_password,
+          params.rangerusersync_username, params.default_rangerusersync_user_password, params.rangerusersync_user_password,
+          params.rangertagsync_username, params.default_rangertagsync_user_password, params.rangertagsync_user_password,
+          params.keyadmin_username, params.default_keyadmin_user_password, params.keyadmin_user_password)
+      else:
+        # Updating password for Ranger Admin user
+        setup_ranger_xml.setup_ranger_admin_passwd_change(params.admin_username, params.admin_password, params.default_admin_password)
+        # Updating password for Ranger Usersync user
+        setup_ranger_xml.setup_ranger_admin_passwd_change(params.rangerusersync_username, params.rangerusersync_user_password, params.default_rangerusersync_user_password)
+        # Updating password for Ranger Tagsync user
+        setup_ranger_xml.setup_ranger_admin_passwd_change(params.rangertagsync_username, params.rangertagsync_user_password, params.default_rangertagsync_user_password)
+        # Updating password for Ranger Keyadmin user
+        setup_ranger_xml.setup_ranger_admin_passwd_change(params.keyadmin_username, params.keyadmin_user_password, params.default_keyadmin_user_password)
 
   def set_ru_rangeradmin_in_progress(self, upgrade_marker_file):
     config_dir = os.path.dirname(upgrade_marker_file)

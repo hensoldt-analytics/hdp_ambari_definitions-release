@@ -477,6 +477,11 @@
         "name": "nifi_auto_client_registration",
         "description": "Supports NiFi's client registration in runtime",
         "min_version": "3.0.0.0"
+      },
+      {
+        "name": "ranger_all_admin_change_default_password",
+        "description": "Supports Ranger All admin's password change in one go instead of multiple calls",
+        "min_version": "3.0.3.0"
       }
     ]
   }
