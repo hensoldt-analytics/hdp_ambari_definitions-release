@@ -58,7 +58,7 @@ def hbase_decommission(env):
     for host in hosts:
       if host:
         regiondrainer_cmd = format(
-          "{kinit_cmd} {hbase_cmd} --config {hbase_conf_dir} {hbase_decommission_auth_config} org.jruby.Main {region_drainer} remove {host}")
+          "{kinit_cmd} HBASE_SERVER_JAAS_OPTS=\"{master_security_config}\" {hbase_cmd} --config {hbase_conf_dir} {hbase_decommission_auth_config} org.jruby.Main {region_drainer} remove {host}")
         Execute(regiondrainer_cmd,
                 user=params.hbase_user,
                 logoutput=True
@@ -70,9 +70,9 @@ def hbase_decommission(env):
     for host in hosts:
       if host:
         regiondrainer_cmd = format(
-          "{kinit_cmd} {hbase_cmd} --config {hbase_conf_dir} {hbase_decommission_auth_config} org.jruby.Main {region_drainer} add {host}")
+          "{kinit_cmd} HBASE_SERVER_JAAS_OPTS=\"{master_security_config}\" {hbase_cmd} --config {hbase_conf_dir} {hbase_decommission_auth_config} org.jruby.Main {region_drainer} add {host}")
         regionmover_cmd = format(
-          "{kinit_cmd} {hbase_cmd} --config {hbase_conf_dir} {hbase_decommission_auth_config} org.jruby.Main {region_mover} -o unload -r {host}")
+          "{kinit_cmd} HBASE_SERVER_JAAS_OPTS=\"{master_security_config}\" {hbase_cmd} --config {hbase_conf_dir} {hbase_decommission_auth_config} org.jruby.Main {region_mover} -o unload -r {host}")
 
         Execute(regiondrainer_cmd,
                 user=params.hbase_user,
