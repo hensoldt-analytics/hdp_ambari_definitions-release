@@ -18,7 +18,7 @@
 
 <upgrade xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="upgrade-pack.xsd">
   <target>3.1.*.*</target>
-  <target-stack>HDP-1.0</target-stack>
+  <target-stack>HDP-3.1</target-stack>
   <skip-failures>false</skip-failures>
   <skip-service-check-failures>false</skip-service-check-failures>
   <type>ROLLING</type>
