@@ -714,20 +714,29 @@ def setup_ranger_audit_solr():
 def setup_ranger_admin_passwd_change(username, user_password, user_default_password):
   import params
 
+  env_dict = {'RANGER_ADMIN_HOME':params.ranger_home, 'JAVA_HOME':params.java_home}
+  if params.db_flavor.lower() == 'sqla':
+    env_dict = {'RANGER_ADMIN_HOME':params.ranger_home, 'JAVA_HOME':params.java_home, 'LD_LIBRARY_PATH':params.ld_lib_path}
+
   cmd = format("ambari-python-wrap {ranger_home}/db_setup.py -changepassword {username} {user_default_password!p} {user_password!p}")
-  Execute(cmd, environment={'JAVA_HOME': params.java_home, 'RANGER_ADMIN_HOME': params.ranger_home}, user=params.unix_user, tries=3, try_sleep=5, logoutput=True)
+  Execute(cmd, environment = env_dict, user = params.unix_user, tries = 3, try_sleep = 5, logoutput = True)
 
 def setup_ranger_all_admin_password_change(admin_username, default_admin_password, admin_password,
                                          rangerusersync_username, default_rangerusersync_user_password, rangerusersync_user_password,
                                          rangertagsync_username, default_rangertagsync_user_password, rangertagsync_user_password,
                                          keyadmin_username, default_keyadmin_user_password, keyadmin_user_password):
   import params
+
+  env_dict = {'RANGER_ADMIN_HOME':params.ranger_home, 'JAVA_HOME':params.java_home}
+  if params.db_flavor.lower() == 'sqla':
+    env_dict = {'RANGER_ADMIN_HOME':params.ranger_home, 'JAVA_HOME':params.java_home, 'LD_LIBRARY_PATH':params.ld_lib_path}
+
   password_change_cmd = format("ambari-python-wrap {ranger_home}/db_setup.py -changepassword "
                " -pair {admin_username} {default_admin_password!p} {admin_password!p} "
                " -pair {rangerusersync_username} {default_rangerusersync_user_password!p} {rangerusersync_user_password!p} "
                " -pair {rangertagsync_username} {default_rangertagsync_user_password!p} {rangertagsync_user_password!p} "
                " -pair {keyadmin_username} {default_keyadmin_user_password!p} {keyadmin_user_password!p} ")
-  Execute(password_change_cmd, environment={'JAVA_HOME': params.java_home, 'RANGER_ADMIN_HOME': params.ranger_home}, user=params.unix_user, tries=3, try_sleep=5, logoutput=True)
+  Execute(password_change_cmd, environment = env_dict, user = params.unix_user, tries = 3, try_sleep = 5, logoutput = True)
 
 @retry(times=10, sleep_time=5, err_class=Fail)
 def check_znode():
