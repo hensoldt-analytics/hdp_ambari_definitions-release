@@ -304,20 +304,21 @@
         <task xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal"/>
       </execute-stage>
 
+      <!-- RANGER -->
       <execute-stage service="RANGER" component="RANGER_TAGSYNC" title="Updating Tagsync security protocol for Kafka">
         <task xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal"/>
       </execute-stage>
 
       <execute-stage service="RANGER" component="RANGER_ADMIN" title="Upgrading ranger-env configurations for Ranger service components">
-        <task xsi:type="configure" id="hdp_3_0_3_0_ranger_services_heap_size_configuration" />
+        <task xsi:type="configure" id="hdp_3_1_0_0_ranger_services_heap_size_configuration" />
       </execute-stage>
 
       <execute-stage service="RANGER" component="RANGER_ADMIN" title="Upgrading admin-properties configurations for Ranger service components">
-        <task xsi:type="configure" id="hdp_3_0_3_0_ranger_patch_retry_configuration" />
+        <task xsi:type="configure" id="hdp_3_1_0_0_ranger_patch_retry_configuration" />
       </execute-stage>
 
       <execute-stage service="RANGER_KMS" component="RANGER_KMS_SERVER" title="Upgrading kms-env configurations Ranger-KMS.">
-        <task xsi:type="configure" id="hdp_3_0_3_0_ranger_kms_services_heap_size_configuration"/>
+        <task xsi:type="configure" id="hdp_3_1_0_0_ranger_kms_services_heap_size_configuration"/>
       </execute-stage>
     </group>
 
