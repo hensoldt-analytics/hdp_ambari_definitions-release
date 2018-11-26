@@ -1412,8 +1412,6 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     self.logger.info("DBG: Calculated 'Cache per node' : {0}, using following : llap_daemon_mem_per_node : {1}, total_mem_for_executors_per_node : {2}"
             .format(cache_mem_per_node, llap_daemon_mem_per_node, total_mem_for_executors_per_node))
 
-    tez_runtime_io_sort_mb = (long((0.8 * mem_per_thread_for_llap) / 3))
-    tez_runtime_unordered_output_buffer_size = long(0.8 * 0.075 * mem_per_thread_for_llap)
     # 'hive_auto_convert_join_noconditionaltask_size' value is in bytes. Thus, multiplying it by 1048576.
     hive_auto_convert_join_noconditionaltask_size = (long((0.8 * mem_per_thread_for_llap) / 3)) * MB_TO_BYTES
 
@@ -1473,12 +1471,15 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       putHiveInteractiveSiteProperty('hive.tez.container.size', mem_per_thread_for_llap)
       self.logger.info("DBG: Setting 'hive.tez.container.size' config value as : {0}".format(mem_per_thread_for_llap))
 
+    tez_runtime_io_sort_mb = (long((0.8 * mem_per_thread_for_llap) / 3))
+    tez_runtime_unordered_output_max_per_buffer_size_bytes=1024*1024*max(min(tez_runtime_io_sort_mb, 256), 128)
     putTezInteractiveSiteProperty('tez.runtime.io.sort.mb', tez_runtime_io_sort_mb)
     if "tez-site" in services["configurations"] and "tez.runtime.sorter.class" in services["configurations"]["tez-site"]["properties"]:
       if services["configurations"]["tez-site"]["properties"]["tez.runtime.sorter.class"] == "LEGACY":
         putTezInteractiveSitePropertyAttribute("tez.runtime.io.sort.mb", "maximum", 1800)
 
-    putTezInteractiveSiteProperty('tez.runtime.unordered.output.buffer.size-mb', tez_runtime_unordered_output_buffer_size)
+    putTezInteractiveSiteProperty('tez.runtime.unordered.output.buffer.size-mb', tez_runtime_io_sort_mb)
+    putHiveInteractiveSiteProperty('tez.runtime.unordered.output.max-per-buffer.size-bytes', tez_runtime_unordered_output_max_per_buffer_size_bytes)
     putHiveInteractiveSiteProperty('hive.auto.convert.join.noconditionaltask.size', hive_auto_convert_join_noconditionaltask_size)
 
     num_executors_per_node = long(num_executors_per_node)
