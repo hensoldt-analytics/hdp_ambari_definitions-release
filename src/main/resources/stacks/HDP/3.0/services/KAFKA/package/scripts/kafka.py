@@ -58,12 +58,13 @@ def kafka(upgrade_type=None):
        if params.kerberos_security_enabled and params.kafka_kerberos_enabled:
          Logger.info("Kafka kerberos security is enabled.")
 
-         if "SASL" not in listeners:
-           listeners = kafka_server_config['listeners']
-           listeners = re.sub(r"(^|\b)PLAINTEXT://", "SASL_PLAINTEXT://", listeners)
-           listeners = re.sub(r"(^|\b)PLAINTEXTSASL://", "SASL_PLAINTEXT://", listeners)
-           listeners = re.sub(r"(^|\b)SSL://", "SASL_SSL://", listeners)
-           kafka_server_config['listeners'] = listeners
+         inter_broker_protocol = kafka_server_config['security.inter.broker.protocol']
+         inter_broker_protocol = replace_sasl_related_config(inter_broker_protocol, True)
+         kafka_server_config['security.inter.broker.protocol'] = inter_broker_protocol
+
+         listeners = kafka_server_config['listeners']
+         listeners = replace_sasl_related_config(listeners)
+         kafka_server_config['listeners'] = listeners
 
          kafka_server_config['advertised.listeners'] = listeners
          Logger.info(format("Kafka advertised listeners: {listeners}"))
@@ -168,6 +169,13 @@ def kafka(upgrade_type=None):
 
     setup_symlink(params.kafka_managed_pid_dir, params.kafka_pid_dir)
     setup_symlink(params.kafka_managed_log_dir, params.kafka_log_dir)
+
+
+def replace_sasl_related_config(property, only_protocol=False):
+  property = re.sub(r"(^|\b)PLAINTEXTSASL", "SASL_PLAINTEXT", property) if only_protocol else re.sub(r"(^|\b)PLAINTEXTSASL://", "SASL_PLAINTEXT://", property)
+  property = re.sub(r"(^|\b)PLAINTEXT", "SASL_PLAINTEXT", property) if only_protocol else re.sub(r"(^|\b)PLAINTEXT://", "SASL_PLAINTEXT://", property)
+  property = re.sub(r"(^|\b)SSL", "SASL_SSL", property) if only_protocol else re.sub(r"(^|\b)SSL://", "SASL_SSL://", property)
+  return property
 
 
 def mutable_config_dict(kafka_broker_config):
