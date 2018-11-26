@@ -172,10 +172,6 @@ if has_metric_collector:
 # Security-related params
 kerberos_security_enabled = config['configurations']['cluster-env']['security_enabled']
 
-#replace PLAINTEXTSASL with SASL_PLAINTEXT
-if 'kafka-broker' in config['configurations'] and 'security.inter.broker.protocol' in config['configurations']['kafka-broker'] and config['configurations']['kafka-broker']['security.inter.broker.protocol'] == "PLAINTEXTSASL":
-  config['configurations']['kafka-broker']['security.inter.broker.protocol'] = "SASL_PLAINTEXT"
-
 kafka_kerberos_enabled = (('security.inter.broker.protocol' in config['configurations']['kafka-broker']) and
                           (config['configurations']['kafka-broker']['security.inter.broker.protocol'] in ("SASL_PLAINTEXT", "SASL_SSL")))
 
