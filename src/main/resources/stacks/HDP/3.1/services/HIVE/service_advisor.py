@@ -762,12 +762,6 @@ class HiveValidator(service_advisor.ServiceAdvisor):
     
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
     if "hive_security_authorization" in hive_env and \
-        str(hive_env["hive_security_authorization"]).lower() == "none" \
-      and str(hiveserver2_site["hive.security.authorization.enabled"]).lower() == "true":
-      authorization_item = self.getErrorItem("hive_security_authorization should not be None "
-                                             "if hive.security.authorization.enabled is set")
-      validationItems.append({"config-name": "hive_security_authorization", "item": authorization_item})
-    if "hive_security_authorization" in hive_env and \
         str(hive_env["hive_security_authorization"]).lower() == "ranger":
       # ranger-hive-plugin must be enabled in ranger-env
       if "RANGER" in servicesList:
