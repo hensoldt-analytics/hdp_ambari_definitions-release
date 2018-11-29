@@ -180,13 +180,13 @@
   </os>
   <os family="ubuntu18">
     <repo>
-      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP/ubuntu18/3.x/updates/3.1.0.0</baseurl>
+      <baseurl>>http://public-repo-1.hortonworks.com/HDP/ubuntu18/3.x/updates/3.1.0.0</baseurl>
       <repoid>HDP-3.1</repoid>
       <reponame>HDP</reponame>
       <unique>true</unique>
     </repo>
     <repo>
-      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-GPL/ubuntu18/3.x/updates/3.1.0.0</baseurl>
+      <baseurl>>http://public-repo-1.hortonworks.com/HDP-GPL/ubuntu18/3.x/updates/3.1.0.0</baseurl>
       <repoid>HDP-3.1-GPL</repoid>
       <reponame>HDP-GPL</reponame>
       <unique>true</unique>
@@ -195,7 +195,7 @@
       </tags>
     </repo>
     <repo>
-      <baseurl>http://s3.amazonaws.com/dev.hortonworks.com/HDP-UTILS-1.1.0.22/repos/ubuntu18</baseurl>
+      <baseurl>>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.22/repos/ubuntu18</baseurl>
       <repoid>HDP-UTILS-1.1.0.22</repoid>
       <reponame>HDP-UTILS</reponame>
       <unique>false</unique>
