@@ -1282,7 +1282,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.server2.authentication.spnego.keytab</name>
-    <value>/etc/security/keytabs/spnego.service.keytab</value>
+    <value>HTTP/_HOST@EXAMPLE.COM</value>
     <description>
       keytab file for SPNego principal, optional,
       typical value would look like /etc/security/keytabs/spnego.service.keytab,
@@ -1332,7 +1332,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.server2.authentication.spnego.principal</name>
-    <value>HTTP/_HOST@EXAMPLE.COM</value>
+    <value>/etc/security/keytabs/spnego.service.keytab</value>
     <description>
       SPNego service principal, optional,
       typical value would look like HTTP/_HOST@EXAMPLE.COM
