@@ -548,10 +548,12 @@
             "spark2-client"
           ],
           "PATCH": [
-            "spark2-client"
+            "spark2-client",
+            "hive_warehouse_connector"
           ],
           "STANDARD": [
-            "spark2-client"
+            "spark2-client",
+            "hive_warehouse_connector"
           ]
         },
         "SPARK2_JOBHISTORYSERVER": {
