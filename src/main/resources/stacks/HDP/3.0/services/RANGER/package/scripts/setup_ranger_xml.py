@@ -173,6 +173,11 @@ def setup_ranger_admin(upgrade_type=None):
     else:
         Logger.error("Unable to use PAM authentication, /etc/pam.d/ directory does not exist.")
 
+  Execute(('ln','-sf', format('{ranger_home}/ews/ranger-admin-services.sh'),'/usr/bin/ranger-admin'),
+    not_if=format("ls /usr/bin/ranger-admin"),
+    only_if=format("ls {ranger_home}/ews/ranger-admin-services.sh"),
+    sudo=True)
+
   # remove plain-text password from xml configs
 
   ranger_admin_site_copy = {}
