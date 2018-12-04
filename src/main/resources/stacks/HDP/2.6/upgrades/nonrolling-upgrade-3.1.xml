@@ -1042,7 +1042,7 @@
 
     <group xsi:type="cluster" name="MOVE_HIVE_TABLES" title="Move Hive Tables">
       <execute-stage service="HIVE" component="HIVE_METASTORE" title="Move Hive Tables">
-        <task xsi:type="execute" hosts="any">
+        <task xsi:type="execute" hosts="any" timeout-config="upgrade.parameter.move.hive.tables.timeout">
           <script>scripts/post_upgrade.py</script>
           <function>move_tables</function>
         </task>
