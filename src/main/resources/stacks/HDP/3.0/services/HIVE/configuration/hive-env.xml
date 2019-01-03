@@ -318,6 +318,7 @@
     <value>container</value>
     <description>Default url to use for beeline (container|llap)</description>
     <display-name>Default beeline url</display-name>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <!-- hive-env.sh -->
