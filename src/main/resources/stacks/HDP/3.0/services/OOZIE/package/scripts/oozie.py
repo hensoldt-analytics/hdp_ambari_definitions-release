@@ -245,6 +245,11 @@ def get_oozie_ext_zip_source_paths(upgrade_type, params):
 
   return paths
 
+
+def is_oozie5_installed():
+    return os.path.exists(os.path.join(format("{oozie_home}"), "bin", "oozie-jetty-server.sh"))
+
+
 def oozie_server_specific(upgrade_type):
   import params
 
@@ -315,7 +320,13 @@ def oozie_server_specific(upgrade_type):
     Execute(format('{sudo} chown {oozie_user}:{user_group} {oozie_libext_dir}/falcon-oozie-el-extension-*.jar'),
       not_if  = no_op_test)
 
-  prepare_war(params)
+  if is_oozie5_installed():
+    command = format("cd {oozie_home}/bin && {oozie_setup_sh}").strip()
+    return_code, output = call(command, user=params.oozie_user)
+    if return_code != 0:
+      raise Fail("Unable to set up Oozie 5. Message: " + output)
+  else:
+    prepare_war(params)
 
   File(hashcode_file,
        mode = 0644,
