@@ -736,7 +736,7 @@ if enable_ranger_hive:
 
   ranger_hive_url = format("{hive_url}/default;principal={hive_principal}") if security_enabled else hive_url
   if stack_supports_ranger_hive_jdbc_url_change:
-    ranger_hive_url = hive_jdbc_url
+    ranger_hive_url = hive_jdbc_url if len(hive_server_hosts) > 0 else hsi_jdbc_url
 
   hive_ranger_plugin_config = {
     'username': repo_config_username,
