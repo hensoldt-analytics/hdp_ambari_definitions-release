@@ -261,7 +261,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
     hiveMetastoreHost = self.getHostWithComponent("HIVE", "HIVE_METASTORE", services, hosts)
     if hiveMetastoreHost is not None and len(hiveMetastoreHost) > 0:
       putHiveSiteProperty("hive.metastore.uris", "thrift://" + hiveMetastoreHost["Hosts"]["host_name"] + ":9083")
-      putHiveInteractiveSiteProperty("hive.metastore.uris", "thrift://" + hiveMetastoreHost["Hosts"]["host_name"] + ":9083")
 
     # DAS Hook
     putHiveEnvProperty("hive_timeline_logging_enabled", "false")
