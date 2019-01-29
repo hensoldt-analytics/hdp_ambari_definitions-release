@@ -52,6 +52,13 @@ def hive_interactive(name = None):
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
     # Create Hive Metastore Warehouse Dir
+    params.HdfsResource(params.hive_metastore_warehouse_external_dir,
+                        type = "directory",
+                        action = "create_on_execute",
+                        owner = params.hive_user,
+                        group = params.user_group,
+                        mode = 01777
+    )
     params.HdfsResource(params.hive_metastore_warehouse_dir,
                         type = "directory",
                         action = "create_on_execute",
