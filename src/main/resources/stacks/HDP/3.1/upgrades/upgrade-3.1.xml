@@ -544,6 +544,7 @@
             <script>scripts/kms_server.py</script>
             <function>setup_ranger_kms_database</function>
           </task>
+          <task xsi:type="configure" id="hdp_3_1_ranger_kms_keysecure_configuration"/>
         </pre-upgrade>
 
         <pre-downgrade>

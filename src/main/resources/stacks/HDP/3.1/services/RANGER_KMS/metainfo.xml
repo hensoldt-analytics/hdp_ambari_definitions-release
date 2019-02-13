@@ -24,6 +24,14 @@
     <service>
       <name>RANGER_KMS</name>
       <version>1.2.0.3.1</version>
+
+      <themes>
+        <theme>
+          <fileName>theme_version_2.json</fileName>
+          <default>true</default>
+        </theme>
+      </themes>
+
     </service>
   </services>
 </metainfo>

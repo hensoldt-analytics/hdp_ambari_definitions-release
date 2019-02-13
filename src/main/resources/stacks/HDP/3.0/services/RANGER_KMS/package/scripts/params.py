@@ -301,7 +301,7 @@ if security_enabled:
 
 plugin_audit_password_property = 'xasecure.audit.destination.db.password'
 kms_plugin_password_properties = ['xasecure.policymgr.clientssl.keystore.password', 'xasecure.policymgr.clientssl.truststore.password']
-dbks_site_password_properties = ['ranger.db.encrypt.key.password', 'ranger.ks.jpa.jdbc.password', 'ranger.ks.hsm.partition.password']
+dbks_site_password_properties = ['ranger.db.encrypt.key.password', 'ranger.ks.jpa.jdbc.password', 'ranger.ks.hsm.partition.password', 'ranger.kms.keysecure.login.password']
 ranger_kms_site_password_properties = ['ranger.service.https.attrib.keystore.pass']
 ranger_kms_cred_ssl_path = config['configurations']['ranger-kms-site']['ranger.credential.provider.path']
 ranger_kms_ssl_keystore_alias = config['configurations']['ranger-kms-site']['ranger.service.https.attrib.keystore.credential.alias']
@@ -362,3 +362,8 @@ if 'viewfs-mount-table' in config['configurations']:
 
 # Ranger KMS Service maximum heap size configurations
 ranger_kms_max_heap_size=default('/configurations/kms-env/ranger_kms_max_heap_size','1g')
+
+# ranger kms keysecure support
+enable_kms_keysecure = default("/configurations/dbks-site/ranger.kms.keysecure.enabled", False)
+keysecure_login_password = config['configurations']['dbks-site']['ranger.kms.keysecure.login.password']
+keysecure_login_password_alias = config['configurations']['dbks-site']['ranger.kms.keysecure.login.password.alias']

@@ -280,6 +280,8 @@ def kms(upgrade_type=None):
       do_keystore_setup(params.credential_provider_path, params.hms_partition_alias, unicode(params.hms_partition_passwd))
     if params.stack_supports_ranger_kms_ssl and params.ranger_kms_ssl_enabled:
       do_keystore_setup(params.ranger_kms_cred_ssl_path, params.ranger_kms_ssl_keystore_alias, params.ranger_kms_ssl_passwd)
+    if params.enable_kms_keysecure and not is_empty(params.keysecure_login_password) and params.keysecure_login_password != "_":
+      do_keystore_setup(params.credential_provider_path, params.keysecure_login_password_alias, params.keysecure_login_password)
 
     # remove plain-text password from xml configs
     dbks_site_copy = {}

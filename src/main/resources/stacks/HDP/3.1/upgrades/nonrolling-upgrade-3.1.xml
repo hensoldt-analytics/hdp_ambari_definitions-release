@@ -295,6 +295,10 @@
           <summary>Setting YARN Timeline Reader Url</summary>
         </task>
       </execute-stage>
+
+      <execute-stage service="RANGER_KMS" component="RANGER_KMS_SERVER" title="Updating dbks-site configurations for Ranger KMS Keysecure support">
+        <task xsi:type="configure" id="hdp_3_1_ranger_kms_keysecure_configuration"/>
+      </execute-stage>
     </group>
 
 
