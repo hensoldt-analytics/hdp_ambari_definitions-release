@@ -142,11 +142,18 @@ def spark_service(name, upgrade_type=None, action=None):
       while i < 15:
         time.sleep(30)
         Logger.info("Check connection to STS is created.")
+
+        beeline_url = ["jdbc:hive2://{fqdn}:{spark_thrift_port}/default"]
+
         if params.security_enabled:
-          beeline_url = ["jdbc:hive2://{fqdn}:{spark_thrift_port}/default;principal={hive_kerberos_principal}","transportMode={spark_transport_mode}"]
-        else:
-          beeline_url = ["jdbc:hive2://{fqdn}:{spark_thrift_port}/default","transportMode={spark_transport_mode}"]
-        # append url according to used transport
+            beeline_url.append("principal={hive_kerberos_principal}")
+
+        beeline_url.append("transportMode={spark_transport_mode}")
+
+        if params.spark_transport_mode.lower() == 'http':
+            beeline_url.append("httpPath=cliservice")
+            if params.spark_thrift_ssl_enabled:
+                beeline_url.append("ssl=true")
 
         beeline_cmd = os.path.join(params.spark_home, "bin", "beeline")
         cmd = "! %s -u '%s'  -e '' 2>&1| awk '{print}'|grep -i -e 'Connection refused' -e 'Invalid URL' -e 'Error: Could not open'" % \
