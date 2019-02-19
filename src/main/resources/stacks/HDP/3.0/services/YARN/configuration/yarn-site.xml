@@ -1638,4 +1638,10 @@ yarn.node-labels.manager-class
     needing cross-origin (CORS) support.</description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>yarn.nodemanager.resourcemanager.connect.wait.secs</name>
+    <value>1800</value>
+    <description>Max time, in seconds, to wait to establish a connection to RM when NM starts. The NM will shutdown if it cannot connect to RM within the specified max time period. If the value is set as -1, then NM will retry forever.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
