@@ -57,6 +57,7 @@ version_for_stack_feature_checks = get_stack_feature_version(config)
 stack_supports_ranger_kerberos = check_stack_feature(StackFeature.RANGER_KERBEROS_SUPPORT, version_for_stack_feature_checks)
 stack_supports_ranger_audit_db = check_stack_feature(StackFeature.RANGER_AUDIT_DB_SUPPORT, version_for_stack_feature_checks)
 stack_supports_core_site_for_ranger_plugin = check_stack_feature(StackFeature.CORE_SITE_FOR_RANGER_PLUGINS_SUPPORT, version_for_stack_feature_checks)
+stack_supports_kafka_env_include_ranger_script = check_stack_feature(StackFeature.KAFKA_ENV_INCLUDE_RANGER_SCRIPT, version_for_stack_feature_checks)
 
 # When downgrading the 'version' is pointing to the downgrade-target version
 # downgrade_from_version provides the source-version the downgrade is happening from
@@ -385,7 +386,9 @@ hadoop_bin_dir = stack_select.get_hadoop_dir("bin") if has_namenode else None
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir() if has_namenode else None
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
 dfs_type = default("/clusterLevelParams/dfs_type", "")
-
+ranger_kafka_plugin_impl_path = format("{kafka_home}/libs/ranger-kafka-plugin-impl")
+ranger_kafka_plugin_core_site_path = format("{ranger_kafka_plugin_impl_path}/core-site.xml")
+ranger_kafka_plugin_hdfs_site_path = format("{ranger_kafka_plugin_impl_path}/hdfs-site.xml")
 mount_table_xml_inclusion_file_full_path = None
 mount_table_content = None
 if 'viewfs-mount-table' in config['configurations']:
