@@ -17,7 +17,7 @@ limitations under the License.
 import os
 
 from resource_management.core.logger import Logger
-from resource_management.core.resources import File, Execute
+from resource_management.core.resources import File, Execute, Link
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.setup_ranger_plugin_xml import setup_configuration_file_for_required_plugins
 
@@ -82,7 +82,7 @@ def setup_ranger_kafka():
                         component_user_principal=params.kafka_jaas_principal if params.kerberos_security_enabled else None,
                         component_user_keytab=params.kafka_keytab_path if params.kerberos_security_enabled else None)
 
-    if params.enable_ranger_kafka:
+    if params.enable_ranger_kafka and params.stack_supports_kafka_env_include_ranger_script:
       Execute(('cp', '--remove-destination', params.setup_ranger_env_sh_source, params.setup_ranger_env_sh_target),
         not_if=format("test -f {setup_ranger_env_sh_target}"),
         sudo=True
@@ -92,16 +92,48 @@ def setup_ranger_kafka():
         group = params.user_group,
         mode = 0755
       )
+    elif not params.stack_supports_kafka_env_include_ranger_script:
+      File(format("{params.setup_ranger_env_sh_target}"),
+           action="delete"
+      )
     if params.stack_supports_core_site_for_ranger_plugin and params.enable_ranger_kafka and params.kerberos_security_enabled:
       # sometimes this is a link for missing /etc/hdp directory, just remove link/file and create regular file.
       Execute(('rm', '-f', os.path.join(params.conf_dir, "core-site.xml")), sudo=True)
 
-      if params.has_namenode:
+      if params.has_namenode and params.stack_supports_kafka_env_include_ranger_script:
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is installed, creating create core-site.xml from namenode configurations")
         setup_configuration_file_for_required_plugins(component_user = params.kafka_user, component_group = params.user_group,
                                              create_core_site_path = params.conf_dir, configurations = params.config['configurations']['core-site'],
                                              configuration_attributes = params.config['configurationAttributes']['core-site'], file_name='core-site.xml',
                                              xml_include_file=params.mount_table_xml_inclusion_file_full_path, xml_include_file_content=params.mount_table_content)
+      elif params.has_namenode and not params.stack_supports_kafka_env_include_ranger_script:
+        Logger.info("Stack supports core-site.xml creation for Ranger plugin and create core-site and hdfs-site in the ranger-kafka-plugin-impl diretory.")
+
+        Link(format('{ranger_kafka_plugin_impl_path}/core-site.xml'),
+             only_if=os.path.islink(format('{ranger_kafka_plugin_impl_path}/core-site.xml')),
+             action="delete")
+        setup_configuration_file_for_required_plugins(component_user = params.kafka_user,
+          component_group = params.user_group,
+          create_core_site_path = params.ranger_kafka_plugin_impl_path,
+          configurations = params.config['configurations']['core-site'],
+          configuration_attributes = params.config['configurationAttributes']['core-site'],
+          file_name='core-site.xml',
+          xml_include_file=params.mount_table_xml_inclusion_file_full_path,
+          xml_include_file_content=params.mount_table_content)
+
+        Link(format('{ranger_kafka_plugin_impl_path}/hdfs-site.xml'),
+             only_if=os.path.islink(format('{ranger_kafka_plugin_impl_path}/hdfs-site.xml')),
+             action="delete")
+        setup_configuration_file_for_required_plugins(component_user = params.kafka_user,
+          component_group = params.user_group,
+          create_core_site_path = params.ranger_kafka_plugin_impl_path,
+          configurations = params.config['configurations']['hdfs-site'],
+          configuration_attributes = params.config['configurationAttributes']['hdfs-site'],
+          file_name='hdfs-site.xml',
+          xml_include_file=params.mount_table_xml_inclusion_file_full_path,
+          xml_include_file_content=params.mount_table_content)
+        Link(format('{ranger_kafka_plugin_impl_path}/conf'),
+             to=format('{conf_dir}'))
       else:
         Logger.info("Stack supports core-site.xml creation for Ranger plugin and Namenode is not installed, creating create core-site.xml from default configurations")
         setup_configuration_file_for_required_plugins(component_user = params.kafka_user, component_group = params.user_group,
