@@ -21,12 +21,12 @@
   <services>
     <service>
       <name>YARN</name>
-      <version>3.1.0</version>
+      <version>3.1.1</version>
     </service>
 
     <service>
       <name>MAPREDUCE2</name>
-      <version>3.0.0.3.1</version>
+      <version>3.1.1</version>
     </service>
   </services>
 </metainfo>
