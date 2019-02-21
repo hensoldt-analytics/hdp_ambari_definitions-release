@@ -26,6 +26,7 @@ from resource_management.core.source import StaticFile
 from resource_management.core.system import System
 from resource_management.libraries.functions import format
 from resource_management.libraries.script import Script
+from resource_management.core.exceptions import Fail
 from ambari_commons.os_family_impl import OsFamilyImpl
 from ambari_commons import OSConst
 
