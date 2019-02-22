@@ -21,8 +21,11 @@
 <configuration>
   <property>
     <name>xasecure.policymgr.clientssl.keystore</name>
-    <value>hadoopdev-clientcert.jks</value>
+    <value/>
     <description>Java Keystore files</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -37,8 +40,11 @@
   </property>
   <property>
     <name>xasecure.policymgr.clientssl.truststore</name>
-    <value>cacerts-xasecure.jks</value>
+    <value/>
     <description>java truststore file</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
