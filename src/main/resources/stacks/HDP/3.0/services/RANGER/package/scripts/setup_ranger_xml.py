@@ -500,12 +500,12 @@ def setup_usersync(upgrade_type=None):
 
     Execute(cmd, logoutput=True, user = params.unix_user)
 
-  File(params.ranger_usersync_keystore_file,
+    File(params.ranger_usersync_keystore_file,
       owner = params.unix_user,
-      group = params.unix_group,
+      group = params.user_group,
       only_if = format("test -e {ranger_usersync_keystore_file}"),
       mode = 0640
-  )
+    )
 
   create_core_site_xml(ranger_ugsync_conf)
 
