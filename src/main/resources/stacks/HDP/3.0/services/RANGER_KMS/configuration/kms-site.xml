@@ -76,7 +76,7 @@
   <property>
     <name>hadoop.kms.authentication.signer.secret.provider</name>
     <value>random</value>
-    <description>Indicates how the secret to sign the authentication cookies will be stored. Options are 'random' (default), 'string' and 'zookeeper'. If using a setup with multiple KMS instances, 'zookeeper' should be used.
+    <description>Indicates how the secret to sign the authentication cookies will be stored. Options are 'random' (default), 'file' and 'zookeeper'. If using a setup with multiple KMS instances, 'zookeeper' should be used.
     </description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -94,8 +94,8 @@
   </property>
   <property>
     <name>hadoop.kms.authentication.signer.secret.provider.zookeeper.auth.type</name>
-    <value>kerberos</value>
-    <description>The Zookeeper authentication type, 'none' or 'sasl' (Kerberos).</description>
+    <value>none</value>
+    <description>The Zookeeper authentication type, 'none' or 'sasl'. The 'none' is used for authentication using 'Client' loginContext &amp; 'sasl' is used for authentication using 'ZKSignerSecretProviderClient' loginContext.</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
