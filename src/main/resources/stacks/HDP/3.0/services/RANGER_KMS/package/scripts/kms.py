@@ -317,9 +317,15 @@ def kms(upgrade_type=None):
       mode=0644
     )
 
+    kms_site_copy = {}
+    kms_site_copy.update(params.config['configurations']['kms-site'])
+
+    if 'hadoop.kms.ha.authentication.kerberos.keytab' in kms_site_copy:
+      kms_site_copy['hadoop.kms.authentication.kerberos.keytab'] = kms_site_copy['hadoop.kms.ha.authentication.kerberos.keytab']
+
     XmlConfig("kms-site.xml",
       conf_dir=params.kms_conf_dir,
-      configurations=params.config['configurations']['kms-site'],
+      configurations=kms_site_copy,
       configuration_attributes=params.config['configurationAttributes']['kms-site'],
       owner=params.kms_user,
       group=params.kms_group,
