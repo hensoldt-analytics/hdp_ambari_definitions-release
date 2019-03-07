@@ -487,6 +487,11 @@
         "name": "kafka_env_include_ranger_script",
         "description": "Need to include Ranger Kafka plugin script if stack version is lower than 3.1.0.0",
         "max_version": "3.1.0.99"
+      },
+      {
+        "name": "ranger_support_security_zone_feature",
+        "description": "Need to add zoneName field in Ranger Audit Solr Collection",
+        "min_version": "3.1.1.0"
       }
     ]
   }

@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
-from resource_management.core.exceptions import Fail
+from resource_management.core.exceptions import Fail, ExecutionFailed
 from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions import upgrade_summary
@@ -33,7 +33,7 @@ from resource_management.libraries.functions import solr_cloud_util
 from ambari_commons.constants import UPGRADE_TYPE_NON_ROLLING, UPGRADE_TYPE_ROLLING
 import upgrade
 import os, errno
-
+import ambari_simplejson as json
 import setup_ranger_xml
 
 class RangerAdmin(Script):
@@ -85,6 +85,23 @@ class RangerAdmin(Script):
         File(format("{ranger_conf}/{file_name}"),
           action = "delete"
         )
+
+    if upgrade_type and params.upgrade_direction == Direction.UPGRADE and params.stack_supports_ranger_zone_feature:
+      if params.has_infra_solr and params.audit_solr_enabled and params.is_solrCloud_enabled and not params.is_external_solrCloud_enabled:
+        add_field_json = json.dumps(params.add_zoneName_field)
+        add_field_cmd = format("curl -k -X POST -H 'Content-type:application/json' --data-binary '{add_field_json}' {infra_solr_protocol}://{infra_solr_host}:{infra_solr_port}/solr/{ranger_solr_collection_name}/schema")
+        if params.security_enabled:
+          kinit_cmd = format("{kinit_path_local} -kt {ranger_admin_keytab} {ranger_admin_jaas_principal};")
+          add_field_cmd = format("{kinit_cmd} curl -k --negotiate -u : -X POST -H 'Content-type:application/json' --data-binary '{add_field_json}' {infra_solr_protocol}://{infra_solr_host}:{infra_solr_port}/solr/{ranger_solr_collection_name}/schema")
+        try:
+          Execute(add_field_cmd,
+            tries = 3,
+            try_sleep = 5,
+            user = params.unix_user,
+            logoutput = True
+          )
+        except ExecutionFailed as execution_exception:
+          Logger.error("Error adding field to Ranger Audits Solr Collection. Kindly check Infra Solr service to be up and running {0}".format(execution_exception))
 
   def start(self, env, upgrade_type=None):
     import params

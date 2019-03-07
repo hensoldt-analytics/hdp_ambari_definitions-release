@@ -29,6 +29,7 @@ from resource_management.libraries.functions.stack_features import check_stack_f
 from resource_management.libraries.functions.stack_features import get_stack_feature_version
 from resource_management.libraries.functions import StackFeature
 from resource_management.libraries.functions.get_bare_principal import get_bare_principal
+from resource_management.libraries.functions.get_kinit_path import get_kinit_path
 from resource_management.core.exceptions import Fail
 
 # a map of the Ambari role to the component name
@@ -77,6 +78,7 @@ stack_supports_ranger_solr_configs = check_stack_feature(StackFeature.RANGER_SOL
 stack_supports_secure_ssl_password = check_stack_feature(StackFeature.SECURE_RANGER_SSL_PASSWORD, version_for_stack_feature_checks)
 stack_supports_multiple_env_sh_files = check_stack_feature(StackFeature.MULTIPLE_ENV_SH_FILES_SUPPORT, version_for_stack_feature_checks)
 stack_supports_ranger_all_admin_change_default_password = check_stack_feature(StackFeature.RANGER_ALL_ADMIN_CHANGE_DEFAULT_PASSWORD, version_for_stack_feature_checks)
+stack_supports_ranger_zone_feature = check_stack_feature(StackFeature.RANGER_SUPPORT_SECURITY_ZONE_FEATURE, version_for_stack_feature_checks)
 
 upgrade_direction = default("/commandParams/upgrade_direction", None)
 
@@ -479,3 +481,18 @@ if 'viewfs-mount-table' in config['configurations']:
 ranger_admin_max_heap_size=default('/configurations/ranger-env/ranger_admin_max_heap_size','1g')
 ranger_usersync_max_heap_size=default('/configurations/ranger-env/ranger_usersync_max_heap_size','1g')
 ranger_tagsync_max_heap_size=default('/configurations/ranger-env/ranger_tagsync_max_heap_size','1g')
+
+# add zoneName field in ranger_audits collection when the current stack support security zone feature during upgrade
+add_zoneName_field = {
+  "add-field" : {
+    "name" : "zoneName",
+    "type" :"key_lower_case",
+    "multiValued" : False
+  }
+}
+infra_solr_ssl_enabled = default("/configurations/infra-solr-env/infra_solr_ssl_enabled", False)
+infra_solr_protocol = "https" if infra_solr_ssl_enabled else "http"
+infra_solr_port = default("/configurations/infra-solr-env/infra_solr_port", "8886")
+if has_infra_solr:
+  infra_solr_host = infra_solr_hosts[0]
+kinit_path_local = get_kinit_path(default("/configurations/kerberos-env/executable_search_paths", None))
