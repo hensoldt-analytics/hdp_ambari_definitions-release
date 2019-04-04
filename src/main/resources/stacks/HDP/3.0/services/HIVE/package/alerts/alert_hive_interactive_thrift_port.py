@@ -21,12 +21,16 @@ limitations under the License.
 import logging
 import os
 import socket
+import subprocess
 import time
 import traceback
 
+from resource_management.core import global_lock, shell
+from resource_management.core.resources import Execute
 from resource_management.libraries.functions import format
 from resource_management.libraries.functions import get_kinit_path
 from resource_management.libraries.functions import hive_check
+
 
 OK_MESSAGE = "TCP OK - {0:.3f}s response on port {1}"
 CRITICAL_MESSAGE = "Connection failed on host {0}:{1} ({2})"
@@ -47,6 +51,8 @@ HIVE_SSL_KEYSTORE_PATH = '{{hive-interactive-site/hive.server2.keystore.path}}'
 HIVE_SSL_KEYSTORE_PASSWORD = '{{hive-interactive-site/hive.server2.keystore.password}}'
 HIVE_LDAP_USERNAME = '{{hive-env/alert_ldap_username}}'
 HIVE_LDAP_PASSWORD = '{{hive-env/alert_ldap_password}}'
+HIVE_WEBUI_PORT = '{{hive-interactive-site/hive.server2.webui.port}}'
+HIVE_WEBUI_SSL = '{{hive-interactive-site/hive.server2.webui.use.ssl}}'
 
 # The configured Kerberos executable search paths, if any
 KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY = '{{kerberos-env/executable_search_paths}}'
@@ -87,7 +93,7 @@ def get_tokens():
           HIVE_SERVER_INTERACTIVE_THRIFT_HTTP_PORT_KEY, HIVE_SERVER_INTERACTIVE_TRANSPORT_MODE_KEY,
           HIVE_SERVER_TRANSPORT_MODE_KEY, KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY, HIVE_SSL,
           HIVE_SSL_KEYSTORE_PATH, HIVE_SSL_KEYSTORE_PASSWORD, HIVE_LDAP_USERNAME, HIVE_LDAP_PASSWORD,
-          HIVE_USER_KEY)
+          HIVE_USER_KEY, HIVE_WEBUI_PORT, HIVE_WEBUI_SSL)
 
 def execute(configurations={}, parameters={}, host_name=None):
   """
@@ -202,12 +208,17 @@ def execute(configurations={}, parameters={}, host_name=None):
 
     start_time = time.time()
 
+    webui_port = configurations[HIVE_WEBUI_PORT]
+    webui_use_ssl = configurations[HIVE_WEBUI_SSL] and configurations[HIVE_WEBUI_SSL].lower() == 'true'
     try:
-      hive_check.check_thrift_port_sasl(host_name, port, hive_server2_authentication, hive_server_principal,
-                                        kinitcmd, smokeuser, hive_user = hive_user, transport_mode=transport_mode, ssl=hive_ssl,
-                                        ssl_keystore=hive_ssl_keystore_path, ssl_password=hive_ssl_keystore_password,
-                                        check_command_timeout=int(check_command_timeout), ldap_username=ldap_username,
-                                        ldap_password=ldap_password)
+      if isLeader(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl):
+        hive_check.check_thrift_port_sasl(host_name, port, hive_server2_authentication, hive_server_principal,
+                                          kinitcmd, smokeuser, hive_user = hive_user, transport_mode=transport_mode, ssl=hive_ssl,
+                                          ssl_keystore=hive_ssl_keystore_path, ssl_password=hive_ssl_keystore_password,
+                                          check_command_timeout=int(check_command_timeout), ldap_username=ldap_username,
+                                          ldap_password=ldap_password)
+      else:
+        logger.info("Not a leader, no need to check.")
       result_code = 'OK'
       total_time = time.time() - start_time
       label = OK_MESSAGE.format(total_time, port)
@@ -220,3 +231,23 @@ def execute(configurations={}, parameters={}, host_name=None):
     result_code = 'UNKNOWN'
 
   return (result_code, [label])
+
+def isLeader(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl):
+  logger.debug("isLeader kinitcmd={}, smokeuser={}, host_name={}, webui_port={}, webui_use_ssl={}".format(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl))
+
+  if (kinitcmd):
+    # prevent concurrent kinit
+    kinit_lock = global_lock.get_lock(global_lock.LOCK_TYPE_KERBEROS)
+    kinit_lock.acquire()
+    try:
+      Execute(kinitcmd, user=smokeuser)
+    finally:
+      kinit_lock.release()
+
+  protocol = "https" if webui_use_ssl else "http"
+  check_cmd = "curl -k {}://{}:{}/leader".format(protocol, host_name, webui_port)
+  code, out, err = shell.call(check_cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE, quiet = True)
+  logger.debug("cmd={}, code={}, out={}, err={}".format(check_cmd, code, out, err))
+  if (code != 0):
+    raise Exception("isLeader check failed with exit code {}".format(code))
+  return out == 'true'
