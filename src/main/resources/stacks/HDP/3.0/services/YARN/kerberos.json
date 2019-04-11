@@ -223,6 +223,10 @@
           "name": "RESOURCEMANAGER",
           "identities": [
             {
+              "name": "yarn_resourcemanager_hdfs",
+              "reference": "/HDFS/NAMENODE/hdfs"
+            },
+            {
               "name": "resource_manager_rm",
               "principal": {
                 "value": "rm/_HOST@${realm}",
