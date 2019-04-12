@@ -52,6 +52,7 @@ class HDP31RangerRecommender(service_advisor.ServiceAdvisor):
   def __init__(self, *args, **kwargs):
     self.as_super = super(HDP31RangerRecommender, self)
     self.as_super.__init__(*args, **kwargs)
+    self.initialize_logger("HDP31RangerRecommender")
 
   def recommendRangerConfigurationsFromHDP31(self, configurations, clusterData, services, hosts):
 
@@ -64,7 +65,11 @@ class HDP31RangerRecommender(service_advisor.ServiceAdvisor):
 
     if "KNOX" in servicesList:
       knox_host = self.getHostWithComponent("KNOX", "KNOX_GATEWAY", services, hosts)
-      knox_host_ip = knox_host['Hosts']['ip']
+      knox_host_ip = None
+      if knox_host:
+        knox_host_ip = knox_host['Hosts']['ip']
+      else:
+        self.logger.warn("KNOX_GATEWAY not found on any hosts in the selected configuration group.")
 
       if 'knox-env' in services['configurations'] and 'knox_user' in services['configurations']['knox-env']['properties']:
         knox_user = services['configurations']['knox-env']['properties']['knox_user']
@@ -73,7 +78,8 @@ class HDP31RangerRecommender(service_advisor.ServiceAdvisor):
         putRangerAdminProperty('ranger.proxyuser.{0}.users'.format(knox_user), '*')
         putRangerAdminProperty('ranger.proxyuser.{0}.hosts'.format(knox_user), '*')
         putRangerAdminProperty('ranger.proxyuser.{0}.groups'.format(knox_user), '*')
-        putRangerAdminProperty('ranger.proxyuser.{0}.ip'.format(knox_user), knox_host_ip)
+        if knox_host_ip:
+          putRangerAdminProperty('ranger.proxyuser.{0}.ip'.format(knox_user), knox_host_ip)
 
         if knox_old_user is not None and knox_user != knox_old_user:
           putRangerAdminAttribute('ranger.proxyuser.{0}.users'.format(knox_old_user), 'delete', 'true')
