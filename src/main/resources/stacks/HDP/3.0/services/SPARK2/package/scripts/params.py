@@ -20,6 +20,7 @@ limitations under the License.
 
 import socket
 import status_params
+import os
 from urlparse import urlparse
 
 from ambari_commons.constants import AMBARI_SUDO_BINARY
@@ -65,6 +66,7 @@ tmp_dir = Script.get_tmp_dir()
 sudo = AMBARI_SUDO_BINARY
 fqdn = socket.getfqdn().lower()
 
+cluster_name = config['clusterName']
 stack_name = status_params.stack_name
 stack_root = Script.get_stack_root()
 stack_version_unformatted = config['clusterLevelParams']['stack_version']
@@ -150,8 +152,28 @@ spark_metrics_properties = config['configurations']['spark2-metrics-properties']
 
 hive_server_host = default("/clusterHostInfo/hive_server_hosts", [])
 is_hive_installed = not len(hive_server_host) == 0
-
 security_enabled = config['configurations']['cluster-env']['security_enabled']
+
+sac_enabled = default("configurations/spark2-atlas-application-properties-override/atlas.spark.enabled", False)
+if type(sac_enabled) is str:
+  sac_enabled = str(sac_enabled).upper() == 'TRUE'
+
+if sac_enabled:
+  atlas_application_properties_to_inlude = ["atlas.cluster.name", "atlas.kafka.bootstrap.servers", "atlas.kafka.security.protocol",
+                                            "atlas.rest.address", "atlas.authentication.method.kerberos.principal", "atlas.authentication.method.kerberos",
+                                            "atlas.authentication.method.kerberos.keytab"]
+  application_properties = dict(config['configurations']['application-properties'])
+  spark_atlas_jar_dir = "/usr/hdp/current/spark-atlas-connector/"
+  if security_enabled:
+    atlas_kafka_keytab = default("/configurations/spark2-atlas-application-properties-override/atlas.jaas.KafkaClient.option.keyTab", None)
+    kafka_user = config['configurations']['kafka-env']['kafka_user']
+
+application_properties_override = dict(default("/configurations/spark2-atlas-application-properties-override", []))
+application_properties_yarn = dict(default("/configurations/spark2-atlas-application-properties-yarn", []))
+atlas_properties_path = spark_conf + os.sep + "atlas-application.properties"
+atlas_properties_for_yarn_path = spark_conf + os.sep + "atlas-application.properties.yarn"
+
+
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
 spark_kerberos_keytab =  config['configurations']['spark2-defaults']['spark.history.kerberos.keytab']
 spark_kerberos_principal =  config['configurations']['spark2-defaults']['spark.history.kerberos.principal']

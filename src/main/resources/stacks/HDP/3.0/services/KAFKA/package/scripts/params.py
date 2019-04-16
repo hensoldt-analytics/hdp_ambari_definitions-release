@@ -278,6 +278,8 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
   has_ranger_tagsync = not len(ranger_tagsync_hosts) == 0
   storm_nimbus_hosts = default('/clusterHostInfo/nimbus_hosts', [])
   has_storm_nimbus = not len(storm_nimbus_hosts) == 0
+  spark_jobhistoryserver_hosts = default("/clusterHostInfo/spark2_jobhistoryserver_hosts", [])
+  has_jobhistoryserver = not len(spark_jobhistoryserver_hosts) == 0
 
   if has_atlas_server:
     atlas_notification_topics = default('/configurations/application-properties/atlas.notification.topics', 'ATLAS_HOOK,ATLAS_ENTITIES')
@@ -286,6 +288,7 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
     hbase_user = default('/configurations/hbase-env/hbase_user', 'hbase')
     atlas_user = default('/configurations/atlas-env/metadata_user', 'atlas')
     rangertagsync_user = default('/configurations/ranger-tagsync-site/ranger.tagsync.dest.ranger.username', 'rangertagsync')
+    spark_user = 'spark_job'
     if len(atlas_notification_topics_list) == 2:
       atlas_hook = atlas_notification_topics_list[0]
       atlas_entity = atlas_notification_topics_list[1]
@@ -301,6 +304,8 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
         storm_principal_name = config['configurations']['storm-env']['storm_principal_name']
         storm_bare_principal_name = get_bare_principal(storm_principal_name)
         hook_policy_user.append(storm_bare_principal_name)
+      if has_jobhistoryserver:
+        hook_policy_user.append(spark_user)
       if len(hook_policy_user) > 0:
         ranger_plugin_config['default-policy.1.policyItem.1.users'] = ",".join(hook_policy_user)
         ranger_plugin_config['default-policy.1.policyItem.1.accessTypes'] = "publish"

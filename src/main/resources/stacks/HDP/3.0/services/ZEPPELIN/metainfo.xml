@@ -70,6 +70,9 @@ limitations under the License.
             <package>
               <name>zeppelin_${stack_version}</name>
             </package>
+            <package>
+              <name>spark-atlas-connector_${stack_version}</name>
+            </package>
           </packages>
         </osSpecific>
         <osSpecific>
@@ -77,6 +80,9 @@ limitations under the License.
           <packages>
             <package>
               <name>zeppelin-${stack_version}</name>
+            </package>
+            <package>
+              <name>spark-atlas-connector-${stack_version}</name>
             </package>
           </packages>
         </osSpecific>

@@ -122,6 +122,7 @@ class ZeppelinServiceAdvisor(service_advisor.ServiceAdvisor):
 
     recommender = ZeppelinRecommender()
     recommender.recommendZeppelinConfigurationsFromHDP25(configurations, clusterData, services, hosts)
+    recommender.recommendZeppelinConfigurationsFromHDP30(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
     """
@@ -199,6 +200,45 @@ class ZeppelinRecommender(service_advisor.ServiceAdvisor):
         if not "#cookie.secure = true" in shiro_ini_content:
           shiro_ini_content = shiro_ini_content.replace("cookie.secure = true", "#cookie.secure = true")
           putZeppelinShiroIniProperty('shiro_ini_content', str(shiro_ini_content))
+
+
+  def recommendZeppelinConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
+    """
+    :type configurations dict
+    :type clusterData dict
+    :type services dict
+    :type hosts dict
+    """
+    servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
+    if "SPARK2" in servicesList and "spark2-atlas-application-properties-override" in services["configurations"] \
+            and 'atlas.spark.enabled' in services['configurations']['spark2-atlas-application-properties-override']['properties']:
+      sac_enabled = str(services['configurations']['spark2-atlas-application-properties-override']['properties']['atlas.spark.enabled']).upper() == 'TRUE'
+      zeppelin_env_properties = self.getServicesSiteProperties(services, "zeppelin-env")
+      putZeppelinEnvProperty = self.putProperty(configurations, "zeppelin-env", services)
+      content = zeppelin_env_properties["zeppelin_env_content"]
+      content_in_lines = content.splitlines()
+      result_list = []
+      for line in content_in_lines:
+        if "ZEPPELIN_INTP_CLASSPATH_OVERRIDES" in line:
+          if sac_enabled:
+            if line.lstrip().startswith("#"):
+              line = "export ZEPPELIN_INTP_CLASSPATH_OVERRIDES=\"{{external_dependency_conf}}:/usr/hdp/current/spark-atlas-connector/*\""
+            elif "{{external_dependency_conf}}" in line:
+              line = line.replace("{{external_dependency_conf}}", "{{external_dependency_conf}}:/usr/hdp/current/spark-atlas-connector/*")
+            else:
+              k = line.rfind("\"")
+              line = line[:k] + ":/usr/hdp/current/spark-atlas-connector/*\"" + line[k+1:]
+          else:
+            if ":/usr/hdp/current/spark-atlas-connector" in line:
+              line = line.replace(":/usr/hdp/current/spark-atlas-connector/*", "")
+            elif "/usr/hdp/current/spark-atlas-connector" in line:
+              line = line.replace("/usr/hdp/current/spark-atlas-connector/*", "")
+
+        result_list.append(line)
+
+      content = "\n".join(result_list)
+      putZeppelinEnvProperty("zeppelin_env_content", content)
+
 
 
   def __recommendLivySuperUsers(self, configurations, services):

@@ -293,4 +293,57 @@
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
+
+  <property>
+    <name>spark.extraListeners</name>
+    <value> </value>
+    <depends-on>
+      <property>
+        <type>spark2-atlas-application-properties-override</type>
+        <name>atlas.spark.enabled</name>
+      </property>
+    </depends-on>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>spark.sql.queryExecutionListeners</name>
+    <value> </value>
+    <depends-on>
+      <property>
+        <type>spark2-atlas-application-properties-override</type>
+        <name>atlas.spark.enabled</name>
+      </property>
+    </depends-on>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>spark.driver.extraClassPath</name>
+    <value> </value>
+    <depends-on>
+      <property>
+        <type>spark2-atlas-application-properties-override</type>
+        <name>atlas.spark.enabled</name>
+      </property>
+    </depends-on>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+
+  <property>
+    <name>spark.sql.streaming.streamingQueryListeners</name>
+    <value> </value>
+    <depends-on>
+      <property>
+        <type>spark2-atlas-application-properties-override</type>
+        <name>atlas.spark.enabled</name>
+      </property>
+    </depends-on>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>

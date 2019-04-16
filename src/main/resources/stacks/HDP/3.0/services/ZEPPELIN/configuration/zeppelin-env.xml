@@ -149,7 +149,13 @@
       # export ZEPPELIN_IMPERSONATE_CMD             # Optional, when user want to run interpreter as end web user. eg) 'sudo -H -u ${ZEPPELIN_IMPERSONATE_USER} bash -c '
 
     </value>
-    <on-ambari-upgrade add="false"/>
+    <depends-on>
+      <property>
+        <type>spark2-atlas-application-properties-override</type>
+        <name>atlas.spark.enabled</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>zeppelin.executor.mem</name>

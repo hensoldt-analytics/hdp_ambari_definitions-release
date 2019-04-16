@@ -39,6 +39,7 @@ from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions import lzo_utils
 from resource_management.libraries.resources.xml_config import XmlConfig
+from common_setup_actions import create_atlas_configs, check_sac_jar
 
 def setup_spark(env, type, upgrade_type = None, action = None):
   import params
@@ -138,6 +139,8 @@ def setup_spark(env, type, upgrade_type = None, action = None):
           group=params.spark_group,
           mode=0644)
 
+  create_atlas_configs()
+
   if params.has_spark_thriftserver:
     spark2_thrift_sparkconf = dict(params.config['configurations']['spark2-thrift-sparkconf'])
 
@@ -164,3 +167,6 @@ def setup_spark(env, type, upgrade_type = None, action = None):
       mode=0755,
       content=InlineTemplate(params.spark_thrift_fairscheduler_content)
     )
+
+  if type == "client":
+    check_sac_jar()
