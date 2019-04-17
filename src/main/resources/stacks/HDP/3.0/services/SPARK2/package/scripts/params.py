@@ -159,7 +159,7 @@ if type(sac_enabled) is str:
   sac_enabled = str(sac_enabled).upper() == 'TRUE'
 
 if sac_enabled:
-  atlas_application_properties_to_inlude = ["atlas.cluster.name", "atlas.kafka.bootstrap.servers", "atlas.kafka.security.protocol",
+  atlas_application_properties_to_include = ["atlas.cluster.name", "atlas.kafka.bootstrap.servers", "atlas.kafka.security.protocol",
                                             "atlas.rest.address", "atlas.authentication.method.kerberos.principal", "atlas.authentication.method.kerberos",
                                             "atlas.authentication.method.kerberos.keytab"]
   application_properties = dict(config['configurations']['application-properties'])

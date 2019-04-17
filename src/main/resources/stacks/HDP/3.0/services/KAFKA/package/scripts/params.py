@@ -288,7 +288,7 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
     hbase_user = default('/configurations/hbase-env/hbase_user', 'hbase')
     atlas_user = default('/configurations/atlas-env/metadata_user', 'atlas')
     rangertagsync_user = default('/configurations/ranger-tagsync-site/ranger.tagsync.dest.ranger.username', 'rangertagsync')
-    spark_user = 'spark_job'
+    spark_user = 'spark_atlas'
     if len(atlas_notification_topics_list) == 2:
       atlas_hook = atlas_notification_topics_list[0]
       atlas_entity = atlas_notification_topics_list[1]

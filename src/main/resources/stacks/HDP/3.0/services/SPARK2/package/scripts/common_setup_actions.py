@@ -32,26 +32,29 @@ def create_atlas_configs():
     if params.sac_enabled:
         atlas_application_properties = params.application_properties
         atlas_application_properties_override = params.application_properties_override
-        for property_name in params.atlas_application_properties_to_inlude:
-            if property_name in atlas_application_properties:
-                params.application_properties_override[property_name] = atlas_application_properties[property_name]
+        atlas_application_properties_yarn = params.application_properties_yarn
+        for property_name in params.atlas_application_properties_to_include:
+            if property_name in atlas_application_properties and not property_name in atlas_application_properties_override:
+                atlas_application_properties_override[property_name] = atlas_application_properties[property_name]
 
 
         PropertiesFile(params.atlas_properties_path,
-                       properties = params.application_properties_override,
+                       properties = atlas_application_properties_override,
                        mode=0644,
                        owner=params.spark_user,
                        group=params.user_group
                        )
 
 
+        atlas_application_properties_override_copy = atlas_application_properties_override.copy()
         if params.security_enabled:
-            atlas_application_properties_override.pop("atlas.jaas.KafkaClient.option.keyTab")
+            atlas_application_properties_override_copy.pop("atlas.jaas.KafkaClient.option.keyTab")
 
-        params.application_properties_yarn.update(atlas_application_properties_override)
+        atlas_application_properties_override_copy.update(atlas_application_properties_yarn)
+        atlas_application_properties_yarn = atlas_application_properties_override_copy
 
         PropertiesFile(params.atlas_properties_for_yarn_path,
-                       properties = params.application_properties_yarn,
+                       properties = atlas_application_properties_yarn,
                        mode=0644,
                        owner=params.spark_user,
                        group=params.user_group
