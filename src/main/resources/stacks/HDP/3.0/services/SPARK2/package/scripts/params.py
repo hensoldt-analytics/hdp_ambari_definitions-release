@@ -167,6 +167,9 @@ if sac_enabled:
   if security_enabled:
     atlas_kafka_keytab = default("/configurations/spark2-atlas-application-properties-override/atlas.jaas.KafkaClient.option.keyTab", None)
     kafka_user = config['configurations']['kafka-env']['kafka_user']
+    secure_atlas_application_properties_to_include = {"atlas.jaas.KafkaClient.loginModuleControlFlag":"required", "atlas.jaas.KafkaClient.loginModuleName":"com.sun.security.auth.module.Krb5LoginModule",
+                                                      "atlas.jaas.KafkaClient.option.serviceName":"{{kafka_user}}", "atlas.jaas.KafkaClient.option.storeKey":"true",
+                                                      "atlas.jaas.KafkaClient.option.useKeyTab":"true"}
 
 application_properties_override = dict(default("/configurations/spark2-atlas-application-properties-override", []))
 application_properties_yarn = dict(default("/configurations/spark2-atlas-application-properties-yarn", []))

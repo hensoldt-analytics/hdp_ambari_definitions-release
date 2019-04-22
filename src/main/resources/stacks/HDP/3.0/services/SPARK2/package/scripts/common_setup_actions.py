@@ -37,6 +37,10 @@ def create_atlas_configs():
             if property_name in atlas_application_properties and not property_name in atlas_application_properties_override:
                 atlas_application_properties_override[property_name] = atlas_application_properties[property_name]
 
+        if params.security_enabled:
+          for property_name in params.secure_atlas_application_properties_to_include.keys():
+            if not property_name in atlas_application_properties_override:
+              atlas_application_properties_override[property_name] = params.secure_atlas_application_properties_to_include[property_name]
 
         PropertiesFile(params.atlas_properties_path,
                        properties = atlas_application_properties_override,

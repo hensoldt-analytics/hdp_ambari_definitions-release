@@ -257,21 +257,6 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
 
         putSpark2AtlasHookProperty("atlas.client.checkModelInStart", "false")
 
-        security_enabled = Spark2ServiceAdvisor.isKerberosEnabled(services, configurations)
-        if security_enabled:
-          putSpark2AtlasHookProperty("atlas.jaas.KafkaClient.loginModuleControlFlag", "required")
-          putSpark2AtlasHookProperty("atlas.jaas.KafkaClient.loginModuleName", "com.sun.security.auth.module.Krb5LoginModule")
-          putSpark2AtlasHookProperty("atlas.jaas.KafkaClient.option.serviceName", "{{kafka_user}}")
-          putSpark2AtlasHookProperty("atlas.jaas.KafkaClient.option.storeKey", "true")
-          putSpark2AtlasHookProperty("atlas.jaas.KafkaClient.option.useKeyTab", "true")
-        else:
-          putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.loginModuleControlFlag", "delete", "true")
-          putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.loginModuleName", "delete", "true")
-          putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.option.serviceName", "delete", "true")
-          putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.option.storeKey", "delete", "true")
-          putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.option.useKeyTab", "delete", "true")
-
-
       else:
 
         self.removeValueFromProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.driver.extraClassPath", "/usr/hdp/current/spark-atlas-connector/*", ":")
@@ -288,11 +273,6 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
 
         putSpark2AtlasHookPropertyAttribute("atlas.client.checkModelInStart", "delete", "true")
 
-        putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.loginModuleControlFlag", "delete", "true")
-        putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.loginModuleName", "delete", "true")
-        putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.option.serviceName", "delete", "true")
-        putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.option.storeKey", "delete", "true")
-        putSpark2AtlasHookPropertyAttribute("atlas.jaas.KafkaClient.option.useKeyTab", "delete", "true")
 
 
   def setOrAddValueToProperty(self, putConfigProperty, config, propertyName, propertyValue, separator):
