@@ -211,7 +211,7 @@ def execute(configurations={}, parameters={}, host_name=None):
     webui_port = configurations[HIVE_WEBUI_PORT]
     webui_use_ssl = configurations[HIVE_WEBUI_SSL] and configurations[HIVE_WEBUI_SSL].lower() == 'true'
     try:
-      if isLeader(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl):
+      if shouldCheck(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl):
         hive_check.check_thrift_port_sasl(host_name, port, hive_server2_authentication, hive_server_principal,
                                           kinitcmd, smokeuser, hive_user = hive_user, transport_mode=transport_mode, ssl=hive_ssl,
                                           ssl_keystore=hive_ssl_keystore_path, ssl_password=hive_ssl_keystore_password,
@@ -232,8 +232,10 @@ def execute(configurations={}, parameters={}, host_name=None):
 
   return (result_code, [label])
 
-def isLeader(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl):
-  logger.debug("isLeader kinitcmd={}, smokeuser={}, host_name={}, webui_port={}, webui_use_ssl={}".format(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl))
+def shouldCheck(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl):
+  """Should check node if: 1) non-HA setup or 2) active node in a HA setup"""
+
+  logger.debug("shouldCheck kinitcmd={}, smokeuser={}, host_name={}, webui_port={}, webui_use_ssl={}".format(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl))
 
   if (kinitcmd):
     # prevent concurrent kinit
@@ -246,8 +248,9 @@ def isLeader(kinitcmd, smokeuser, host_name, webui_port, webui_use_ssl):
 
   protocol = "https" if webui_use_ssl else "http"
   check_cmd = "curl -k {}://{}:{}/leader".format(protocol, host_name, webui_port)
+  logger.debug("cmd={}".format(check_cmd))
   code, out, err = shell.call(check_cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE, quiet = True)
-  logger.debug("cmd={}, code={}, out={}, err={}".format(check_cmd, code, out, err))
+  logger.debug("code={}, out={}, err={}".format(code, out, err))
   if (code != 0):
-    raise Exception("isLeader check failed with exit code {}".format(code))
-  return out == 'true'
+    raise Exception("shouldCheck failed with exit code {}".format(code))
+  return out != 'false' # false means there is a HA setup and the server is in standby mode
