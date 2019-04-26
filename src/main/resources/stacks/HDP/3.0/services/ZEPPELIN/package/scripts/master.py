@@ -472,21 +472,21 @@ class Master(Script):
     for interpreter_setting in interpreter_settings:
       interpreter = interpreter_settings[interpreter_setting]
       if interpreter['group'] == 'livy':
-        if params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab and params.security_enabled:
+        if params.security_enabled and params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab:
           self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.principal', 'string', params.zeppelin_kerberos_principal)
           self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.keytab', 'string', params.zeppelin_kerberos_keytab)
         else:
           self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.principal', 'string', "")
           self.storePropertyToInterpreter(interpreter, 'zeppelin.livy.keytab', 'string', "")
       elif interpreter['group'] == 'spark':
-        if params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab and params.security_enabled:
+        if params.security_enabled and params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab:
           self.storePropertyToInterpreter(interpreter, 'spark.yarn.principal', 'string', params.zeppelin_kerberos_principal)
           self.storePropertyToInterpreter(interpreter, 'spark.yarn.keytab', 'string', params.zeppelin_kerberos_keytab)
         else:
           self.storePropertyToInterpreter(interpreter, 'spark.yarn.principal', 'string', "")
           self.storePropertyToInterpreter(interpreter, 'spark.yarn.keytab', 'string', "")
       elif interpreter['group'] == 'jdbc':
-        if params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab and params.security_enabled:
+        if params.security_enabled and params.zeppelin_kerberos_principal and params.zeppelin_kerberos_keytab:
           self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.auth.type', 'string', "KERBEROS")
           self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.principal', 'string', params.zeppelin_kerberos_principal)
           self.storePropertyToInterpreter(interpreter, 'zeppelin.jdbc.keytab.location', 'string', params.zeppelin_kerberos_keytab)
@@ -639,8 +639,7 @@ class Master(Script):
           del interpreter_settings[setting_key]
 
     self.set_interpreter_settings(config_data)
-    if params.security_enabled:
-      self.update_kerberos_properties()
+    self.update_kerberos_properties()
 
   def storePropertyToInterpreter(self, interpreter, property_name, property_type, property_value, mode='set'):
     if property_name in interpreter['properties'] and 'value' in interpreter['properties'][property_name]:
