@@ -323,7 +323,7 @@ HADOOP_OPTS="$HADOOP_OPTS -Djavax.security.auth.useSubjectCredsOnly=false"
 {% endif %}
 
 {% if rm_security_opts is defined %}
-HADOOP_OPTS="{{rm_security_opts}} $HADOOP_OPTS"
+YARN_RESOURCEMANAGER_OPTS="{{rm_security_opts}} $YARN_RESOURCEMANAGER_OPTS"
 {% endif %}
 
 export YARN_NODEMANAGER_OPTS="$YARN_NODEMANAGER_OPTS -Dnm.audit.logger=INFO,NMAUDIT"
