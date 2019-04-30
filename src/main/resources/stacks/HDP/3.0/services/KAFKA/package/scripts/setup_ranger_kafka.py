@@ -139,6 +139,8 @@ def setup_ranger_kafka():
         setup_configuration_file_for_required_plugins(component_user = params.kafka_user, component_group = params.user_group,
                                              create_core_site_path = params.conf_dir, configurations = { 'hadoop.security.authentication' : 'kerberos' if params.kerberos_security_enabled else 'simple' },
                                              configuration_attributes = {}, file_name='core-site.xml')
+        Link(format('{ranger_kafka_plugin_impl_path}/conf'),
+             to=format('{conf_dir}'))
     else:
       Logger.info("Stack does not support core-site.xml creation for Ranger plugin, skipping core-site.xml configurations")
   else:
