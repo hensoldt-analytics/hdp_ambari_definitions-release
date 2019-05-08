@@ -75,6 +75,15 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>kerberos_merge_advertised_listeners</name>
+    <value>true</value>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <description>Merge default Ambari-managed "advertised.listeners" value with user defined value.</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>kafka_user_nproc_limit</name>
     <value>65536</value>
     <description>Max number of processes limit setting for KAFKA user.</description>

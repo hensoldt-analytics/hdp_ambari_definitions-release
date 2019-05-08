@@ -52,7 +52,6 @@ def kafka(upgrade_type=None):
        check_stack_feature(StackFeature.KAFKA_LISTENERS, effective_version):
 
        listeners = kafka_server_config['listeners'].replace("localhost", params.hostname)
-       Logger.info(format("Kafka listeners: {listeners}"))
        kafka_server_config['listeners'] = listeners
 
        if params.kerberos_security_enabled and params.kafka_kerberos_enabled:
@@ -66,12 +65,26 @@ def kafka(upgrade_type=None):
          listeners = replace_sasl_related_config(listeners)
          kafka_server_config['listeners'] = listeners
 
-         kafka_server_config['advertised.listeners'] = listeners
-         Logger.info(format("Kafka advertised listeners: {listeners}"))
+         if 'advertised.listeners' not in kafka_server_config:
+           kafka_server_config['advertised.listeners'] = listeners
+         else:
+           if params.kafka_kerberos_merge_advertised_listeners:
+             Logger.warning("User defined advertised.listeners will be merged with Ambari-managed advertised.listeners value. To leave value as is change kafka-env/kerberos_merge_advertised_listeners to false.")
+             kafka_server_config['advertised.listeners'] = ",".join((listeners, kafka_server_config['advertised.listeners']))
        elif 'advertised.listeners' in kafka_server_config:
          advertised_listeners = kafka_server_config['advertised.listeners'].replace("localhost", params.hostname)
          kafka_server_config['advertised.listeners'] = advertised_listeners
-         Logger.info(format("Kafka advertised listeners: {advertised_listeners}"))
+
+       raw_listeners = kafka_server_config['raw.listeners'] if 'raw.listeners' in kafka_server_config else ""
+       if 'raw.listeners' in kafka_server_config:
+         del kafka_server_config['raw.listeners']
+       if raw_listeners.strip():
+         kafka_server_config['listeners'] = ",".join((kafka_server_config['listeners'], raw_listeners))
+       effective_kafka_listeners = kafka_server_config['listeners']
+       Logger.info("Kafka listeners: "+effective_kafka_listeners)
+       if 'advertised.listeners' in kafka_server_config:
+         effective_advertised_listeners = kafka_server_config['advertised.listeners']
+         Logger.info("Kafka advertised listeners: "+effective_advertised_listeners)
     else:
       kafka_server_config['host.name'] = params.hostname
 

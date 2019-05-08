@@ -426,7 +426,16 @@
   <property>
     <name>listeners</name>
     <value>PLAINTEXT://localhost:6667</value>
-    <description>host and port where kafka broker will be accepting connections. localhost will be substituted with hostname.</description>
+    <description>host and port where kafka broker will be accepting connections. localhost will be substituted with hostname. This property managed with Ambari and every user-defined listeners need to be placed to raw.listeners property.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>raw.listeners</name>
+    <value></value>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <description>User-defined listeners that will be unchanged by Ambari. Value of this property will be merged with Ambari-managed listeners.</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
