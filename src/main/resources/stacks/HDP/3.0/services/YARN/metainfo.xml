@@ -147,7 +147,6 @@
           </customCommands>
 
           <configuration-dependencies>
-            <config-type>capacity-scheduler</config-type>
             <config-type>hdfs-site</config-type>
             <config-type>resource-types</config-type>
             <config-type>container-executor</config-type>
