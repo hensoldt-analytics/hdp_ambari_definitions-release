@@ -405,7 +405,6 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
     # hive_security_authorization == "None"
     if str(configurations["hive-env"]["properties"]["hive_security_authorization"]).lower() == "none":
-      putHiveSiteProperty("hive.server2.enable.doAs", "true")
       putHiveServerProperty("hive.security.authorization.enabled", "false")
       putHiveServerPropertyAttribute("hive.security.authorization.manager", "delete", "true")
       putHiveServerPropertyAttribute("hive.security.authenticator.manager", "delete", "true")
