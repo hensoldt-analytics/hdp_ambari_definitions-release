@@ -177,10 +177,6 @@
           "subsection-name": "security-row1-col1"
         },
         {
-          "config": "hive-site/hive.server2.enable.doAs",
-          "subsection-name": "security-row1-col1"
-        },
-        {
           "config": "hive-site/hive.server2.authentication",
           "subsection-name": "security-row1-col1"
         },
@@ -470,12 +466,6 @@
               "unit-name": "MB"
             }
           ]
-        }
-      },
-      {
-        "config": "hive-site/hive.server2.enable.doAs",
-        "widget": {
-          "type": "toggle"
         }
       },
       {
