@@ -1344,25 +1344,14 @@ limitations under the License.
   </property>
   <property>
     <name>hive.server2.enable.doAs</name>
-    <value>true</value>
+    <value>false</value>
     <description>
       Setting this property to true will have HiveServer2 execute
       Hive operations as the user making the calls to it.
     </description>
     <display-name>Run as end user instead of Hive user</display-name>
     <value-attributes>
-      <type>value-list</type>
-      <entries>
-        <entry>
-          <value>true</value>
-          <label>True</label>
-        </entry>
-        <entry>
-          <value>false</value>
-          <label>False</label>
-        </entry>
-      </entries>
-      <selection-cardinality>1</selection-cardinality>
+      <type>boolean</type>
     </value-attributes>
     <depends-on>
       <property>
