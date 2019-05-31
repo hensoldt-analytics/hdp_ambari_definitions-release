@@ -406,6 +406,7 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
     # hive_security_authorization == "None"
     if str(configurations["hive-env"]["properties"]["hive_security_authorization"]).lower() == "none":
+      putHiveSiteProperty("hive.server2.enable.doAs", "true")
       putHiveServerProperty("hive.security.authorization.enabled", "true")
       putHiveServerProperty("hive.security.authorization.manager", "org.apache.hadoop.hive.ql.security.authorization.plugin.fallback.FallbackHiveAuthorizerFactory")
       putHiveServerProperty("hive.security.authenticator.manager", "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator")
