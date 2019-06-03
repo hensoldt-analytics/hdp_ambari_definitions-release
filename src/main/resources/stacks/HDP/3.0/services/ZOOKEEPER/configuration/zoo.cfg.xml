@@ -90,4 +90,24 @@
       Set to a positive integer (1 and above) to enable the auto purging.</description>
     <on-ambari-upgrade add="true"/>
   </property>
+  <property>
+    <name>quorum.auth.enableSasl</name>
+    <value>false</value>
+    <display-name>Enable Server to Server SASL Authentication</display-name>
+    <description>Enables SASL authentication between ZooKeeper servers. Only applies when ZooKeeper Kerberos Authentication is enabled..</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>quorum.cnxn.threads.size</name>
+    <value>20</value>
+    <display-name>Quorum Connection Manager Thread Pool Size</display-name>
+    <description>Size of the thread pool quorum connection manager uses to manage connections between quorum servers. Only applies when ZooKeeper Server to Server SASL Authentication is enabled.</description>
+    <value-attributes>
+      <type>int</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
 </configuration>
