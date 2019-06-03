@@ -95,6 +95,7 @@ zk_keytab_path = config['configurations']['zookeeper-env']['zookeeper_keytab_pat
 zk_server_jaas_file = format("{config_dir}/zookeeper_jaas.conf")
 zk_client_jaas_file = format("{config_dir}/zookeeper_client_jaas.conf")
 security_enabled = config['configurations']['cluster-env']['security_enabled']
+enable_sasl = security_enabled and zoo_cfg_properties_map['quorum.auth.enableSasl']
 
 smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
 smokeuser = config['configurations']['cluster-env']['smokeuser']

@@ -24,3 +24,23 @@ useTicketCache=false
 keyTab="{{zk_keytab_path}}"
 principal="{{zk_principal}}";
 };
+
+{% if enable_sasl -%}
+QuorumServer {
+com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=true
+storeKey=true
+useTicketCache=false
+keyTab="{{zk_keytab_path}}"
+principal="{{zk_principal}}";
+};
+
+QuorumLearner {
+com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=true
+storeKey=true
+useTicketCache=false
+keyTab="{{zk_keytab_path}}"
+principal="{{zk_principal}}";
+};
+{% endif %}
