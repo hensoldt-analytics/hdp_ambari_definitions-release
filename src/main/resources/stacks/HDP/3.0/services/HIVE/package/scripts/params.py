@@ -826,3 +826,7 @@ beeline_site_config = {
 
 if has_hive_interactive:
   beeline_site_config['beeline.hs2.jdbc.url.llap'] = hsi_jdbc_url
+
+# For ldap - hive_check
+hive_ldap_user = config['configurations']['hive-env'].get('alert_ldap_username','')
+hive_ldap_passwd = config['configurations']['hive-env'].get('alert_ldap_password','')

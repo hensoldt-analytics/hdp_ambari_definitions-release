@@ -87,7 +87,8 @@ class HiveServiceCheck(Script):
                                params.hive_server_principal, kinit_cmd, params.smokeuser, hive_user = params.hive_user,
                                transport_mode=params.hive_transport_mode,
                                http_endpoint=params.hive_http_endpoint, ssl=params.hive_ssl,
-                               ssl_keystore=ssl_keystore, ssl_password=ssl_password)
+                               ssl_keystore=ssl_keystore, ssl_password=ssl_password,
+                               ldap_username=params.hive_ldap_user, ldap_password=params.hive_ldap_passwd)
         Logger.info("Successfully connected to {0} on port {1}".format(address, server_port))
         workable_server_available = True
       except:
