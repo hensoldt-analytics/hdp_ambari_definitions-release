@@ -499,6 +499,8 @@
             <function>set_pre_start</function>
           </task>
 
+          <task xsi:type="configure" id="hdp_3_1_maint_ranger_audit_solr_bootstrap"/>
+
           <task xsi:type="execute" hosts="any">
             <summary>Upgrading Ranger database schema</summary>
             <script>scripts/ranger_admin.py</script>

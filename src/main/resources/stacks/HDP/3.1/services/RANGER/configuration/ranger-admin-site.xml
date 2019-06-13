@@ -25,4 +25,14 @@
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>ranger.audit.solr.bootstrap.enabled</name>
+    <description>Enable Ranger Audit Solr Bootstrap. Keep this config disable for Ambari based installation.</description>
+    <value>false</value>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
