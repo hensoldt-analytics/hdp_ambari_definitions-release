@@ -304,6 +304,10 @@
         <task xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal"/>
       </execute-stage>
 
+      <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Updating logger configurations for Atlas.">
+        <task xsi:type="configure" id="hdp_3_1_x_atlas_log4j"/>
+      </execute-stage>
+
       <!-- RANGER -->
       <execute-stage service="RANGER" component="RANGER_TAGSYNC" title="Updating Tagsync security protocol for Kafka">
         <task xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal"/>
