@@ -282,11 +282,12 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
       putConfigProperty(propertyName, propertyValue)
 
   def removeValueFromProperty(self, putConfigProperty, config, propertyName, propertyValue, separator):
-    if self.checkSiteProperties(config, propertyName) and str(config[propertyName]).strip() == propertyValue:
+    if not self.checkSiteProperties(config, propertyName):
+      return
+    if str(config[propertyName]).strip() == propertyValue:
       putConfigProperty(propertyName, " ")
     else:
       putConfigProperty(propertyName, str(config[propertyName]).replace(separator + propertyValue, ""))
-
 
   def __addZeppelinToLivy2SuperUsers(self, configurations, services):
     """
