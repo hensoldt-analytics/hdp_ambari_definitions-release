@@ -32,6 +32,7 @@
           <category>MASTER</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
+          <timelineAppid>nimbus</timelineAppid>
           <dependencies>
             <dependency>
               <name>ZOOKEEPER/ZOOKEEPER_SERVER</name>
@@ -60,6 +61,7 @@
           <category>MASTER</category>
           <cardinality>1</cardinality>
           <versionAdvertised>true</versionAdvertised>
+          <timelineAppid>nimbus</timelineAppid>
           <commandScript>
             <script>scripts/ui_server.py</script>
             <scriptType>PYTHON</scriptType>
@@ -79,6 +81,7 @@
           <category>SLAVE</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
+          <timelineAppid>nimbus</timelineAppid>
           <commandScript>
             <script>scripts/supervisor.py</script>
             <scriptType>PYTHON</scriptType>
@@ -108,6 +111,7 @@
           <category>MASTER</category>
           <cardinality>1</cardinality>
           <versionAdvertised>true</versionAdvertised>
+          <timelineAppid>nimbus</timelineAppid>
           <commandScript>
             <script>scripts/ui_server.py</script>
             <scriptType>PYTHON</scriptType>
@@ -124,6 +128,7 @@
         <component>
           <name>DRPC_SERVER</name>
           <displayName>DRPC Server</displayName>
+          <timelineAppid>nimbus</timelineAppid>
           <category>MASTER</category>
           <cardinality>1</cardinality>
           <versionAdvertised>true</versionAdvertised>

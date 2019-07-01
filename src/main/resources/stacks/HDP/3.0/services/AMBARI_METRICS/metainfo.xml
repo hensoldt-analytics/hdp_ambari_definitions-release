@@ -34,6 +34,7 @@
           <reassignAllowed>true</reassignAllowed>
           <timelineAppid>AMS-HBASE</timelineAppid>
           <recovery_enabled>true</recovery_enabled>
+          <timelineAppid>ams-hbase</timelineAppid>
           <dependencies>
             <dependency>
               <name>ZOOKEEPER/ZOOKEEPER_SERVER</name>

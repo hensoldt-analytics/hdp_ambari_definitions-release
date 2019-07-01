@@ -31,6 +31,7 @@
                     <cardinality>1+</cardinality>
                     <versionAdvertised>true</versionAdvertised>
                     <rollingRestartSupported>true</rollingRestartSupported>
+                    <timelineAppid>kafka_broker</timelineAppid>
                     <dependencies>
                         <dependency>
                             <name>ZOOKEEPER/ZOOKEEPER_SERVER</name>
