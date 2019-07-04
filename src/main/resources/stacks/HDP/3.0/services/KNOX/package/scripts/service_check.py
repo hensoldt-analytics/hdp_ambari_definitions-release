@@ -83,7 +83,7 @@ class KnoxServiceCheckDefault(KnoxServiceCheck):
     )
 
     Execute(smoke_cmd,
-            tries=3,
+            tries=15,
             try_sleep=5,
             path='/usr/sbin:/sbin:/usr/local/bin:/bin:/usr/bin',
             user=params.smokeuser,
