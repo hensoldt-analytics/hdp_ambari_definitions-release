@@ -170,6 +170,13 @@ class ResourcemanagerDefault(Resourcemanager):
     user_group = params.user_group
 
     yarn_refresh_cmd = format("{rm_kinit_cmd} yarn --config {conf_dir} rmadmin -refreshNodes")
+    
+    if params.yarn_graceful_decommission:
+      yarn_refresh_cmd += " -g "
+      if params.yarn_graceful_decommission_client_side_timeout:
+        yarn_refresh_cmd += format("{yarn_graceful_decommission_timeout} -client")
+      else:
+        yarn_refresh_cmd += "-server"
 
     File(params.exclude_file_path,
          content=Template("exclude_hosts_list.j2"),

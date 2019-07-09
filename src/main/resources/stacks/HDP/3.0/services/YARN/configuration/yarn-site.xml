@@ -1638,4 +1638,10 @@ yarn.node-labels.manager-class
     needing cross-origin (CORS) support.</description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>yarn.resourcemanager.nodemanager-graceful-decommission-timeout-secs</name>
+    <value>3600</value>
+    <description>Timeout in seconds for YARN node graceful decommission. This is the maximal time to wait for running containers and applications to complete before transition a DECOMMISSIONING node into DECOMMISSIONED.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>

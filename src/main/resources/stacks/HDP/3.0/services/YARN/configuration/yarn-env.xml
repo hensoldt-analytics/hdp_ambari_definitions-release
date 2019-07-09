@@ -32,6 +32,28 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>yarn_graceful_decommission</name>
+    <value>false</value>
+    <display-name>YARN Graceful Decommission</display-name>
+    <description>If true YARN graceful decommission is enabled</description>
+    <value-attributes>
+      <overridable>true</overridable>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+    <property>
+    <name>yarn_graceful_decommission_client_side_timeout</name>
+    <value>false</value>
+    <display-name>YARN Graceful Decommission Client Side Timeout</display-name>
+    <description>If true YARN graceful decommission will use client side timeout, otherwise server side timeout is enforced.</description>
+    <value-attributes>
+      <overridable>true</overridable>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>yarn_pid_dir_prefix</name>
     <value>/var/run/hadoop-yarn</value>
     <display-name>YARN PID Dir Prefix</display-name>

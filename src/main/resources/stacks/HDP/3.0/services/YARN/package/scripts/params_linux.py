@@ -232,6 +232,9 @@ java_exec = format("{java64_home}/bin/java")
 hadoop_ssl_enabled = default("/configurations/core-site/hadoop.ssl.enabled", False)
 java_version = expect("/ambariLevelParams/java_version", int)
 
+yarn_graceful_decommission = config['configurations']['yarn-env']['yarn_graceful_decommission']
+yarn_graceful_decommission_client_side_timeout = config['configurations']['yarn-env']['yarn_graceful_decommission_client_side_timeout']
+yarn_graceful_decommission_timeout = default('/configurations/yarn-site/yarn.resourcemanager.nodemanager-graceful-decommission-timeout-secs', "3600")
 yarn_heapsize = config['configurations']['yarn-env']['yarn_heapsize']
 resourcemanager_heapsize = config['configurations']['yarn-env']['resourcemanager_heapsize']
 nodemanager_heapsize = config['configurations']['yarn-env']['nodemanager_heapsize']
