@@ -56,10 +56,10 @@
   <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
     <param name="File" value="{{log_dir}}/application.log"/>
     <param name="Append" value="true"/>
+    <param name="maxFileSize" value="{{atlas_log_max_backup_size}}MB" />
+    <param name="maxBackupIndex" value="{{atlas_log_number_of_backup_files}}" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d %-5p - [%t:%x] ~ %m (%C{1}:%L)%n"/>
-      <param name="maxFileSize" value="{{atlas_log_max_backup_size}}MB" />
-      <param name="maxBackupIndex" value="{{atlas_log_number_of_backup_files}}" />
     </layout>
   </appender>
 
@@ -93,29 +93,29 @@
   <appender name="AUDIT" class="org.apache.log4j.RollingFileAppender">
     <param name="File" value="{{log_dir}}/audit.log"/>
     <param name="Append" value="true"/>
+    <param name="maxFileSize" value="{{atlas_log_max_backup_size}}MB" />
+    <param name="maxBackupIndex" value="{{atlas_log_number_of_backup_files}}" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d %x %m%n"/>
-      <param name="maxFileSize" value="{{atlas_log_max_backup_size}}MB" />
-      <param name="maxBackupIndex" value="{{atlas_log_number_of_backup_files}}" />
     </layout>
   </appender>
 
   <appender name="METRICS" class="org.apache.log4j.RollingFileAppender">
     <param name="File" value="{{log_dir}}/metric.log"/>
     <param name="Append" value="true"/>
+    <param name="maxFileSize" value="{{atlas_log_max_backup_size}}MB" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d %x %m%n"/>
-      <param name="maxFileSize" value="{{atlas_log_max_backup_size}}MB" />
     </layout>
   </appender>
 
   <appender name="FAILED" class="org.apache.log4j.RollingFileAppender">
     <param name="File" value="{{log_dir}}/failed.log"/>
     <param name="Append" value="true"/>
+    <param name="maxFileSize" value="{{atlas_log_max_backup_size}}MB" />
+    <param name="maxBackupIndex" value="{{atlas_log_number_of_backup_files}}" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d %m%n"/>
-      <param name="maxFileSize" value="{{atlas_log_max_backup_size}}MB" />
-      <param name="maxBackupIndex" value="{{atlas_log_number_of_backup_files}}" />
     </layout>
   </appender>
 

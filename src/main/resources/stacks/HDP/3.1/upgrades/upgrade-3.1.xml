@@ -940,7 +940,6 @@
             <script>scripts/metadata_server.py</script>
             <function>update_atlas_simple_authz</function>
           </task>
-          <task xsi:type="configure" id="hdp_3_1_x_atlas_log4j"/>
         </pre-upgrade>
         <pre-downgrade/>
         <upgrade>

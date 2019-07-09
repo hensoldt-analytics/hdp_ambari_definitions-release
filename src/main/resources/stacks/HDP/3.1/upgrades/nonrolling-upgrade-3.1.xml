@@ -304,9 +304,6 @@
         <task xsi:type="configure" id="hdp_3_1_ranger_kms_keysecure_configuration"/>
       </execute-stage>
 
-      <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Updating logger configurations for Atlas.">
-        <task xsi:type="configure" id="hdp_3_1_x_atlas_log4j"/>
-      </execute-stage>
     </group>
 
 
