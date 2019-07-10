@@ -43,6 +43,9 @@
 {% endfor %}
 
 {% if enable_sasl -%}
+{% if not "quorum.auth.kerberos.servicePrincipal" in zoo_cfg_properties_map -%}
+quorum.auth.kerberos.servicePrincipal=zookeeper/_HOST
+{% endif %}
 {% if not "quorum.auth.serverRequireSasl" in zoo_cfg_properties_map -%}
 quorum.auth.serverRequireSasl=true
 {% endif %}
