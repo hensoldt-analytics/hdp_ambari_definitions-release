@@ -37,17 +37,13 @@ CRITICAL_MESSAGE = "Connection failed on host {0}:{1} ({2})"
 HIVE_SERVER_THRIFT_PORT_KEY = '{{spark2-hive-site-override/hive.server2.thrift.port}}'
 HIVE_SERVER_THRIFT_HTTP_PORT_KEY = '{{spark2-hive-site-override/hive.server2.thrift.http.port}}'
 HIVE_SERVER_TRANSPORT_MODE_KEY = '{{spark2-hive-site-override/hive.server2.transport.mode}}'
+HIVE_SERVER_HTTP_ENDPOINT = '{{spark2-hive-site-override/hive.server2.http.endpoint}}'
+HIVE_SERVER2_USE_SSL_KEY = '{{spark2-hive-site-override/hive.server2.use.SSL}}'
+
 SECURITY_ENABLED_KEY = '{{cluster-env/security_enabled}}'
 
-HIVE_SERVER2_AUTHENTICATION_KEY = '{{hive-site/hive.server2.authentication}}'
 HIVE_SERVER2_KERBEROS_KEYTAB = '{{spark2-hive-site-override/hive.server2.authentication.kerberos.keytab}}'
 HIVE_SERVER2_PRINCIPAL_KEY = '{{spark2-hive-site-override/hive.server2.authentication.kerberos.principal}}'
-
-
-SPARK_SSL_ENABLED = '{{spark2-defaults/spark.ssl.enabled}}'
-SPARK_TRUST_STORE_PATH = '{{spark2-defaults/spark.ssl.trustStore}}'
-SPARK_TRUST_STORE_PASS = '{{spark2-defaults/spark.ssl.trustStorePassword}}'
-
 
 # The configured Kerberos executable search paths, if any
 KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY = '{{kerberos-env/executable_search_paths}}'
@@ -68,9 +64,9 @@ def get_tokens():
     Returns a tuple of tokens in the format {{site/property}} that will be used
     to build the dictionary passed into execute
     """
-    return (HIVE_SERVER_THRIFT_PORT_KEY, HIVE_SERVER_THRIFT_HTTP_PORT_KEY, HIVE_SERVER_TRANSPORT_MODE_KEY, SECURITY_ENABLED_KEY,
-            KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY, SPARK_USER_KEY, HIVE_SERVER2_KERBEROS_KEYTAB, HIVE_SERVER2_PRINCIPAL_KEY,
-            SPARK_SSL_ENABLED, SPARK_TRUST_STORE_PATH, SPARK_TRUST_STORE_PASS)
+    return (HIVE_SERVER_THRIFT_PORT_KEY, HIVE_SERVER_THRIFT_HTTP_PORT_KEY, HIVE_SERVER_TRANSPORT_MODE_KEY, HIVE_SERVER_HTTP_ENDPOINT,
+            HIVE_SERVER2_USE_SSL_KEY, SECURITY_ENABLED_KEY, KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY, SPARK_USER_KEY, HIVE_SERVER2_KERBEROS_KEYTAB,
+            HIVE_SERVER2_PRINCIPAL_KEY)
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def execute(configurations={}, parameters={}, host_name=None):
@@ -92,11 +88,19 @@ def execute(configurations={}, parameters={}, host_name=None):
     if HIVE_SERVER_TRANSPORT_MODE_KEY in configurations:
         transport_mode = configurations[HIVE_SERVER_TRANSPORT_MODE_KEY]
 
+    if HIVE_SERVER_HTTP_ENDPOINT in configurations:
+        http_endpoint = configurations[HIVE_SERVER_HTTP_ENDPOINT]
+
     port = THRIFT_PORT_DEFAULT
     if transport_mode.lower() == 'binary' and HIVE_SERVER_THRIFT_PORT_KEY in configurations:
         port = int(configurations[HIVE_SERVER_THRIFT_PORT_KEY])
     elif transport_mode.lower() == 'http' and HIVE_SERVER_THRIFT_HTTP_PORT_KEY in configurations:
         port = int(configurations[HIVE_SERVER_THRIFT_HTTP_PORT_KEY])
+
+    ssl_enabled = False
+    if (HIVE_SERVER2_USE_SSL_KEY in configurations
+        and str(configurations[HIVE_SERVER2_USE_SSL_KEY]).upper() == 'TRUE'):
+        ssl_enabled = True
 
     security_enabled = False
     if SECURITY_ENABLED_KEY in configurations:
@@ -113,16 +117,6 @@ def execute(configurations={}, parameters={}, host_name=None):
     if HIVE_SERVER2_PRINCIPAL_KEY in configurations:
         hive_principal = configurations[HIVE_SERVER2_PRINCIPAL_KEY]
         hive_principal = hive_principal.replace('_HOST',host_name.lower())
-
-    # Get the Trust store and pass
-    spark_truststore_path = None
-    spark_truststore_pass = None
-    spark_ssl_enabled = False
-    if SPARK_SSL_ENABLED in configurations:
-        spark_truststore_path = configurations[SPARK_TRUST_STORE_PATH]
-        spark_truststore_pass = configurations[SPARK_TRUST_STORE_PASS]
-        spark_ssl_enabled = str(configurations[SPARK_SSL_ENABLED]).upper() == 'TRUE'
-
 
     # Get the configured Kerberos executable search paths, if any
     if KERBEROS_EXECUTABLE_SEARCH_PATHS_KEY in configurations:
@@ -153,9 +147,9 @@ def execute(configurations={}, parameters={}, host_name=None):
         if security_enabled:
             beeline_url.append("principal={hive_principal}")
         if transport_mode == "http":
-            beeline_url.append("httpPath=cliservice")
-            if spark_ssl_enabled:
-                beeline_url.append("ssl=true;sslTrustStore={spark_truststore_path};trustStorePassword={spark_truststore_pass!p}")
+            beeline_url.append("httpPath={http_endpoint}")
+            if ssl_enabled:
+                beeline_url.append("ssl=true")
 
         # append url according to used transport
 

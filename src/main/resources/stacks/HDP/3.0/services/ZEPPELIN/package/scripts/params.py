@@ -171,8 +171,17 @@ if 'hive-site' in config['configurations']:
     hive_transport_mode = config['configurations']['hive-site']['hive.server2.transport.mode']
 
 spark2_transport_mode = hive_transport_mode
-if 'spark2-hive-site-override' in config['configurations'] and 'hive.server2.transport.mode' in config['configurations']['spark2-hive-site-override']:
-  spark2_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
+spark2_http_path = None
+spark2_ssl = False
+if 'spark2-hive-site-override' in config['configurations']:
+  if 'hive.server2.transport.mode' in config['configurations']['spark2-hive-site-override']:
+    spark2_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
+
+  if 'hive.server2.http.endpoint' in config['configurations']['spark2-hive-site-override']:
+    spark2_http_path = config['configurations']['spark2-hive-site-override']['hive.server2.http.endpoint']
+
+  if 'hive.server2.use.SSL' in config['configurations']['spark2-hive-site-override']:
+    spark2_ssl = default("configurations/spark2-hive-site-override/hive.server2.use.SSL", False)
 
 if 'spark_thriftserver_hosts' in master_configs and len(master_configs['spark_thriftserver_hosts']) != 0:
   spark_thrift_server_hosts = str(master_configs['spark_thriftserver_hosts'][0])

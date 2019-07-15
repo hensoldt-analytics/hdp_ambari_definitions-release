@@ -597,6 +597,10 @@ class Master(Script):
             self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';principal=' + params.spark2_hive_principal, 'add')
           if params.spark2_transport_mode:
             self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';transportMode=' + params.spark2_transport_mode, 'add')
+          if params.spark2_http_path:
+            self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';httpPath=' + params.spark2_http_path, 'add')
+          if params.spark2_ssl:
+            self.storePropertyToInterpreter(interpreter, 'spark2.url', 'string', ';ssl=true', 'add')
           if 'spark2.splitQueries' not in interpreter['properties']:
             self.storePropertyToInterpreter(interpreter, 'spark2.splitQueries', 'string', "true")
 

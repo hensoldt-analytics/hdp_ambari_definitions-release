@@ -223,6 +223,7 @@ if spark_transport_mode.lower() == 'binary':
 elif spark_transport_mode.lower() == 'http':
   spark_thrift_port = int(config['configurations']['spark2-hive-site-override']['hive.server2.thrift.http.port'])
   spark_thrift_ssl_enabled = default("configurations/spark2-hive-site-override/hive.server2.use.SSL", False)
+  spark_thrift_endpoint = default("configurations/spark2-hive-site-override/hive.server2.http.endpoint", "cliservice")
 
 # thrift server support - available on HDP 2.3 or higher
 spark_thrift_sparkconf = None

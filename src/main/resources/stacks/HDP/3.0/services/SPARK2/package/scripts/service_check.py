@@ -69,6 +69,10 @@ class SparkServiceCheck(Script):
         else:
           beeline_url = ["jdbc:hive2://{spark_thrift_host}:{spark_thrift_port}/default","transportMode={spark_transport_mode}"]
         # append url according to used transport
+        if params.spark_transport_mode == "http":
+          beeline_url.append("httpPath={spark_thrift_endpoint}")
+          if params.spark_thrift_ssl_enabled:
+            beeline_url.append("ssl=true")
 
         beeline_cmd = os.path.join(params.spark_home, "bin", "beeline")
         cmd = "! %s -u '%s'  -e '' 2>&1| awk '{print}'|grep -i -e 'Connection refused' -e 'Invalid URL' -e 'Error: Could not open'" % \

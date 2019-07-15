@@ -170,7 +170,7 @@ def spark_service(name, upgrade_type=None, action=None):
         beeline_url.append("transportMode={spark_transport_mode}")
 
         if params.spark_transport_mode.lower() == 'http':
-            beeline_url.append("httpPath=cliservice")
+            beeline_url.append("httpPath={spark_thrift_endpoint}")
             if params.spark_thrift_ssl_enabled:
                 beeline_url.append("ssl=true")
 
