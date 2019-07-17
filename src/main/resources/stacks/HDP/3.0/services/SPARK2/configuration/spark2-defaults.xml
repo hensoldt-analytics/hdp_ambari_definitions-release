@@ -299,7 +299,7 @@
 
   <property>
     <name>spark.yarn.dist.files</name>
-    <value>/etc/spark2/conf/atlas-application.properties.yarn#atlas-application.properties</value>
+    <value> </value>
     <depends-on>
       <property>
         <type>spark2-atlas-application-properties-override</type>
