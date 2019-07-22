@@ -349,6 +349,8 @@ class HiveServerInteractive(Script):
       Execute(yarn_service_keytab_mkdir_cmd, user=params.hive_user)
       yarn_service_keytab_install_cmd = format("hdfs dfs -copyFromLocal -f {params.hive_llap_keytab_file} .yarn/keytabs/{params.hive_user}/")
       Execute(yarn_service_keytab_install_cmd, user=params.hive_user)
+      yarn_service_keytab_chmod_cmd = format("hdfs dfs -chmod -R go-rwx .yarn/keytabs/{params.hive_user}/")
+      Execute(yarn_service_keytab_chmod_cmd, user=params.hive_user)
 
     def do_kinit(self):
       import params
