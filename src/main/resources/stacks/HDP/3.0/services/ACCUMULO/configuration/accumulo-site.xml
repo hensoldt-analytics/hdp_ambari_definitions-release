@@ -151,6 +151,15 @@
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
+    <name>master.replication.coordinator.port</name>
+    <value>10006</value>
+    <description>Port for the replication coordinator service.</description>
+    <value-attributes>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>trace.user</name>
     <value>trace</value>
     <display-name>Trace user</display-name>
