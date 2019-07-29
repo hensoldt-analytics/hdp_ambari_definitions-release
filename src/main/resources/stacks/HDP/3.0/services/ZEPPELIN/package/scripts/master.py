@@ -557,7 +557,7 @@ class Master(Script):
           if params.hive_server2_support_dynamic_service_discovery:
             self.storePropertyToInterpreter(interpreter, 'hive.url', 'string', 'jdbc:hive2://' + \
                                                  params.hive_zookeeper_quorum + \
-                                                 '/;' + 'serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=' + \
+                                                 '/;' + 'serviceDiscoveryMode=' + params.discovery_mode + ';zooKeeperNamespace=' + \
                                                  params.hive_zookeeper_namespace)
           else:
             self.storePropertyToInterpreter(interpreter, 'hive.url', 'string', 'jdbc:hive2://' + \
@@ -574,7 +574,7 @@ class Master(Script):
           if params.hive_server2_support_dynamic_service_discovery:
             self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.url', 'string', 'jdbc:hive2://' + \
                                                     params.hive_zookeeper_quorum + \
-                                                    '/;' + 'serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=' + \
+                                                    '/;' + 'serviceDiscoveryMode=' + params.discovery_mode + ';zooKeeperNamespace=' + \
                                                     params.hive_interactive_zookeeper_namespace)
           else:
             self.storePropertyToInterpreter(interpreter, hive_interactive_properties_key + '.url', 'string', 'jdbc:hive2://' + \

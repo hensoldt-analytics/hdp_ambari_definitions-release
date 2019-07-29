@@ -148,10 +148,15 @@ if 'hive_server_hosts' in master_configs and len(master_configs['hive_server_hos
   hive_server_port = str(config['configurations']['hive-site']['hive.server2.thrift.http.port'])
   hive_zookeeper_quorum = config['configurations']['hive-site']['hive.zookeeper.quorum']
   hive_zookeeper_namespace = config['configurations']['hive-site']['hive.server2.zookeeper.namespace']
+  hive_zookeeper_namespace = default('/configurations/hive-interactive-site/hive.server2.zookeeper.namespace', hive_zookeeper_namespace)
   hive_server2_support_dynamic_service_discovery = config['configurations']['hive-site']['hive.server2.support.dynamic.service.discovery']
 
+discovery_mode = "zooKeeper"
 hive_server_interactive_hosts = None
 if 'hive_server_interactive_hosts' in master_configs and len(master_configs['hive_server_interactive_hosts']) != 0:
+    if master_configs['hive_server_interactive_hosts'] > 1:
+      discovery_mode = "zooKeeperHA"
+
     hive_server_interactive_hosts = str(master_configs['hive_server_interactive_hosts'][0])
     hive_interactive_zookeeper_namespace = config['configurations']['hive-interactive-site']['hive.server2.zookeeper.namespace']
     hive_server_port = str(config['configurations']['hive-site']['hive.server2.thrift.http.port'])
