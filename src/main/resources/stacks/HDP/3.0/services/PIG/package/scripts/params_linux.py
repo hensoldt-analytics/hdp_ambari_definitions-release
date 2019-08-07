@@ -77,8 +77,7 @@ java64_home = config['ambariLevelParams']['java_home']
 pig_properties = config['configurations']['pig-properties']['content']
 
 log4j_props = config['configurations']['pig-log4j']['content']
-
-
+dfs_home_dir = default('/configurations/hdfs-site/dfs.user.home.dir.prefix', '/user')
 
 hdfs_site = config['configurations']['hdfs-site']
 default_fs = config['configurations']['core-site']['fs.defaultFS']

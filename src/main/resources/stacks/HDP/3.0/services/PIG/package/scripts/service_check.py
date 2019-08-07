@@ -42,10 +42,10 @@ class PigServiceCheckLinux(PigServiceCheck):
     import params
     env.set_params(params)
 
-    input_file = format('/user/{smokeuser}/passwd')
-    output_dir = format('/user/{smokeuser}/pigsmoke.out')
+    input_file = format('{dfs_home_dir}/{smokeuser}/passwd')
+    output_dir = format('{dfs_home_dir}/{smokeuser}/pigsmoke.out')
 
-    params.HdfsResource(format("/user/{smokeuser}"),
+    params.HdfsResource(format("{dfs_home_dir}/{smokeuser}"),
                         type="directory",
                         action="create_on_execute",
                         owner=params.smokeuser,
