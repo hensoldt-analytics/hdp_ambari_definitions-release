@@ -192,7 +192,7 @@ class DruidRecommender(service_advisor.ServiceAdvisor):
                              self.getMetadataConnectionString(database_type).format(metastore_hostname, database_name,
                                                                                     metadata_storage_port))
       # HDFS is installed
-      if "HDFS" in servicesList and "hdfs-site" in services["configurations"]:
+      if "hdfs-site" in services["configurations"]:
           # recommend HDFS as default deep storage
           extensions_load_list = self.addToList(extensions_load_list, "druid-hdfs-storage")
           putCommonProperty("druid.storage.type", "hdfs")
