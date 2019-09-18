@@ -110,6 +110,13 @@ def hive_service(name, action='start', upgrade_type=None):
     )
 
     wait_time = 5
+    if name == 'hiveserver2':
+      # wait for HS2 to drain connections
+      Execute(format("! ({process_id_exists_command})"),
+              tries=50,
+              try_sleep=3,
+              ignore_failures = True
+      )
     Execute(daemon_hard_kill_cmd,
       not_if = format("! ({process_id_exists_command}) || ( sleep {wait_time} && ! ({process_id_exists_command}) )"),
       ignore_failures = True
