@@ -1428,6 +1428,15 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.merge.nway.joins</name>
+    <value>false</value>
+    <description>Merge adjacent joins into a single n-way join</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.prewarm.enabled</name>
     <value>false</value>
     <description>Enables container prewarm for Tez (Hadoop 2 only)</description>
