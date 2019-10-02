@@ -191,6 +191,12 @@
         }
       },
       {
+        "config": "oozie-site/oozie.server.authentication.type",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
          "config": "oozie-site/oozie.authentication.authentication.provider.url",
         "widget": {
           "type": "text-field"

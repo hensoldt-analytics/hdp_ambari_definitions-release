@@ -123,6 +123,14 @@
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
+    <name>oozie.server.authentication.type</name>
+    <value>simple</value>
+    <description>
+      The supported values are: simple | kerberos.
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>oozie.authentication.authentication.provider.url</name>
     <value></value>
     <value-attributes>
