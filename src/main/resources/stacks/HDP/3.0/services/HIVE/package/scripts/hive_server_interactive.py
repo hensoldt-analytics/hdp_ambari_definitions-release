@@ -217,7 +217,7 @@ class HiveServerInteractive(Script):
         Check llap app state
         """
         Logger.info("HSI HA is enabled. Checking if LLAP is already running ...")
-        status = self.check_llap_app_status(params.llap_app_name, 2, params.hive_server_interactive_ha)
+        status = self.check_llap_app_status(params.llap_app_name, params.num_retries_for_checking_llap_status, params.hive_server_interactive_ha)
         if status:
           Logger.info("LLAP app '{0}' is already running.".format(params.llap_app_name))
           return True
@@ -297,7 +297,7 @@ class HiveServerInteractive(Script):
         if params.hive_server_interactive_ha:
           Logger.info("LLAP start failed. Checking if LLAP was started by another HSI instance ...")
           time.sleep(20) #sleep for 30s. Llap app may get started during start of  another HS2
-          status = self.check_llap_app_status(params.llap_app_name, 2, params.hive_server_interactive_ha)
+          status = self.check_llap_app_status(params.llap_app_name, params.num_retries_for_checking_llap_status, params.hive_server_interactive_ha)
           if status:
             Logger.info("LLAP app '{0}' is running.".format(params.llap_app_name))
             return True
