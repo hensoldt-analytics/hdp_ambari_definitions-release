@@ -1084,7 +1084,7 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
           llap_named_queue_selected_in_curr_invocation = False
       self.logger.info("DBG: llap_named_queue_selected_in_curr_invocation = {0}".format(llap_named_queue_selected_in_curr_invocation))
 
-      if (len(leafQueueNames) == 2 and (llap_daemon_selected_queue_name and llap_daemon_selected_queue_name == llap_queue_name) or
+      if (len(leafQueueNames) >= 2 and (llap_daemon_selected_queue_name and llap_daemon_selected_queue_name == llap_queue_name) or
             llap_named_queue_selected_in_curr_invocation) or \
         (len(leafQueueNames) == 1 and llap_daemon_selected_queue_name == 'default' and llap_named_queue_selected_in_curr_invocation):
         self.logger.info("DBG: Setting 'num_llap_nodes' config's  READ ONLY attribute as 'False'.")
