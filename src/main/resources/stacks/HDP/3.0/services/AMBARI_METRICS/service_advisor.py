@@ -588,7 +588,7 @@ class AMBARI_METRICSValidator(service_advisor.ServiceAdvisor):
                   validationItems.extend([{"config-name": 'hbase.rootdir', "item": item}])
                   break
           # If no local DN in distributed mode
-          elif collectorHostName not in dn_hosts and distributed.lower() == "true":
+          elif dn_hosts and collectorHostName not in dn_hosts and distributed.lower() == "true":
             item = self.getWarnItem("It's recommended to install Datanode component on {0} "
                                     "to speed up IO operations between HDFS and Metrics "
                                     "Collector in distributed mode ".format(collectorHostName))
