@@ -26,6 +26,7 @@ from resource_management.core import shell
 from resource_management.core.exceptions import Fail
 from resource_management.core.logger import Logger
 from resource_management.core.resources.system import Execute
+from resource_management.libraries.functions import get_user_call_output
 from resource_management.libraries.functions import format
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions import StackFeature
@@ -49,8 +50,13 @@ def deregister():
   :return:
   """
   import params
+  import status_params
 
   Logger.info('HiveServer2 executing "deregister" command to complete upgrade...')
+
+  pid_file = status_params.hive_pid
+  pid = get_user_call_output.get_user_call_output(format("cat {pid_file}"), user=params.hive_user, is_checked_call=False)[1]
+  process_id_exists_command = format("ls {pid_file} >/dev/null 2>&1 && ps -p {pid} >/dev/null 2>&1")
 
   if params.security_enabled:
     kinit_command=format("{kinit_path_local} -kt {smoke_user_keytab} {smokeuser_principal}; ")
@@ -75,7 +81,8 @@ def deregister():
     hive_execute_path = _get_hive_execute_path(params.downgrade_from_version)
 
   command = format('hive --config {hive_server_conf_dir} --service hiveserver2 --deregister ' + current_hiveserver_version)
-  Execute(command, user=params.hive_user, path=hive_execute_path, tries=1 )
+  Execute(command, user=params.hive_user, path=hive_execute_path, tries=1,
+          not_if = format("! ({process_id_exists_command})"))
 
 
 def _get_hive_execute_path(stack_version_formatted):
