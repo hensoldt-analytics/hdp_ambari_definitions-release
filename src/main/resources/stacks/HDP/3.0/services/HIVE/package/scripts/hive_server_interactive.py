@@ -345,12 +345,24 @@ class HiveServerInteractive(Script):
       self.do_kinit()
 
       # Copy params.hive_llap_keytab_file to hdfs://<host>:<port>/user/<hive_user>/.yarn/keytabs/<hive_user> , required by LLAP
-      yarn_service_keytab_mkdir_cmd = format("hdfs dfs -mkdir -p .yarn/keytabs/{params.hive_user}/")
-      Execute(yarn_service_keytab_mkdir_cmd, user=params.hive_user)
-      yarn_service_keytab_install_cmd = format("hdfs dfs -copyFromLocal -f {params.hive_llap_keytab_file} .yarn/keytabs/{params.hive_user}/")
-      Execute(yarn_service_keytab_install_cmd, user=params.hive_user)
-      yarn_service_keytab_chmod_cmd = format("hdfs dfs -chmod -R go-rwx .yarn/keytabs/{params.hive_user}/")
-      Execute(yarn_service_keytab_chmod_cmd, user=params.hive_user)
+      hive_llap_keytab_file_name = os.path.basename(format("{params.hive_llap_keytab_file}"))
+      params.HdfsResource(format("/user/{params.hive_user}/.yarn/keytabs/{params.hive_user}/"),
+                          type="directory",
+                          action="create_on_execute",
+                          owner=params.hive_user,
+                          group=params.user_group,
+                          mode=0700,
+                          )
+      params.HdfsResource(format("/user/{params.hive_user}/.yarn/keytabs/{params.hive_user}/{hive_llap_keytab_file_name}"),
+                          type="file",
+                          action="create_on_execute",
+                          source=format("{params.hive_llap_keytab_file}"),
+                          owner=params.hive_user,
+                          group=params.user_group,
+                          mode=0600,
+                          replace_existing_files=True
+                          )
+      params.HdfsResource(None, action="execute")
 
     def do_kinit(self):
       import params
