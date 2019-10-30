@@ -2066,5 +2066,15 @@ limitations under the License.
     </value-attributes>
     <on-ambari-upgrade add="false"/>
   </property>
-
+  <property>
+    <name>hive.vectorized.adaptor.usage.mode</name>
+    <value>chosen</value>
+    <description>
+      Specifies the extent to which the VectorUDFAdaptor will be used for UDFs that do not have a corresponding vectorized class.
+      0. none   : disable any usage of VectorUDFAdaptor
+      1. chosen : use VectorUDFAdaptor for a small set of UDFs that were chosen for good performance
+      2. all    : use VectorUDFAdaptor for all UDFs
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
 </configuration>
