@@ -154,7 +154,7 @@ if 'hive_server_hosts' in master_configs and len(master_configs['hive_server_hos
 discovery_mode = "zooKeeper"
 hive_server_interactive_hosts = None
 if 'hive_server_interactive_hosts' in master_configs and len(master_configs['hive_server_interactive_hosts']) != 0:
-    if master_configs['hive_server_interactive_hosts'] > 1:
+    if len(master_configs['hive_server_interactive_hosts']) > 1:
       discovery_mode = "zooKeeperHA"
 
     hive_server_interactive_hosts = str(master_configs['hive_server_interactive_hosts'][0])
