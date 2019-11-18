@@ -22,6 +22,7 @@ import imp
 import os
 import traceback
 import inspect
+import re
 
 # Local imports
 from resource_management.libraries.functions.mounted_dirs_helper import get_mounts_with_multiple_data_dirs
@@ -30,6 +31,7 @@ from resource_management.libraries.functions.mounted_dirs_helper import get_moun
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 STACKS_DIR = os.path.join(SCRIPT_DIR, '../../../../../stacks/')
 PARENT_FILE = os.path.join(STACKS_DIR, 'service_advisor.py')
+MEMORY_SIZE_PATTERN = re.compile("([0-9]+)([kmg]?)")
 
 try:
   if "BASE_SERVICE_ADVISOR" in os.environ:
@@ -40,6 +42,19 @@ except Exception as e:
   traceback.print_exc()
   print "Failed to load parent."
 
+
+def convertToMegabytes(value):
+  """
+  Using this method the given value will be converted to megabytes based on the following rules:
+    1024  -> 1024
+    1024k -> 1
+    1024m -> 1024
+    1g    -> 1024
+    1024[a-Z] -> 1024
+  """
+  modifier = {'k': float(1)/1024, 'm': 1, 'g': 1024, '': 1}
+  pattern = MEMORY_SIZE_PATTERN.match(str(value))
+  return long(long(pattern.group(1)) * modifier[pattern.group(2)])
 
 class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
 
@@ -170,7 +185,6 @@ class HDFSServiceAdvisor(service_advisor.ServiceAdvisor):
   def isComponentUsingCardinalityForLayout(self, componentName):
     return componentName == 'NFS_GATEWAY'
 
-
 class HDFSRecommender(service_advisor.ServiceAdvisor):
   """
   HDFS Recommender suggests properties when adding the service for the first time or modifying configs via the UI.
@@ -193,11 +207,11 @@ class HDFSRecommender(service_advisor.ServiceAdvisor):
 
     totalAvailableRam = clusterData['totalAvailableRam']
     self.logger.info("Class: %s, Method: %s. Total Available Ram: %s" % (self.__class__.__name__, inspect.stack()[0][3], str(totalAvailableRam)))
-    putHDFSProperty('namenode_heapsize', max(int(totalAvailableRam / 2), 1024))
+    putHDFSProperty('namenode_heapsize', max(convertToMegabytes(totalAvailableRam / 2), 1024))
     putHDFSProperty = self.putProperty(configurations, "hadoop-env", services)
-    putHDFSProperty('namenode_opt_newsize', max(int(totalAvailableRam / 8), 128))
+    putHDFSProperty('namenode_opt_newsize', max(convertToMegabytes(totalAvailableRam / 8), 128))
     putHDFSProperty = self.putProperty(configurations, "hadoop-env", services)
-    putHDFSProperty('namenode_opt_maxnewsize', max(int(totalAvailableRam / 8), 256))
+    putHDFSProperty('namenode_opt_maxnewsize', max(convertToMegabytes(totalAvailableRam / 8), 256))
 
     # Check if NN HA is enabled and recommend removing dfs.namenode.rpc-address
     hdfsSiteProperties = self.getServicesSiteProperties(services, "hdfs-site")
@@ -317,18 +331,18 @@ class HDFSRecommender(service_advisor.ServiceAdvisor):
     putHdfsEnvProperty = self.putProperty(configurations, "hadoop-env", services)
     putHdfsEnvPropertyAttribute = self.putPropertyAttribute(configurations, "hadoop-env")
 
-    putHdfsEnvProperty('namenode_heapsize', max(int(clusterData['totalAvailableRam'] / 2), 1024))
+    putHdfsEnvProperty('namenode_heapsize', max(convertToMegabytes(clusterData['totalAvailableRam'] / 2), 1024))
 
     nn_heapsize_limit = None
     if (namenodeHosts is not None and len(namenodeHosts) > 0):
       if len(namenodeHosts) > 1:
-        nn_max_heapsize = min(int(namenodeHosts[0]["Hosts"]["total_mem"]),
-                              int(namenodeHosts[1]["Hosts"]["total_mem"])) / 1024
+        nn_max_heapsize = min(convertToMegabytes(namenodeHosts[0]["Hosts"]["total_mem"]),
+                              convertToMegabytes(namenodeHosts[1]["Hosts"]["total_mem"])) / 1024
         masters_at_host = max(
           self.getHostComponentsByCategories(namenodeHosts[0]["Hosts"]["host_name"], ["MASTER"], services, hosts),
           self.getHostComponentsByCategories(namenodeHosts[1]["Hosts"]["host_name"], ["MASTER"], services, hosts))
       else:
-        nn_max_heapsize = int(namenodeHosts[0]["Hosts"]["total_mem"] / 1024)  # total_mem in kb
+        nn_max_heapsize = convertToMegabytes(namenodeHosts[0]["Hosts"]["total_mem"] / 1024)  # total_mem in kb
         masters_at_host = self.getHostComponentsByCategories(namenodeHosts[0]["Hosts"]["host_name"], ["MASTER"],
                                                              services, hosts)
 
@@ -337,7 +351,7 @@ class HDFSRecommender(service_advisor.ServiceAdvisor):
       nn_heapsize_limit = nn_max_heapsize
       nn_heapsize_limit -= clusterData["reservedRam"]
       if len(masters_at_host) > 1:
-        nn_heapsize_limit = int(nn_heapsize_limit / 2)
+        nn_heapsize_limit = convertToMegabytes(nn_heapsize_limit / 2)
 
       putHdfsEnvProperty('namenode_heapsize', max(nn_heapsize_limit, 1024))
 
@@ -386,9 +400,9 @@ class HDFSRecommender(service_advisor.ServiceAdvisor):
 
       putHdfsEnvPropertyAttribute('dtnode_heapsize', 'maximum', int(min_datanode_ram_kb / 1024))
 
-    nn_heapsize = int(configurations["hadoop-env"]["properties"]["namenode_heapsize"])
-    putHdfsEnvProperty('namenode_opt_newsize', max(int(nn_heapsize / 8), 128))
-    putHdfsEnvProperty('namenode_opt_maxnewsize', max(int(nn_heapsize / 8), 128))
+    nn_heapsize = convertToMegabytes(configurations["hadoop-env"]["properties"]["namenode_heapsize"])
+    putHdfsEnvProperty('namenode_opt_newsize', max(convertToMegabytes(nn_heapsize / 8), 128))
+    putHdfsEnvProperty('namenode_opt_maxnewsize', max(convertToMegabytes(nn_heapsize / 8), 128))
 
     putHdfsSitePropertyAttribute = self.putPropertyAttribute(configurations, "hdfs-site")
     putHdfsSitePropertyAttribute('dfs.datanode.failed.volumes.tolerated', 'maximum', dataDirsCount)
