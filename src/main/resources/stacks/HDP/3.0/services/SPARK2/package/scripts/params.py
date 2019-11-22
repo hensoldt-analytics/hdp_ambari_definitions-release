@@ -247,7 +247,12 @@ if is_hive_installed:
   spark_hive_properties.update({
     'hive.metastore.client.socket.timeout' : config['configurations']['hive-site']['hive.metastore.client.socket.timeout']
   })
-  spark_hive_properties.update(config['configurations']['spark2-hive-site-override'])
+
+  spark2_hive_site_override_properties = config['configurations']['spark2-hive-site-override'].copy()
+  if not default_metastore_catalog:
+    spark2_hive_site_override_properties.pop("metastore.catalog.default")
+  spark_hive_properties.update(spark2_hive_site_override_properties)
+
 default_fs = config['configurations']['core-site']['fs.defaultFS']
 hdfs_site = config['configurations']['hdfs-site']
 hdfs_resource_ignore_file = "/var/lib/ambari-agent/data/.hdfs_resource_ignore"

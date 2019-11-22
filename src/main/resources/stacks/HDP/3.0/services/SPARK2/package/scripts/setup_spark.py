@@ -75,7 +75,7 @@ def setup_spark(env, type, upgrade_type = None, action = None):
                        mode=0775
     )
 
-    if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
+    if params.spark_warehouse_dir and (not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme):
     # Create Spark Warehouse Dir
       params.HdfsResource(params.spark_warehouse_dir,
                           type="directory",
@@ -98,6 +98,9 @@ def setup_spark(env, type, upgrade_type = None, action = None):
     spark2_defaults.pop("history.server.spnego.kerberos.principal")
     spark2_defaults.pop("history.server.spnego.keytab.file")
     spark2_defaults['spark.history.kerberos.principal'] = spark2_defaults['spark.history.kerberos.principal'].replace('_HOST', socket.getfqdn().lower())
+
+  if not params.spark_warehouse_dir:
+      spark2_defaults.pop("spark.sql.warehouse.dir")
 
   PropertiesFile(format("{spark_conf}/spark-defaults.conf"),
     properties = spark2_defaults,
@@ -146,6 +149,9 @@ def setup_spark(env, type, upgrade_type = None, action = None):
 
     if params.security_enabled and 'spark.yarn.principal' in spark2_thrift_sparkconf:
       spark2_thrift_sparkconf['spark.yarn.principal'] = spark2_thrift_sparkconf['spark.yarn.principal'].replace('_HOST', socket.getfqdn().lower())
+
+    if not spark2_thrift_sparkconf.get("spark.sql.warehouse.dir", "x"):
+        spark2_thrift_sparkconf.pop("spark.sql.warehouse.dir")
 
     PropertiesFile(params.spark_thrift_server_conf_file,
       properties = spark2_thrift_sparkconf,
