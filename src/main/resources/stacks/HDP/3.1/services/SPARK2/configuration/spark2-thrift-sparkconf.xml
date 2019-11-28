@@ -21,7 +21,7 @@
 <configuration supports_final="true">
     <property>
         <name>spark.sql.warehouse.dir</name>
-        <value />
+        <value>/warehouse/tablespace/managed/hive</value>
         <value-attributes>
             <empty-value-valid>true</empty-value-valid>
         </value-attributes>
