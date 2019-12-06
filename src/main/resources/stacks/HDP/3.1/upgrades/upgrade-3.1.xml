@@ -229,6 +229,12 @@
       </exclude>
     </group>
 
+    <group name="TEZ_CLIENTS" title="Tez Clients">
+      <skippable>true</skippable>
+      <service name="TEZ">
+        <component>TEZ_CLIENT</component>
+      </service>
+    </group>
 
     <group name="HIVE" title="Hive">
       <skippable>true</skippable>
