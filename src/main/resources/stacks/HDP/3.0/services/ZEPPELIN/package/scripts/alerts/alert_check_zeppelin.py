@@ -98,11 +98,8 @@ def execute(configurations={}, parameters={}, host_name=None):
       Execute(kinit_cmd, user=zeppelin_user)
 
     scheme = "https" if ui_ssl_enabled else "http"
-    Execute(format("curl -s -o /dev/null -w'%{{http_code}}' --negotiate -u: -k {scheme}://{host_name}:{zeppelin_port}/api/version | grep 200"),
-            tries = 10,
-            try_sleep=3,
-            user=zeppelin_user,
-            logoutput=True)
+    command = format("curl -s -o /dev/null -w'%{{http_code}}' --negotiate -u: -k {scheme}://{host_name}:{zeppelin_port}/api/version | grep 200")
+    Execute(command, tries = 10, try_sleep=3, user=zeppelin_user, logoutput=True)
   except ComponentIsNotRunning as ex:
     return (RESULT_CODE_CRITICAL, [str(ex)])
   except:
