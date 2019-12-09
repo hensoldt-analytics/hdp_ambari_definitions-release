@@ -13,6 +13,7 @@
         "requires_user_name": "false",
         "component_name": "METRICS_GRAFANA",
         "url":"%@://%@:%@",
+        "attributes": ["secure_spark_only"],
         "port": {
           "http_property": "port",
           "http_default_port": "3000",
@@ -38,6 +39,7 @@
         "requires_user_name": "false",
         "component_name": "HIVE_SERVER_INTERACTIVE",
         "url": "%@://%@:%@/llap.html",
+        "attributes": ["secure_spark_only"],
         "port":{
           "http_property": "hive.server2.webui.port",
           "http_default_port": "10502",
@@ -53,31 +55,6 @@
               "property":"hive.server2.webui.use.ssl",
               "desired":"true",
               "site":"hive-interactive-site"
-            }
-          ]
-        }
-      },
-      {
-        "name": "hiveserver2_jdbc_jar",
-        "label": "Jdbc Standalone Jar Download",
-        "requires_user_name": "false",
-        "component_name": "HIVE_SERVER",
-        "url": "%@://%@:%@/jdbcjar",
-        "port":{
-          "http_property": "hive.server2.webui.port",
-          "http_default_port": "10002",
-          "https_property": "hive.server2.webui.port",
-          "https_default_port": "10002",
-          "regex": "\\w*:(\\d+)",
-          "site": "hive-site"
-        },
-        "protocol":{
-          "type":"https",
-          "checks":[
-            {
-              "property":"hive.server2.webui.use.ssl",
-              "desired":"true",
-              "site":"hive-site"
             }
           ]
         }
