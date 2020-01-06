@@ -124,7 +124,6 @@
             </execute-stage>
         </group>
 
-        </group>
         <!--
         In a HOST_ORDERED upgrade, this placeholder group is expanded by the number of hosts passed
         when creating the upgrade.  For starters, this will include "stop" commands, a manual
