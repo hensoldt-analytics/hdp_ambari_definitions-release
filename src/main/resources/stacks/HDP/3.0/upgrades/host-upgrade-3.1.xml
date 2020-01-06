@@ -35,25 +35,6 @@
         <group xsi:type="cluster" name="PRE_CLUSTER" title="Prepare Upgrade">
             <direction>UPGRADE</direction>
 
-            <skippable>true</skippable>
-            <supports-auto-skip-failure>false</supports-auto-skip-failure>
-
-            <execute-stage service="YARN" component="RESOURCEMANAGER" title="Stop YARN Queues">
-                <condition xsi:type="config" type="yarn-site"
-                           property="yarn.resourcemanager.work-preserving-recovery.enabled" value="true"
-                           comparison="not-equals"/>
-                <task xsi:type="manual">
-                    <message>Before continuing, please stop all YARN queues.</message>
-                </task>
-            </execute-stage>
-
-
-            <execute-stage service="STORM" component="NIMBUS" title="Stop Storm Topologies">
-                <task xsi:type="manual">
-                    <message>Before continuing, please deactivate and kill any currently running topologies.</message>
-                </task>
-            </execute-stage>
-
             <execute-stage service="TEZ" component="TEZ_CLIENT" title="Check Tez Tarball">
                 <task xsi:type="execute" hosts="any">
                     <script>scripts/pre_upgrade.py</script>
@@ -67,63 +48,14 @@
             <skippable>true</skippable>
             <supports-auto-skip-failure>false</supports-auto-skip-failure>
 
-            <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Backup Oozie Database">
-                <task xsi:type="manual">
-                    <message>Before continuing, please backup the Oozie Server database referenced by the Oozie server
-                        located on {{hosts.all}}.
-                    </message>
-                </task>
-            </execute-stage>
-
-            <execute-stage service="HIVE" component="HIVE_METASTORE" title="Backup Hive Metastore">
-                <task xsi:type="manual">
-                    <message>Before continuing, please backup the Hive Metastore database referenced by the Hive
-                        Metastore service(s) located on the following host(s): {{hosts.all}}.
-                    </message>
-                </task>
-            </execute-stage>
-
             <execute-stage service="HBASE" component="HBASE_MASTER" title="Pre Upgrade HBase Backup">
-                <condition xsi:type="config" type="cluster-env" property="stack_upgrade_express_skip_hbase_snapshot"
-                           comparison="not-equals" value="true"/>
                 <task xsi:type="execute" hosts="master">
                     <script>scripts/hbase_upgrade.py</script>
                     <function>take_snapshot</function>
                 </task>
             </execute-stage>
 
-            <execute-stage service="HDFS" component="NAMENODE" title="Prepare HDFS">
-                <task xsi:type="execute" hosts="master">
-                    <script>scripts/namenode.py</script>
-                    <function>prepare_express_upgrade</function>
-                </task>
-            </execute-stage>
-
-            <execute-stage service="RANGER" component="RANGER_ADMIN" title="Backup Ranger Database">
-                <task xsi:type="manual">
-                    <message>Before continuing, please backup the Ranger Admin database on the following host(s):
-                        {{hosts.all}}.
-                    </message>
-                </task>
-            </execute-stage>
-
-            <execute-stage service="RANGER_KMS" component="RANGER_KMS_SERVER" title="Backup Ranger KMS Database">
-                <task xsi:type="manual">
-                    <message>Before continuing, please backup Ranger KMS database on the following host(s):
-                        {{hosts.all}}.
-                    </message>
-                </task>
-            </execute-stage>
-
-            <execute-stage service="ZEPPELIN" component="ZEPPELIN_MASTER" title="Pre Upgrade Zeppelin notebooks Backup">
-                <task xsi:type="manual">
-                    <message>Before continuing, please backup Zeppelin notebooks directory on the following host(s):
-                        {{hosts.all}}.
-                    </message>
-                </task>
-            </execute-stage>
         </group>
-
         <!--
         In a HOST_ORDERED upgrade, this placeholder group is expanded by the number of hosts passed
         when creating the upgrade.  For starters, this will include "stop" commands, a manual
@@ -231,17 +163,6 @@
                     </task>
 
                     <task xsi:type="configure_function" hosts="all" />
-
-                    <task xsi:type="manual">
-                        <summary>Run Ranger JAVA patches</summary>
-                        <message>Please follow below steps on any Ranger Admin hosts:</message>
-                        <message>- Export RANGER_ADMIN_HOME=/usr/hdp/{{version}}/ranger-admin and JAVA_HOME environment
-                            variables.
-                        </message>
-                        <message>- Run JAVA patches command using Ranger service process user: /usr/bin/python
-                            /usr/hdp/{{version}}/ranger-admin/db_setup.py -javapatch
-                        </message>
-                    </task>
 
                     <task xsi:type="execute" hosts="any">
                         <summary>Applying Ranger java patches</summary>
