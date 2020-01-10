@@ -163,6 +163,7 @@ so_src_x64 = format("{so_src_dir_x64}/{snappy_so}")
 
 #security params
 smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
+ambari_server_keytab = config['configurations']['cluster-env']['ambari_server_keytab']
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
 falcon_user = config['configurations']['falcon-env']['falcon_user']
 
@@ -390,14 +391,18 @@ if security_enabled:
   if jn_principal_name:
     jn_principal_name = jn_principal_name.replace('_HOST', hostname.lower())
   jn_keytab = default("/configurations/hdfs-site/dfs.journalnode.keytab.file", None)
-  hdfs_kinit_cmd = format("{kinit_path_local} -kt {hdfs_user_keytab} {hdfs_principal_name};")
+
+  ambari_server_principal_name = default("/configurations/hdfs-site/dfs.ambari.server.kerberos.principal", None)
+  if ambari_server_principal_name:
+    ambari_server_principal_name = ambari_server_principal_name.replace('_HOST', hostname.lower())
+  ambari_server_kinit_cmd = format("{kinit_path_local} -kt {ambari_server_keytab} {ambari_server_principal_name};")
 
   zk_principal_name = default("/configurations/zookeeper-env/zookeeper_principal_name", "zookeeper/_HOST@EXAMPLE.COM")
   zk_principal_user = zk_principal_name.split('/')[0]
 else:
   dn_kinit_cmd = ""
   nn_kinit_cmd = ""
-  hdfs_kinit_cmd = ""
+  ambari_server_kinit_cmd = ""
 
 hdfs_site = config['configurations']['hdfs-site']
 default_fs = config['configurations']['core-site']['fs.defaultFS']

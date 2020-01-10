@@ -198,6 +198,12 @@
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
+    <name>ambari_server_keytab</name>
+    <value>/etc/security/keytabs/ambari.server.keytab</value>
+    <description>Path to ambari server keytab file</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>user_group</name>
     <display-name>Hadoop Group</display-name>
     <value>hadoop</value>
