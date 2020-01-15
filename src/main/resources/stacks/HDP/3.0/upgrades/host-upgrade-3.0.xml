@@ -99,6 +99,44 @@
                 </task>
             </execute-stage>
         </group>
+
+        <group xsi:type="cluster" name="Upgrade service configs" title="Upgrade service configs">
+            <direction>UPGRADE</direction> <!--  prevent config changes on downgrade -->
+            <skippable>true</skippable> <!-- May fix configuration problems manually -->
+
+            <execute-stage service="SPARK2" component="SPARK2_JOBHISTORYSERVER" title="Create spark.yarn.keytab/principal based on spark history keytab/principal">
+                <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixSparkYarnIdentity">
+                    <summary>Adding spark.yarn.keytab/principal properties</summary>
+                </task>
+            </execute-stage>
+
+            <!-- ZEPPELIN -->
+            <execute-stage service="ZEPPELIN" component="ZEPPELIN_MASTER" title="Apply zeppelin.notebook.storage config">
+                <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixNotebookStorage">
+                    <summary>Adjusting Zeppelin Notebook properties</summary>
+                </task>
+            </execute-stage>
+
+            <execute-stage service="YARN" title="Apply config changes for Timeline Reader">
+                <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixTimelineReaderAddress">
+                    <summary>Setting YARN Timeline Reader Url</summary>
+                </task>
+            </execute-stage>
+
+            <execute-stage service="KAFKA" component="KAFKA_BROKER" title="Apply config changes for Kafka PLAINTEXTSASL changes">
+                <task xsi:type="configure" id="hdp_3_0_x_kafka_plaintext_sasl_removal"/>
+            </execute-stage>
+
+            <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Updating Atlas security protocol for Kafka">
+                <task xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal"/>
+            </execute-stage>
+
+            <!-- RANGER -->
+            <execute-stage service="RANGER" component="RANGER_TAGSYNC" title="Updating Tagsync security protocol for Kafka">
+                <task xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal"/>
+            </execute-stage>
+        </group>
+
         <!--
         In a HOST_ORDERED upgrade, this placeholder group is expanded by the number of hosts passed
         when creating the upgrade.  For starters, this will include "stop" commands, a manual
