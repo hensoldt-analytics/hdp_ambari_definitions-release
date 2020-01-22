@@ -26,8 +26,10 @@
             <set key="admin.enableServer" value="false" if-type="zoo.cfg" if-key="admin.enableServer" if-key-state="absent"/>
             <set key="admin.serverPort" value="9990" if-type="zoo.cfg" if-key="admin.serverPort" if-key-state="absent"/>
             <set key="4lw.commands.whitelist" value="stat, ruok" if-type="zoo.cfg" if-key="4lw.commands.whitelist" if-key-state="absent"/>
+            <set key="snapshot.trust.empty" value="true" if-type="zoo.cfg" if-key="snapshot.trust.empty" if-key-state="absent"/>
           </definition>
         </changes>
       </component>
     </service>
+  </services>
 </upgrade-config-changes>
