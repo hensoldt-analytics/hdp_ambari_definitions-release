@@ -35,8 +35,8 @@ class ServiceCheck(Script):
 
     kafka_config = self.read_kafka_config()
     topic = "ambari_kafka_service_check"
-    create_topic_cmd_created_output = "Created topic \"ambari_kafka_service_check\"."
-    create_topic_cmd_exists_output = "Topic \"ambari_kafka_service_check\" already exists."
+    create_topic_cmd_created_output = "Created topic ambari_kafka_service_check."
+    create_topic_cmd_exists_output = "Topic 'ambari_kafka_service_check' already exists."
     source_cmd = format("source {conf_dir}/kafka-env.sh")
     topic_exists_cmd = format(source_cmd + " ; " + "{kafka_home}/bin/kafka-topics.sh --zookeeper {kafka_config[zookeeper.connect]} --topic {topic} --list")
     topic_exists_cmd_code, topic_exists_cmd_out = shell.call(topic_exists_cmd, logoutput=True, quiet=False, user=params.kafka_user)
@@ -55,7 +55,7 @@ class ServiceCheck(Script):
       Logger.info("Running kafka create topic command: %s" % command)
       call_and_match_output(command, format("({create_topic_cmd_created_output})|({create_topic_cmd_exists_output})"), "Failed to check that topic exists", user=params.kafka_user)
 
-    under_rep_cmd = format("{kafka_home}/bin/kafka-topics.sh --describe --zookeeper {kafka_config[zookeeper.connect]} --under-replicated-partitions")
+    under_rep_cmd = format(source_cmd + " ; " + "{kafka_home}/bin/kafka-topics.sh --describe --zookeeper {kafka_config[zookeeper.connect]} --under-replicated-partitions")
     under_rep_cmd_code, under_rep_cmd_out = shell.call(under_rep_cmd, logoutput=True, quiet=False, user=params.kafka_user)
 
     if under_rep_cmd_code > 0:
