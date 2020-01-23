@@ -53,4 +53,15 @@
     If the property is specified, then only commands listed in the whitelist are enabled.</description>
     <on-ambari-upgrade add="false"/>
   </property>
+  <property>
+    <name>snapshot.trust.empty</name>
+    <value>true</value>
+    <display-name>Trust In EmptySnapshot</display-name>
+    <description> ZooKeeper will load the db without a snapshot file in case the transaction log files are present and valid.
+      It is recommended to remove the property once you have a working server, because that check is important to ensure that the system is in good shape.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
 </configuration>
