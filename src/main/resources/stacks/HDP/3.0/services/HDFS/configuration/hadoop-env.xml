@@ -249,12 +249,6 @@
     <property-type>KERBEROS_PRINCIPAL</property-type>
     <on-ambari-upgrade add="false"/>
   </property>
-  <property>
-    <name>ambari_server_principal_name</name>
-    <description>Ambari server principal name</description>
-    <property-type>KERBEROS_PRINCIPAL</property-type>
-    <on-ambari-upgrade add="true"/>
-  </property>
 
   <!-- These configs were inherited from HDP 2.2 -->
   <property>

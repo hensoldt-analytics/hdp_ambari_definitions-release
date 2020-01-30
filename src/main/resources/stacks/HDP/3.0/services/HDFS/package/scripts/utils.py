@@ -305,8 +305,18 @@ def get_jmx_data(nn_address, modeler_type, metric, encrypted=False, security_ena
 
   if security_enabled:
     import params
-    data, error_msg, time_millis = curl_krb_request(params.tmp_dir, params.smoke_user_keytab, params.smokeuser_principal, nn_address,
-                            "jn_upgrade", params.kinit_path_local, False, None, params.smoke_user)
+
+    if params.security_enabled and params.cluster_admin_defined:
+      principal = params.cluster_admin_principal
+      keytab = params.cluster_admin_keytab
+      user = params.cluster_admin_user
+    else:
+      principal = params.smokeuser_principal
+      keytab = params.smoke_user_keytab
+      user = params.smoke_user
+
+    data, error_msg, time_millis = curl_krb_request(params.tmp_dir, keytab, principal, nn_address,
+                                                    "jn_upgrade", params.kinit_path_local, False, None, user)
   else:
     data = urllib2.urlopen(nn_address).read()
   my_data = None
