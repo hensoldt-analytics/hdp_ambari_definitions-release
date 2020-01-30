@@ -22,5 +22,11 @@
       <name>YARN</name>
       <version>3.1.1</version>
     </service>
+
+    <service>
+      <name>MAPREDUCE2</name>
+      <version>3.1.1</version>
+      <configuration-dir>configuration-mapred</configuration-dir>
+    </service>
   </services>
 </metainfo>

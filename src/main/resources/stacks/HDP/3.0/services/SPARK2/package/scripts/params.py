@@ -318,6 +318,9 @@ if stack_version_formatted and check_stack_feature(StackFeature.SPARK_LIVY2, sta
 
   livy2_livyserver_port = default('configurations/livy2-conf/livy.server.port',8999)
 
+  if stack_version_formatted and check_stack_feature(StackFeature.SPARK_STANDALONE_HIVE_METASTORE_JARS, stack_version_formatted):
+    spark_hive_metastore_jars = config['configurations']['spark2-defaults']['spark.sql.hive.metastore.jars']
+
 
 import functools
 #create partial functions with common arguments for every HdfsResource call

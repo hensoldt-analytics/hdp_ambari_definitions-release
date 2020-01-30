@@ -492,6 +492,11 @@
         "name": "ranger_support_security_zone_feature",
         "description": "Need to add zoneName field in Ranger Audit Solr Collection",
         "min_version": "3.1.1.0"
+      },
+      {
+        "name": "spark_standalone_hive_metastore_jars",
+        "description": "CDP-DC Spark uses Hive's standalone metastore jar directly",
+        "min_version": "7.1.0.0"
       }
     ]
   }

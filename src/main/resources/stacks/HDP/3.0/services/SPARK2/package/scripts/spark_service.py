@@ -57,6 +57,19 @@ def make_tarfile(output_filename, source_dirs):
         tar.add(os.path.join(dir,file),arcname=file)
   os.chmod(output_filename, 0644)
 
+def make_tarfile(output_filename, files):
+  try:
+    os.remove(output_filename)
+  except OSError:
+    pass
+  parent_dir=os.path.dirname(output_filename)
+  if not os.path.exists(parent_dir):
+    os.makedirs(parent_dir)
+  os.chmod(parent_dir, 0711)
+  with closing(tarfile.open(output_filename, "w:gz")) as tar:
+    for file in files:
+      tar.add(file)
+  os.chmod(output_filename, 0644)
 
 def spark_service(name, upgrade_type=None, action=None):
   import params
@@ -92,9 +105,15 @@ def spark_service(name, upgrade_type=None, action=None):
 
       # create & copy spark2-hdp-hive-archive.tar.gz to hdfs
       if not params.sysprep_skip_copy_tarballs_hdfs:
-        source_dirs = [params.spark_home+"/standalone-metastore"]
         tmp_archive_file=get_tarball_paths("spark2hive")[1]
-        make_tarfile(tmp_archive_file, source_dirs)
+        if params.stack_version_formatted and check_stack_feature(StackFeature.SPARK_STANDALONE_HIVE_METASTORE_JARS, params.stack_version_formatted):
+          metastore_jars = params.spark_hive_metastore_jars.split(",")
+          Logger.debug("Standalone Metastore jars: %s" % metastore_jars)
+          make_tarfile(tmp_archive_file, metastore_jars)
+        else:
+          source_dirs = [params.spark_home+"/standalone-metastore"]
+          make_tarfile(tmp_archive_file, source_dirs)
+
         copy_to_hdfs("spark2hive", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
 
       # create spark history directory
