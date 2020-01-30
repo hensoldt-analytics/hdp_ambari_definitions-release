@@ -58,6 +58,7 @@ stack_supports_ranger_kerberos = check_stack_feature(StackFeature.RANGER_KERBERO
 stack_supports_ranger_audit_db = check_stack_feature(StackFeature.RANGER_AUDIT_DB_SUPPORT, version_for_stack_feature_checks)
 stack_supports_core_site_for_ranger_plugin = check_stack_feature(StackFeature.CORE_SITE_FOR_RANGER_PLUGINS_SUPPORT, version_for_stack_feature_checks)
 stack_supports_kafka_env_include_ranger_script = check_stack_feature(StackFeature.KAFKA_ENV_INCLUDE_RANGER_SCRIPT, version_for_stack_feature_checks)
+stack_supports_ranger_kafka_consumergroup_resource = check_stack_feature(StackFeature.RANGER_KAFKA_CONSUMERGROUP_RESOURCE, version_for_stack_feature_checks)
 
 # When downgrading the 'version' is pointing to the downgrade-target version
 # downgrade_from_version provides the source-version the downgrade is happening from
@@ -290,10 +291,14 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
     atlas_user = default('/configurations/atlas-env/metadata_user', 'atlas')
     rangertagsync_user = default('/configurations/ranger-tagsync-site/ranger.tagsync.dest.ranger.username', 'rangertagsync')
     spark_user = 'spark_atlas'
+
+    default_policies_count = 0
+
     if len(atlas_notification_topics_list) == 2:
       atlas_hook = atlas_notification_topics_list[0]
       atlas_entity = atlas_notification_topics_list[1]
       ranger_plugin_config['setup.additional.default.policies'] = 'true'
+      default_policies_count += 1
       ranger_plugin_config['default-policy.1.name'] = atlas_hook
       ranger_plugin_config['default-policy.1.resource.topic'] = atlas_hook
       hook_policy_user = []
@@ -312,6 +317,7 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
         ranger_plugin_config['default-policy.1.policyItem.1.accessTypes'] = "publish"
       ranger_plugin_config['default-policy.1.policyItem.2.users'] = atlas_user
       ranger_plugin_config['default-policy.1.policyItem.2.accessTypes'] = "consume"
+      default_policies_count += 1
       ranger_plugin_config['default-policy.2.name'] = atlas_entity
       ranger_plugin_config['default-policy.2.resource.topic'] = atlas_entity
       ranger_plugin_config['default-policy.2.policyItem.1.users'] = atlas_user
@@ -319,6 +325,22 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
       if has_ranger_tagsync:
         ranger_plugin_config['default-policy.2.policyItem.2.users'] = rangertagsync_user
         ranger_plugin_config['default-policy.2.policyItem.2.accessTypes'] = "consume"
+
+
+      if stack_supports_ranger_kafka_consumergroup_resource:
+        default_policies_count += 1
+        ranger_plugin_config["default-policy.3.name"] = "atlas consumergroup"
+        ranger_plugin_config["default-policy.3.resource.consumergroup"] = "atlas"
+        ranger_plugin_config["default-policy.3.policyItem.1.users"] = atlas_user
+        ranger_plugin_config["default-policy.3.policyItem.1.accessTypes"] = "consume,describe"
+
+  if has_ranger_tagsync and stack_supports_ranger_kafka_consumergroup_resource:
+      default_policies_count += 1
+      policy = "default-policy.%s."%default_policies_count
+      ranger_plugin_config[policy + "name"] = "ranger_entities_consumer consumergroup"
+      ranger_plugin_config[policy + "resource.consumergroup"] = "ranger_entities_consumer"
+      ranger_plugin_config[policy + "policyItem.1.users"] = "rangertagsync"
+      ranger_plugin_config[policy + "policyItem.1.accessTypes"] = "consume,describe"
 
   if kerberos_security_enabled:
     ranger_plugin_config['policy.download.auth.users'] = kafka_user
