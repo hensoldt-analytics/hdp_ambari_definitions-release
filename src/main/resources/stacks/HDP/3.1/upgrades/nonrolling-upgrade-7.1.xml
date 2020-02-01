@@ -43,6 +43,13 @@
         </task>
       </execute-stage>
 
+
+      <execute-stage service="STORM" component="NIMBUS" title="Stop Storm Topologies">
+        <task xsi:type="manual">
+          <message>Before continuing, please deactivate and kill any currently running topologies.</message>
+        </task>
+      </execute-stage>
+
       <execute-stage service="TEZ" component="TEZ_CLIENT" title="Check Tez Tarball">
         <task xsi:type="execute" hosts="any">
           <script>scripts/pre_upgrade.py</script>
@@ -68,6 +75,13 @@
         <component>ACCUMULO_TSERVER</component>
         <component>ACCUMULO_MONITOR</component>
         <component>ACCUMULO_MASTER</component>
+      </service>
+
+      <service name="STORM">
+        <component>DRPC_SERVER</component>
+        <component>STORM_UI_SERVER</component>
+        <component>SUPERVISOR</component>
+        <component>NIMBUS</component>
       </service>
 
       <service name="KNOX">
