@@ -43,13 +43,6 @@
         </task>
       </execute-stage>
 
-
-      <execute-stage service="STORM" component="NIMBUS" title="Stop Storm Topologies">
-        <task xsi:type="manual">
-          <message>Before continuing, please deactivate and kill any currently running topologies.</message>
-        </task>
-      </execute-stage>
-
       <execute-stage service="TEZ" component="TEZ_CLIENT" title="Check Tez Tarball">
         <task xsi:type="execute" hosts="any">
           <script>scripts/pre_upgrade.py</script>
@@ -75,13 +68,6 @@
         <component>ACCUMULO_TSERVER</component>
         <component>ACCUMULO_MONITOR</component>
         <component>ACCUMULO_MASTER</component>
-      </service>
-
-      <service name="STORM">
-        <component>DRPC_SERVER</component>
-        <component>STORM_UI_SERVER</component>
-        <component>SUPERVISOR</component>
-        <component>NIMBUS</component>
       </service>
 
       <service name="KNOX">
@@ -624,18 +610,6 @@
       </service>
     </group>
 
-    <group xsi:type="restart" name="STORM" title="Storm">
-      <service-check>false</service-check>
-      <skippable>true</skippable>
-      <parallel-scheduler/>
-      <service name="STORM">
-        <component>NIMBUS</component>
-        <component>SUPERVISOR</component>
-        <component>STORM_UI_SERVER</component>
-        <component>DRPC_SERVER</component>
-      </service>
-    </group>
-
 
     <group xsi:type="restart" name="ACCUMULO" title="Accumulo">
       <service-check>false</service-check>
@@ -675,7 +649,6 @@
       <skippable>true</skippable>
       <priority>
         <service>KNOX</service>
-        <service>STORM</service>
         <service>ACCUMULO</service>
         <service>DRUID</service>
         <service>SUPERSET</service>
@@ -1063,32 +1036,6 @@
 
     <service name="KNOX">
       <component name="KNOX_GATEWAY">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-    </service>
-
-    <service name="STORM">
-      <component name="NIMBUS">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-
-      <component name="SUPERVISOR">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-
-      <component name="STORM_UI_SERVER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-
-      <component name="DRPC_SERVER">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
