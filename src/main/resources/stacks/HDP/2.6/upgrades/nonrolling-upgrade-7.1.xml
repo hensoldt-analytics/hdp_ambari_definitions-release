@@ -965,16 +965,12 @@
       </service>
     </group>
 
-    <group xsi:type="restart" name="CLIENTS" title="Tez, Pig, Sqoop Clients">
+    <group xsi:type="restart" name="CLIENTS" title="Tez, Sqoop Clients">
       <service-check>false</service-check>
       <skippable>true</skippable>
       <parallel-scheduler/>
       <service name="TEZ">
         <component>TEZ_CLIENT</component>
-      </service>
-
-      <service name="PIG">
-        <component>PIG</component>
       </service>
 
       <service name="SQOOP">
@@ -1465,14 +1461,6 @@
 
     <service name="TEZ">
       <component name="TEZ_CLIENT">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-    </service>
-
-    <service name="PIG">
-      <component name="PIG">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
