@@ -203,6 +203,11 @@
         <component>KAFKA_BROKER</component>
       </service>
 
+      <service name="AMBARI_INFRA_SOLR">
+        <component>INFRA_SOLR</component>
+        <component>INFRA_SOLR_CLIENT</component>
+      </service>
+
       <service name="HDFS">
         <component>DATANODE</component>
         <component>NAMENODE</component>
@@ -571,6 +576,17 @@
       <parallel-scheduler/>
       <service name="ZEPPELIN">
         <component>ZEPPELIN_MASTER</component>
+      </service>
+    </group>
+
+    <group xsi:type="restart" name="AMBARI_INFRA_SOLR" title="Ambari Infra Solr">
+      <service-check>false</service-check>
+      <skippable>true</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+      <parallel-scheduler/>
+      <service name="AMBARI_INFRA_SOLR">
+        <component>INFRA_SOLR</component>
+        <component>INFRA_SOLR_CLIENT</component>
       </service>
     </group>
 
