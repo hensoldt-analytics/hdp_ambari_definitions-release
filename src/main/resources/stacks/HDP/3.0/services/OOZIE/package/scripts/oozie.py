@@ -273,15 +273,16 @@ def oozie_server_specific(upgrade_type):
             create_parents = True,
   )
 
-  hashcode_file = format("{oozie_home}/.hashcode")
-  skip_recreate_sharelib = format("test -f {hashcode_file} && test -d {oozie_home}/share")
+  if params.untar_shared_libs:
+      hashcode_file = format("{oozie_home}/.hashcode")
+      skip_recreate_sharelib = format("test -f {hashcode_file} && test -d {oozie_home}/share")
 
-  untar_sharelib = ('tar','-xvf',format('{oozie_home}/oozie-sharelib.tar.gz'),'-C',params.oozie_home)
+      untar_sharelib = ('tar','-xvf',format('{oozie_home}/oozie-sharelib.tar.gz'),'-C',params.oozie_home)
 
-  Execute( untar_sharelib,    # time-expensive
-    not_if  = format("{no_op_test} || {skip_recreate_sharelib}"),
-    sudo = True,
-  )
+      Execute( untar_sharelib,    # time-expensive
+        not_if  = format("{no_op_test} || {skip_recreate_sharelib}"),
+        sudo = True,
+      )
 
   configure_cmds = []
   # Default to /usr/share/$TARGETSTACK-oozie/ext-2.2.zip as the first path
@@ -328,9 +329,10 @@ def oozie_server_specific(upgrade_type):
   else:
     prepare_war(params)
 
-  File(hashcode_file,
-       mode = 0644,
-  )
+  if params.untar_shared_libs:
+      File(hashcode_file,
+           mode = 0644,
+      )
 
   if params.stack_version_formatted and check_stack_feature(StackFeature.OOZIE_CREATE_HIVE_TEZ_CONFIGS, params.stack_version_formatted):
     # Create hive-site and tez-site configs for oozie

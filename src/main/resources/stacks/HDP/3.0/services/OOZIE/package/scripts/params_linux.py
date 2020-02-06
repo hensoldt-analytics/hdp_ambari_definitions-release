@@ -336,6 +336,8 @@ hdfs_principal_name = config['configurations']['hadoop-env']['hdfs_principal_nam
 
 hdfs_site = config['configurations']['hdfs-site']
 default_fs = config['configurations']['core-site']['fs.defaultFS']
+untar_shared_libs = config['configurations']['oozie-env']['untar_shared_libs']
+oozie_start_cmd = config['configurations']['oozie-env']['oozie_start_cmd']
 
 dfs_type = default("/clusterLevelParams/dfs_type", "")
 

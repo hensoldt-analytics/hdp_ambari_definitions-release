@@ -43,6 +43,18 @@
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
+    <name>untar_shared_libs</name>
+    <value>true</value>
+    <display-name>Compressed Shared Libraries</display-name>
+    <description>In case of Oozie version which contains compressed shared libraries, set to true.</description>
+  </property>
+  <property>
+    <name>oozie_start_cmd</name>
+    <value>oozie-start.sh</value>
+    <display-name>Oozie start command</display-name>
+    <description>Command for starting Oozie</description>
+  </property>
+  <property>
     <name>oozie_admin_users</name>
     <value>{oozie_user}, oozie-admin</value>
     <description>Oozie admin users.</description>
