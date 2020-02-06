@@ -305,6 +305,12 @@
         <task xsi:type="configure" id="hdp_3_0_x_kafka_plaintext_sasl_removal"/>
       </execute-stage>
 
+      <execute-stage service="KAFKA" component="KAFKA_BROKER" title="Patch security configs for Kafka">
+        <task xsi:type="configure" id="hdp_7_1_kafka_kerberos_patch">
+          <summary>Patch security configs for Kafka.</summary>
+        </task>
+      </execute-stage>
+
       <execute-stage service="ATLAS" component="ATLAS_SERVER" title="Updating Atlas security protocol for Kafka">
         <task xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal"/>
       </execute-stage>

@@ -301,6 +301,12 @@
         </task>
       </execute-stage>
 
+      <execute-stage service="KAFKA" component="KAFKA_BROKER" title="Patch security configs for Kafka">
+        <task xsi:type="configure" id="hdp_7_1_kafka_kerberos_patch">
+          <summary>Patch security configs for Kafka.</summary>
+        </task>
+      </execute-stage>
+
       <execute-stage service="RANGER" component="RANGER_ADMIN" title="Disabling Ranger Audit Solr Bootstrap Configuration">
         <task xsi:type="configure" id="hdp_3_1_maint_ranger_audit_solr_bootstrap"/>
       </execute-stage>

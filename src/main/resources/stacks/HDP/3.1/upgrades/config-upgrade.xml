@@ -46,5 +46,15 @@
         </changes>
       </component>
     </service>
+    <service name="KAFKA">
+      <component name="KAFKA_BROKER">
+        <changes>
+          <definition xsi:type="configure" id="hdp_7_1_kafka_kerberos_patch">
+            <type>kafka-env</type>
+            <replace key="content" find="KAFKA_KERBEROS_PARAMS" replace-with="KAFKA_OPTS"/>
+          </definition>
+        </changes>
+      </component>
+    </service>
   </services>
 </upgrade-config-changes>

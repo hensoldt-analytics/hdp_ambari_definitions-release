@@ -28,6 +28,10 @@
                  if-type="kafka-broker" if-key="security.inter.broker.protocol" if-value="PLAINTEXTSASL"/>
             <replace key="listeners" find="PLAINTEXTSASL" replace-with="SASL_PLAINTEXT"/>
           </definition>
+          <definition xsi:type="configure" id="hdp_7_1_kafka_kerberos_patch">
+            <type>kafka-env</type>
+            <replace key="content" find="KAFKA_KERBEROS_PARAMS" replace-with="KAFKA_OPTS"/>
+          </definition>
         </changes>
       </component>
     </service>
