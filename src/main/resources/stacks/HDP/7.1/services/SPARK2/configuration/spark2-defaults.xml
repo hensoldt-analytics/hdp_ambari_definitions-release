@@ -21,7 +21,7 @@
 <configuration supports_final="true">
     <property>
         <name>spark.sql.hive.metastore.jars</name>
-        <value>/usr/hdp/current/hive-client/lib/hive-standalone-metastore.jar</value>
+        <value>/usr/hdp/current/hive-client/lib/*</value>
         <description></description>
         <on-ambari-upgrade add="false"/>
     </property>
