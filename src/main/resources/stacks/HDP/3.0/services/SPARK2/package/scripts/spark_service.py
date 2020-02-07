@@ -107,9 +107,12 @@ def spark_service(name, upgrade_type=None, action=None):
       if not params.sysprep_skip_copy_tarballs_hdfs:
         tmp_archive_file=get_tarball_paths("spark2hive")[1]
         if params.stack_version_formatted and check_stack_feature(StackFeature.SPARK_STANDALONE_HIVE_METASTORE_JARS, params.stack_version_formatted):
-          metastore_jars = params.spark_hive_metastore_jars.split(",")
-          Logger.debug("Standalone Metastore jars: %s" % metastore_jars)
-          make_tarfile(tmp_archive_file, metastore_jars)
+          if params.spark_hive_metastore_jars and params.spark_hive_metastore_jars.endswith("*"):
+            source_dirs = [params.spark_hive_metastore_jars[:-1]]
+            make_tarfile(tmp_archive_file, source_dirs)
+          else:
+            metastore_jars = params.spark_hive_metastore_jars.split(",")
+            make_tarfile(tmp_archive_file, metastore_jars)
         else:
           source_dirs = [params.spark_home+"/standalone-metastore"]
           make_tarfile(tmp_archive_file, source_dirs)
