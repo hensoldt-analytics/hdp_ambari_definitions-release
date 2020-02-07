@@ -689,6 +689,12 @@
         </task>
       </execute-stage>
 
+      <execute-stage service="KAFKA" component="KAFKA_BROKER" title="Fix Kafka replication factor">
+        <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixKafkaReplicationFactor">
+          <summary>Fix Kafka replication factor.</summary>
+        </task>
+      </execute-stage>
+
       <!--ZEPPELIN-->
       <execute-stage service="ZEPPELIN" component="ZEPPELIN_MASTER" title="Apply zeppelin.notebook.storage config">
         <task xsi:type="configure" id="hdp_3_0_0_0_zeppelin_notebook_storage"/>
