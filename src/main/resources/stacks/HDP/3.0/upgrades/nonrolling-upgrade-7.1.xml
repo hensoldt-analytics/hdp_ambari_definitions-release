@@ -673,33 +673,12 @@
       </service>
     </group>
 
-    <group xsi:type="restart" name="DRUID" title="Druid">
-      <skippable>true</skippable>
-      <service name="DRUID">
-        <component>DRUID_HISTORICAL</component>
-        <component>DRUID_MIDDLEMANAGER</component>
-        <component>DRUID_BROKER</component>
-        <component>DRUID_ROUTER</component>
-        <component>DRUID_COORDINATOR</component>
-        <component>DRUID_OVERLORD</component>
-      </service>
-    </group>
-
-    <group xsi:type="restart" name="SUPERSET" title="Superset">
-      <skippable>true</skippable>
-      <service name="SUPERSET">
-        <component>SUPERSET</component>
-      </service>
-    </group>
-
     <group name="SERVICE_CHECK_3" title="All Service Checks" xsi:type="service-check">
       <direction>UPGRADE</direction>
       <skippable>true</skippable>
       <priority>
         <service>KNOX</service>
         <service>ACCUMULO</service>
-        <service>DRUID</service>
-        <service>SUPERSET</service>
       </priority>
     </group>
 
@@ -1152,45 +1131,5 @@
       </component>
     </service>
 
-    <service name="DRUID">
-      <component name="DRUID_HISTORICAL">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="DRUID_MIDDLEMANAGER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="DRUID_BROKER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="DRUID_ROUTER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="DRUID_COORDINATOR">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="DRUID_OVERLORD">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-    </service>
-
-    <service name="SUPERSET">
-      <component name="SUPERSET">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-    </service>
   </processing>
 </upgrade>
