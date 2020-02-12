@@ -752,6 +752,7 @@ if enable_ranger_hive:
     hive_ranger_plugin_config['policy.grantrevoke.auth.users'] = hive_user
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
+  hive_ranger_plugin_config['service.admin.users'] = hive_user
   if len(custom_ranger_service_config) > 0:
     hive_ranger_plugin_config.update(custom_ranger_service_config)
 

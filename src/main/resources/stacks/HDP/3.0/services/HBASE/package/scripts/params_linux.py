@@ -389,6 +389,7 @@ if enable_ranger_hbase:
   hbase_ranger_plugin_config['default-policy.1.resource.column'] = "*"
   hbase_ranger_plugin_config['default-policy.1.policyItem.1.users'] = policy_user
   hbase_ranger_plugin_config['default-policy.1.policyItem.1.accessTypes'] = "read,write,create"
+  hbase_ranger_plugin_config['service.admin.users'] = hbase_user
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
   if len(custom_ranger_service_config) > 0:

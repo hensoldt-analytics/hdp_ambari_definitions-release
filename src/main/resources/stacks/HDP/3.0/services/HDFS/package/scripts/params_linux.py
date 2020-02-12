@@ -562,6 +562,7 @@ if enable_ranger_hdfs:
   if len(custom_ranger_service_config) > 0:
     hdfs_ranger_plugin_config.update(custom_ranger_service_config)
 
+  hdfs_ranger_plugin_config['service.admin.users'] = hdfs_user
   hdfs_ranger_plugin_repo = {
     'isEnabled': 'true',
     'configs': hdfs_ranger_plugin_config,

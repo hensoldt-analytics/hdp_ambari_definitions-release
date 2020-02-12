@@ -359,6 +359,7 @@ if enable_ranger_storm:
     storm_ranger_plugin_config['ambari.service.check.user'] = policy_user
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
+  storm_ranger_plugin_config['service.admin.users'] = policy_user
   if len(custom_ranger_service_config) > 0:
     storm_ranger_plugin_config.update(custom_ranger_service_config)
 

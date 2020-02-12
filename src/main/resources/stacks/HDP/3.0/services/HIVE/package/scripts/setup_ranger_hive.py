@@ -114,6 +114,7 @@ def setup_ranger_hive_metastore_service():
       hive_ranger_plugin_config['policy.grantrevoke.auth.users'] = params.hive_user
 
     custom_ranger_service_config = generate_ranger_service_config(params.config['configurations']['ranger-hive-plugin-properties'])
+    hive_ranger_plugin_config['service.admin.users'] = params.hive_user
     if len(custom_ranger_service_config) > 0:
       hive_ranger_plugin_config.update(custom_ranger_service_config)
 

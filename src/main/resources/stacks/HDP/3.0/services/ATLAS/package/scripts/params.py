@@ -418,6 +418,7 @@ if stack_supports_atlas_ranger_plugin and enable_ranger_atlas:
     atlas_repository_configuration['policy.download.auth.users'] = metadata_user
     atlas_repository_configuration['tag.download.auth.users'] = metadata_user
 
+  atlas_repository_configuration['service.admin.users'] = metadata_user
   atlas_ranger_plugin_repo = {
     'isEnabled': 'true',
     'configs': atlas_repository_configuration,

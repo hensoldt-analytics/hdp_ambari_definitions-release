@@ -541,6 +541,7 @@ if enable_ranger_yarn and is_supported_yarn_ranger:
   ranger_plugin_config['default-policy.1.resource.queue'] = service_check_queue_name
   ranger_plugin_config['default-policy.1.policyItem.1.users'] = policy_user
   ranger_plugin_config['default-policy.1.policyItem.1.accessTypes'] = "submit-app"
+  ranger_plugin_config['service.admin.users'] = yarn_user
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
   if len(custom_ranger_service_config) > 0:

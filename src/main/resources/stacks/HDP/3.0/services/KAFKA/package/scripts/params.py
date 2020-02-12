@@ -347,6 +347,7 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
     ranger_plugin_config['tag.download.auth.users'] = kafka_user
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
+  ranger_plugin_config['service.admin.users'] = kafka_user
   if len(custom_ranger_service_config) > 0:
     ranger_plugin_config.update(custom_ranger_service_config)
 

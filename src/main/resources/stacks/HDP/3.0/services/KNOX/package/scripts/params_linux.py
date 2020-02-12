@@ -466,6 +466,7 @@ if enable_ranger_knox:
     knox_ranger_plugin_config['tag.download.auth.users'] = knox_user
 
   custom_ranger_service_config = generate_ranger_service_config(ranger_plugin_properties)
+  knox_ranger_plugin_config['service.admin.users'] = knox_user
   if len(custom_ranger_service_config) > 0:
     knox_ranger_plugin_config.update(custom_ranger_service_config)
 

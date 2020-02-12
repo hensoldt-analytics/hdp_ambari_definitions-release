@@ -276,6 +276,7 @@ if stack_supports_ranger_kerberos:
       rangerkms_bare_principal = get_bare_principal(rangerkms_principal)
       rangerkms_principal = rangerkms_principal.replace('_HOST', kms_host.lower())
   kms_plugin_config['policy.download.auth.users'] = format('keyadmin,{rangerkms_bare_principal}')
+  kms_plugin_config['service.admin.users'] = format('keyadmin,{rangerkms_bare_principal}')
 
 custom_ranger_service_config = generate_ranger_service_config(config['configurations']['kms-properties'])
 if len(custom_ranger_service_config) > 0:
