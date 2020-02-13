@@ -283,6 +283,8 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
   spark_jobhistoryserver_hosts = default("/clusterHostInfo/spark2_jobhistoryserver_hosts", [])
   has_jobhistoryserver = not len(spark_jobhistoryserver_hosts) == 0
 
+  default_policies_count = 0
+
   if has_atlas_server:
     atlas_notification_topics = default('/configurations/application-properties/atlas.notification.topics', 'ATLAS_HOOK,ATLAS_ENTITIES')
     atlas_notification_topics_list = atlas_notification_topics.split(',')
@@ -291,8 +293,6 @@ if enable_ranger_kafka and is_supported_kafka_ranger:
     atlas_user = default('/configurations/atlas-env/metadata_user', 'atlas')
     rangertagsync_user = default('/configurations/ranger-tagsync-site/ranger.tagsync.dest.ranger.username', 'rangertagsync')
     spark_user = 'spark_atlas'
-
-    default_policies_count = 0
 
     if len(atlas_notification_topics_list) == 2:
       atlas_hook = atlas_notification_topics_list[0]
