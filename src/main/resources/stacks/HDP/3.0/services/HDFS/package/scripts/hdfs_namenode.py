@@ -183,7 +183,7 @@ def namenode(action=None, hdfs_binary=None, do_format=True, upgrade_type=None,
           if is_downgrade_allowed:
             options = "-rollingUpgrade started"
           else:
-            options = "-upgrade"
+            options = ""
         else:
           Logger.info("The NameNode upgrade marker file {0} does not exist, yet an upgrade is currently suspended. "
                       "Assuming that the upgrade of NameNode has not occurred yet.".format(namenode_upgrade.get_upgrade_in_progress_marker()))
