@@ -331,6 +331,11 @@
       <execute-stage service="RANGER_KMS" component="RANGER_KMS_SERVER" title="Upgrading kms-env configurations Ranger-KMS.">
         <task xsi:type="configure" id="hdp_3_1_0_0_ranger_kms_services_heap_size_configuration"/>
       </execute-stage>
+
+      <!-- OOZIE -->
+      <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Upgrading Oozie env configuration">
+        <task xsi:type="configure" id="hdp_7_1_update_oozie_env_template_config"/>
+      </execute-stage>
     </group>
 
 

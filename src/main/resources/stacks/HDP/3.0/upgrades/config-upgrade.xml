@@ -97,5 +97,23 @@
       </component>
     </service>
 
+    <service name="OOZIE">
+      <component name="OOZIE_SERVER">
+        <changes>
+          <definition xsi:type="configure" id="hdp_7_1_update_oozie_env_template_config">
+            <type>oozie-env</type>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='unset OOZIE_CONFIG'/>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='unset CATALINA_BASE'/>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='unset CATALINA_TMPDIR'/>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='unset OOZIE_CATALINA_HOME'/>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='unset CATALINA_OPTS'/>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='export JETTY_PID_FILE="$CATALINA_PID"'/>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='unset CATALINA_PID'/>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='export OOZIE_CONFIG={{conf_dir}}'/>
+          </definition>
+        </changes>
+      </component>
+    </service>
+
   </services>
 </upgrade-config-changes>
