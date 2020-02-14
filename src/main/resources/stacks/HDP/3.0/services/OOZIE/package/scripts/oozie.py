@@ -322,10 +322,15 @@ def oozie_server_specific(upgrade_type):
       not_if  = no_op_test)
 
   if is_oozie5_installed():
-    command = format("cd {oozie_home}/bin && {oozie_setup_sh}").strip()
-    return_code, output = call(command, user=params.oozie_user)
-    if return_code != 0:
-      raise Fail("Unable to set up Oozie 5. Message: " + output)
+    Directory([params.oozie_embedded_webapp_dir, params.oozie_embedded_webapp_libs_dir],
+        owner = params.oozie_user,
+        group = params.user_group
+    )
+
+    Execute(format("cd {oozie_home}/bin && {oozie_setup_sh}"),
+            user=params.oozie_user,
+            not_if=format('test -e {oozie_embedded_webapp_dir}/ext-2.2')
+    )
   else:
     prepare_war(params)
 

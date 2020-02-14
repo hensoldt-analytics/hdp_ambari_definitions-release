@@ -114,6 +114,8 @@ oozie_shared_lib = format("{stack_root}/current/{oozie_root}/share")
 oozie_home = format("{stack_root}/current/{oozie_root}")
 oozie_bin_dir = format("{stack_root}/current/{oozie_root}/bin")
 oozie_examples_regex = format("{stack_root}/current/{oozie_root}/doc")
+oozie_embedded_webapp_dir = format("{stack_root}/current/{oozie_root}/embedded-oozie-server/webapp")
+oozie_embedded_webapp_libs_dir = format("{oozie_embedded_webapp_dir}/WEB-INF/lib")
 
 # set the falcon home for copying JARs; if in an upgrade, then use the version of falcon that
 # matches the version of oozie
