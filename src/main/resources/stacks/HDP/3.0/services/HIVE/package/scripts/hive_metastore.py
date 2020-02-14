@@ -57,10 +57,13 @@ class HiveMetastore(Script):
 
     # writing configurations on start required for securtity
     self.configure(env)
-    if params.init_metastore_schema:
-      create_metastore_schema() # execute without config lock
 
-    create_hive_metastore_schema() # before starting metastore create info schema
+    if params.sysprep_skip_hive_schema_create:
+      Logger.info("Skipping creation of Hive Metastore schema as host is sys prepped")
+    else:
+      if params.init_metastore_schema:
+        create_metastore_schema() # execute without config lock
+      create_hive_metastore_schema() # before starting metastore create info schema
 
     hive_service('metastore', action='start', upgrade_type=upgrade_type)
 
