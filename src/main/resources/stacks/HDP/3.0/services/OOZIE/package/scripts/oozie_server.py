@@ -36,7 +36,7 @@ from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyImpl
 from ambari_commons.constants import UPGRADE_TYPE_NON_ROLLING, UPGRADE_TYPE_ROLLING
 
-from oozie import oozie
+from oozie import oozie, is_oozie5_installed
 from oozie_service import oozie_service
 from oozie_server_upgrade import OozieUpgrade
 
@@ -77,7 +77,7 @@ class OozieServer(Script):
 
     # preparing the WAR file must run after configure since configure writes out
     # oozie-env.sh which is needed to have the right environment directories setup!
-    if upgrade_type is not None:
+    if upgrade_type is not None and not is_oozie5_installed():
       OozieUpgrade.prepare_warfile()
 
     oozie_service(action='start', upgrade_type=upgrade_type)
