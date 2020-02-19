@@ -743,6 +743,11 @@
         <task xsi:type="configure" id="hdp_30_accumulo_classpath_update"/>
       </execute-stage>
 
+      <!--AMBARI METRICS-->
+      <execute-stage service="AMBARI_METRICS" component="METRICS_GRAFANA" title="Convert ams-grafana-ini template to Grafana 6 compatibel">
+        <task xsi:type="configure" id="hdp_3_1_0_0_ams_grafana_ini_template_update"/>
+      </execute-stage>
+
     </group>
 
     <!--

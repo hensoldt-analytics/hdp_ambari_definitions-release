@@ -336,6 +336,12 @@
       <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Upgrading Oozie env configuration">
         <task xsi:type="configure" id="hdp_7_1_update_oozie_env_template_config"/>
       </execute-stage>
+
+      <!--AMBARI METRICS-->
+      <execute-stage service="AMBARI_METRICS" component="METRICS_GRAFANA" title="Convert ams-grafana-ini template to Grafana 6 compatibel">
+        <task xsi:type="configure" id="hdp_3_1_0_0_ams_grafana_ini_template_update"/>
+      </execute-stage>
+
     </group>
 
 

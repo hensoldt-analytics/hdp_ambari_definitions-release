@@ -115,5 +115,132 @@
       </component>
     </service>
 
+    <service name="AMBARI_METRICS">
+      <component name="METRICS_GRAFANA">
+        <changes>
+          <definition xsi:type="configure" id="hdp_3_1_0_0_ams_grafana_ini_template_update">
+            <type>ams-grafana-ini</type>
+            <replace key="content" find="; app_mode = production"
+                     replace-with="; app_mode = production
+                      &#10;
+                      &#10;# instance name, defaults to HOSTNAME environment variable value or hostname if HOSTNAME var is empty
+                      &#10;; instance_name = ${HOSTNAME}
+                      &#10;"/>
+            <replace key="content" find="logs = {{ams_grafana_log_dir}}"
+                     replace-with="logs = {{ams_grafana_log_dir}}
+                      &#10;#
+                      &#10;# Directory where grafana will automatically scan and look for plugins
+                      &#10;#
+                      &#10;plugins = /var/lib/ambari-metrics-grafana/plugins
+                      &#10;"/>
+            <replace key="content" find=";protocol = http" replace-with=""/>
+            <replace key="content" find=";http_port = 3000" replace-with=""/>
+            <replace key="content" find=";static_root_path = public" replace-with=""/>
+            <replace key="content" find=";cert_file =" replace-with=""/>
+            <replace key="content" find=";cert_key =" replace-with=""/>
+            <replace key="content" find="cert_key = {{ams_grafana_cert_key}}"
+                     replace-with="cert_key = {{ams_grafana_cert_key}}
+                      &#10;
+                      &#10;# Unix socket path
+                      &#10;;socket ="/>
+            <replace key="content" find=";password ="
+                     replace-with="# If the password contains # or ; you have to wrap it with trippel quotes. Ex &quot;&quot;&quot;#password;&quot;&quot;&quot;
+                      &#10;;password =
+                      &#10;
+                      &#10;# Use either URL or the previous fields to configure the database
+                      &#10;# Example: mysql://user:secret@host:port/database
+                      &#10;;url ="/>
+            <replace key="content" find=";session_life_time = 86400"
+                     replace-with=";session_life_time = 86400
+                      &#10;
+                      &#10;#################################### Data proxy ###########################
+                      &#10;[dataproxy]
+                      &#10;
+                      &#10;# This enables data proxy logging, default is false
+                      &#10;;logging = false
+                      &#10;"/>
+            <replace key="content" find="# Google Analytics universal tracking code, only enabled if you specify an id here"
+                     replace-with="# Set to false to disable all checks to https://grafana.net
+                      &#10;# for new vesions (grafana itself and plugins), check is used
+                      &#10;# in some UI views to notify that grafana or plugin update exists
+                      &#10;# This option does not cause any auto updates, nor send any information
+                      &#10;# only a GET request to http://grafana.com to get latest versions
+                      &#10;;check_for_updates = true
+                      &#10;
+                      &#10;# Google Analytics universal tracking code, only enabled if you specify an id here"/>
+            <replace key="content" find="#################################### Users ####################################"
+                     replace-with="[snapshots]
+                      &#10;# snapshot sharing options
+                      &#10;;external_enabled = true
+                      &#10;;external_snapshot_url = https://snapshots-origin.raintank.io
+                      &#10;;external_snapshot_name = Publish to snapshot.raintank.io
+                      &#10;
+                      &#10;# remove expired snapshot
+                      &#10;;snapshot_remove_expired = true
+                      &#10;
+                      &#10;# remove snapshots after 90 days
+                      &#10;;snapshot_TTL_days = 90
+                      &#10;
+                      &#10;#################################### Users ####################################"/>
+            <replace key="content" find="#################################### Anonymous Auth ##########################"
+                     replace-with="# Default UI theme (&quot;dark&quot; or &quot;light&quot;)
+                      &#10;;default_theme = dark
+                      &#10;
+                      &#10;# External user management, these options affect the organization users view
+                      &#10;;external_manage_link_url =
+                      &#10;;external_manage_link_name =
+                      &#10;;external_manage_info =
+                      &#10;
+                      &#10;[auth]
+                      &#10;# Set to true to disable (hide) the login form, useful if you use OAuth, defaults to false
+                      &#10;;disable_login_form = false
+                      &#10;
+                      &#10;# Set to true to disable the signout link in the side menu. useful if you use auth.proxy, defaults to false
+                      &#10;;disable_signout_menu = false
+                      &#10;
+                      &#10;#################################### Anonymous Auth ##########################"/>
+            <replace key="content" find="#################################### Auth Proxy ##########################"
+                     replace-with="#################################### Generic OAuth ##########################
+                      &#10;[auth.generic_oauth]
+                      &#10;;enabled = false
+                      &#10;;name = OAuth
+                      &#10;;allow_sign_up = true
+                      &#10;;client_id = some_id
+                      &#10;;client_secret = some_secret
+                      &#10;;scopes = user:email,read:org
+                      &#10;;auth_url = https://foo.bar/login/oauth/authorize
+                      &#10;;token_url = https://foo.bar/login/oauth/access_token
+                      &#10;;api_url = https://foo.bar/user
+                      &#10;;team_ids =
+                      &#10;;allowed_organizations =
+                      &#10;
+                      &#10;#################################### Grafana.com Auth ####################
+                      &#10;[auth.grafana_com]
+                      &#10;;enabled = false
+                      &#10;;allow_sign_up = true
+                      &#10;;client_id = some_id
+                      &#10;;client_secret = some_secret
+                      &#10;;scopes = user:email
+                      &#10;;allowed_organizations =
+                      &#10;
+                      &#10;#################################### Auth Proxy ##########################"/>
+            <replace key="content" find="[emails]"
+                     replace-with=";from_name = Grafana
+                      &#10;# EHLO identity in SMTP dialog (defaults to instance_name)
+                      &#10;;ehlo_identity = dashboard.example.com
+                      &#10;
+                      &#10;[emails]"/>
+            <replace key="content" find="# Either &quot;Trace&quot;, &quot;Debug&quot;, &quot;Info&quot;, &quot;Warn&quot;, &quot;Error&quot;, &quot;Critical&quot;, default is &quot;Trace&quot;"
+                     replace-with="# Either &quot;debug&quot;, &quot;info&quot;, &quot;warn&quot;, &quot;error&quot;, &quot;critical&quot;, default is &quot;info&quot;"/>
+            <replace key="content" find=";level = Info"
+                     replace-with=";level = info"/>
+            <replace key="content" find="# Buffer length of channel, keep it as it is if you don't know what it is.&#10;;buffer_len = 10000"
+                     replace-with="# optional settings to set different levels for specific loggers. Ex filters = sqlstore:debug
+                      &#10;;filters ="/>
+          </definition>
+        </changes>
+      </component>
+    </service>
+
   </services>
 </upgrade-config-changes>
