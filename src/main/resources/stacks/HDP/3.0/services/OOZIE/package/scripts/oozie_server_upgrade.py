@@ -25,6 +25,7 @@ from resource_management.core.exceptions import Fail
 from resource_management.core.resources.system import Execute
 from resource_management.core.resources.system import Directory
 from resource_management.core.resources.system import File
+from resource_management.core.source import StaticFile
 from resource_management.libraries.functions import Direction
 from resource_management.libraries.functions import format
 from resource_management.libraries.functions import stack_select
@@ -83,8 +84,12 @@ class OozieUpgrade(Script):
       files_copied = False
       for file in files:
         if os.path.isfile(file):
-          Logger.info("Copying {0} to {1}".format(str(file), params.oozie_libext_dir))
-          shutil.copy2(file, params.oozie_libext_dir)
+          target_file = format("{oozie_libext_dir}/{filename}", filename=os.path.basename(file))
+          File(target_file,
+               content = StaticFile(file),
+               owner = params.oozie_user,
+               group = params.user_group
+          )
           files_copied = True
 
       if not files_copied:
