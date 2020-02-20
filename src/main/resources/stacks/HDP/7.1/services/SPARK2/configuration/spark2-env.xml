@@ -72,7 +72,31 @@ export HADOOP_CONF_DIR=${HADOOP_CONF_DIR:-{{hadoop_conf_dir}}}
 # The java implementation to use.
 export JAVA_HOME={{java_home}}
 
-export SPARK_DIST_CLASSPATH=$SPARK_DIST_CLASSPATH:/usr/hdp/{{version}}/hadoop/lib/hadoop-lzo-0.6.0.{{version}}.jar
+# Add Hadoop lzo jar to the classpath (if found)
+if [ -z "${HADOOP_VERSION}" ]; then
+    if [ `command -v hdp-select` ]; then
+        HADOOP_VERSION=`hdp-select status | grep hadoop-client | awk -F " " '{print $3}'`
+    else
+        echo -e "command hdp-select is not found, please manually set HADOOP_VERSION in spark-env.sh or current environment" 1>&amp;2
+        exit 1
+    fi
+fi
+
+HADOOP_LZO_JAR=
+HADOOP_LZO_DIR="/usr/hdp/${HADOOP_VERSION}/hadoop/lib"
+num_jars="$(ls -1 "$HADOOP_LZO_DIR" | grep "^hadoop-lzo.*${HADOOP_VERSION}\.jar$" | wc -l)"
+if [ "$num_jars" -eq "0" -a -z "$HADOOP_LZO_JAR" ]; then
+    HADOOP_LZO_JAR=
+elif [ "$num_jars" -gt "1" ]; then
+    echo "Found multiple Hadoop lzo jars in $HADOOP_LZO_DIR:" 1>&amp;2
+    echo "Please remove all but one jar." 1>&amp;2
+    exit 1
+elif [ "$num_jars" -eq "1" ]; then
+    LZO_JARS="$(ls -1 "$HADOOP_LZO_DIR" | grep "^hadoop-lzo-.*${HADOOP_VERSION}\.jar$" || true)"
+    HADOOP_LZO_JAR="${HADOOP_LZO_DIR}/${LZO_JARS}"
+fi
+
+export SPARK_DIST_CLASSPATH=${SPARK_DIST_CLASSPATH}:${HADOOP_LZO_JAR}
     </value>
     <value-attributes>
       <type>content</type>
