@@ -35,6 +35,7 @@ from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.oozie_prepare_war import prepare_war
 from resource_management.libraries.functions.copy_tarball import get_current_version
+from resource_management.libraries.functions.data_structure_utils import replace_in_dict
 from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.libraries.functions.lzo_utils import install_lzo_if_needed
 from resource_management.libraries.script.script import Script
@@ -106,10 +107,10 @@ def oozie(is_server=False, upgrade_type=None):
 
   if is_server:
     params.HdfsResource(params.oozie_hdfs_user_dir,
-                         type="directory",
-                         action="create_on_execute",
-                         owner=params.oozie_user,
-                         mode=params.oozie_hdfs_user_mode
+                        type="directory",
+                        action="create_on_execute",
+                        owner=params.oozie_user,
+                        mode=params.oozie_hdfs_user_mode
     )
     params.HdfsResource(None, action="execute")
 
@@ -142,6 +143,60 @@ def oozie(is_server=False, upgrade_type=None):
     group=params.user_group,
   )
 
+  if is_server and params.stack_version_formatted and check_stack_feature(StackFeature.OOZIE_DELEGATED_HADOOP_CONFIGS, params.stack_version_formatted):
+    delegated_conf_dir = InlineTemplate(params.oozie_service_hadoopaccessorservice_hadoop_configurations_dir).get_content()
+    Directory(delegated_conf_dir,
+      create_parents = True,
+      owner = params.oozie_user,
+      group = params.user_group
+    )
+
+    XmlConfig("core-site.xml",
+      conf_dir=delegated_conf_dir,
+      configurations=replaceHdpVersion(params.config['configurations']['core-site']),
+      configuration_attributes=params.config['configurationAttributes']['core-site'],
+      owner=params.oozie_user,
+      group=params.user_group,
+      mode=0644
+    )
+
+    XmlConfig("hdfs-site.xml",
+      conf_dir=delegated_conf_dir,
+      configurations=replaceHdpVersion(params.config['configurations']['hdfs-site']),
+      configuration_attributes=params.config['configurationAttributes']['hdfs-site'],
+      owner=params.oozie_user,
+      group=params.user_group,
+      mode=0644
+    )
+
+    XmlConfig("mapred-site.xml",
+      conf_dir=delegated_conf_dir,
+      configurations=replaceHdpVersion(params.config['configurations']['mapred-site']),
+      configuration_attributes=params.config['configurationAttributes']['mapred-site'],
+      owner=params.oozie_user,
+      group=params.user_group,
+      mode=0644
+    )
+
+    XmlConfig("yarn-site.xml",
+      conf_dir=delegated_conf_dir,
+      configurations=replaceHdpVersion(params.config['configurations']['yarn-site']),
+      configuration_attributes=params.config['configurationAttributes']['yarn-site'],
+      owner=params.oozie_user,
+      group=params.user_group,
+      mode=0644
+    )
+
+    if "ssl-client" in params.config['configurations']:
+      XmlConfig("ssl-client.xml",
+        conf_dir=delegated_conf_dir,
+        configurations=replaceHdpVersion(params.config['configurations']['ssl-client']),
+        configuration_attributes=params.config['configurationAttributes']['ssl-client'],
+        owner=params.oozie_user,
+        group=params.user_group,
+        mode=0644
+      )
+
   # On some OS this folder could be not exists, so we will create it before pushing there files
   Directory(params.limits_conf_dir,
             create_parents=True,
@@ -150,10 +205,10 @@ def oozie(is_server=False, upgrade_type=None):
   )
 
   File(os.path.join(params.limits_conf_dir, 'oozie.conf'),
-       owner='root',
-       group='root',
-       mode=0644,
-       content=Template("oozie.conf.j2")
+    owner='root',
+    group='root',
+    mode=0644,
+    content=Template("oozie.conf.j2")
   )
 
   if (params.log4j_props != None):
@@ -178,9 +233,9 @@ def oozie(is_server=False, upgrade_type=None):
       content=Template('adminusers.txt.j2', oozie_admin_users=params.oozie_admin_users)
     )
   else:
-    File ( format("{params.conf_dir}/adminusers.txt"),
-           owner = params.oozie_user,
-           group = params.user_group
+    File (format("{params.conf_dir}/adminusers.txt"),
+      owner = params.oozie_user,
+      group = params.user_group
     )
 
   if params.jdbc_driver_name == "com.mysql.jdbc.Driver" or \
@@ -193,18 +248,18 @@ def oozie(is_server=False, upgrade_type=None):
   pass
 
   oozie_ownership()
-  
+
   if params.lzo_enabled:
     install_lzo_if_needed()
     Execute(format('{sudo} cp {hadoop_lib_home}/hadoop-lzo*.jar {oozie_lib_dir}'),
     )
-  
+
   if is_server:
     oozie_server_specific(upgrade_type)
-  
+
 def oozie_ownership():
   import params
-  
+
   File ( format("{conf_dir}/hadoop-config.xml"),
     owner = params.oozie_user,
     group = params.user_group
@@ -565,3 +620,6 @@ def download_database_library_if_needed(target_directory = None):
 
     File(target_jar_with_directory, owner = params.oozie_user,
       group = params.user_group)
+
+def replaceHdpVersion(configuration):
+  return replace_in_dict(configuration, "${hdp.version}", "{{version}}")

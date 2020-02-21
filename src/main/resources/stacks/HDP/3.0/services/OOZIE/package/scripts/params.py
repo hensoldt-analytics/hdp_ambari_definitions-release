@@ -38,3 +38,7 @@ sysprep_skip_copy_oozie_share_lib_to_hdfs = False
 if host_sys_prepped:
   sysprep_skip_copy_oozie_share_lib_to_hdfs = default("/configurations/cluster-env/sysprep_skip_copy_oozie_share_lib_to_hdfs", False)
 sysprep_skip_oozie_schema_create = host_sys_prepped and default("/configurations/cluster-env/sysprep_skip_oozie_schema_create", False)
+
+if stack_version_formatted and check_stack_feature(StackFeature.OOZIE_DELEGATED_HADOOP_CONFIGS, stack_version_formatted):
+  oozie_service_hadoopaccessorservice_hadoop_configurations = config['configurations']['oozie-site']['oozie.service.HadoopAccessorService.hadoop.configurations']
+  oozie_service_hadoopaccessorservice_hadoop_configurations_dir = re.search('^.*=(.*)$', oozie_service_hadoopaccessorservice_hadoop_configurations).group(1)

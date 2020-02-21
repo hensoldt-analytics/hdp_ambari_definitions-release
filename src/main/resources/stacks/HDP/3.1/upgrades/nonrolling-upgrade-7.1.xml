@@ -319,6 +319,10 @@
       <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Upgrading Oozie env configuration">
         <task xsi:type="configure" id="hdp_7_1_update_oozie_env_template_config"/>
       </execute-stage>
+
+      <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Upgrading Oozie env configuration">
+        <task xsi:type="configure" id="hdp_7_1_update_oozie_hadoop_accessor_service_config"/>
+      </execute-stage>
     </group>
 
 

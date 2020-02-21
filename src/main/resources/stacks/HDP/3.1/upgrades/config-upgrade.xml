@@ -70,6 +70,10 @@
             <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='unset CATALINA_PID'/>
             <insert key="content" insert-type="append" newline-before="true" newline-after="true" value='export OOZIE_CONFIG={{conf_dir}}'/>
           </definition>
+          <definition xsi:type="configure" id="hdp_7_1_update_oozie_hadoop_accessor_service_config">
+            <type>oozie-site</type>
+            <set key="oozie.service.HadoopAccessorService.hadoop.configurations" value="*={{conf_dir}}/hadoop-conf" />
+          </definition>
         </changes>
       </component>
     </service>
