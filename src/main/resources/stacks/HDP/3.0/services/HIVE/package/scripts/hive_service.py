@@ -105,6 +105,10 @@ def hive_service(name, action='start', upgrade_type=None):
     daemon_kill_cmd = format("{sudo} kill {pid}")
     daemon_hard_kill_cmd = format("{sudo} kill -9 {pid}")
 
+    Execute(daemon_kill_cmd,
+      not_if = format("! ({process_id_exists_command})")
+    )
+
     if name == 'hiveserver2':
       # wait for HS2 to die after a "delete" event notification sent to HS2 instance
       Execute(format("! ({process_id_exists_command})"),
@@ -112,9 +116,6 @@ def hive_service(name, action='start', upgrade_type=None):
               try_sleep=5,
               ignore_failures = True
               )
-    Execute(daemon_kill_cmd,
-      not_if = format("! ({process_id_exists_command})")
-    )
 
     wait_time = 5
     if name == 'hiveserver2':
