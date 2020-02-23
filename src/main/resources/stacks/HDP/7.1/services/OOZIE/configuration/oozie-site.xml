@@ -62,4 +62,17 @@
     <on-ambari-upgrade add="true"/>
     <property-type>PASSWORD</property-type>
   </property>
+  <property>
+    <name>oozie.action.spark.setup.hadoop.conf.dir</name>
+    <display-name>Copy hadoop configs to action.xml</display-name>
+    <value>true</value>
+    <description>
+      This property will allow users to copy Oozie action.xml as hadoop *-site configurations files.
+    </description>
+    <final>false</final>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
 </configuration>
