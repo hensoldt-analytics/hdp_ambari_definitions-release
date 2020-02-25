@@ -346,6 +346,11 @@
         <task xsi:type="configure" id="hdp_3_1_0_0_ams_grafana_ini_template_update"/>
       </execute-stage>
 
+      <!--SPARK2-->
+      <execute-stage service="SPARK2" component="SPARK2_CLIENT" title="Add LZO lib to the classpath">
+        <task xsi:type="configure" id="hdp_7_1_0_0_spark2_env"/>
+      </execute-stage>
+
     </group>
 
 

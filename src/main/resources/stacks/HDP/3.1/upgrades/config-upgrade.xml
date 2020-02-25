@@ -36,6 +36,7 @@
         </changes>
       </component>
     </service>
+
     <service name="RANGER">
       <component name="RANGER_ADMIN">
         <changes>
@@ -46,6 +47,7 @@
         </changes>
       </component>
     </service>
+
     <service name="KAFKA">
       <component name="KAFKA_BROKER">
         <changes>
@@ -56,6 +58,7 @@
         </changes>
       </component>
     </service>
+
     <service name="OOZIE">
       <component name="OOZIE_SERVER">
         <changes>
@@ -73,6 +76,42 @@
           <definition xsi:type="configure" id="hdp_7_1_update_oozie_hadoop_accessor_service_config">
             <type>oozie-site</type>
             <set key="oozie.service.HadoopAccessorService.hadoop.configurations" value="*={{conf_dir}}/hadoop-conf" />
+          </definition>
+        </changes>
+      </component>
+    </service>
+
+    <service name="SPARK2">
+      <component name="SPARK2_CLIENT">
+        <changes>
+          <definition xsi:type="configure" id="hdp_7_1_0_0_spark2_env">
+            <type>spark2-env</type>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="false"
+                    value="# Add Hadoop lzo jar to the classpath (if found)
+                      &#10;if [ -z &quot;${HADOOP_VERSION}&quot; ]; then
+                      &#10; if [ `command -v hdp-select` ]; then
+                      &#10;   HADOOP_VERSION=`hdp-select status | grep hadoop-client | awk -F &quot; &quot; &apos;{print $3}&apos;`
+                      &#10; else
+                      &#10;   echo -e &quot;command hdp-select is not found, please manually set HADOOP_VERSION in spark-env.sh or current environment&quot; 1>&amp;2
+                      &#10;   exit 1
+                      &#10; fi
+                      &#10;fi
+                      &#10;
+                      &#10;HADOOP_LZO_JAR=
+                      &#10;HADOOP_LZO_DIR=&quot;/usr/hdp/${HADOOP_VERSION}/hadoop/lib&quot;
+                      &#10;num_jars=&quot;$(ls -1 &quot;$HADOOP_LZO_DIR&quot; | grep &quot;^hadoop-lzo.*${HADOOP_VERSION}\.jar$&quot; | wc -l)&quot;
+                      &#10;if [ &quot;$num_jars&quot; -eq &quot;0&quot; -a -z &quot;$HADOOP_LZO_JAR&quot; ]; then
+                      &#10; HADOOP_LZO_JAR=
+                      &#10;elif [ &quot;$num_jars&quot; -gt &quot;1&quot; ]; then
+                      &#10; echo &quot;Found multiple Hadoop lzo jars in $HADOOP_LZO_DIR:&quot; 1>&amp;2
+                      &#10; echo &quot;Please remove all but one jar.&quot; 1>&amp;2
+                      &#10; exit 1
+                      &#10;elif [ &quot;$num_jars&quot; -eq &quot;1&quot; ]; then
+                      &#10; LZO_JARS=&quot;$(ls -1 &quot;$HADOOP_LZO_DIR&quot; | grep &quot;^hadoop-lzo-.*${HADOOP_VERSION}\.jar$&quot; || true)&quot;
+                      &#10; HADOOP_LZO_JAR=&quot;${HADOOP_LZO_DIR}/${LZO_JARS}&quot;
+                      &#10;fi
+                      &#10;
+                      &#10;export SPARK_DIST_CLASSPATH=${SPARK_DIST_CLASSPATH}:${HADOOP_LZO_JAR}"/>
           </definition>
         </changes>
       </component>

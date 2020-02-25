@@ -712,7 +712,6 @@
             <set key="spark.yarn.executor.failuresValidityInterval" value="2h"/>
             <set key="spark.yarn.maxAppAttempts" value="1"/>
           </definition>
-
         </changes>
       </component>
       <component name="SPARK2_JOBHISTORYSERVER">
@@ -723,6 +722,39 @@
                 value="{% if security_enabled %}
                   &#10;export SPARK_HISTORY_OPTS=&apos;-Dspark.ui.filters=org.apache.hadoop.security.authentication.server.AuthenticationFilter -Dspark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.params=&quot;type=kerberos,kerberos.principal={{spnego_principal}},kerberos.keytab={{spnego_keytab}}&quot; &apos;${SPARK_HISTORY_OPTS}
                   &#10;{% endif %}"/>
+          </definition>
+        </changes>
+      </component>
+      <component name="SPARK2_CLIENT">
+        <changes>
+          <definition xsi:type="configure" id="hdp_7_1_0_0_spark2_env">
+            <type>spark2-env</type>
+            <insert key="content" insert-type="append" newline-before="true" newline-after="false"
+                    value="# Add Hadoop lzo jar to the classpath (if found)
+                      &#10;if [ -z &quot;${HADOOP_VERSION}&quot; ]; then
+                      &#10; if [ `command -v hdp-select` ]; then
+                      &#10;   HADOOP_VERSION=`hdp-select status | grep hadoop-client | awk -F &quot; &quot; &apos;{print $3}&apos;`
+                      &#10; else
+                      &#10;   echo -e &quot;command hdp-select is not found, please manually set HADOOP_VERSION in spark-env.sh or current environment&quot; 1>&amp;2
+                      &#10;   exit 1
+                      &#10; fi
+                      &#10;fi
+                      &#10;
+                      &#10;HADOOP_LZO_JAR=
+                      &#10;HADOOP_LZO_DIR=&quot;/usr/hdp/${HADOOP_VERSION}/hadoop/lib&quot;
+                      &#10;num_jars=&quot;$(ls -1 &quot;$HADOOP_LZO_DIR&quot; | grep &quot;^hadoop-lzo.*${HADOOP_VERSION}\.jar$&quot; | wc -l)&quot;
+                      &#10;if [ &quot;$num_jars&quot; -eq &quot;0&quot; -a -z &quot;$HADOOP_LZO_JAR&quot; ]; then
+                      &#10; HADOOP_LZO_JAR=
+                      &#10;elif [ &quot;$num_jars&quot; -gt &quot;1&quot; ]; then
+                      &#10; echo &quot;Found multiple Hadoop lzo jars in $HADOOP_LZO_DIR:&quot; 1>&amp;2
+                      &#10; echo &quot;Please remove all but one jar.&quot; 1>&amp;2
+                      &#10; exit 1
+                      &#10;elif [ &quot;$num_jars&quot; -eq &quot;1&quot; ]; then
+                      &#10; LZO_JARS=&quot;$(ls -1 &quot;$HADOOP_LZO_DIR&quot; | grep &quot;^hadoop-lzo-.*${HADOOP_VERSION}\.jar$&quot; || true)&quot;
+                      &#10; HADOOP_LZO_JAR=&quot;${HADOOP_LZO_DIR}/${LZO_JARS}&quot;
+                      &#10;fi
+                      &#10;
+                      &#10;export SPARK_DIST_CLASSPATH=${SPARK_DIST_CLASSPATH}:${HADOOP_LZO_JAR}"/>
           </definition>
         </changes>
       </component>
