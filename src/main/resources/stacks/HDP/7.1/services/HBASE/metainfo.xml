@@ -20,7 +20,28 @@
   <services>
     <service>
       <name>HBASE</name>
-      <version>2.1.6</version>
+      <version>2.2.3</version>
+      <osSpecifics>
+        <osSpecific>
+          <osFamily>redhat7,amazonlinux2,redhat6,suse11,suse12</osFamily>
+          <packages>
+            <package>
+              <name>hbase_connectors_${stack_version}</name>
+            </package>
+          </packages>
+        </osSpecific>
+        <osSpecific>
+          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16,ubuntu18</osFamily>
+          <packages>
+            <package>
+              <name>hbase_connectors-${stack_version}</name>
+            </package>
+            <package>
+              <name>hbase-connectors-assembly-${stack_version}</name>
+            </package>
+          </packages>
+        </osSpecific>
+      </osSpecifics>
     </service>
   </services>
 </metainfo>
