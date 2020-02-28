@@ -89,6 +89,7 @@ version_for_stack_feature_checks = get_stack_feature_version(config)
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
 hadoop_lib_home = stack_select.get_hadoop_dir("lib")
+hadoop_home = stack_select.get_hadoop_dir("home")
 
 #spark_conf
 spark_conf_dir = format("{stack_root}/current/spark-client/conf")
