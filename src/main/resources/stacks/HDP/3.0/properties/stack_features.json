@@ -507,6 +507,11 @@
         "name": "oozie_delegated_hadoop_configs",
         "description": "CDP-DC Oozie Server gets a directory of copied hadoop configurations",
         "min_version": "7.1.0.0"
+      },
+      {
+        "name": "zeppelin_spark_jdbc_interpreter_support",
+        "description": "Remove Spark JDBC Interpreter support from Zeppelin since version 7.1",
+        "max_version": "7.0.0.99"
       }
     ]
   }

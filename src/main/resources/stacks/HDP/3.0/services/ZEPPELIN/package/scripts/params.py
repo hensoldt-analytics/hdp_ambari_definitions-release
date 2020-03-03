@@ -163,45 +163,53 @@ if 'hive_server_interactive_hosts' in master_configs and len(master_configs['hiv
     hive_zookeeper_quorum = config['configurations']['hive-site']['hive.zookeeper.quorum']
     hive_server2_support_dynamic_service_discovery = config['configurations']['hive-site']['hive.server2.support.dynamic.service.discovery']
 
-spark_thrift_server_hosts = None
-spark_hive_thrift_port = None
-spark_hive_principal = None
-hive_principal = None
-hive_transport_mode = None
+# e.g. 2.3
+stack_version_unformatted = config['clusterLevelParams']['stack_version']
 
-if 'hive-site' in config['configurations']:
-  if 'hive.server2.authentication.kerberos.principal' in config['configurations']['hive-site']:
-    hive_principal = config['configurations']['hive-site']['hive.server2.authentication.kerberos.principal']
-  if 'hive.server2.transport.mode' in config['configurations']['hive-site']:
-    hive_transport_mode = config['configurations']['hive-site']['hive.server2.transport.mode']
+# e.g. 2.3.0.0
+stack_version_formatted = format_stack_version(stack_version_unformatted)
+major_stack_version = get_major_version(stack_version_formatted)
 
-spark2_transport_mode = hive_transport_mode
-spark2_http_path = None
-spark2_ssl = False
-if 'spark2-hive-site-override' in config['configurations']:
-  if 'hive.server2.transport.mode' in config['configurations']['spark2-hive-site-override']:
-    spark2_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
+if stack_version_formatted and check_stack_feature(StackFeature.ZEPPELIN_SPARK_JDBC_INTERPRETER_SUPPORT, stack_version_formatted):
+  spark_thrift_server_hosts = None
+  spark_hive_thrift_port = None
+  spark_hive_principal = None
+  hive_principal = None
+  hive_transport_mode = None
 
-  if 'hive.server2.http.endpoint' in config['configurations']['spark2-hive-site-override']:
-    spark2_http_path = config['configurations']['spark2-hive-site-override']['hive.server2.http.endpoint']
+  if 'hive-site' in config['configurations']:
+    if 'hive.server2.authentication.kerberos.principal' in config['configurations']['hive-site']:
+      hive_principal = config['configurations']['hive-site']['hive.server2.authentication.kerberos.principal']
+    if 'hive.server2.transport.mode' in config['configurations']['hive-site']:
+      hive_transport_mode = config['configurations']['hive-site']['hive.server2.transport.mode']
 
-  if 'hive.server2.use.SSL' in config['configurations']['spark2-hive-site-override']:
-    spark2_ssl = default("configurations/spark2-hive-site-override/hive.server2.use.SSL", False)
+  spark2_transport_mode = hive_transport_mode
+  spark2_http_path = None
+  spark2_ssl = False
+  if 'spark2-hive-site-override' in config['configurations']:
+    if 'hive.server2.transport.mode' in config['configurations']['spark2-hive-site-override']:
+      spark2_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
 
-if 'spark_thriftserver_hosts' in master_configs and len(master_configs['spark_thriftserver_hosts']) != 0:
-  spark_thrift_server_hosts = str(master_configs['spark_thriftserver_hosts'][0])
-  if config['configurations']['spark-hive-site-override']:
-    spark_hive_thrift_port = config['configurations']['spark-hive-site-override']['hive.server2.thrift.port']
+    if 'hive.server2.http.endpoint' in config['configurations']['spark2-hive-site-override']:
+      spark2_http_path = config['configurations']['spark2-hive-site-override']['hive.server2.http.endpoint']
 
-spark2_thrift_server_hosts = None
-spark2_hive_thrift_port = None
-spark2_hive_principal = None
-if 'spark2_thriftserver_hosts' in master_configs and len(master_configs['spark2_thriftserver_hosts']) != 0:
-  spark2_thrift_server_hosts = str(master_configs['spark2_thriftserver_hosts'][0])
-  if config['configurations']['spark2-hive-site-override']:
-    spark2_hive_thrift_port = config['configurations']['spark2-hive-site-override']['hive.server2.thrift.port']
-    if 'hive.server2.authentication.kerberos.principal' in config['configurations']['spark2-hive-site-override']:
-      spark2_hive_principal = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.principal']
+    if 'hive.server2.use.SSL' in config['configurations']['spark2-hive-site-override']:
+      spark2_ssl = default("configurations/spark2-hive-site-override/hive.server2.use.SSL", False)
+
+  if 'spark_thriftserver_hosts' in master_configs and len(master_configs['spark_thriftserver_hosts']) != 0:
+    spark_thrift_server_hosts = str(master_configs['spark_thriftserver_hosts'][0])
+    if config['configurations']['spark-hive-site-override']:
+      spark_hive_thrift_port = config['configurations']['spark-hive-site-override']['hive.server2.thrift.port']
+
+  spark2_thrift_server_hosts = None
+  spark2_hive_thrift_port = None
+  spark2_hive_principal = None
+  if 'spark2_thriftserver_hosts' in master_configs and len(master_configs['spark2_thriftserver_hosts']) != 0:
+    spark2_thrift_server_hosts = str(master_configs['spark2_thriftserver_hosts'][0])
+    if config['configurations']['spark2-hive-site-override']:
+      spark2_hive_thrift_port = config['configurations']['spark2-hive-site-override']['hive.server2.thrift.port']
+      if 'hive.server2.authentication.kerberos.principal' in config['configurations']['spark2-hive-site-override']:
+        spark2_hive_principal = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.principal']
 
 
 # detect hbase details if installed
@@ -237,12 +245,6 @@ else:
 
 exclude_interpreter_autoconfig = default("/configurations/zeppelin-site/exclude.interpreter.autoconfig", None)
 
-# e.g. 2.3
-stack_version_unformatted = config['clusterLevelParams']['stack_version']
-
-# e.g. 2.3.0.0
-stack_version_formatted = format_stack_version(stack_version_unformatted)
-major_stack_version = get_major_version(stack_version_formatted)
 
 # e.g. 2.3.0.0-2130
 full_stack_version = default("/commandParams/version", None)

@@ -585,7 +585,9 @@ class Master(Script):
 
 
 
-        if params.spark2_thrift_server_hosts and 'spark2' not in jdbc_property_groups:
+        if params.stack_version_formatted and \
+                check_stack_feature(StackFeature.ZEPPELIN_SPARK_JDBC_INTERPRETER_SUPPORT, params.stack_version_formatted) and \
+                params.spark2_thrift_server_hosts and 'spark2' not in jdbc_property_groups:
           self.storePropertyToInterpreter(interpreter, 'spark2.driver', 'string', 'org.apache.spark-project.org.apache.hive.jdbc.HiveDriver')
           self.storePropertyToInterpreter(interpreter, 'spark2.user', 'string', 'hive')
           self.storePropertyToInterpreter(interpreter, 'spark2.password', 'string', '')
