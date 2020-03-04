@@ -328,6 +328,11 @@
       <execute-stage service="SPARK2" component="SPARK2_CLIENT" title="Add LZO lib to the classpath">
         <task xsi:type="configure" id="hdp_7_1_0_0_spark2_env"/>
       </execute-stage>
+
+      <!--HIVE-->
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Disable metastore strict table location check">
+        <task xsi:type="configure" id="hdp_7_1_disable_hive_metastore_strict_check" />
+      </execute-stage>
     </group>
 
 

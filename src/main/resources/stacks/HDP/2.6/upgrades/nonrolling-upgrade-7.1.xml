@@ -611,6 +611,10 @@
         <task xsi:type="configure" id="hdp_3_0_updating_ranger_hive_policy_rest_ssl_file" />
       </execute-stage>
 
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Disable metastore strict table location check">
+        <task xsi:type="configure" id="hdp_7_1_disable_hive_metastore_strict_check" />
+      </execute-stage>
+
       <!--TEZ-->
       <execute-stage service="TEZ" component="TEZ_CLIENT" title="Update Tez GC JVM args">
         <task xsi:type="configure" id="hdp_30_tez_gc_jvm_args" />
