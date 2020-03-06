@@ -40,6 +40,7 @@ from resource_management.libraries.resources.xml_config import XmlConfig
 from resource_management.libraries.functions.lzo_utils import install_lzo_if_needed
 from resource_management.libraries.script.script import Script
 from resource_management.libraries.functions.security_commons import update_credential_provider_path
+from resource_management.core.source import StaticFile
 from resource_management.core.resources.packaging import Package
 from resource_management.core.shell import as_user, as_sudo, call, checked_call
 from resource_management.core.exceptions import Fail
@@ -348,13 +349,11 @@ def oozie_server_specific(upgrade_type):
   if source_ext_zip_paths is not None:
     for source_ext_zip_path in source_ext_zip_paths:
       if os.path.isfile(source_ext_zip_path):
-        configure_cmds.append(('cp', source_ext_zip_path, params.oozie_libext_dir))
-        configure_cmds.append(('chown', format('{oozie_user}:{user_group}'), format('{oozie_libext_dir}/{ext_js_file}')))
-
-        Execute(configure_cmds,
-                not_if=no_op_test,
-                sudo=True,
-                )
+        File(format('{oozie_libext_dir}/{ext_js_file}'),
+             owner = params.oozie_user,
+             group = params.user_group,
+             content = StaticFile(source_ext_zip_path)
+        )
         break
 
 
@@ -377,7 +376,7 @@ def oozie_server_specific(upgrade_type):
       not_if  = no_op_test)
 
   if is_oozie5_installed():
-    Directory([params.oozie_embedded_webapp_dir, params.oozie_embedded_webapp_libs_dir],
+    Directory([params.oozie_embedded_webapp_dir, params.oozie_embedded_webapp_libs_dir, params.oozie_embedded_webapp_extjs_dir],
         owner = params.oozie_user,
         group = params.user_group
     )
