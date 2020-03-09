@@ -36,9 +36,6 @@
             <package>
               <name>hbase_connectors-${stack_version}</name>
             </package>
-            <package>
-              <name>hbase-connectors-assembly-${stack_version}</name>
-            </package>
           </packages>
         </osSpecific>
       </osSpecifics>
