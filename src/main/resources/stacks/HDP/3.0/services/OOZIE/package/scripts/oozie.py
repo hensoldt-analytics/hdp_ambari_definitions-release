@@ -376,7 +376,7 @@ def oozie_server_specific(upgrade_type):
       not_if  = no_op_test)
 
   if is_oozie5_installed():
-    Directory([params.oozie_embedded_webapp_dir, params.oozie_embedded_webapp_libs_dir, params.oozie_embedded_webapp_extjs_dir],
+    Directory([params.oozie_embedded_webapp_dir, params.oozie_embedded_webapp_libs_dir],
         owner = params.oozie_user,
         group = params.user_group
     )
