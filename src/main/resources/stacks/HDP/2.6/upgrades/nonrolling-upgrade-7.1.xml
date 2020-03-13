@@ -541,6 +541,12 @@
         </task>
       </execute-stage>
 
+      <execute-stage service="YARN" title="Fix llap queue capacity">
+        <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixLlapCapacityScheduler">
+          <summary>Fix llap queue capacity.</summary>
+        </task>
+      </execute-stage>
+
       <execute-stage>
         <task xsi:type="server_action"
               class="org.apache.ambari.server.serveraction.upgrades.FixCapacitySchedulerOrderingPolicy">

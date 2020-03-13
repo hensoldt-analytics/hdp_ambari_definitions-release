@@ -301,6 +301,12 @@
         </task>
       </execute-stage>
 
+      <execute-stage service="YARN" title="Fix llap queue capacity">
+        <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.FixLlapCapacityScheduler">
+          <summary>Fix llap queue capacity.</summary>
+        </task>
+      </execute-stage>
+
       <execute-stage service="KAFKA" component="KAFKA_BROKER" title="Patch security configs for Kafka">
         <task xsi:type="configure" id="hdp_7_1_kafka_kerberos_patch">
           <summary>Patch security configs for Kafka.</summary>
