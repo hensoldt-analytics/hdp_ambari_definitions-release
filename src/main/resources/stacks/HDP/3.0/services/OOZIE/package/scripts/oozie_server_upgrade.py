@@ -117,10 +117,12 @@ class OozieUpgrade(Script):
       for source_ext_zip_path in source_ext_zip_paths:
         if os.path.isfile(source_ext_zip_path):
           found_at_least_one_oozie_ext_file = True
-          Logger.info("Copying {0} to {1}".format(source_ext_zip_path, params.oozie_libext_dir))
-          Execute(("cp", source_ext_zip_path, params.oozie_libext_dir), sudo=True)
-          Execute(("chown", format("{oozie_user}:{user_group}"), oozie_ext_zip_target_path), sudo=True)
-          File(oozie_ext_zip_target_path, mode=0644)
+          File(format('{oozie_libext_dir}/{ext_js_file}'),
+               owner=params.oozie_user,
+               group=params.user_group,
+               mode=0644,
+               content=StaticFile(source_ext_zip_path)
+               )
           break
 
     # ExtJS was expected to the be on the system, but was not found
