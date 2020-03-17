@@ -1,0 +1,126 @@
+{#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+{
+    "logging": {
+        "type": "external"
+    },
+    "jerseyClient":{
+    
+    },
+    "dasConf": {
+        "application.name": "das-webapp",
+        "application.version":"${build_version}",
+        "das.jobs.dir":"/user/{{data_analytics_studio_user}}/jobs",
+        "use.hive.interactive.mode":"true"
+    },
+    "database": {
+        "driverClass": "org.postgresql.Driver",
+        "url": "{{data_analytics_studio_database_jdbc_url}}",
+        "user": "{{data_analytics_studio_database_username}}",
+        "password": "${data_analytics_studio_database_password}",
+        "properties": {
+        }
+    },
+    "server": {
+        "requestLog": {
+            "type": "external"
+        },
+        "applicationConnectors": [
+            {
+              {% if data_analytics_studio_ssl_enabled %}
+                "keyStorePath": "{{data_analytics_studio_webapp_keystore_file}}",
+                "keyStorePassword": "${das_webapp_keystore_password}",
+                {# "validateCerts": true, #}
+              {% endif %}
+                "type": "{{data_analytics_studio_webapp_server_protocol}}",
+                "port": {{data_analytics_studio_webapp_server_port}},
+                "useForwardedHeaders": false
+            }
+        ],
+        "adminConnectors": [
+            {
+              {% if data_analytics_studio_ssl_enabled %}
+                "keyStorePath": "{{data_analytics_studio_webapp_keystore_file}}",
+                "keyStorePassword": "${das_webapp_keystore_password}",
+                {# "validateCerts": true, #}
+              {% endif %}
+                "type": "{{data_analytics_studio_webapp_server_protocol}}",
+                "port": {{data_analytics_studio_webapp_admin_port}},
+                "useForwardedHeaders": false
+            }
+        ]
+    },
+    "akka": {
+        "properties": {
+            "akka.loglevel": "INFO",
+            "akka.stdout-loglevel": "INFO",
+            "akka.actor.jdbc-connector-dispatcher.fork-join-executor.parallelism-factor": 5.0,
+            "akka.actor.result-dispatcher.fork-join-executor.parallelism-factor": 10.0,
+            "akka.actor.misc-dispatcher.fork-join-executor.parallelism-factor": 5.0
+        }
+    },
+    "session":{
+        "sessionTimeoutInSeconds": {{data_analytics_studio_webapp_session_timeout}}
+      },
+    "gaConfiguration": {
+        "enabled": true,
+        "identifier": "UA-22950817-34"
+    },
+    "serviceConfigDirectory" : "/etc/das/conf/",
+    "environment": "production",
+    "smartsenseId": "das-id",
+
+    "hiveSessionParams": "${das_hive_session_params}",
+    "credentialProviderPath": "{{das_credential_provider_paths}}",
+    "passwordAliases": ["data_analytics_studio_database_password","das_webapp_keystore_password","das_hive_session_params"],
+    "jdbcPublicEndpoint": "",
+    "authConfig": {
+        "appUserName": "{{data_analytics_studio_user}}",
+        "adminUsers": "{{data_analytics_studio_admin_users}}",
+        "adminGroups": "{{data_analytics_studio_admin_groups}}",
+        "serviceAuth": "{{data_analytics_studio_service_authentication}}",
+        "userAuth": "{{data_analytics_studio_user_authentication}}",
+        "serviceKeytab": "{{data_analytics_studio_webapp_service_keytab}}",
+        "servicePrincipal": "{{data_analytics_studio_webapp_service_principal}}",
+        "knoxSSOUrl": "{{data_analytics_studio_webapp_knox_sso_url}}",
+        "knoxSSOutUrl": "{{data_analytics_studio_webapp_knox_ssout_url}}",
+        "knoxPublicKey": "{{data_analytics_studio_webapp_knox_publickey}}",
+        "knoxCookieName": "{{data_analytics_studio_webapp_knox_cookiename}}",
+        "knoxUrlParamName": "{{data_analytics_studio_webapp_knox_url_query_param}}",
+        "knoxUserAgent": "{{data_analytics_studio_webapp_knox_useragent}}",
+        "spnegoPrincipal": "{{data_analytics_studio_webapp_spnego_principal}}",
+        "spnegoKeytab": "{{data_analytics_studio_webapp_spnego_keytab}}",
+        "nameRules": "{{data_analytics_studio_webapp_spnego_name_rules}}",
+        "knoxUser": "{{data_analytics_studio_webapp_knox_user}}",
+        "doAsParamName": "{{data_analytics_studio_webapp_doas_param_name}}",
+        "ldapUrl": "{{das_webapp_ldap_url}}",
+        "ldapGuidKey": "{{das_webapp_ldap_guid_key}}",
+        "ldapGroupClassKey": "{{das_webapp_ldap_group_class_key}}",
+        "ldapGroupMemebershipKey": "{{das_webapp_ldap_group_membership_key}}",
+        "ldapUserMemebershipKey": "{{das_webapp_ldap_user_membership_key}}",
+        "ldapBasedn": "{{das_webapp_ldap_basedn}}",
+        "ldapDomain": "{{das_webapp_ldap_domain}}",
+        "ldapUserDNPattern": "{{das_webapp_ldap_user_dn_pattern}}",
+        "ldapGroupDNPattern": "{{das_webapp_ldap_group_dn_pattern}}",
+        "ldapCustomLdapQuery": "{{das_webapp_ldap_custom_ldap_query}}",
+        "ldapGroupFilter": "{{das_webapp_ldap_group_filter}}",
+        "ldapUserFilter": "{{das_webapp_ldap_user_filter}}",
+        "authorizationMode": "{{das_webapp_authorization_mode}}"
+
+    }
+}

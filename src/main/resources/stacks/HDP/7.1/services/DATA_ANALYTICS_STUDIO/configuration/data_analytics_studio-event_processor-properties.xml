@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration supports_adding_forbidden="true">
+  <property>
+    <name>data_analytics_studio_event_processor_server_protocol</name>
+    <value>http</value>
+    <description>Data Analytics Studio Event Processor server protocol (http or https - only http supported in beta)</description>
+    <display-name>Data Analytics Studio Event Processor server protocol</display-name>
+    <on-ambari-upgrade add="true"/>
+    <value-attributes>
+      <read-only>true</read-only>
+      <overridable>false</overridable>
+    </value-attributes>
+  </property>
+  <property>
+    <name>data_analytics_studio_event_processor_server_port</name>
+    <value>30900</value>
+    <description>Data Analytics Studio Event Processor server port</description>
+    <display-name>Data Analytics Studio Event Processor server port</display-name>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>data_analytics_studio_event_processor_admin_server_port</name>
+    <value>30901</value>
+    <description>Data Analytics Studio Event Processor admin server port</description>
+    <display-name>Data Analytics Studio Event Processor admin server port</display-name>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>content</name>
+    <display-name>Data Analytics Studio Event Processor config file template</display-name>
+    <description>This is the jinja template for das-event-processor.json file</description>
+    <value/>
+    <property-type>VALUE_FROM_PROPERTY_FILE</property-type>
+    <value-attributes>
+      <property-file-name>das-event-processor.json.j2</property-file-name>
+      <property-file-type>text</property-file-type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>das_event_processor_log4j2_yaml</name>
+    <display-name>DAS Event Processor log4j2 yaml config file template</display-name>
+    <description>This is the jinja template for das-event-processor-log4j2.yml file</description>
+    <value/>
+    <property-type>VALUE_FROM_PROPERTY_FILE</property-type>
+    <value-attributes>
+      <property-file-name>das-event-processor-log4j2.yml.j2</property-file-name>
+      <property-file-type>text</property-file-type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+</configuration>

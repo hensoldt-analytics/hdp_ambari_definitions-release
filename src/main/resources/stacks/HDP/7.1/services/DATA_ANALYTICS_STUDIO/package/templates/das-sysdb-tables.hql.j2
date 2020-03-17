@@ -1,0 +1,115 @@
+{#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+drop table sys.query_data;
+drop table sys.dag_data;
+drop table sys.das_hive_query;
+
+create external table if not exists sys.query_data (
+	eventType string,
+	hiveQueryId string,
+	`timestamp` BIGINT,
+	executionMode string,
+	requestUser string,
+	queue string,
+	`user` string,
+	operationId string,
+	tablesWritten string,
+	tablesRead string,
+	otherInfo map<string, string>
+	)
+partitioned by (`date` string)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.protobuf.ProtobufMessageSerDe'
+WITH SERDEPROPERTIES ('proto.class'='org.apache.hadoop.hive.ql.hooks.proto.HiveHookEvents$HiveHookEventProto', 'proto.maptypes'='org.apache.hadoop.hive.ql.hooks.proto.MapFieldEntry')
+STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.protobuf.ProtobufMessageInputFormat'
+   OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveNullValueSequenceFileOutputFormat'
+LOCATION '{{data_analytics_studio_event_processor_hive_base_dir}}'
+TBLPROPERTIES ('proto.class'='org.apache.hadoop.hive.ql.hooks.proto.HiveHookEvents$HiveHookEventProto');
+
+create external table if not exists sys.dag_data (
+    event_type string,
+    event_time bigint,
+    `user` string,
+    app_id string,
+    app_attempt_id string,
+    dag_id string,
+    vertex_id string,
+    task_id string,
+    task_attempt_id string,
+    event_data map<string, string>
+  )
+partitioned by (`date` string)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.protobuf.ProtobufMessageSerDe'
+WITH SERDEPROPERTIES ('proto.class'='org.apache.tez.dag.history.logging.proto.HistoryLoggerProtos$HistoryEventProto', 'proto.maptypes'='KVPair')
+STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.protobuf.ProtobufMessageInputFormat'
+   OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveNullValueSequenceFileOutputFormat'
+LOCATION '{{data_analytics_studio_event_processor_tez_base_dir}}/dag_data/'
+TBLPROPERTIES ('proto.class'='org.apache.tez.dag.history.logging.proto.HistoryLoggerProtos$HistoryEventProto');
+
+MSCK REPAIR TABLE sys.query_data;
+MSCK REPAIR TABLE sys.dag_data;
+
+
+create external table if not exists sys.das_hive_query
+(
+  id int,
+  query_id varchar(512),
+  query string,
+  start_time bigint,
+  end_time bigint,
+  elapsed_time bigint,
+  status varchar(32),
+  queue_name varchar(767),
+  user_id varchar(256),
+  request_user varchar(256),
+  cpu_time bigint,
+  physical_memory bigint,
+  virtual_memory bigint,
+  data_read bigint,
+  data_written bigint,
+  operation_id varchar(512),
+  client_ip_address varchar(64),
+  hive_instance_address varchar(512),
+  hive_instance_type varchar(512),
+  session_id varchar(512),
+  log_id varchar(512),
+  thread_id varchar(512),
+  execution_mode varchar(16),
+  tables_read string,
+  tables_written string,
+  domain_id varchar(512),
+  llap_app_id varchar(512),
+  used_cbo varchar(16),
+  processed boolean,
+  created_at timestamp,
+  databases_used string,
+  first_task_started_time bigint,
+  waiting_time bigint,
+  resource_utilization bigint
+)
+stored by 'org.apache.hive.storage.jdbc.JdbcStorageHandler'
+TBLPROPERTIES(
+"hive.sql.database.type" = "POSTGRES",
+"hive.sql.jdbc.driver" = "org.postgresql.Driver",
+"hive.sql.jdbc.url" = "{{data_analytics_studio_database_jdbc_url}}",
+"hive.sql.dbcp.username" = "{{data_analytics_studio_database_username}}",
+"hive.sql.dbcp.password.keystore" = "jceks://hdfs/{{das_db_password_jceks_hdfs_location}}",
+"hive.sql.dbcp.password.key" = "data_analytics_studio_database_password",
+"hive.sql.query" = "SELECT id ,query_id ,query ,start_time ,end_time ,elapsed_time ,status ,queue_name,user_id ,request_user ,cpu_time ,physical_memory ,virtual_memory ,data_read ,data_written ,operation_id ,client_ip_address ,hive_instance_address ,hive_instance_type,session_id ,log_id ,thread_id ,execution_mode ,tables_read ,tables_written ,domain_id ,llap_app_id ,used_cbo ,processed ,created_at ,databases_used ,first_task_started_time ,waiting_time ,resource_utilization  FROM das.hive_query"
+);
+
+

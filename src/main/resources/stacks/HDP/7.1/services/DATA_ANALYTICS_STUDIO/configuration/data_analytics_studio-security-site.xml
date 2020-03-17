@@ -1,0 +1,332 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>admin_users</name>
+    <value></value>
+    <description>List of admin users</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>admin_groups</name>
+    <value></value>
+    <description>List of admin groups</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>user_authentication</name>
+    <value>NONE</value>
+    <description>User Authentication : NONE, KNOX_SSO, KNOX_PROXY, LDAP, SPNEGO</description>
+    <value-attributes>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>NONE</value>
+          <label>None</label>
+        </entry>
+        <entry>
+          <value>KNOX_SSO</value>
+          <label>Knox SSO</label>
+        </entry>
+        <entry>
+          <value>LDAP</value>
+          <label>Ldap</label>
+        </entry>
+        <entry>
+          <value>KNOX_PROXY</value>
+          <label>Knox Proxy</label>
+        </entry>
+        <entry>
+          <value>SPNEGO</value>
+          <label>Knox SSO</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+  </property>
+  <property>
+    <name>knox_useragent</name>
+    <value>Mozilla,Chrome</value>
+    <description>Comma seperated browser agent</description>
+  </property>
+  <property>
+    <name>knox_sso_url</name>
+    <value></value>
+    <description>Login URL. Example: https://KNOX_HOST:KNOX_PORT/gateway/knoxsso/api/v1/websso</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>gateway-site</type>
+        <name>gateway.port</name>
+      </property>
+    </depends-on>
+  </property>
+  <property>
+    <name>knox_ssout_url</name>
+    <value></value>
+    <description>Logout URL. Example: https://KNOX_HOST:KNOX_PORT/gateway/knoxssout/api/v1/webssout</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>gateway-site</type>
+        <name>gateway.port</name>
+      </property>
+    </depends-on>
+  </property>
+  <property>
+    <name>knox_publickey</name>
+    <value></value>
+    <description></description>
+    <value-attributes>
+      <type>multiLine</type>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>knox_cookiename</name>
+    <value>hadoop-jwt</value>
+    <description>Parameter name for SSO cookie</description>
+  </property>
+  <property>
+    <name>knox_url_query_param</name>
+    <value>originalUrl</value>
+    <description>Query name for appending original url in SSO url</description>
+  </property>
+  <property>
+    <name>knox_useragent</name>
+    <value>Mozilla,Chrome</value>
+    <description>Comma seperated browser agent</description>
+  </property>
+  <property>
+    <name>ldap_url</name>
+    <value></value>
+    <description>Ldap url for authentication</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>ldap_basedn</name>
+    <value></value>
+    <description>Base domain name.</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>ldap_domain</name>
+    <value></value>
+    <description>Base domain name.</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>ldap_guid_key</name>
+    <value>uid</value>
+    <description>
+      LDAP attribute name whose values are unique in this LDAP server.
+      For example: uid or CN.
+    </description>
+  </property>
+  <property>
+    <name>ldap_user_membership_key</name>
+    <value></value>
+    <description>
+      LDAP attribute name on the user object that contains groups of which the user is
+      a direct member, except for the primary group, which is represented by the
+      primaryGroupId.
+      For example: memberOf
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>ldap_user_filter</name>
+    <value></value>
+    <description>
+      This is a comma separated list of usernames to grant access to. The Atn provider grants access if the user being
+      authenticated is part of this list, and denies access otherwise.
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>ldap_user_dn_pattern</name>
+    <value></value>
+    <description>
+      This value represents a pattern for “distinguishedName” (DN) for users in the directory. This value could be a single DN if the LDAP User entities are co-located within a single root or could be a colon separated list of all DN patterns if the users are scattered across different trees/forests in the directory.
+      Each DN pattern can contain a “%s” in it that will be substituted with the username (from the user filter) by the provider for user search queries.
+      For Example:
+      for single DN:
+      CN=%s,CN=Users,DC=apache,DC=org
+
+      for two DNs:
+      CN=%s,OU=Users,DC=apache,DC=org:uid=%s,CN=UnixUsers,DC=apache,DC=org
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+
+  <property>
+    <name>ldap_group_class_key</name>
+    <value></value>
+    <description>LDAP objectClass each of the groups implements in LDAP. example: objectClass: group</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>ldap_group_membership_key</name>
+    <value></value>
+    <description>
+      LDAP attribute name on the group object that contains the list of distinguished names
+      for the user, group, and contact objects that are members of the group.
+      For example: member, uniqueMember or memberUid
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+
+  <property>
+    <name>ldap_group_filter</name>
+    <value></value>
+    <description>
+      This value represents the group name filter that is to be enforced by the LDAPAtnProvider. All individual groups are represented using a comma separated list. The user MUST belong to one or more of these groups for the authentication request to succeed.
+      For Example : group1,group2
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>ldap_group_dn_pattern</name>
+    <value></value>
+    <description>
+      This value represents a pattern for “distinguishedName” (DN) for groups in the directory. This value could be a single DN if the LDAP Group entities are co-located or could be a colon separated list of all DN patterns if the groups are scattered across different trees.
+      Each DN pattern can contain a “%s” in it that will be substituted with the group name (from the group filter) by the provider for group search queries.
+      For Example:
+      for Single DN :
+      CN=%s,OU=Groups,DC=apache,DC=org
+
+      for two DNs:
+      CN=%s,OU=Groups,DC=apache,DC=org:uid=%s,CN=Users,DC=apache,DC=org
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>ldap_custom_ldap_query</name>
+    <value></value>
+    <description>
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+
+  <property>
+    <name>ssl_enabled</name>
+    <value>false</value>
+    <description>Use ssl</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+  </property>
+  <property>
+    <name>webapp_keystore_file</name>
+    <value></value>
+    <description>Keystore with ssl certificate used by webapp</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>das_webapp_keystore_password</name>
+    <value> </value>
+    <property-type>PASSWORD</property-type>
+    <description>Webapp keystore password</description>
+    <value-attributes>
+      <type>password</type>
+      <overridable>false</overridable>
+      <keystore>true</keystore>
+    </value-attributes>
+  </property>
+  <property>
+    <name>event_processor_keystore_file</name>
+    <value></value>
+    <description>Keystore with ssl certificate used by event processor</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>das_event_processor_keystore_password</name>
+    <value> </value>
+    <property-type>PASSWORD</property-type>
+    <description>Event processor keystore password</description>
+    <value-attributes>
+      <type>password</type>
+      <overridable>false</overridable>
+      <keystore>true</keystore>
+    </value-attributes>
+  </property>
+
+  <!-- spnego properties -->
+  <property>
+    <name>das_spnego_name_rules</name>
+    <value></value>
+    <description>Auth to local mapping name rules</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+
+  <!-- Knox proxy config properties -->
+  <property>
+    <name>das_knox_user</name>
+    <value></value>
+    <description>The knox service user name.</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+  <property>
+    <name>das_knox_doas_param_name</name>
+    <value>doAs</value>
+    <description>The doas param name</description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+
+</configuration>

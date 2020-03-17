@@ -1,0 +1,105 @@
+{#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+{
+    "logging": {
+        "type": "external"
+    },
+    "jerseyClient": {
+      "timeout": "240s",
+      "connectionTimeout": "2s"
+    },
+    "database": {
+        "driverClass": "org.postgresql.Driver",
+        "url": "{{data_analytics_studio_database_jdbc_url}}",
+        "user": "{{data_analytics_studio_database_username}}",
+        "password": "${data_analytics_studio_database_password}",
+        "properties": {
+        }
+    },
+    "server": {
+        "requestLog": {
+            "type": "external"
+        },
+        "applicationConnectors": [
+            {
+              {% if data_analytics_studio_ssl_enabled %}
+                "keyStorePath": "{{data_analytics_studio_event_processor_keystore_file}}",
+                "keyStorePassword": "${das_event_processor_keystore_password}",
+                {# "validateCerts": true, #}
+              {% endif %}
+                "type": "{{data_analytics_studio_event_processor_server_protocol}}",
+                "port": {{data_analytics_studio_event_processor_server_port}},
+                "useForwardedHeaders": false
+            }
+        ],
+        "adminConnectors": [
+            {
+              {% if data_analytics_studio_ssl_enabled %}
+                "keyStorePath": "{{data_analytics_studio_event_processor_keystore_file}}",
+                "keyStorePassword": "${das_event_processor_keystore_password}",
+                {# "validateCerts": true, #}
+              {% endif %}
+                "type": "{{data_analytics_studio_event_processor_server_protocol}}",
+                "port": {{data_analytics_studio_event_processor_admin_server_port}},
+                "useForwardedHeaders": false
+            }
+        ]
+    },
+    "akka": {
+        "properties": {
+            "akka.loglevel": "INFO",
+            "akka.stdout-loglevel": "INFO",
+            "akka.loggers.0": "akka.event.slf4j.Slf4jLogger"
+        }
+    },
+    "authConfig": {
+        "serviceAuth": "{{data_analytics_studio_service_authentication}}",
+        "appUserName": "{{data_analytics_studio_user}}",
+        "serviceKeytab": "{{data_analytics_studio_event_processor_service_keytab}}",
+        "servicePrincipal": "{{data_analytics_studio_event_processor_service_principal}}"
+    },
+    "event-processing": {
+        "hive.hook.proto.base-directory": "{{data_analytics_studio_event_processor_hive_base_dir}}",
+        "tez.history.logging.proto-base-dir": "{{data_analytics_studio_event_processor_tez_base_dir}}",
+        "meta.info.sync.service.delay.millis": 5000,
+        "actor.initialization.delay.millis": 20000,
+        "close.folder.delay.millis": 600000,
+        "reread.event.max.retries": -1,
+        "reporting.scheduler.initial.delay.millis": 30000,
+        "reporting.scheduler.interval.delay.millis": 300000
+    },
+    "dasConf": {
+        "application.name": "das-webapp",
+        "application.version":"${build_version}",
+        "das.jobs.dir":"/user/{{data_analytics_studio_user}}/jobs",
+        "use.hive.interactive.mode":"true"
+    },
+    "flyway": {
+        "schemas": ["das"],
+        "locations": [
+            "db/migrate/common", "db/migrate/prod"
+        ]
+    },
+    "hiveSessionParams": "${das_hive_session_params}",
+    "credentialProviderPath": "{{das_credential_provider_paths}}",
+    "passwordAliases": ["data_analytics_studio_database_password","das_event_processor_keystore_password","das_hive_session_params"],
+
+    "serviceConfigDirectory": "/etc/das/conf/",
+    "environment": "production",
+    "useEmbeddedHive": false
+}
