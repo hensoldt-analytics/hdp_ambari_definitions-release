@@ -19,6 +19,7 @@ limitations under the License.
 """
 
 import os
+from resource_management.libraries.functions.default import default
 
 OK_MESSAGE = "OK - Sys DB and Information Schema created"
 CRITICAL_MESSAGE = "Sys DB and Information Schema not created yet"
@@ -39,12 +40,14 @@ def execute(configurations={}, parameters={}, host_name=None):
   parameters (dictionary): a mapping of script parameter key to value
   host_name (string): the name of this host where the alert is running
   """
-  
-  if os.path.isfile("/etc/hive/sys.db.created"):
-    result_code = 'OK'
-    label = OK_MESSAGE
-  else:
+
+  host_sys_prepped = default("/ambariLevelParams/host_sys_prepped", False)
+
+  if not host_sys_prepped and not os.path.isfile("/etc/hive/sys.db.created"):
     result_code = 'CRITICAL'
     label = CRITICAL_MESSAGE
+  else:
+    result_code = 'OK'
+    label = OK_MESSAGE
 
   return (result_code, [label])
