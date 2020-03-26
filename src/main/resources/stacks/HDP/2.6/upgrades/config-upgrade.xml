@@ -868,6 +868,10 @@
             <type>oozie-site</type>
             <set key="oozie.service.HadoopAccessorService.hadoop.configurations" value="*={{conf_dir}}/hadoop-conf" />
           </definition>
+          <definition xsi:type="configure" id="hdp_7_1_update_oozie_credentials_credentialclasses_config">
+            <type>oozie-site</type>
+            <replace key="oozie.credentials.credentialclasses" find="HiveCredentials" replace-with="HCatCredentials" />
+          </definition>
         </changes>
       </component>
     </service>

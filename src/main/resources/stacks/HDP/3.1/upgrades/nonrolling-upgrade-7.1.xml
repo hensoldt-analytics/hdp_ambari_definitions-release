@@ -330,6 +330,10 @@
         <task xsi:type="configure" id="hdp_7_1_update_oozie_hadoop_accessor_service_config"/>
       </execute-stage>
 
+      <execute-stage service="OOZIE" component="OOZIE_SERVER" title="Upgrading Oozie site configuration">
+        <task xsi:type="configure" id="hdp_7_1_update_oozie_credentials_credentialclasses_config"/>
+      </execute-stage>
+
       <!--SPARK2-->
       <execute-stage service="SPARK2" component="SPARK2_CLIENT" title="Add LZO lib to the classpath">
         <task xsi:type="configure" id="hdp_7_1_0_0_spark2_env"/>
