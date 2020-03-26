@@ -1047,7 +1047,8 @@ class HiveValidator(service_advisor.ServiceAdvisor):
     current_selected_queue_for_llap_cap = None
     for key in cap_sched_keys:
       # Expected capacity prop key is of form : "yarn.scheduler.capacity.<one or more queues in path separated by ".'>.[llap_daemon_selected_queue_name].capacity'
-      if key.endswith(llap_daemon_selected_queue_name+".capacity") and key.startswith("yarn.scheduler.capacity.root"):
+      if key.endswith(llap_daemon_selected_queue_name+".capacity") and key.startswith("yarn.scheduler.capacity.root") \
+      and not "accessible-node-labels" in key:
         self.logger.info("DBG: Selected queue name as: " + key)
         llap_selected_queue_cap_key = key
         break;
