@@ -193,7 +193,9 @@ class HiveServerInteractive(Script):
       code, output, error = shell.call(stop_cmd, user=params.hive_user, stderr=subprocess.PIPE, logoutput=True)
       if code == 0:
         Logger.info(format("Stopped {params.llap_app_name} application on YARN Service successfully"))
-      elif code in [1, 56] and ((output and "File does not exist" in output) or (error and "File does not exist" in error)):
+      elif code in [1, 56] and ((output and "File does not exist" in output) or (error and "File does not exist" in error)
+                                (output and "The specified path does not exist" in output) or
+                                (error and "The specified path does not exist" in error)):
         Logger.info(format("Application {params.llap_app_name} was already stopped on YARN Service"))
       else:
         raise Fail(format("Could not stop application {params.llap_app_name} on YARN Service. {error}\n{output}"))
