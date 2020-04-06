@@ -103,17 +103,10 @@ def spark_service(name, upgrade_type=None, action=None):
         if params.sac_enabled and params.security_enabled:
           os.remove(os.path.join(source_dirs[0], os.path.basename(params.atlas_kafka_keytab)))
 
-      # create & copy spark2-hdp-hive-archive.tar.gz to hdfs
-      if not params.sysprep_skip_copy_tarballs_hdfs:
-        tmp_archive_file=get_tarball_paths("spark2hive")[1]
-        if params.stack_version_formatted and check_stack_feature(StackFeature.SPARK_STANDALONE_HIVE_METASTORE_JARS, params.stack_version_formatted):
-          if params.spark_hive_metastore_jars and params.spark_hive_metastore_jars.endswith("*"):
-            source_dirs = [params.spark_hive_metastore_jars[:-1]]
-            make_tarfile(tmp_archive_file, source_dirs)
-          else:
-            metastore_jars = params.spark_hive_metastore_jars.split(",")
-            make_tarfile(tmp_archive_file, metastore_jars)
-        else:
+      if params.stack_version_formatted and not check_stack_feature(StackFeature.SPARK_REMOVE_HIVE_METASTORE_JARS, params.stack_version_formatted):
+        # create & copy spark2-hdp-hive-archive.tar.gz to hdfs
+        if not params.sysprep_skip_copy_tarballs_hdfs:
+          tmp_archive_file=get_tarball_paths("spark2hive")[1]
           source_dirs = [params.spark_home+"/standalone-metastore"]
           make_tarfile(tmp_archive_file, source_dirs)
 

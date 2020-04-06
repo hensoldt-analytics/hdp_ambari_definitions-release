@@ -20,8 +20,20 @@
 -->
 <configuration supports_final="true">
   <property>
+    <name>spark.sql.hive.metastore.version</name>
+    <value />
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property
+  <property>
     <name>spark.sql.hive.metastore.jars</name>
-    <value>/usr/hdp/current/hive-client/lib/*</value>
+    <value />
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>

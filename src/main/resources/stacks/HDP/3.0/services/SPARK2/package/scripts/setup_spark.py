@@ -102,6 +102,10 @@ def setup_spark(env, type, upgrade_type = None, action = None):
   if not params.spark_warehouse_dir:
       spark2_defaults.pop("spark.sql.warehouse.dir")
 
+  if params.stack_version_formatted and check_stack_feature(StackFeature.SPARK_REMOVE_HIVE_METASTORE_JARS, params.stack_version_formatted):
+    spark2_defaults.pop("spark.sql.hive.metastore.jars")
+    spark2_defaults.pop("spark.sql.hive.metastore.version")
+
   PropertiesFile(format("{spark_conf}/spark-defaults.conf"),
     properties = spark2_defaults,
     key_value_delimiter = " ",
@@ -152,6 +156,10 @@ def setup_spark(env, type, upgrade_type = None, action = None):
 
     if not spark2_thrift_sparkconf.get("spark.sql.warehouse.dir", "x"):
         spark2_thrift_sparkconf.pop("spark.sql.warehouse.dir")
+
+    if params.stack_version_formatted and check_stack_feature(StackFeature.SPARK_REMOVE_HIVE_METASTORE_JARS, params.stack_version_formatted):
+      spark2_thrift_sparkconf.pop("spark.sql.hive.metastore.jars")
+      spark2_thrift_sparkconf.pop("spark.sql.hive.metastore.version")
 
     PropertiesFile(params.spark_thrift_server_conf_file,
       properties = spark2_thrift_sparkconf,

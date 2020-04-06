@@ -129,6 +129,20 @@
                       &#10;
                       &#10;export SPARK_DIST_CLASSPATH=${SPARK_DIST_CLASSPATH}:${HADOOP_LZO_JAR}"/>
           </definition>
+          <definition xsi:type="configure" id="hdp_7_1_0_0_remove_hive_metastore">
+            <type>spark2-defaults</type>
+            <transfer operation="delete" delete-key="spark.sql.hive.metastore.version" />
+            <transfer operation="delete" delete-key="spark.sql.hive.metastore.jars" />
+          </definition>
+        </changes>
+      </component>
+      <component name="SPARK2_THRIFTSERVER">
+        <changes>
+          <definition xsi:type="configure" id="hdp_7_1_0_0_remove_hive_metastore_thrift">
+            <type>spark2-thrift-sparkconf</type>
+            <transfer operation="delete" delete-key="spark.sql.hive.metastore.version" />
+            <transfer operation="delete" delete-key="spark.sql.hive.metastore.jars" />
+          </definition>
         </changes>
       </component>
     </service>
