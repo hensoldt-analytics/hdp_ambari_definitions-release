@@ -1040,6 +1040,16 @@
       </priority>
     </group>
 
+    <group xsi:type="cluster" name="MOVE_HIVE_TABLES" title="Move Hive Tables">
+      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Move Hive Tables">
+        <task xsi:type="execute" hosts="any" timeout-config="upgrade.parameter.move.hive.tables.timeout">
+          <script>scripts/post_upgrade.py</script>
+          <function>move_tables</function>
+        </task>
+      </execute-stage>
+    </group>
+
+
     <group xsi:type="restart" name="HIVE_METASTORE" title="Hive Metastore">
       <service-check>false</service-check>
       <skippable>true</skippable>
@@ -1050,15 +1060,6 @@
       <service name="HIVE">
         <component>HIVE_METASTORE</component>
       </service>
-    </group>
-
-    <group xsi:type="cluster" name="MOVE_HIVE_TABLES" title="Move Hive Tables">
-      <execute-stage service="HIVE" component="HIVE_METASTORE" title="Move Hive Tables">
-        <task xsi:type="execute" hosts="any" timeout-config="upgrade.parameter.move.hive.tables.timeout">
-          <script>scripts/post_upgrade.py</script>
-          <function>move_tables</function>
-        </task>
-      </execute-stage>
     </group>
 
     <group xsi:type="restart" name="HIVE_SERVERS" title="Hive Servers">
