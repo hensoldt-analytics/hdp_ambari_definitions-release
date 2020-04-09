@@ -21,20 +21,22 @@
 <configuration supports_final="true">
   <property>
     <name>spark.sql.hive.metastore.version</name>
-    <value />
+    <value></value>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
     <description></description>
+    <deleted>true</deleted>
     <on-ambari-upgrade add="false"/>
-  </property
+  </property>
   <property>
     <name>spark.sql.hive.metastore.jars</name>
-    <value />
+    <value></value>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
     <description></description>
+    <deleted>true</deleted>
     <on-ambari-upgrade add="false"/>
   </property>
 </configuration>
