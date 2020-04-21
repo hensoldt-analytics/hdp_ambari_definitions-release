@@ -21,6 +21,13 @@
         <service>
             <name>SPARK2</name>
             <version>2.3.2</version>
+
+            <components>
+                <component>
+                    <name>SPARK2_THRIFTSERVER</name>
+                    <deleted>true</deleted>
+                </component>
+            </components>
         </service>
     </services>
 </metainfo>
