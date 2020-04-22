@@ -234,6 +234,8 @@ hbase_log_dir = config['configurations']['ams-hbase-env']['hbase_log_dir']
 hbase_classpath_additional = default("/configurations/ams-hbase-env/hbase_classpath_additional", None)
 master_heapsize = config['configurations']['ams-hbase-env']['hbase_master_heapsize']
 regionserver_heapsize = config['configurations']['ams-hbase-env']['hbase_regionserver_heapsize']
+zookeeper_snapshot_trust_empty = config['configurations']['ams-hbase-env']['zookeeper_snapshot_trust_empty']
+fourlw_commands_whitelist = config['configurations']['ams-hbase-env']['fourlw_commands_whitelist']
 
 # Check if hbase java options already have appended "m". If Yes, remove the trailing m.
 metrics_collector_heapsize = check_append_heap_property(str(metrics_collector_heapsize), "m")
