@@ -19,8 +19,8 @@
   <schemaVersion>2.0</schemaVersion>
   <services>
     <service>
-      <name>OOZIE</name>
-      <version>5.1.0</version>
+      <name>KAFKA</name>
+      <version>2.4.1</version>
     </service>
   </services>
 </metainfo>

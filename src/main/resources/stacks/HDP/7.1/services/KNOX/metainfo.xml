@@ -19,8 +19,8 @@
   <schemaVersion>2.0</schemaVersion>
   <services>
     <service>
-      <name>OOZIE</name>
-      <version>5.1.0</version>
+      <name>KNOX</name>
+      <version>1.3.0</version>
     </service>
   </services>
 </metainfo>
