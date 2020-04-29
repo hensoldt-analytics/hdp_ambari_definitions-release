@@ -343,10 +343,6 @@
         <task xsi:type="configure" id="hdp_7_1_0_0_remove_hive_metastore"/>
       </execute-stage>
 
-      <execute-stage service="SPARK2" component="SPARK2_THRIFTSERVER" title="Remove hive metastore jar and version configuration">
-        <task xsi:type="configure" id="hdp_7_1_0_0_remove_hive_metastore_thrift"/>
-      </execute-stage>
-
       <!--HIVE-->
       <execute-stage service="HIVE" component="HIVE_METASTORE" title="Disable metastore strict table location check">
         <task xsi:type="configure" id="hdp_7_1_disable_hive_metastore_strict_check" />
@@ -581,7 +577,6 @@
       <parallel-scheduler/>
       <service name="SPARK2">
         <component>SPARK2_JOBHISTORYSERVER</component>
-        <component>SPARK2_THRIFTSERVER</component>
         <component>LIVY2_SERVER</component>
       </service>
     </group>
@@ -1010,11 +1005,6 @@
 
     <service name="SPARK2">
       <component name="SPARK2_JOBHISTORYSERVER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="SPARK2_THRIFTSERVER">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>

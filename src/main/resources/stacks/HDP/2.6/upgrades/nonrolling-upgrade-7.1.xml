@@ -719,7 +719,7 @@
       </execute-stage>
 
       <!--SPARK2-->
-      <execute-stage service="SPARK2" component="SPARK2_THRIFTSERVER" title="Update content property in env config">
+      <execute-stage service="SPARK2" component="SPARK2_JOBHISTORYSERVER" title="Update content property in env config">
         <task xsi:type="configure" id="hdp_3_0_0_0_spark2_env"/>
       </execute-stage>
 
@@ -727,7 +727,7 @@
         <task xsi:type="configure" id="hdp_7_1_0_0_spark2_env"/>
       </execute-stage>
 
-      <execute-stage service="SPARK2" component="SPARK2_THRIFTSERVER" title="Update Yarn ACL Admin queue">
+      <execute-stage service="SPARK2" component="SPARK2_JOBHISTORYSERVER" title="Update Yarn ACL Admin queue">
         <task xsi:type="server_action" class="org.apache.ambari.server.serveraction.upgrades.AddSparkUserToYarnACLAdminQueue">
           <summary>Adding spark user to ACL admin queue property in capacity-scheduler config.</summary>
         </task>
@@ -1091,7 +1091,6 @@
       <parallel-scheduler/>
       <service name="SPARK2">
         <component>SPARK2_JOBHISTORYSERVER</component>
-        <component>SPARK2_THRIFTSERVER</component>
         <component>LIVY2_SERVER</component>
       </service>
     </group>
@@ -1539,11 +1538,6 @@
 
     <service name="SPARK2">
       <component name="SPARK2_JOBHISTORYSERVER">
-        <upgrade>
-          <task xsi:type="restart-task"/>
-        </upgrade>
-      </component>
-      <component name="SPARK2_THRIFTSERVER">
         <upgrade>
           <task xsi:type="restart-task"/>
         </upgrade>
