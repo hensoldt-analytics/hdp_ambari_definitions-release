@@ -33,7 +33,6 @@ from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.core.resources.system import File, Execute, Link
 from resource_management.core.resources.service import Service
 from resource_management.core.logger import Logger
-from resource_management.core.source import StaticFile
 
 
 from ambari_commons import OSConst, OSCheck
@@ -57,15 +56,6 @@ class KnoxGateway(Script):
     File(os.path.join(params.knox_conf_dir, 'topologies', 'sandbox.xml'),
          action = "delete",
     )
-
-    manager_topology_file_path = os.path.join(params.knox_conf_dir, "topologies", "manager.xml")
-    if not os.path.exists(manager_topology_file_path):
-      File(manager_topology_file_path,
-           mode=0600,
-           group=params.knox_group,
-           owner=params.knox_user,
-           content=StaticFile('manager.xml')
-      )
 
   def configure(self, env, upgrade_type=None):
     import params

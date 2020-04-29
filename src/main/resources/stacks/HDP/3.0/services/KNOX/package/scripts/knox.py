@@ -28,7 +28,7 @@ from resource_management.libraries.functions.generate_logfeeder_input_config imp
 from resource_management.libraries.resources.template_config import TemplateConfig
 from resource_management.core.resources.system import File, Execute, Directory
 from resource_management.core.shell import as_user
-from resource_management.core.source import Template, InlineTemplate
+from resource_management.core.source import Template, InlineTemplate, StaticFile
 
 from ambari_commons import OSConst
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
@@ -82,6 +82,15 @@ def knox():
         owner=params.knox_user,
         content=InlineTemplate(params.knoxsso_topology_template)
       )
+
+  manager_topology_file_path = os.path.join(params.knox_conf_dir, "topologies", "manager.xml")
+  if not os.path.exists(manager_topology_file_path):
+    File(manager_topology_file_path,
+         mode=0600,
+         group=params.knox_group,
+         owner=params.knox_user,
+         content=StaticFile('manager.xml')
+         )
 
   if params.security_enabled:
     TemplateConfig( os.path.join(params.knox_conf_dir, "krb5JAASLogin.conf"),
@@ -146,6 +155,15 @@ def knox():
             owner=params.knox_user,
             content=InlineTemplate(params.knoxsso_topology_template)
         )
+
+    manager_topology_file_path = os.path.join(params.knox_conf_dir, "topologies", "manager.xml")
+    if not os.path.exists(manager_topology_file_path):
+      File(manager_topology_file_path,
+           mode=0600,
+           group=params.knox_group,
+           owner=params.knox_user,
+           content=StaticFile('manager.xml')
+           )
 
     if params.security_enabled:
       TemplateConfig( format("{knox_conf_dir}/krb5JAASLogin.conf"),
