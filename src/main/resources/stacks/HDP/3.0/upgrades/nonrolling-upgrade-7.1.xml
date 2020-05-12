@@ -20,6 +20,7 @@
   <target>7.1.*.*</target>
   <target-stack>HDP-7.1</target-stack>
   <type>NON_ROLLING</type>
+  <downgrade-allowed>false</downgrade-allowed>
   <prerequisite-checks>
     <check>org.apache.ambari.server.checks.LZOCheck</check>
     <configuration>
@@ -266,6 +267,31 @@
       <execute-stage service="ZEPPELIN" component="ZEPPELIN_MASTER" title="Restore Zeppelin notebooks directory">
         <task xsi:type="manual">
           <message>Before continuing, please restore Zeppelin notebooks directory</message>
+        </task>
+      </execute-stage>
+    </group>
+
+    <!-- stop action for SMARTSENSE should be exactly here, before we will remove service -->
+    <group xsi:type="stop" name="STOP_UNSUPPORTED_COMPONENTS" title="Stop Unsupported Components">
+      <service-check>false</service-check>
+      <skippable>false</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+      <parallel-scheduler/>
+
+      <service name="SMARTSENSE">
+        <component>ACTIVITY_ANALYZER</component>
+        <component>ACTIVITY_EXPLORER</component>
+        <component>HST_SERVER</component>
+        <component>HST_AGENT</component>
+      </service>
+    </group>
+
+    <!-- Since the add component task might need components which are to be removed, this should always be done after adding new components -->
+    <group xsi:type="cluster" name="REMOVE_UNSUPPORTED_SERVICES"  title="Remove unsupported services and components">
+      <execute-stage title="Remove unsupported services and components">
+        <task xsi:type="server_action"
+              class="org.apache.ambari.server.serveraction.upgrades.DeleteUnsupportedServicesAndComponents">
+          <summary>Delete services and components which are removed from the new release</summary>
         </task>
       </execute-stage>
     </group>

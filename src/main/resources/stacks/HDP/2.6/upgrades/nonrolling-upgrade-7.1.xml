@@ -381,6 +381,21 @@
       </execute-stage>
     </group>
 
+    <!-- stop action for SMARTSENSE should be exactly here, before we will remove service -->
+    <group xsi:type="stop" name="STOP_UNSUPPORTED_COMPONENTS" title="Stop Unsupported Components">
+      <service-check>false</service-check>
+      <skippable>false</skippable>
+      <supports-auto-skip-failure>false</supports-auto-skip-failure>
+      <parallel-scheduler/>
+
+      <service name="SMARTSENSE">
+        <component>ACTIVITY_ANALYZER</component>
+        <component>ACTIVITY_EXPLORER</component>
+        <component>HST_SERVER</component>
+        <component>HST_AGENT</component>
+      </service>
+    </group>
+
     <!-- Since the add component task might need components which are to be removed, this should always be done after adding new components -->
     <group xsi:type="cluster" name="REMOVE_UNSUPPORTED_SERVICES"  title="Remove unsupported services and components">
       <execute-stage title="Remove unsupported services and components">
