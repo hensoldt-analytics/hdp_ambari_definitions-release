@@ -19,8 +19,8 @@
 <upgrade xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="upgrade-pack.xsd">
   <target>7.1.*.*</target>
   <target-stack>HDP-7.1</target-stack>
-  <type>NON_ROLLING</type>
   <downgrade-allowed>false</downgrade-allowed>
+  <type>NON_ROLLING</type>
   <prerequisite-checks>
     <check>org.apache.ambari.server.checks.LZOCheck</check>
     <configuration>
