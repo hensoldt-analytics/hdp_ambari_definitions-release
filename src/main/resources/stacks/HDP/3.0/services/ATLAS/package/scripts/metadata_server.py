@@ -103,14 +103,12 @@ class MetadataServer(Script):
           )
 
       if check_stack_feature(StackFeature.ATLAS_UPGRADE_SUPPORT, effective_version) and params.security_enabled:
-        try:
-          Execute(secure_atlas_kafka_setup_command,
-                  user=params.kafka_user,
-                  tries=5,
-                  try_sleep=10
-          )
-        except Fail:
-          pass  # do nothing and do not block Atlas start, fail logs would be available via Execute internals
+        Execute(secure_atlas_kafka_setup_command,
+                user=params.kafka_user,
+                tries=5,
+                try_sleep=10,
+                ignore_failures=True # do not block Atlas start
+        )
 
       Execute(daemon_cmd,
               user=params.metadata_user,

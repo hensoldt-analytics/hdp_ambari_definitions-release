@@ -283,6 +283,8 @@ if check_stack_feature(StackFeature.ATLAS_UPGRADE_SUPPORT, version_for_stack_fea
   kafka_home = os.path.join(stack_root,  "current", "kafka-broker")
   kafka_conf_dir = os.path.join(kafka_home, "config")
 
+  is_ranger_authorizer_of_kafka = "RangerKafkaAuthorizer" in default("/configurations/kafka-broker/authorizer.class.name", "")
+
   kafka_zk_endpoint = default("/configurations/kafka-broker/zookeeper.connect", None)
   kafka_kerberos_enabled = (('security.inter.broker.protocol' in config['configurations']['kafka-broker']) and
                             ((config['configurations']['kafka-broker']['security.inter.broker.protocol'] == "PLAINTEXTSASL") or
