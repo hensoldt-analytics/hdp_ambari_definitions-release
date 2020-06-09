@@ -20,7 +20,7 @@
   <services>
     <service>
       <name>DRUID</name>
-      <deleted>true</deleted>
+      <version>0.17.1</version>
     </service>
   </services>
 </metainfo>
