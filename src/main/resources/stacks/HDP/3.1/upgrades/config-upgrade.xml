@@ -136,5 +136,49 @@
         </changes>
       </component>
     </service>
+    
+    <service name="DRUID">
+      <component name="DRUID_OVERLORD">
+        <changes>
+          <definition xsi:type="configure" id="hdp_7_1_0_0_druid_common">
+            <type>druid-common</type>
+            <replace key="druid.monitoring.monitors" find="io.druid.java.util.metrics.JvmMonitor" 
+            replace-with="org.apache.druid.java.util.metrics.JvmMonitor"/>
+          </definition>
+          
+          <definition xsi:type="configure" id="hdp_7_1_0_0_druid_env">
+            <type>druid-env</type>
+            <replace key="druid.broker.jvm.opts" find="io.druid.common.config.Log4jShutdown" 
+            replace-with="org.apache.druid.common.config.Log4jShutdown"/>
+            
+            <replace key="druid.coordinator.jvm.opts" find="io.druid.common.config.Log4jShutdown" 
+            replace-with="org.apache.druid.common.config.Log4jShutdown"/>
+            
+            <replace key="druid.middlemanager.jvm.opts" find="io.druid.common.config.Log4jShutdown" 
+            replace-with="org.apache.druid.common.config.Log4jShutdown"/>
+            
+            <replace key="druid.historical.jvm.opts" find="io.druid.common.config.Log4jShutdown" 
+            replace-with="org.apache.druid.common.config.Log4jShutdown"/>
+            
+            <replace key="druid.overlord.jvm.opts" find="io.druid.common.config.Log4jShutdown" 
+            replace-with="org.apache.druid.common.config.Log4jShutdown"/>
+            
+            <replace key="druid.router.jvm.opts" find="io.druid.common.config.Log4jShutdown" 
+            replace-with="org.apache.druid.common.config.Log4jShutdown"/>                                  
+          </definition>
+          
+          <definition xsi:type="configure" id="hdp_7_1_0_0_druid_log4j">
+            <type>druid-log4j</type>
+            <replace key="content" find="io.druid" 
+            replace-with="org.apache.druid"/>
+          </definition>
+          
+          <definition xsi:type="configure" id="hdp_7_1_0_0_druid_router">
+            <type>druid-router</type>
+            <set key="druid.router.managementProxy.enabled" value="true"/>
+          </definition>
+        </changes>
+      </component>
+    </service>
   </services>
 </upgrade-config-changes>

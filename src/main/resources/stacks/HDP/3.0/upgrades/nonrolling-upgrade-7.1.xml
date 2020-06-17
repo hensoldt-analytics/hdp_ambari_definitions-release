@@ -395,6 +395,23 @@
       <execute-stage service="HIVE" component="HIVE_METASTORE" title="Disable metastore strict table location check">
         <task xsi:type="configure" id="hdp_7_1_disable_hive_metastore_strict_check" />
       </execute-stage>
+      
+      <!--DRUID-->
+      <execute-stage service="DRUID" component="DRUID_OVERLORD" title="Update druid-common">
+        <task xsi:type="configure" id="hdp_7_1_0_0_druid_common"/>
+      </execute-stage>
+      
+      <execute-stage service="DRUID" component="DRUID_OVERLORD" title="Update druid-env">
+        <task xsi:type="configure" id="hdp_7_1_0_0_druid_env"/>
+      </execute-stage>
+      
+      <execute-stage service="DRUID" component="DRUID_OVERLORD" title="Update druid-log4j">
+        <task xsi:type="configure" id="hdp_7_1_0_0_druid_log4j"/>
+      </execute-stage>
+
+	  <execute-stage service="DRUID" component="DRUID_OVERLORD" title="Update druid-router">
+        <task xsi:type="configure" id="hdp_7_1_0_0_druid_router"/>
+      </execute-stage>
 
     </group>
 

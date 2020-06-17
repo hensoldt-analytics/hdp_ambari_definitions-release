@@ -774,6 +774,23 @@
       <execute-stage service="AMBARI_METRICS" component="METRICS_GRAFANA" title="Convert ams-grafana-ini template to Grafana 6 compatibel">
         <task xsi:type="configure" id="hdp_3_1_0_0_ams_grafana_ini_template_update"/>
       </execute-stage>
+      
+      <!--DRUID-->
+      <execute-stage service="DRUID" component="DRUID_OVERLORD" title="Update druid-common">
+        <task xsi:type="configure" id="hdp_7_1_0_0_druid_common"/>
+      </execute-stage>
+      
+      <execute-stage service="DRUID" component="DRUID_OVERLORD" title="Update druid-env">
+        <task xsi:type="configure" id="hdp_7_1_0_0_druid_env"/>
+      </execute-stage>
+      
+      <execute-stage service="DRUID" component="DRUID_OVERLORD" title="Update druid-log4j">
+        <task xsi:type="configure" id="hdp_7_1_0_0_druid_log4j"/>
+      </execute-stage>
+
+	  <execute-stage service="DRUID" component="DRUID_OVERLORD" title="Update druid-router">
+        <task xsi:type="configure" id="hdp_7_1_0_0_druid_router"/>
+      </execute-stage>
     </group>
 
     <!--

@@ -171,11 +171,10 @@ metric_truststore_password = default("/configurations/ams-ssl-client/ssl.client.
 ams_collector_hosts = default("/clusterHostInfo/metrics_collector_hosts", [])
 if 'cluster-env' in config['configurations'] and \
     'metrics_collector_external_hosts' in config['configurations']['cluster-env']:
-  ams_collector_hosts = config['configurations']['cluster-env']['metrics_collector_external_hosts']
+  ams_collector_hosts = config['configurations']['cluster-env']['metrics_collector_external_hosts'].split(',')
   set_instanceId = "true"
-else:
-  ams_collector_hosts = ",".join(default("/clusterHostInfo/metrics_collector_hosts", []))
-has_metric_collector = not len(ams_collector_hosts) == 0
+
+has_metric_collector = len(ams_collector_hosts) > 0
 
 if has_metric_collector:
   metric_emitter_type = "ambari-metrics"

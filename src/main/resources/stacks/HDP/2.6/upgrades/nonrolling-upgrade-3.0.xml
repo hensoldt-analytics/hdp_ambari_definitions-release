@@ -742,7 +742,6 @@
       <execute-stage service="ACCUMULO" component="ACCUMULO_MASTER" title="Update Accumulo HDP 2.6 classpath for HDP 3.0">
         <task xsi:type="configure" id="hdp_30_accumulo_classpath_update"/>
       </execute-stage>
-
     </group>
 
     <!--
