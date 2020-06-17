@@ -378,7 +378,8 @@ def oozie_server_specific(upgrade_type):
   if is_oozie5_installed():
     Directory([params.oozie_embedded_webapp_dir, params.oozie_embedded_webapp_libs_dir],
         owner = params.oozie_user,
-        group = params.user_group
+        group = params.user_group,
+        recursive_ownership = True
     )
 
     Execute(format("cd {oozie_home}/bin && {oozie_setup_sh}"),
