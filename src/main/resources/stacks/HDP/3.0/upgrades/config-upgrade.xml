@@ -298,6 +298,8 @@
             <type>druid-common</type>
             <replace key="druid.monitoring.monitors" find="io.druid.java.util.metrics.JvmMonitor" 
             replace-with="org.apache.druid.java.util.metrics.JvmMonitor"/>
+            <regex-replace key="druid.extensions.loadList" find="([, ]*)&quot;druid-kafka-eight&quot;" replace-with=""/>
+            <regex-replace key="druid.extensions.loadList" find="&quot;druid-kafka-eight&quot;([, ]*)" replace-with=""/>
           </definition>
           
           <definition xsi:type="configure" id="hdp_7_1_0_0_druid_env">
