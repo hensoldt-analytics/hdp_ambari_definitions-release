@@ -71,8 +71,8 @@ def hbase_service(
 def hbase(action):
     if action == 'stop':
         Logger.info("Stopping HBase daemons")
-        hbase_service('regionserver', action=action)
         hbase_service('master', action=action)
+        hbase_service('regionserver', action=action)
     else:
         Logger.info("Starting HBase daemons")
         hbase_service('master', action=action)
