@@ -976,6 +976,13 @@ class HiveValidator(service_advisor.ServiceAdvisor):
       if "hive.server2.enable.doAs" in hsi_site and hsi_site["hive.server2.enable.doAs"] == "true":
           validationItems.append({"config-name": "hive.server2.enable.doAs", "item": self.getErrorItem("Value should be set to 'false' for Hive2.")})
 
+      # Validate that hive.llap.io.threadpool.size is the same as hive.llap.daemon.num.executors
+      if "hive.llap.io.threadpool.size" in hsi_site and "hive.llap.daemon.num.executors" in hsi_site and hsi_site["hive.llap.io.threadpool.size"] != hsi_site["hive.llap.daemon.num.executors"]:
+          validationItems.append({"config-name": "hive.llap.io.threadpool.size", "item": 
+                                  self.getWarnItem("The value for hive.llap.io.threadpool.size should be same as hive.llap.daemon.num.executors of '{}'"
+                                                    .format(hsi_site["hive.llap.daemon.num.executors"]))})
+
+
       # Validate that "Maximum Total Concurrent Queries" (hive.server2.tez.sessions.per.default.queue) is not consuming more that
       # 50% of selected queue for LLAP.
       if llap_queue_cap and "hive.server2.tez.sessions.per.default.queue" in hsi_site:
