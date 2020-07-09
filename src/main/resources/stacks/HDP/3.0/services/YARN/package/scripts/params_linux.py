@@ -46,17 +46,17 @@ from functions import calc_heap_memory, ensure_unit_for_memory
 # a map of the Ambari role to the component name
 # for use with <stack-root>/current/<component>
 MAPR_SERVER_ROLE_DIRECTORY_MAP = {
-  'HISTORYSERVER' : 'hadoop-mapreduce-historyserver',
-  'MAPREDUCE2_CLIENT' : 'hadoop-mapreduce-client',
+  'HISTORYSERVER': 'hadoop-mapreduce-historyserver',
+  'MAPREDUCE2_CLIENT': 'hadoop-mapreduce-client',
 }
 
 YARN_SERVER_ROLE_DIRECTORY_MAP = {
-  'APP_TIMELINE_SERVER' : 'hadoop-yarn-timelineserver',
-  'NODEMANAGER' : 'hadoop-yarn-nodemanager',
-  'RESOURCEMANAGER' : 'hadoop-yarn-resourcemanager',
-  'YARN_CLIENT' : 'hadoop-yarn-client',
-  'TIMELINE_READER' : 'hadoop-yarn-timelinereader',
-  'YARN_REGISTRY_DNS' : 'hadoop-yarn-registrydns'
+  'APP_TIMELINE_SERVER': 'hadoop-yarn-timelineserver',
+  'NODEMANAGER': 'hadoop-yarn-nodemanager',
+  'RESOURCEMANAGER': 'hadoop-yarn-resourcemanager',
+  'YARN_CLIENT': 'hadoop-yarn-client',
+  'TIMELINE_READER': 'hadoop-yarn-timelinereader',
+  'YARN_REGISTRY_DNS': 'hadoop-yarn-registrydns'
 }
 
 # server configurations
@@ -69,8 +69,7 @@ stack_name = status_params.stack_name
 stack_root = Script.get_stack_root()
 tarball_map = default("/configurations/cluster-env/tarball_map", None)
 
-config_path = os.path.join(stack_root, "current/hadoop-client/conf")
-config_dir = os.path.realpath(config_path)
+config_dir = conf_select.get_hadoop_conf_dir()
 
 # get the correct version to use for checking stack features
 version_for_stack_feature_checks = get_stack_feature_version(config)

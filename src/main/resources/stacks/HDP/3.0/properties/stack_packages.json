@@ -692,7 +692,8 @@
             "hadoop-yarn-timelineserver"
           ],
           "STANDARD": [
-            "hadoop-yarn-timelineserver"
+            "hadoop-yarn-timelineserver",
+            "hadoop-client"
           ]
         },
         "TIMELINE_READER": {
@@ -704,7 +705,8 @@
             "hadoop-yarn-timelinereader"
           ],
           "STANDARD": [
-            "hadoop-yarn-timelinereader"
+            "hadoop-yarn-timelinereader",
+            "hadoop-client"
           ]
         },
         "NODEMANAGER": {
@@ -716,7 +718,8 @@
             "hadoop-yarn-nodemanager"
           ],
           "STANDARD": [
-            "hadoop-yarn-nodemanager"
+            "hadoop-yarn-nodemanager",
+            "hadoop-client"
           ]
         },
         "RESOURCEMANAGER": {
@@ -728,7 +731,8 @@
             "hadoop-yarn-resourcemanager"
           ],
           "STANDARD": [
-            "hadoop-yarn-resourcemanager"
+            "hadoop-yarn-resourcemanager",
+            "hadoop-client"
           ]
         },
         "YARN_CLIENT": {
@@ -752,7 +756,8 @@
             "hadoop-yarn-registrydns"
           ],
           "STANDARD": [
-            "hadoop-yarn-registrydns"
+            "hadoop-yarn-registrydns",
+            "hadoop-client"
           ]
         }
       },
