@@ -560,6 +560,21 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
           if hive_tez_default_queue:
             putHiveInteractiveSiteProperty("hive.server2.tez.default.queues", hive_tez_default_queue)
             self.logger.debug("Updated 'hive.server2.tez.default.queues' config : '{0}'".format(hive_tez_default_queue))
+
+      # Update "hive.llap.daemon.queue.name" property attributes if capacity scheduler is changed.
+      if 'changed-configurations' in services.keys() and self.isConfigPropertiesChanged(services, self.HIVE_INTERACTIVE_SITE, {'hive.llap.daemon.yarn.container.mb'}, False):
+        if hsi_properties and "hive.llap.daemon.yarn.container.mb" in hsi_properties:
+          memory_per_demon = int(hsi_properties["hive.llap.daemon.yarn.container.mb"])
+          # cache size + heap size + headroom = Memory Per Daemon
+          llap_heap_size_multiplier = 0.4
+          in_memory_cache_size_multiplier = 0.4
+          llap_heap_size = int(memory_per_demon * llap_heap_size_multiplier)
+          putHiveInteractiveEnvProperty("llap_heap_size", llap_heap_size)
+          self.logger.debug("Updated 'llap_heap_size' config : '{0}'".format(llap_heap_size))
+          in_memory_cache_size = int(memory_per_demon * in_memory_cache_size_multiplier)
+          putHiveInteractiveSiteProperty("hive.llap.io.memory.size", in_memory_cache_size)
+          self.logger.debug("Updated 'hive.llap.io.memory.size' config : '{0}'".format(hive_tez_default_queue))
+
     else:
       self.logger.info("DBG: Setting 'num_llap_nodes' config's  READ ONLY attribute as 'True'.")
       putHiveInteractiveEnvProperty("enable_hive_interactive", "false")
@@ -879,6 +894,7 @@ class HiveValidator(service_advisor.ServiceAdvisor):
     yarn_site_properties = self.getSiteProperties(configurations, "yarn-site")
     validationItems = []
     hsi_hosts = self.getHostsForComponent(services, "HIVE", "HIVE_SERVER_INTERACTIVE")
+    hsi_site = self.getServicesSiteProperties(services, self.HIVE_INTERACTIVE_SITE)
 
     # Check for expecting "enable_hive_interactive" is ON given that there is HSI on at least one host present.
     if len(hsi_hosts) > 0:
@@ -890,6 +906,11 @@ class HiveValidator(service_advisor.ServiceAdvisor):
         validationItems.append({"config-name": "enable_hive_interactive",
                                 "item": self.getErrorItem(
                                   "HIVE_SERVER_INTERACTIVE requires enable_hive_interactive in hive-interactive-env set to true.")})
+      # Validate LLAP HEAP SIZE
+      if hsi_site and hive_site_env_properties :
+        if int(hive_site_env_properties["llap_heap_size"]) > int(hsi_site["hive.llap.daemon.yarn.container.mb"]):
+          errorMessage = "Working memory (llap_heap_size: {0}) has to be smaller than the container sizing (hive.llap.daemon.yarn.container.mb: {1})".format(hive_site_env_properties["llap_heap_size"], hsi_site["hive.llap.daemon.yarn.container.mb"])
+          validationItems.append({"config-name": "llap_heap_size","item": self.getErrorItem(errorMessage)})
     else:
       # no  HIVE_SERVER_INTERACTIVE
       if "enable_hive_interactive" in hive_site_env_properties and hive_site_env_properties[
@@ -928,6 +949,7 @@ class HiveValidator(service_advisor.ServiceAdvisor):
     MIN_ASSUMED_CAP_REQUIRED_FOR_SERVICE_CHECKS = 512
     llap_queue_cap = None
     hsi_site = self.getServicesSiteProperties(services, self.HIVE_INTERACTIVE_SITE)
+    hive_site_env_properties = self.getSiteProperties(configurations, "hive-interactive-env")
 
     if len(hsi_hosts) == 0:
       return []
@@ -998,7 +1020,13 @@ class HiveValidator(service_advisor.ServiceAdvisor):
       if int(hsi_site["hive.llap.io.memory.size"]) > int(hsi_site["hive.llap.daemon.yarn.container.mb"]):
         errorMessage = "In-Memory Cache per Daemon (value: {0}) may not be more then Memory per Daemon (value: {1})".format(hsi_site["hive.llap.io.memory.size"], hsi_site["hive.llap.daemon.yarn.container.mb"])
         validationItems.append({"config-name": "hive.llap.io.memory.size","item": self.getErrorItem(errorMessage)})
-      
+
+      # Validate LLAP HEAP SIZE
+      if hive_site_env_properties :
+        if int(hive_site_env_properties["llap_heap_size"]) > int(hsi_site["hive.llap.daemon.yarn.container.mb"]):
+          errorMessage = "Working memory (llap_heap_size: {0}) has to be smaller than the container sizing (hive.llap.daemon.yarn.container.mb: {1})".format(hive_site_env_properties["llap_heap_size"], hsi_site["hive.llap.daemon.yarn.container.mb"])
+          validationItems.append({"config-name": "hive.llap.daemon.yarn.container.mb","item": self.getErrorItem(errorMessage)})
+
     # Validate that "remaining available capacity" in cluster is at least 512 MB, after "llap" queue is selected,
     # in order to run Service Checks.
     if llap_queue_name and llap_queue_cap_perc and llap_queue_name == self.AMBARI_MANAGED_LLAP_QUEUE_NAME:

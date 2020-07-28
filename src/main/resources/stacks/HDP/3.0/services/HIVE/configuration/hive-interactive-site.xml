@@ -386,6 +386,10 @@ limitations under the License.
         <type>tez-site</type>
         <name>tez.am.resource.memory.mb</name>
       </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.llap.daemon.yarn.container.mb</name>
+      </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
