@@ -561,19 +561,33 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
             putHiveInteractiveSiteProperty("hive.server2.tez.default.queues", hive_tez_default_queue)
             self.logger.debug("Updated 'hive.server2.tez.default.queues' config : '{0}'".format(hive_tez_default_queue))
 
-      # Update "hive.llap.daemon.queue.name" property attributes if capacity scheduler is changed.
+      # Update "llap_heap_size" and "hive.llap.io.memory.size" property attributes if "hive.llap.daemon.yarn.container.mb" is changed.
       if 'changed-configurations' in services.keys() and self.isConfigPropertiesChanged(services, self.HIVE_INTERACTIVE_SITE, {'hive.llap.daemon.yarn.container.mb'}, False):
         if hsi_properties and "hive.llap.daemon.yarn.container.mb" in hsi_properties:
           memory_per_demon = int(hsi_properties["hive.llap.daemon.yarn.container.mb"])
           # cache size + heap size + headroom = Memory Per Daemon
           llap_heap_size_multiplier = 0.4
           in_memory_cache_size_multiplier = 0.4
+          if hsi_properties and "hive.llap.io.enabled" in hsi_properties:
+            if hsi_properties["hive.llap.io.enabled"].lower() == "true":
+              llap_heap_size_multiplier = 0.8
+              in_memory_cache_size_multiplier = 0
           llap_heap_size = int(memory_per_demon * llap_heap_size_multiplier)
           putHiveInteractiveEnvProperty("llap_heap_size", llap_heap_size)
           self.logger.debug("Updated 'llap_heap_size' config : '{0}'".format(llap_heap_size))
           in_memory_cache_size = int(memory_per_demon * in_memory_cache_size_multiplier)
           putHiveInteractiveSiteProperty("hive.llap.io.memory.size", in_memory_cache_size)
           self.logger.debug("Updated 'hive.llap.io.memory.size' config : '{0}'".format(hive_tez_default_queue))
+      # 'hive.llap.io.enabled' should be set to 'true' if 'hive.llap.io.memory.size' > 0.
+      if 'changed-configurations' in services.keys() and self.isConfigPropertiesChanged(services, self.HIVE_INTERACTIVE_SITE, {'hive.llap.daemon.yarn.container.mb'}, False):
+        if hsi_properties and "hive.llap.io.memory.size" in hsi_properties:
+          hive_llap_io_memory_size = int(hsi_properties["hive.llap.io.memory.size"])
+          if hive_llap_io_memory_size > 0:
+            putHiveInteractiveSiteProperty("hive.llap.io.enabled", "true")
+            self.logger.debug("Updated 'hive.llap.io.enabled' config : 'true''")
+          else:
+            putHiveInteractiveSiteProperty("hive.llap.io.enabled", "false")
+            self.logger.debug("Updated 'hive.llap.io.enabled' config : 'false'")
 
     else:
       self.logger.info("DBG: Setting 'num_llap_nodes' config's  READ ONLY attribute as 'True'.")
@@ -1026,6 +1040,14 @@ class HiveValidator(service_advisor.ServiceAdvisor):
         if int(hive_site_env_properties["llap_heap_size"]) > int(hsi_site["hive.llap.daemon.yarn.container.mb"]):
           errorMessage = "Working memory (llap_heap_size: {0}) has to be smaller than the container sizing (hive.llap.daemon.yarn.container.mb: {1})".format(hive_site_env_properties["llap_heap_size"], hsi_site["hive.llap.daemon.yarn.container.mb"])
           validationItems.append({"config-name": "hive.llap.daemon.yarn.container.mb","item": self.getErrorItem(errorMessage)})
+
+      # 'hive.llap.io.enabled' should be set to 'true' if 'hive.llap.io.memory.size' > 0.
+      if "hive.llap.io.memory.size" in hsi_site:
+        hive_llap_io_memory_size = int(hsi_site["hive.llap.io.memory.size"])
+        if hive_llap_io_memory_size > 0 and hsi_site["hive.llap.io.enabled"].lower() == "false":
+          validationItems.append({"config-name": "hive.llap.io.enabled","item": self.getErrorItem("hive.llap.io.enabled' should be set to 'true' if 'hive.llap.io.memory.size' > 0")})
+        elif hive_llap_io_memory_size <= 0 and hsi_site["hive.llap.io.enabled"].lower() == "true":
+          validationItems.append({"config-name": "hive.llap.io.enabled","item": self.getErrorItem("hive.llap.io.enabled' should be set to 'false' if 'hive.llap.io.memory.size' <= 0")})
 
     # Validate that "remaining available capacity" in cluster is at least 512 MB, after "llap" queue is selected,
     # in order to run Service Checks.
