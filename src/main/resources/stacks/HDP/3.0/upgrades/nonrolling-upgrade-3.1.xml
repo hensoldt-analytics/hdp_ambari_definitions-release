@@ -56,6 +56,13 @@
           <function>prepare</function>
         </task>
       </execute-stage>
+
+      <execute-stage service="YARN" component="APP_TIMELINE_SERVER" title="Fix default coprocessor paths for ATSv2">
+        <task xsi:type="execute" hosts="master">
+          <script>scripts/timelinereader_upgrade.py</script>
+          <function>fix_coprocessor_jars_path</function>
+        </task>
+      </execute-stage>
     </group>
 
     <group xsi:type="stop" name="STOP_HIGH_LEVEL_SERVICE_COMPONENTS" title="Stop Components for High-Level Services">
