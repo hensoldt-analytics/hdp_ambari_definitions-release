@@ -19,6 +19,7 @@ limitations under the License.
 """
 # Python Imports
 import os
+import glob
 
 # Local Imports
 from oozie import copy_atlas_hive_hook_to_dfs_share_lib
@@ -76,6 +77,8 @@ def oozie_service(action = 'start', upgrade_type=None):
   if action == 'start':
     start_cmd = format("cd {oozie_tmp_dir} && {oozie_home}/bin/" + params.oozie_start_cmd)
     path_to_jdbc = params.target
+    if glob.glob(path_to_jdbc):
+      path_to_jdbc = glob.glob(path_to_jdbc)[0]
 
     if params.jdbc_driver_name == "com.mysql.jdbc.Driver" or \
        params.jdbc_driver_name == "com.microsoft.sqlserver.jdbc.SQLServerDriver" or \
