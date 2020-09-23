@@ -150,6 +150,7 @@ def metadata(type='server'):
       solr_cloud_util.setup_solr_client(params.config)
       check_znode()
       jaasFile=params.atlas_jaas_file if params.security_enabled else None
+      sasl_users = [params.atlas_jaas_principal] if params.security_enabled else []
       upload_conf_set('atlas_configs', jaasFile)
 
       if params.security_enabled: # update permissions before creating the collections
@@ -157,9 +158,9 @@ def metadata(type='server'):
                                        roles = [params.infra_solr_role_atlas, params.infra_solr_role_ranger_audit, params.infra_solr_role_dev],
                                        new_service_principals = [params.atlas_jaas_principal])
 
-      create_collection('vertex_index', 'atlas_configs', jaasFile)
-      create_collection('edge_index', 'atlas_configs', jaasFile)
-      create_collection('fulltext_index', 'atlas_configs', jaasFile)
+      create_collection('vertex_index', 'atlas_configs', jaasFile, sasl_users)
+      create_collection('edge_index', 'atlas_configs', jaasFile, sasl_users)
+      create_collection('fulltext_index', 'atlas_configs', jaasFile, sasl_users)
 
       if params.security_enabled:
         secure_znode(format('{infra_solr_znode}/configs/atlas_configs'), jaasFile)
@@ -251,7 +252,7 @@ def upload_conf_set(config_set, jaasFile):
       jaas_file=jaasFile,
       retry=30, interval=5)
 
-def create_collection(collection, config_set, jaasFile):
+def create_collection(collection, config_set, jaasFile, sasl_users):
   import params
 
   solr_cloud_util.create_collection(
@@ -265,7 +266,7 @@ def create_collection(collection, config_set, jaasFile):
       shards=params.atlas_solr_shards,
       replication_factor = params.infra_solr_replication_factor,
       lock_path="/locks/atlas",
-      sasl_users=[params.atlas_jaas_principal])
+      sasl_users=sasl_users)
 
 def secure_znode(znode, jaasFile):
   import params
