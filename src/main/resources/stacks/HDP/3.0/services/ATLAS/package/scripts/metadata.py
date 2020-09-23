@@ -255,6 +255,7 @@ def create_collection(collection, config_set, jaasFile):
   import params
 
   solr_cloud_util.create_collection(
+      config=params.config,
       zookeeper_quorum=params.zookeeper_quorum,
       solr_znode=params.infra_solr_znode,
       collection = collection,
@@ -262,7 +263,9 @@ def create_collection(collection, config_set, jaasFile):
       java64_home=params.java64_home,
       jaas_file=jaasFile,
       shards=params.atlas_solr_shards,
-      replication_factor = params.infra_solr_replication_factor)
+      replication_factor = params.infra_solr_replication_factor,
+      lock_path="/locks/atlas",
+      sasl_users=[params.atlas_jaas_principal])
 
 def secure_znode(znode, jaasFile):
   import params

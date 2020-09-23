@@ -700,6 +700,7 @@ def setup_ranger_audit_solr():
 
 
     solr_cloud_util.create_collection(
+      config=params.config,
       zookeeper_quorum = params.zookeeper_quorum,
       solr_znode = params.solr_znode,
       collection = params.ranger_solr_collection_name,
@@ -707,7 +708,9 @@ def setup_ranger_audit_solr():
       java64_home = params.java_home,
       shards = params.ranger_solr_shards,
       replication_factor = int(params.replication_factor),
-      jaas_file = params.solr_jaas_file)
+      jaas_file = params.solr_jaas_file,
+      lock_path = "/locks/ranger",
+      sasl_users=[params.ranger_admin_jaas_principal])
 
     if params.security_enabled and params.has_infra_solr \
       and not params.is_external_solrCloud_enabled and params.stack_supports_ranger_kerberos:
